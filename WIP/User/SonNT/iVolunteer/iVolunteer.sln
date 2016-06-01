@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iVolunteer", "iVolunteer\iVolunteer.csproj", "{925EEA4F-F218-4035-B13D-20CF3A4E5661}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iVolunteer.Tests", "iVolunteer.Tests\iVolunteer.Tests.csproj", "{77707088-D341-4C0C-9E47-A7D441207485}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{925EEA4F-F218-4035-B13D-20CF3A4E5661}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925EEA4F-F218-4035-B13D-20CF3A4E5661}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925EEA4F-F218-4035-B13D-20CF3A4E5661}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925EEA4F-F218-4035-B13D-20CF3A4E5661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77707088-D341-4C0C-9E47-A7D441207485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77707088-D341-4C0C-9E47-A7D441207485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77707088-D341-4C0C-9E47-A7D441207485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77707088-D341-4C0C-9E47-A7D441207485}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0086d5205fe145b5893b31314ba94296" Name="Diagram1">
+        <EntityTypeShape EntityType="iVolunteerModel.Account" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.AlbumSD" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.GroupSD" Width="1.5" PointX="0.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.PostSD" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.ProjectSD" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.sysdiagram" Width="1.5" PointX="5.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.User_Group" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.User_Project" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Group_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Project_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_AlbumSD_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_AlbumSD_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_PostSD_AlbumSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_PostSD_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Group_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_PostSD_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Project_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.User_Friend" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

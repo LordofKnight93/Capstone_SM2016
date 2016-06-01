@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="iVolunteerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FacebookLink" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IndentifyID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+    <Property Name="IsActivate" Type="Boolean" Nullable="false" />
+    <Property Name="IsConfirm" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="User_Group" Relationship="Self.FK_User_Group_Account" FromRole="Account" ToRole="User_Group" />
+    <NavigationProperty Name="User_Project" Relationship="Self.FK_User_Project_Account" FromRole="Account" ToRole="User_Project" />
+    <NavigationProperty Name="Account1" Relationship="Self.User_Friend" FromRole="Account" ToRole="Account1" />
+    <NavigationProperty Name="Accounts" Relationship="Self.User_Friend" FromRole="Account1" ToRole="Account" />
+  </EntityType>
+  <EntityType Name="AlbumSD">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+    </Key>
+    <Property Name="AlbumID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Permission" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="GroupSD" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="AlbumSD" ToRole="GroupSD" />
+    <NavigationProperty Name="ProjectSD" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="AlbumSD" ToRole="ProjectSD" />
+    <NavigationProperty Name="PostSDs" Relationship="Self.FK_PostSD_AlbumSD" FromRole="AlbumSD" ToRole="PostSD" />
+  </EntityType>
+  <EntityType Name="GroupSD">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsActivate" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AlbumSDs" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="GroupSD" ToRole="AlbumSD" />
+    <NavigationProperty Name="PostSDs" Relationship="Self.FK_PostSD_GroupSD" FromRole="GroupSD" ToRole="PostSD" />
+    <NavigationProperty Name="User_Group" Relationship="Self.FK_User_Group_GroupSD" FromRole="GroupSD" ToRole="User_Group" />
+  </EntityType>
+  <EntityType Name="PostSD">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DateCreate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Permission" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AlbumSD" Relationship="Self.FK_PostSD_AlbumSD" FromRole="PostSD" ToRole="AlbumSD" />
+    <NavigationProperty Name="GroupSD" Relationship="Self.FK_PostSD_GroupSD" FromRole="PostSD" ToRole="GroupSD" />
+    <NavigationProperty Name="ProjectSD" Relationship="Self.FK_PostSD_ProjectSD" FromRole="PostSD" ToRole="ProjectSD" />
+  </EntityType>
+  <EntityType Name="ProjectSD">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsActivate" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AlbumSDs" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="ProjectSD" ToRole="AlbumSD" />
+    <NavigationProperty Name="PostSDs" Relationship="Self.FK_PostSD_ProjectSD" FromRole="ProjectSD" ToRole="PostSD" />
+    <NavigationProperty Name="User_Project" Relationship="Self.FK_User_Project_ProjectSD" FromRole="ProjectSD" ToRole="User_Project" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="User_Group">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="RelationType" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="GroupID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RelationType" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_User_Group_Account" FromRole="User_Group" ToRole="Account" />
+    <NavigationProperty Name="GroupSD" Relationship="Self.FK_User_Group_GroupSD" FromRole="User_Group" ToRole="GroupSD" />
+  </EntityType>
+  <EntityType Name="User_Project">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="RelationType" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="RelationType" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK_User_Project_Account" FromRole="User_Project" ToRole="Account" />
+    <NavigationProperty Name="ProjectSD" Relationship="Self.FK_User_Project_ProjectSD" FromRole="User_Project" ToRole="ProjectSD" />
+  </EntityType>
+  <Association Name="FK_User_Group_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Group" Type="Self.User_Group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Group">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Project_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Project" Type="Self.User_Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Project">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AlbumSD_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="0..1" />
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="*" />
+  </Association>
+  <Association Name="FK_AlbumSD_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="0..1" />
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="*" />
+  </Association>
+  <Association Name="FK_PostSD_AlbumSD">
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+  </Association>
+  <Association Name="FK_PostSD_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+  </Association>
+  <Association Name="FK_User_Group_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="1" />
+    <End Role="User_Group" Type="Self.User_Group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupSD">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="User_Group">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+  </Association>
+  <Association Name="FK_User_Project_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="1" />
+    <End Role="User_Project" Type="Self.User_Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectSD">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="User_Project">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="User_Friend">
+    <End Role="Account" Type="Self.Account" Multiplicity="*" />
+    <End Role="Account1" Type="Self.Account" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="iVolunteerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
+    <EntitySet Name="AlbumSDs" EntityType="Self.AlbumSD" />
+    <EntitySet Name="GroupSDs" EntityType="Self.GroupSD" />
+    <EntitySet Name="PostSDs" EntityType="Self.PostSD" />
+    <EntitySet Name="ProjectSDs" EntityType="Self.ProjectSD" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="User_Group" EntityType="Self.User_Group" />
+    <EntitySet Name="User_Project" EntityType="Self.User_Project" />
+    <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="User_Group" EntitySet="User_Group" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_Account" Association="Self.FK_User_Project_Account">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="User_Project" EntitySet="User_Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AlbumSD_GroupSD" Association="Self.FK_AlbumSD_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSDs" />
+      <End Role="AlbumSD" EntitySet="AlbumSDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSDs" />
+      <End Role="AlbumSD" EntitySet="AlbumSDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_AlbumSD" Association="Self.FK_PostSD_AlbumSD">
+      <End Role="AlbumSD" EntitySet="AlbumSDs" />
+      <End Role="PostSD" EntitySet="PostSDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_GroupSD" Association="Self.FK_PostSD_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSDs" />
+      <End Role="PostSD" EntitySet="PostSDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Group_GroupSD" Association="Self.FK_User_Group_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSDs" />
+      <End Role="User_Group" EntitySet="User_Group" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_ProjectSD" Association="Self.FK_PostSD_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSDs" />
+      <End Role="PostSD" EntitySet="PostSDs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_ProjectSD" Association="Self.FK_User_Project_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSDs" />
+      <End Role="User_Project" EntitySet="User_Project" />
+    </AssociationSet>
+    <AssociationSet Name="User_Friend" Association="Self.User_Friend">
+      <End Role="Account" EntitySet="Accounts" />
+      <End Role="Account1" EntitySet="Accounts" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

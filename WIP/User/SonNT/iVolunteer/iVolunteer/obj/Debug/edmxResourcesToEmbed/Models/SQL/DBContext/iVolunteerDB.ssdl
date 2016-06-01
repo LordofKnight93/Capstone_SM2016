@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FacebookLink" Type="varchar(max)" />
+    <Property Name="IndentifyID" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="IsAdmin" Type="bit" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+    <Property Name="IsConfirm" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AlbumSD">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+    </Key>
+    <Property Name="AlbumID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" />
+    <Property Name="Permission" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GroupSD">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PostSD">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="DateCreate" Type="datetime" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" />
+    <Property Name="AlbumID" Type="varchar" MaxLength="24" />
+    <Property Name="Permission" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProjectSD">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'iVolunteer.dbo.User_Friend' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="User_Friend">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="FriendID" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="FriendID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'iVolunteer.dbo.User_Group' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="User_Group">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="RelationType" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="RelationType" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'iVolunteer.dbo.User_Project' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="User_Project">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="RelationType" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="RelationType" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AlbumSD_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="0..1" />
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupSD">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="AlbumSD">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AlbumSD_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="0..1" />
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectSD">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="AlbumSD">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_AlbumSD">
+    <End Role="AlbumSD" Type="Self.AlbumSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AlbumSD">
+        <PropertyRef Name="AlbumID" />
+      </Principal>
+      <Dependent Role="PostSD">
+        <PropertyRef Name="AlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupSD">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="PostSD">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="0..1" />
+    <End Role="PostSD" Type="Self.PostSD" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectSD">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="PostSD">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Friend_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Friend" Type="Self.User_Friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Friend">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Friend_Account1">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Friend" Type="Self.User_Friend" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Friend">
+        <PropertyRef Name="FriendID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Group_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Group" Type="Self.User_Group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Group">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Group_GroupSD">
+    <End Role="GroupSD" Type="Self.GroupSD" Multiplicity="1" />
+    <End Role="User_Group" Type="Self.User_Group" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupSD">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="User_Group">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Project_Account">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="User_Project" Type="Self.User_Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="User_Project">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Project_ProjectSD">
+    <End Role="ProjectSD" Type="Self.ProjectSD" Multiplicity="1" />
+    <End Role="User_Project" Type="Self.User_Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProjectSD">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="User_Project">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="iVolunteerModelStoreContainer">
+    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AlbumSD" EntityType="Self.AlbumSD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupSD" EntityType="Self.GroupSD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PostSD" EntityType="Self.PostSD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProjectSD" EntityType="Self.ProjectSD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User_Friend" EntityType="Self.User_Friend" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [User_Friend].[UserID] AS [UserID], 
+    [User_Friend].[FriendID] AS [FriendID]
+    FROM [dbo].[User_Friend] AS [User_Friend]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="User_Group" EntityType="Self.User_Group" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [User_Group].[UserID] AS [UserID], 
+    [User_Group].[GroupID] AS [GroupID], 
+    [User_Group].[RelationType] AS [RelationType]
+    FROM [dbo].[User_Group] AS [User_Group]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="User_Project" EntityType="Self.User_Project" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [User_Project].[UserID] AS [UserID], 
+    [User_Project].[ProjectID] AS [ProjectID], 
+    [User_Project].[RelationType] AS [RelationType]
+    FROM [dbo].[User_Project] AS [User_Project]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_AlbumSD_GroupSD" Association="Self.FK_AlbumSD_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSD" />
+      <End Role="AlbumSD" EntitySet="AlbumSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSD" />
+      <End Role="AlbumSD" EntitySet="AlbumSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_AlbumSD" Association="Self.FK_PostSD_AlbumSD">
+      <End Role="AlbumSD" EntitySet="AlbumSD" />
+      <End Role="PostSD" EntitySet="PostSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_GroupSD" Association="Self.FK_PostSD_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSD" />
+      <End Role="PostSD" EntitySet="PostSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_ProjectSD" Association="Self.FK_PostSD_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSD" />
+      <End Role="PostSD" EntitySet="PostSD" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Friend_Account" Association="Self.FK_User_Friend_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="User_Friend" EntitySet="User_Friend" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Friend_Account1" Association="Self.FK_User_Friend_Account1">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="User_Friend" EntitySet="User_Friend" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="User_Group" EntitySet="User_Group" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Group_GroupSD" Association="Self.FK_User_Group_GroupSD">
+      <End Role="GroupSD" EntitySet="GroupSD" />
+      <End Role="User_Group" EntitySet="User_Group" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_Account" Association="Self.FK_User_Project_Account">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="User_Project" EntitySet="User_Project" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_ProjectSD" Association="Self.FK_User_Project_ProjectSD">
+      <End Role="ProjectSD" EntitySet="ProjectSD" />
+      <End Role="User_Project" EntitySet="User_Project" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

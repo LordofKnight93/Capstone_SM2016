@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="iVolunteerModelStoreContainer" CdmEntityContainer="iVolunteerEntities">
+    <EntitySetMapping Name="Accounts">
+      <EntityTypeMapping TypeName="iVolunteerModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="FacebookLink" ColumnName="FacebookLink" />
+          <ScalarProperty Name="IndentifyID" ColumnName="IndentifyID" />
+          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+          <ScalarProperty Name="IsConfirm" ColumnName="IsConfirm" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AlbumSDs">
+      <EntityTypeMapping TypeName="iVolunteerModel.AlbumSD">
+        <MappingFragment StoreEntitySet="AlbumSD">
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="Permission" ColumnName="Permission" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GroupSDs">
+      <EntityTypeMapping TypeName="iVolunteerModel.GroupSD">
+        <MappingFragment StoreEntitySet="GroupSD">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PostSDs">
+      <EntityTypeMapping TypeName="iVolunteerModel.PostSD">
+        <MappingFragment StoreEntitySet="PostSD">
+          <ScalarProperty Name="PostID" ColumnName="PostID" />
+          <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+          <ScalarProperty Name="Permission" ColumnName="Permission" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProjectSDs">
+      <EntityTypeMapping TypeName="iVolunteerModel.ProjectSD">
+        <MappingFragment StoreEntitySet="ProjectSD">
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="iVolunteerModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User_Group">
+      <EntityTypeMapping TypeName="iVolunteerModel.User_Group">
+        <MappingFragment StoreEntitySet="User_Group">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="RelationType" ColumnName="RelationType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User_Project">
+      <EntityTypeMapping TypeName="iVolunteerModel.User_Project">
+        <MappingFragment StoreEntitySet="User_Project">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="RelationType" ColumnName="RelationType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="FK_AlbumSD_GroupSD" TypeName="iVolunteerModel.FK_AlbumSD_GroupSD" StoreEntitySet="AlbumSD">
+      <EndProperty Name="GroupSD">
+        <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+      </EndProperty>
+      <EndProperty Name="AlbumSD">
+        <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+      </EndProperty>
+      <Condition IsNull="false" ColumnName="GroupID" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_AlbumSD_ProjectSD" TypeName="iVolunteerModel.FK_AlbumSD_ProjectSD" StoreEntitySet="AlbumSD">
+      <EndProperty Name="ProjectSD">
+        <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+      </EndProperty>
+      <EndProperty Name="AlbumSD">
+        <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+      </EndProperty>
+      <Condition IsNull="false" ColumnName="ProjectID" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_PostSD_AlbumSD" TypeName="iVolunteerModel.FK_PostSD_AlbumSD" StoreEntitySet="PostSD">
+      <EndProperty Name="AlbumSD">
+        <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+      </EndProperty>
+      <EndProperty Name="PostSD">
+        <ScalarProperty Name="PostID" ColumnName="PostID" />
+      </EndProperty>
+      <Condition IsNull="false" ColumnName="AlbumID" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_PostSD_GroupSD" TypeName="iVolunteerModel.FK_PostSD_GroupSD" StoreEntitySet="PostSD">
+      <EndProperty Name="GroupSD">
+        <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+      </EndProperty>
+      <EndProperty Name="PostSD">
+        <ScalarProperty Name="PostID" ColumnName="PostID" />
+      </EndProperty>
+      <Condition IsNull="false" ColumnName="GroupID" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FK_PostSD_ProjectSD" TypeName="iVolunteerModel.FK_PostSD_ProjectSD" StoreEntitySet="PostSD">
+      <EndProperty Name="ProjectSD">
+        <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+      </EndProperty>
+      <EndProperty Name="PostSD">
+        <ScalarProperty Name="PostID" ColumnName="PostID" />
+      </EndProperty>
+      <Condition IsNull="false" ColumnName="ProjectID" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="User_Friend" TypeName="iVolunteerModel.User_Friend" StoreEntitySet="User_Friend">
+      <EndProperty Name="Account">
+        <ScalarProperty Name="UserID" ColumnName="UserID" />
+      </EndProperty>
+      <EndProperty Name="Account1">
+        <ScalarProperty Name="UserID" ColumnName="FriendID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>
