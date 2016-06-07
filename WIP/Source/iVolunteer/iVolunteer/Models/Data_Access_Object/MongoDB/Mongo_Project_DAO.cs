@@ -16,7 +16,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         {
             try
             {
-                collection.InsertOneAsync(project);
+                collection.InsertOne(project);
                 return true;
             }
             catch

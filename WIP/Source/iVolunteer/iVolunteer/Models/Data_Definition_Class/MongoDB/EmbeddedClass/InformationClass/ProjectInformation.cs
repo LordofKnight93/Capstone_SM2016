@@ -8,7 +8,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class ProjectInformation
     {
-        public ObjectId _id { get; set; }
         public string ProjectName { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateStart { get; set; }

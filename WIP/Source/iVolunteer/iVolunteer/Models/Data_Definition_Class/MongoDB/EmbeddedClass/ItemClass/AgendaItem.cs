@@ -8,5 +8,12 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
         public ObjectId _id { get; set; }
         public DateTime WorkDate { get; set; }
         public string Content { get; set; }
+
+        public AgendaItem()
+        {
+            this._id = new ObjectId();
+            this.WorkDate = new DateTime();
+            this.Content = "";
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
     public static class SQL_Project_DAO
     {
         static iVolunteerEntities dbEntitied = new iVolunteerEntities();
-        public static bool AddProject(SQL_Project project)
+        public static bool Add_Project(SQL_Project project)
         {
             try
             {

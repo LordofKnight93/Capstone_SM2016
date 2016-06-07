@@ -1,5 +1,6 @@
 ﻿using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
+using System.Collections.Generic;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureClass
 {
@@ -9,7 +10,14 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Structur
     public class GroupStructure
     {
         public UserSD Creator { get; set; }
-        public UserSD[] Leaders { get; set; }
-        public Member[] JoinedUsers { get; set; }
+        public List<UserSD> Leaders { get; set; }
+        public List<Member> JoinedUsers { get; set; }
+
+        public GroupStructure()
+        {
+            this.Creator = new UserSD();
+            this.Leaders = new List<UserSD>();
+            this.JoinedUsers = new List<Member>();
+        }
     }
 }

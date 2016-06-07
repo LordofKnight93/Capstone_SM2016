@@ -4,7 +4,13 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClas
 {
     public class AlbumLink
     {
-        public ObjectId _id { get; set; }
+        public string AlbumID { get; set; }
         public string AlbumName { get; set; }
+
+        public AlbumLink()
+        {
+            this.AlbumID = "";
+            this.AlbumName = "";
+        }
     }
 }

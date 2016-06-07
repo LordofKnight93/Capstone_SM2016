@@ -16,6 +16,13 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public ObjectId _id { get; set; }
         public ProjectLink Project { get; set; }
         public string PlanName { get; set; }
-        public PlanItem[] ItemList { get; set; }
+        public List<PlanItem> ItemList { get; set; }
+        public Mongo_Plan()
+        {
+            this._id = new ObjectId();
+            this.Project = new ProjectLink();
+            this.PlanName = "";
+            this.ItemList = new List<PlanItem>();
+        }
     }
 }

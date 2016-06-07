@@ -13,5 +13,13 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
         public DateTime DateSend { get; set; }
         public UserSD Sender { get; set; }
         public string Content { get; set; }
+
+        public MessageItem()
+        {
+            this._id = new ObjectId();
+            this.DateSend = new DateTime();
+            this.Sender = new UserSD();
+            this.Content = "";
+        }
     }
 }

@@ -8,9 +8,17 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
     /// </summary>
     public class GroupSD
     {
-        public ObjectId _id { get; set; }
+        public string GroupID { get; set; }
         public string Name { get; set; }
         public string AvtImgLink { get; set; }
         public int MemberCount { get; set; }
+
+        public GroupSD()
+        {
+            this.GroupID = "";
+            this.Name = "";
+            this.AvtImgLink = "";
+            this.MemberCount = 0;
+        }
     }
 }

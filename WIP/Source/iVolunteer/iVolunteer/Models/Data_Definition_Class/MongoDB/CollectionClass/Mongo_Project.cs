@@ -4,6 +4,7 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureCla
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.TableClass;
+using System.Collections.Generic;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
 {
@@ -15,13 +16,18 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public ObjectId _id { get; set; }
         public ProjectInformation ProjectInformation { get; set; }
         public ProjectStructure ProjectStructure { get; set; }
-        public AlbumSD[] AlbumList { get; set; }
-        public Team[] Teams { get; set; }
-        public Agenda AgendaList { get; set; }
+        public List<AlbumSD> AlbumList { get; set; }
+        public List<Team> Teams { get; set; }
+        public Agenda Agenda { get; set; }
 
-        public Mongo_Project(ProjectInformation projectInfo)
+        public Mongo_Project()
         {
-            this.ProjectInformation = projectInfo;
+            this._id = new ObjectId();
+            this.ProjectInformation = new ProjectInformation();
+            this.ProjectStructure = new ProjectStructure();
+            this.AlbumList = new List<AlbumSD>();
+            this.Teams = new List<Team>();
+            this.Agenda = new Agenda();
         }
     }
 }

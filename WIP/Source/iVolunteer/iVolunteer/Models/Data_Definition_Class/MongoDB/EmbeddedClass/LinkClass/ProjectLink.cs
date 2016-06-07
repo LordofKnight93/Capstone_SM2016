@@ -4,7 +4,12 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClas
 {
     public class ProjectLink
     {
-        public ObjectId _id { get; set; }
+        public string ProjectID { get; set; }
         public string ProjectName { get; set; }
+        public ProjectLink()
+        {
+            this.ProjectID = "";
+            this.ProjectName = "";
+        }
     }
 }

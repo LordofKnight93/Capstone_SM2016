@@ -1,4 +1,5 @@
 ﻿using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
+using System.Collections.Generic;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
@@ -7,8 +8,15 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class HistoryInformation
     {
-        public ProjectSD[] OrganizedProject { get; set; }
-        public ProjectSD[] JoinedProject { get; set; }
-        public ProjectSD[] SponsoredProject { get; set; }
+        public List<ProjectSD> OrganizedProject { get; set; }
+        public List<ProjectSD> JoinedProject { get; set; }
+        public List<ProjectSD> SponsoredProject { get; set; }
+
+        public HistoryInformation()
+        {
+            this.OrganizedProject = new List<ProjectSD>();
+            this.JoinedProject = new List<ProjectSD>();
+            this.SponsoredProject = new List<ProjectSD>();
+        }
     }
 }

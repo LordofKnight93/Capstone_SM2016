@@ -10,7 +10,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class PostInformation
     {
-        public ObjectId _id { get; set; }
         public UserSD Creator { get; set; }
         public GroupLink GroupLink { get; set; }
         public ProjectLink ProjectLink { get; set; }

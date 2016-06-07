@@ -189,15 +189,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\Constant.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImageController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
-    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -206,7 +206,16 @@
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Post_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Project_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_User_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Account_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Album_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Group_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Message_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Plan_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_Post_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\SQL\SQL_Project_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Friend_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Group_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Project_DAO.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Message.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Plan.cs" />
@@ -230,6 +239,7 @@
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\AlbumLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\GroupLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\ProjectLink.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\TeamLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\UserLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\AlbumSD.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\GroupSD.cs" />
@@ -286,6 +296,8 @@
     <Compile Include="Models\Data_Definition_Class\SQL\sysdiagram.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Data_Definition_Class\ViewModel\LoginModel.cs" />
+    <Compile Include="Models\Data_Definition_Class\ViewModel\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -296,8 +308,12 @@
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Project\AddProject.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\Newfeed.cshtml" />
+    <Content Include="Views\Project\CreateProject.cshtml" />
+    <Content Include="Views\Group\CreateGroup.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -307,13 +323,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Data_Definition_Class\ViewModel\" />
+    <Folder Include="Views\Account\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Album\" />
-    <Folder Include="Views\Group\" />
-    <Folder Include="Views\Home\" />
     <Folder Include="Views\Image\" />
-    <Folder Include="Views\Login\" />
     <Folder Include="Views\Post\" />
     <Folder Include="Views\Register\" />
     <Folder Include="Views\User\" />

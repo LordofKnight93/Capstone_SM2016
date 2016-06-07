@@ -6,9 +6,9 @@ using System.Web.Mvc;
 
 namespace iVolunteer.Controllers
 {
-    public class LoginController : Controller
+    public class AccountController : Controller
     {
-        // GET: Login
+        // GET: Account
         public ActionResult Index()
         {
             return View();

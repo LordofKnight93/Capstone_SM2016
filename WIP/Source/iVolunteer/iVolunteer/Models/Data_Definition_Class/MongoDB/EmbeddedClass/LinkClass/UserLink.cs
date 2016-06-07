@@ -4,7 +4,12 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClas
 {
     public class UserLink
     {
-        public ObjectId _id { get; set; }
+        public string UserID { get; set; }
         public string DisplayName { get; set; }
+        public UserLink()
+        {
+            this.UserID = "";
+            this.DisplayName = "";
+        }
     }
 }

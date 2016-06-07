@@ -8,9 +8,8 @@
     <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="IndentifyID" Type="varchar" MaxLength="20" Nullable="false" />
-    <Property Name="DisplayName" Type="varchar" MaxLength="50" />
+    <Property Name="DisplayName" Type="nvarchar" MaxLength="50" />
     <Property Name="AvtImgLink" Type="varchar" MaxLength="100" />
-    <Property Name="CoverImgLink" Type="varchar" MaxLength="100" />
     <Property Name="IsAdmin" Type="bit" Nullable="false" />
     <Property Name="IsActivate" Type="bit" Nullable="false" />
     <Property Name="IsConfirm" Type="bit" Nullable="false" />

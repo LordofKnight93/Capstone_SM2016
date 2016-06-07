@@ -10,5 +10,13 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
         public UserSD Creater { get; set; }
         public string Content { get; set; }
         public DateTime DateCreate { get; set; }
+
+        public Comment()
+        {
+            this._id = new ObjectId();
+            this.Creater = new UserSD();
+            this.Content = "";
+            this.DateCreate = new DateTime();
+        }
     }
 }

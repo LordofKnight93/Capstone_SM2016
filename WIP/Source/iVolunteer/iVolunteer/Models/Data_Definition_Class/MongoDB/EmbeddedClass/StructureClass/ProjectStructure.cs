@@ -1,5 +1,6 @@
 ﻿using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
+using System.Collections.Generic;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureClass
 {
@@ -9,14 +10,26 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Structur
     public class ProjectStructure
     {
         public string CreatorID { get; set; }
-        public UserSD[] Leaders { get; set; }
+        public List<UserSD> Leaders { get; set; }
         // users individually organize
-        public UserSD[] OrganizeUser { get; set; }
+        public List<UserSD> OrganizeUser { get; set; }
         // groups organize
-        public GroupSD[] OrganizeGroup { get; set; }
-        public GroupSD[] JoinedGroups { get; set; }
-        public GroupSD[] SponsorGroups { get; set; }
-        public Member[] JoinedUsers { get; set; }
-        public Sponsor[] Sponsors { get; set; }
+        public List<GroupSD> OrganizeGroup { get; set; }
+        public List<GroupSD> JoinedGroups { get; set; }
+        public List<GroupSD> SponsorGroups { get; set; }
+        public List<Member> JoinedUsers { get; set; }
+        public List<Sponsor> Sponsors { get; set; }
+
+        public ProjectStructure()
+        {
+            this.CreatorID = "";
+            this.Leaders = new List<UserSD>();
+            this.OrganizeUser = new List<UserSD>();
+            this.OrganizeGroup = new List<GroupSD>();
+            this.JoinedGroups = new List<GroupSD>();
+            this.SponsorGroups = new List<GroupSD>();
+            this.Sponsors = new List<Sponsor>();
+            this.JoinedUsers = new List<Member>();
+        }
     }
 }

@@ -30,7 +30,6 @@ namespace iVolunteer.Models.Data_Definition_Class.SQL
         public string IndentifyID { get; set; }
         public string DisplayName { get; set; }
         public string AvtImgLink { get; set; }
-        public string CoverImgLink { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsActivate { get; set; }
         public bool IsConfirm { get; set; }

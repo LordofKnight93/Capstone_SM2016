@@ -10,7 +10,6 @@
           <ScalarProperty Name="IndentifyID" ColumnName="IndentifyID" />
           <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
           <ScalarProperty Name="AvtImgLink" ColumnName="AvtImgLink" />
-          <ScalarProperty Name="CoverImgLink" ColumnName="CoverImgLink" />
           <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
           <ScalarProperty Name="IsConfirm" ColumnName="IsConfirm" />
