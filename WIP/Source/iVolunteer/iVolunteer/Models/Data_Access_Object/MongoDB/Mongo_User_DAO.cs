@@ -21,7 +21,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

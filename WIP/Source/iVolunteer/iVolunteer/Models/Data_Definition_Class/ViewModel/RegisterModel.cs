@@ -35,7 +35,7 @@ namespace iVolunteer.Models.Data_Definition_Class.ViewModel
         [Required]
         [DisplayName("Số chứng minh thư")]
         [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
-        public string IndentifyID { get; set; }
+        public string IdentifyID { get; set; }
         [DisplayName("Địa chỉ")]
         public string Address { get; set; }
         [DisplayName("Số điện thoại")]

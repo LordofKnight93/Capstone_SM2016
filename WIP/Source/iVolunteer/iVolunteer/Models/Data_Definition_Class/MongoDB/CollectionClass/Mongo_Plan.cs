@@ -24,5 +24,16 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.PlanName = "";
             this.ItemList = new List<PlanItem>();
         }
+
+        public void Add_Item(PlanItem item)
+        {
+            this.ItemList.Add(item);
+        }
+
+        public void Delete_Item(string itemID)
+        {
+            PlanItem item = this.ItemList.Find(i => i.ItemID == itemID);
+            this.ItemList.Remove(item);
+        }
     }
 }

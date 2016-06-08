@@ -24,5 +24,8 @@ namespace iVolunteer.Common
 
         public const string DEFAULT_AVATAR = "Avater";
         public const string DEFAULT_COVER = "Cover";
+
+        public const bool IS_RECRUITING = true;
+        public const bool IS_NOT_RECRUITING = false;
     }
 }

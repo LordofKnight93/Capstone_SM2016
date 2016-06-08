@@ -19,27 +19,27 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
-        public static bool Delete_Specific_Relation(string userID1, string userID2)
+        public static bool Delete_Specific_Relation(string userID, string friendID)
         {
             try
             {
-                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID1 && rls.FriendID == userID2 
-                                                                  || rls.UserID == userID2 && rls.FriendID == userID1);
+                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID && rls.FriendID == friendID 
+                                                                  || rls.UserID == friendID && rls.FriendID == userID);
                 dbEntities.SQL_User_Friend.RemoveRange(result);
                 dbEntities.SaveChanges();
                 return true;
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
-        public static bool Delete_Relation_By_OneID(string userID)
+        public static bool Delete_Relation_By_UserID(string userID)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

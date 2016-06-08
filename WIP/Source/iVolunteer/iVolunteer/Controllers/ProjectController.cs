@@ -10,7 +10,7 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureClass;
-using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.TableClass;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.Data_Definition_Class.SQL;
 using iVolunteer.Models.Data_Access_Object.MongoDB;
 using iVolunteer.Models.Data_Access_Object.SQL;
@@ -48,26 +48,14 @@ namespace iVolunteer.Controllers
             projectInfo.IsActivate = true;
             projectInfo.IsRecruit = true;
 
-            //create leader
-            UserSD leader = new UserSD();
-            leader.UserID = Session["UserID"].ToString();
-            leader.DisplayName = Session["DisplayName"].ToString();
-            leader.AvtImgLink = Session["Avatar"].ToString();
-            //craete member
-            Member member = new Member();
-            member.JoinDate = DateTime.Now.Date;
-            member.User = leader;
+            //create creator
+            UserSD creator = new UserSD();
+            creator.UserID = Session["UserID"].ToString();
+            creator.DisplayName = Session["DisplayName"].ToString();
+            creator.AvtImgLink = Session["Avatar"].ToString();
 
-            ObjectId _id = ObjectId.GenerateNewId();
             //create mongo project
-            Mongo_Project mongo_Project = new Mongo_Project();
-            mongo_Project._id = _id;
-            //set information
-            mongo_Project.ProjectInformation = projectInfo;
-            //set structure
-            mongo_Project.ProjectStructure.CreatorID = leader.UserID;
-            mongo_Project.ProjectStructure.Leaders.Add(leader);
-            mongo_Project.ProjectStructure.JoinedUsers.Add(member);
+            Mongo_Project mongo_Project = new Mongo_Project(creator, projectInfo);
 
             //create sql project
             SQL_Project sql_Project = new SQL_Project();
@@ -76,8 +64,8 @@ namespace iVolunteer.Controllers
 
             //create first relation
             SQL_User_Project relation = new SQL_User_Project();
-            relation.UserID = leader.UserID;
-            relation.ProjectID = _id.ToString();
+            relation.UserID = creator.UserID;
+            relation.ProjectID = mongo_Project._id.ToString();
             relation.RelationType = Constant.DIRECT_RELATION;
 
             //start transaction

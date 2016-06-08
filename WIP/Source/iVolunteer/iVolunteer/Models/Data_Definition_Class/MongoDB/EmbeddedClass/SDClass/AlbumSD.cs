@@ -10,7 +10,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
     public class AlbumSD
     {
         public string AlbumID  { get; set; }
-        public string Name { get; set; }
+        public string AlbumName { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateLastActivity { get; set; }
         public string CoverImgLink { get; set; }
@@ -22,7 +22,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
         public AlbumSD()
         {
             this.AlbumID = "";
-            this.Name = "";
+            this.AlbumName = "";
             this.DateCreate = new DateTime();
             this.DateLastActivity = new DateTime();
             this.CoverImgLink = "";

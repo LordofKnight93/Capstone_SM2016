@@ -1,4 +1,5 @@
 ﻿using iVolunteer.Common;
+using iVolunteer.Models.Data_Definition_Class.ViewModel;
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
     /// <summary>
@@ -22,8 +23,21 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.Password = "";
             this.DisplayName = "";
             this.IdentifyID = "";
-            this.AvtImgLink = "";
-            this.CoverImgLink = "";
+            this.AvtImgLink = Constant.DEFAULT_AVATAR;
+            this.CoverImgLink = Constant.DEFAULT_COVER;
+            this.IsAdmin = Constant.IS_USER;
+            this.IsActivate = Constant.IS_ACTIVATE;
+            this.IsConfirmed = Constant.IS_NOT_CONFIRMED;
+        }
+
+        public AccountInformation(RegisterModel registerModel)
+        {
+            this.Email = registerModel.Email;
+            this.Password = registerModel.Password;
+            this.DisplayName = registerModel.RealName;
+            this.IdentifyID = registerModel.IdentifyID;
+            this.AvtImgLink = Constant.DEFAULT_AVATAR;
+            this.CoverImgLink = Constant.DEFAULT_COVER;
             this.IsAdmin = Constant.IS_USER;
             this.IsActivate = Constant.IS_ACTIVATE;
             this.IsConfirmed = Constant.IS_NOT_CONFIRMED;

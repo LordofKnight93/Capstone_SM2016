@@ -13,5 +13,11 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
             this.User = new UserSD();
             this.JoinDate = new DateTime();
         }
+
+        public Member(UserSD user)
+        {
+            this.User = user;
+            this.JoinDate = DateTime.Now.Date;
+        }
     }
 }

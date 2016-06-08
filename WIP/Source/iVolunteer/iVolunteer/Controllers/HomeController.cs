@@ -10,7 +10,7 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureClass;
-using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.TableClass;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.Data_Definition_Class.SQL;
 using iVolunteer.Models.Data_Access_Object.MongoDB;
 using iVolunteer.Models.Data_Access_Object.SQL;
@@ -25,6 +25,9 @@ namespace iVolunteer.Controllers
         public ActionResult Newfeed()
         {
             if (Session["UserID"] == null) return RedirectToAction("Login");
+            Mongo_Message_DAO.Add_Message(new Mongo_Message());
+            Mongo_Plan_DAO.Add_Plan(new Mongo_Plan());
+            Mongo_Post_DAO.Add_Post(new Mongo_Post());
             return View("Newfeed");
         }
 
@@ -41,7 +44,7 @@ namespace iVolunteer.Controllers
             SQL_Account account = SQL_Account_DAO.Get_Account_By_Email(loginModel.Email);
             if (account == null)
             {
-                ViewBag.Message = "Tài khoản khoong tồn tại";
+                ViewBag.Message = "Tài khoản không tồn tại";
                 return View("Login", loginModel);
             }
             if (!account.IsActivate)
@@ -83,30 +86,15 @@ namespace iVolunteer.Controllers
             account.UserID = _id.ToString();
             account.Email = registerModel.Email;
             account.Password = registerModel.Password;
-            account.IndentifyID = registerModel.IndentifyID;
+            account.IndentifyID = registerModel.IdentifyID;
             account.DisplayName = registerModel.RealName;
             account.AvtImgLink = Constant.DEFAULT_AVATAR;
             account.IsAdmin = Constant.IS_USER;
             account.IsActivate = Constant.IS_ACTIVATE;
+            account.IsConfirm = Constant.IS_NOT_CONFIRMED;
 
             //give data to account in MongoDB
-            Mongo_User user = new Mongo_User();
-            user._id = _id;
-            //set account information
-            user.AccountInformation.Email = registerModel.Email;
-            user.AccountInformation.Password = registerModel.Password;
-            user.AccountInformation.DisplayName = registerModel.RealName;
-            user.AccountInformation.IsAdmin = Constant.IS_USER;
-            user.AccountInformation.IsActivate = Constant.IS_ACTIVATE;
-            user.AccountInformation.AvtImgLink = Constant.DEFAULT_AVATAR;
-            user.AccountInformation.CoverImgLink = Constant.DEFAULT_COVER;
-            //set userinfomation
-            user.UserInformation.RealName = registerModel.RealName;
-            user.UserInformation.Birthday = registerModel.Birthday;
-            user.UserInformation.IdentifyID = registerModel.IndentifyID;
-            user.UserInformation.Address = registerModel.Address;
-            user.UserInformation.Phone = registerModel.Phone;
-            user.UserInformation.Gender = registerModel.Gender;
+            Mongo_User user = new Mongo_User(registerModel);
             //write to DB
             
             using (TransactionScope transaction = new TransactionScope())
@@ -125,7 +113,6 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            ViewBag.Message = "Đăng ký thành công. Mail xác nhận đã được gửi đến Email đăng ký.";
             return RedirectToAction("Login");
         }
     }

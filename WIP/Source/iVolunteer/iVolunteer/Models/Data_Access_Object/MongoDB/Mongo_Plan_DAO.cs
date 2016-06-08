@@ -7,16 +7,16 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass;
 
 namespace iVolunteer.Models.Data_Access_Object.MongoDB
 {
-    public static class Mongo_Project_DAO
+    public class Mongo_Plan_DAO
     {
         static IMongoClient client = new MongoClient();
         static IMongoDatabase db = client.GetDatabase("iVolunteer");
-        static IMongoCollection<Mongo_Project> collection = db.GetCollection<Mongo_Project>("Project");
-        public static bool Add_Project(Mongo_Project project)
+        static IMongoCollection<Mongo_Plan> collection = db.GetCollection<Mongo_Plan>("Plan");
+        public static bool Add_Plan(Mongo_Plan plan)
         {
             try
             {
-                collection.InsertOne(project);
+                collection.InsertOne(plan);
                 return true;
             }
             catch

@@ -7,13 +7,13 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
 {
     public class PlanItem
     {
-        public ObjectId _id { get; set; }
+        public string ItemID { get; set; }
         public DateTime WorkDate { get; set; }
         public string Content { get; set; }
         public List<TeamLink> PIC { get; set; }
         public PlanItem()
         {
-            this._id = new ObjectId();
+            this.ItemID = "";
             this.WorkDate = new DateTime();
             this.Content = "";
             this.PIC = new List<TeamLink>();

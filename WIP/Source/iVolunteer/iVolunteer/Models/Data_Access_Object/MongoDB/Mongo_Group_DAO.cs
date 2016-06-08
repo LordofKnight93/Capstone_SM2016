@@ -16,12 +16,12 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         {
             try
             {
-                collection.InsertOneAsync(group);
+                collection.InsertOne(group);
                 return true;
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

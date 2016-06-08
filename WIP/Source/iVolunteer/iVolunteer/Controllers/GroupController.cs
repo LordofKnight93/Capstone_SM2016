@@ -10,7 +10,7 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.StructureClass;
-using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.TableClass;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.Data_Definition_Class.SQL;
 using iVolunteer.Models.Data_Access_Object.MongoDB;
 using iVolunteer.Models.Data_Access_Object.SQL;
@@ -47,37 +47,27 @@ namespace iVolunteer.Controllers
             groupInfo.CoverImgLink = Constant.DEFAULT_COVER;
             groupInfo.IsActivate = true;
 
-            //craete leader
-            UserSD leader = new UserSD();
-            leader.UserID = Session["UserID"].ToString();
-            leader.DisplayName = Session["DisplayName"].ToString();
-            leader.AvtImgLink = Session["Avatar"].ToString();
-            //craete member
-            Member member = new Member();
-            member.JoinDate = DateTime.Now.Date;
-            member.User = leader;
+            //craete creator
+            UserSD creator = new UserSD();
+            creator.UserID = Session["UserID"].ToString();
+            creator.DisplayName = Session["DisplayName"].ToString();
+            creator.AvtImgLink = Session["Avatar"].ToString();
 
-            ObjectId _id = ObjectId.GenerateNewId();
             //create mongo Group
-            Mongo_Group mongo_Group = new Mongo_Group();
-            mongo_Group._id = _id;
-            //set information
-            mongo_Group.GroupInformation = groupInfo;
-            //set structure
-            mongo_Group.GroupStructure.Creator = leader;
-            mongo_Group.GroupStructure.Leaders.Add(leader);
-            mongo_Group.GroupStructure.JoinedUsers.Add(member);
+            Mongo_Group mongo_Group = new Mongo_Group(creator,groupInfo);
 
             //create sql Group
             SQL_Group sql_Group = new SQL_Group();
-            sql_Group.GroupID = _id.ToString();
+            sql_Group.GroupID = mongo_Group._id.ToString();
             sql_Group.IsActivate = true;
 
-            // crate first relation
+            // create first relation
             SQL_User_Group relation = new SQL_User_Group();
-            relation.UserID = leader.UserID ;
-            relation.GroupID = _id.ToString();
+            relation.UserID = creator.UserID ;
+            relation.GroupID = mongo_Group._id.ToString();
             relation.RelationType = Constant.DIRECT_RELATION;
+
+            //this code will change user information, will add later
 
             //start transaction
             using (var transaction = new TransactionScope())

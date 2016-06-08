@@ -22,7 +22,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             catch (Exception)
             {
 
-                return false;
+                throw;
             }
         }
 
@@ -43,7 +43,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_Account.Where(acc => acc.Email == email && acc.IsActivate == Constant.IS_ACTIVATE).FirstOrDefault();
+                var result = dbEntities.SQL_Account.Where(acc => acc.Email == email).FirstOrDefault();
                 return result;
             }
             catch
@@ -53,7 +53,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 
         }
 
-        public static bool Set_Activation(string userID, bool status)
+        public static bool Set_Activation_Status(string userID, bool status)
         {
             try
             {
@@ -64,11 +64,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
-        public static bool Set_Confirmation(string userID, bool status)
+        public static bool Set_Confirmation_Status(string userID, bool status)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -94,7 +94,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -109,7 +109,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -124,7 +124,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -137,7 +137,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 

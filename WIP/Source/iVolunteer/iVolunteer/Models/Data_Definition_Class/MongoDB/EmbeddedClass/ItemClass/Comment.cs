@@ -6,17 +6,24 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
 {
     public class Comment
     {
-        public ObjectId _id { get; set; }
+        public string CommentID { get; set; }
         public UserSD Creater { get; set; }
         public string Content { get; set; }
         public DateTime DateCreate { get; set; }
 
         public Comment()
         {
-            this._id = new ObjectId();
+            this.CommentID = "";
             this.Creater = new UserSD();
             this.Content = "";
             this.DateCreate = new DateTime();
+        }
+        public Comment(UserSD user, string content)
+        {
+            this.CommentID = ObjectId.GenerateNewId().ToString();
+            this.Creater = user;
+            this.Content = content;
+            this.DateCreate = DateTime.Now;
         }
     }
 }

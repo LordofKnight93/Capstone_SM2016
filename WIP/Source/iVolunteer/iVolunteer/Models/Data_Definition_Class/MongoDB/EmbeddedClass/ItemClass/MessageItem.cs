@@ -21,5 +21,12 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
             this.Sender = new UserSD();
             this.Content = "";
         }
+        public MessageItem(UserSD sender, string content)
+        {
+            this._id = ObjectId.GenerateNewId();
+            this.DateSend = DateTime.Now;
+            this.Sender = sender;
+            this.Content = content;
+        }
     }
 }

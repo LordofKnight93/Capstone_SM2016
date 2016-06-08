@@ -19,7 +19,20 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
+            }
+        }
+
+        public static int Get_Specific_Relation(string userID, string projectID)
+        {
+            try
+            {
+                var result = dbEntities.SQL_User_Project.Where(rls => rls.UserID == userID && rls.ProjectID == projectID).FirstOrDefault();
+                return result.RelationType;
+            }
+            catch
+            {
+                throw;
             }
         }
 
@@ -34,7 +47,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -49,7 +62,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

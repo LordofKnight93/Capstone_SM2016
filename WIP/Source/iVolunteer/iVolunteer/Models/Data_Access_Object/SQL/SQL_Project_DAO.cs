@@ -19,7 +19,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

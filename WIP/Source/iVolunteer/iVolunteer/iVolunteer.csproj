@@ -203,6 +203,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Group_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Message_DAO.cs" />
+    <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Plan_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Post_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_Project_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_User_DAO.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\MessageItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\PlanItem.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\RequestItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Team.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\AlbumLink.cs" />
@@ -241,13 +244,14 @@
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\ProjectLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\TeamLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\UserLink.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ListClass\RequestList.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\AlbumSD.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\GroupSD.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\ProjectSD.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\SDClass\UserSD.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\StructureClass\GroupStructure.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\StructureClass\ProjectStructure.cs" />
-    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\TableClass\Agenda.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
     <Compile Include="Models\Data_Definition_Class\SQL\iVolunteerSQL.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

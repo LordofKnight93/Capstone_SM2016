@@ -27,5 +27,15 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.CurrentProjects = new List<ProjectSD>();
             this.AlbumList = new List<AlbumSD>();
         }
+
+        public Mongo_Group(UserSD creator, GroupInformation groupInfo)
+        {
+            this._id = ObjectId.GenerateNewId();
+            this.GroupInformation = groupInfo;
+            this.GroupStructure = new GroupStructure(creator);
+            this.HistoryInformation = new HistoryInformation();
+            this.CurrentProjects = new List<ProjectSD>();
+            this.AlbumList = new List<AlbumSD>();
+        }
     }
 }

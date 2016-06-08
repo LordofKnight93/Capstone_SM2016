@@ -3,6 +3,7 @@ using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using iVolunteer.Models.Data_Definition_Class.ViewModel;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
 {
@@ -29,6 +30,24 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.ActivityHistory = new HistoryInformation();
             this.CurrentProjects = new List<ProjectSD>();
             this.NotificationList = new List<Notification>();
+        }
+
+        public Mongo_User(RegisterModel registerModel)
+        {
+            this._id = ObjectId.GenerateNewId();
+            this.UserInformation = new UserInformation(registerModel);
+            this.AccountInformation = new AccountInformation(registerModel);
+            this.JoinedGroup = new List<GroupSD>();
+            this.FriendList = new List<Member>();
+            this.ActivityHistory = new HistoryInformation();
+            this.CurrentProjects = new List<ProjectSD>();
+            this.NotificationList = new List<Notification>();
+        }
+
+        public void Add_Friend(UserSD userSD)
+        {
+            Member newFriend = new Member();
+            this.FriendList.Add(newFriend);
         }
     }
 }

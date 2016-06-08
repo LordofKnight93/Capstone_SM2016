@@ -20,11 +20,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
-        public static int Get_RelationType(string userID, string groupID)
+        public static int Get_Specific_Relation(string userID, string groupID)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return 0;
+                throw;
             }
         }
 
@@ -48,7 +48,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
 
@@ -63,7 +63,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
             }
             catch
             {
-                return false;
+                throw;
             }
         }
     }

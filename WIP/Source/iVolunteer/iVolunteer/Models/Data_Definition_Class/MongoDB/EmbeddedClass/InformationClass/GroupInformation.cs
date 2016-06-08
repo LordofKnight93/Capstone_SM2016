@@ -23,8 +23,8 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.DateCreate = new DateTime();
             this.GroupDescription = "";
             this.MemberCount = 0;
-            this.AvtImgLink = "";
-            this.CoverImgLink = "";
+            this.AvtImgLink = Constant.DEFAULT_AVATAR;
+            this.CoverImgLink = Constant.DEFAULT_COVER;
             this.IsActivate = Constant.IS_ACTIVATE;
         }
     }

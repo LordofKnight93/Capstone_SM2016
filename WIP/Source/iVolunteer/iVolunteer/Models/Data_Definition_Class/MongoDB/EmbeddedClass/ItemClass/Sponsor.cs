@@ -1,10 +1,12 @@
 ﻿using MongoDB.Bson;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass
 {
     public class Sponsor
     {
-        public ObjectId _id { get; set; }
+        // guest create new or get from logined user
+        public string SponsorID { get; set; }
         public string SponsorName { get; set; }
         public string SponsorMail { get; set; }
         public string SponsorPhone { get; set; }
@@ -12,11 +14,19 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
 
         public Sponsor()
         {
-            this._id = new ObjectId();
+            this.SponsorID = "";
             this.SponsorName = "";
             this.SponsorMail = "";
             this.SponsorPhone = "";
             this.SponsorAddress = "";
+        }
+
+        public Sponsor(UserInformation userInfo)
+        {
+            this.SponsorName = userInfo.RealName;
+            this.SponsorMail = userInfo.Email;
+            this.SponsorPhone = userInfo.Phone;
+            this.SponsorAddress = userInfo.Address;
         }
     }
 }

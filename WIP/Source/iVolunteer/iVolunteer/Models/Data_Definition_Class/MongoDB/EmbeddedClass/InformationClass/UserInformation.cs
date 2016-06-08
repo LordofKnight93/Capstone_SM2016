@@ -1,4 +1,5 @@
 ﻿using System;
+using iVolunteer.Models.Data_Definition_Class.ViewModel;
 using MongoDB.Bson;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
@@ -11,6 +12,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public string RealName { get; set; }
         public DateTime Birthday { get; set; }
         public string IdentifyID { get; set; }
+        public string Email { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public bool Gender { get; set; }
@@ -21,9 +23,21 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.RealName = "";
             this.Birthday = new DateTime();
             this.IdentifyID = "";
+            this.Email = "";
             this.Address = "";
             this.Phone = "";
             this.Gender = false;
+        }
+
+        public UserInformation(RegisterModel registerModel)
+        {
+            this.RealName = registerModel.RealName;
+            this.Birthday = registerModel.Birthday;
+            this.IdentifyID = registerModel.IdentifyID;
+            this.Email = registerModel.Email;
+            this.Address = registerModel.Address;
+            this.Phone = registerModel.Phone;
+            this.Gender = registerModel.Gender;
         }
     }
 }
