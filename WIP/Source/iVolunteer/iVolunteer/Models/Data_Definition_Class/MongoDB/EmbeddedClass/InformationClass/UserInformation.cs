@@ -1,6 +1,7 @@
 ﻿using System;
 using iVolunteer.Models.Data_Definition_Class.ViewModel;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
@@ -16,7 +17,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public string Address { get; set; }
         public string Phone { get; set; }
         public bool Gender { get; set; }
-        public string[] Interest { get; set; }
+        public List<string> Interest { get; set; }
 
         public UserInformation()
         {
@@ -27,6 +28,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.Address = "";
             this.Phone = "";
             this.Gender = false;
+            this.Interest = new List<string>();
         }
 
         public UserInformation(RegisterModel registerModel)
@@ -38,6 +40,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.Address = registerModel.Address;
             this.Phone = registerModel.Phone;
             this.Gender = registerModel.Gender;
+            //missing interest
         }
     }
 }

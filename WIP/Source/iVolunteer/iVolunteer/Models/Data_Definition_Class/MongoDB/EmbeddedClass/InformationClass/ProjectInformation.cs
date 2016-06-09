@@ -10,6 +10,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class ProjectInformation
     {
+        public string ProjectID { get; set; }
         public string ProjectName { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateStart { get; set; }
@@ -26,6 +27,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
 
         public ProjectInformation()
         {
+            this.ProjectID = "";
             this.ProjectName = "";
             this.DateCreate = new DateTime();
             this.DateStart = new DateTime();

@@ -16,6 +16,7 @@ namespace iVolunteer.Models.Data_Definition_Class.SQL
     {
         public string PostID { get; set; }
         public System.DateTime DateCreate { get; set; }
+        public System.DateTime DateLastActivity { get; set; }
         public string ProjectID { get; set; }
         public string GroupID { get; set; }
         public string AlbumID { get; set; }

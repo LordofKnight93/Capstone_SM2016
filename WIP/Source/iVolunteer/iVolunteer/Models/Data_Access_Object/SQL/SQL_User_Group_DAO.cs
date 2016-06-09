@@ -10,6 +10,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
     public static class SQL_User_Group_DAO
     {
         static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        /// <summary>
+        /// Add a relaton between a user and group to SQLDB
+        /// </summary>
+        /// <param name="relation">a SQL_User_Group instance</param>
+        /// <returns>true if add success</returns>
         public static bool Add_Relation(SQL_User_Group relation)
         {
             try
@@ -23,12 +28,17 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Get relation between a user and a group
+        /// </summary>
+        /// <param name="userID">ID of User</param>
+        /// <param name="groupID">ID of Group</param>
+        /// <returns>return relation's type to compare with Constant</returns>
         public static int Get_Specific_Relation(string userID, string groupID)
         {
             try
             {
-                var result = dbEntities.SQL_User_Group.Where(rls => rls.UserID == userID && rls.GroupID == groupID).FirstOrDefault();
+                var result = dbEntities.SQL_User_Group.FirstOrDefault(rls => rls.UserID == userID && rls.GroupID == groupID);
                 return result.RelationType;
             }
             catch
@@ -36,12 +46,17 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Delete a relation between a user and group
+        /// </summary>
+        /// <param name="userID">user ID in relation</param>
+        /// <param name="groupID">group id in relation</param>
+        /// <returns>true if delete success</returns>
         public static bool Delete_Specific_Relation(string userID, string groupID)
         {
             try
             {
-                var result = dbEntities.SQL_User_Group.Where(b => b.UserID == userID && b.GroupID == groupID).FirstOrDefault();
+                var result = dbEntities.SQL_User_Group.FirstOrDefault(b => b.UserID == userID && b.GroupID == groupID);
                 dbEntities.SQL_User_Group.Remove(result);
                 dbEntities.SaveChanges();
                 return true;
@@ -51,7 +66,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Delete all relation with group of a user, use when delete user, maybe not be used
+        /// </summary>
+        /// <param name="userID">deleted userID</param>
+        /// <returns>true if delete success</returns>
         public static bool Delete_Relation_By_OneID(string userID)
         {
             try

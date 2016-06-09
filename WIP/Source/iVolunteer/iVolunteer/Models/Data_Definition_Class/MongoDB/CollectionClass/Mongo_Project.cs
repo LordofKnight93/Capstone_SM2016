@@ -35,6 +35,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public Mongo_Project(UserSD creator, ProjectInformation projectInfo)
         {
             this._id = ObjectId.GenerateNewId();
+            this.ProjectInformation.ProjectID = this._id.ToString();
             this.ProjectInformation = projectInfo;
             this.ProjectStructure = new ProjectStructure(creator);
             this.RequestList = new RequestList();

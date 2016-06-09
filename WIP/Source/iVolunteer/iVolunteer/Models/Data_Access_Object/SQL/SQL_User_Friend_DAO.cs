@@ -9,6 +9,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
     public static class SQL_User_Friend_DAO
     {
         static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        /// <summary>
+        /// Add a relaton between a user and another usser to SQLDB
+        /// </summary>
+        /// <param name="relation">a SQL_User_Friend instance</param>
+        /// <returns>true if add success</returns>
         public static bool Add_Relation( SQL_User_Friend relation)
         {
             try
@@ -22,7 +27,32 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Check if 2 user is friend or not
+        /// </summary>
+        /// <param name="userID1"></param>
+        /// <param name="userID2"></param>
+        /// <returns>true if is friend, false if not</returns>
+        public static bool Is_Friend(string userID1, string userID2)
+        {
+            try
+            {
+                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID1 && rls.FriendID == userID2
+                                                                  || rls.UserID == userID2 && rls.FriendID == userID1);
+                if (result == null) return false;
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Delete a relation between a user and another user
+        /// </summary>
+        /// <param name="userID">user ID in relation</param>
+        /// <param name="friendID">other user id in relation</param>
+        /// <returns>true if delete success</returns>
         public static bool Delete_Specific_Relation(string userID, string friendID)
         {
             try
@@ -38,7 +68,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Delete all friend relation of user, use when delete user, maybe not be used
+        /// </summary>
+        /// <param name="userID">deleted userID</param>
+        /// <returns>true if delete success</returns>
         public static bool Delete_Relation_By_UserID(string userID)
         {
             try

@@ -22,12 +22,18 @@ namespace iVolunteer.Controllers
 {
     public class HomeController : Controller
     {
+        public void GenerateDB()
+        {
+
+        }
+
+        public ActionResult FrontPage()
+        {
+            return View();
+        }
         public ActionResult Newfeed()
         {
             if (Session["UserID"] == null) return RedirectToAction("Login");
-            Mongo_Message_DAO.Add_Message(new Mongo_Message());
-            Mongo_Plan_DAO.Add_Plan(new Mongo_Plan());
-            Mongo_Post_DAO.Add_Post(new Mongo_Post());
             return View("Newfeed");
         }
 

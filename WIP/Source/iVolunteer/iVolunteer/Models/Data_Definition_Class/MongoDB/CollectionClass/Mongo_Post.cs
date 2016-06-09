@@ -14,7 +14,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public ObjectId _id { get; set; }
         public PostInformation PostInfomation { get; set; }
         public List<UserSD> LikerList { get; set; }
-        public string[] FollowerIDs { get; set; }
+        public List<string> FollowerIDs { get; set; }
         public List<Comment> CommentList { get; set; }
 
         public Mongo_Post()

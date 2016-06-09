@@ -56,6 +56,7 @@
           </Key>
           <Property Name="PostID" Type="varchar" MaxLength="24" Nullable="false" />
           <Property Name="DateCreate" Type="datetime" Nullable="false" />
+          <Property Name="DateLastActivity" Type="datetime" Nullable="false" />
           <Property Name="ProjectID" Type="varchar" MaxLength="24" />
           <Property Name="GroupID" Type="varchar" MaxLength="24" />
           <Property Name="AlbumID" Type="varchar" MaxLength="24" />
@@ -394,6 +395,7 @@
           </Key>
           <Property Name="PostID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="DateCreate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateLastActivity" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
           <Property Name="GroupID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
           <Property Name="AlbumID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
@@ -737,6 +739,7 @@
               <MappingFragment StoreEntitySet="SQL_Post">
                 <ScalarProperty Name="PostID" ColumnName="PostID" />
                 <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+                <ScalarProperty Name="DateLastActivity" ColumnName="DateLastActivity" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="GroupID" ColumnName="GroupID" />
                 <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
