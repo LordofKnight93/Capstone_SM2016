@@ -1,5 +1,6 @@
 ﻿using iVolunteer.Common;
 using iVolunteer.Models.Data_Definition_Class.ViewModel;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
     /// <summary>
@@ -7,6 +8,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class AccountInformation
     {
+        public string UserID { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string DisplayName { get; set; }
@@ -16,9 +18,11 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public bool IsAdmin { get; set; }
         public bool IsActivate { get; set; }
         public bool IsConfirmed { get; set; }
+        public TagsList Interested { get; set; }
 
         public AccountInformation()
         {
+            this.UserID = "";
             this.Email = "";
             this.Password = "";
             this.DisplayName = "";
@@ -28,6 +32,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.IsAdmin = Constant.IS_USER;
             this.IsActivate = Constant.IS_ACTIVATE;
             this.IsConfirmed = Constant.IS_NOT_CONFIRMED;
+            this.Interested = new TagsList();
         }
 
         public AccountInformation(RegisterModel registerModel)
@@ -41,6 +46,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.IsAdmin = Constant.IS_USER;
             this.IsActivate = Constant.IS_ACTIVATE;
             this.IsConfirmed = Constant.IS_NOT_CONFIRMED;
+            this.Interested = registerModel.Interested;
         }
     }
 }

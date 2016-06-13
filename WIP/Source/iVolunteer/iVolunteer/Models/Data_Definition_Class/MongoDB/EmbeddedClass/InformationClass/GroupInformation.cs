@@ -9,6 +9,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class GroupInformation
     {
+        public string GroupID { get; set; }
         public string GroupName { get; set; }
         public DateTime DateCreate { get; set; }
         public string GroupDescription { get; set; }
@@ -19,6 +20,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
 
         public GroupInformation()
         {
+            this.GroupID = "";
             this.GroupName = "";
             this.DateCreate = new DateTime();
             this.GroupDescription = "";

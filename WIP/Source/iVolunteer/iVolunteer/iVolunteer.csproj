@@ -197,6 +197,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
+    <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
@@ -225,12 +226,14 @@
     <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Friend_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Group_DAO.cs" />
     <Compile Include="Models\Data_Access_Object\SQL\SQL_User_Project_DAO.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Message.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Plan.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Post.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_Project.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\CollectionClass\Mongo_User.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\InformationClass\HistoryInformation.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
@@ -239,12 +242,14 @@
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\AgendaItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\HistoryItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Member.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\MessageItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\PlanItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\RequestItem.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
+    <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\TagsList.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\ItemClass\Team.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\AlbumLink.cs" />
     <Compile Include="Models\Data_Definition_Class\MongoDB\EmbeddedClass\LinkClass\GroupLink.cs" />
@@ -321,10 +326,12 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\Newfeed.cshtml" />
     <Content Include="Views\Project\CreateProject.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
+    <Content Include="Views\Admin\GroupList.cshtml" />
+    <Content Include="Views\Home\FrontPage.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -335,7 +342,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Account\" />
-    <Folder Include="Views\Admin\" />
     <Folder Include="Views\Album\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Post\" />

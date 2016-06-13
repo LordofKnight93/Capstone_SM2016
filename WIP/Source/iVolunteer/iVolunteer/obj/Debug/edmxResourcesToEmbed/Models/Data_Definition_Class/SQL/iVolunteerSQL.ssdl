@@ -51,6 +51,7 @@
     </Key>
     <Property Name="PostID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="DateCreate" Type="datetime" Nullable="false" />
+    <Property Name="DateLastActivity" Type="datetime" Nullable="false" />
     <Property Name="ProjectID" Type="varchar" MaxLength="24" />
     <Property Name="GroupID" Type="varchar" MaxLength="24" />
     <Property Name="AlbumID" Type="varchar" MaxLength="24" />

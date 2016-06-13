@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
     /// <summary>
-    /// This class store activity history of group or user
+    /// This class store activity history of group or user fomr day join system
     /// </summary>
     public class HistoryInformation
     {

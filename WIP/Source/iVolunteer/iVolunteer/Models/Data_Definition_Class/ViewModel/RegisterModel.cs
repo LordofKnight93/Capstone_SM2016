@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 
 namespace iVolunteer.Models.Data_Definition_Class.ViewModel
 {
@@ -40,5 +41,7 @@ namespace iVolunteer.Models.Data_Definition_Class.ViewModel
         public string Address { get; set; }
         [DisplayName("Số điện thoại")]
         public string Phone { get; set; }
+        [DisplayName("Các chủ dề quan tâm")]
+        public TagsList Interested { get; set; }
     }
 }

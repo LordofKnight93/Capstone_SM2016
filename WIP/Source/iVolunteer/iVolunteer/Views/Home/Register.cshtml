@@ -6,7 +6,7 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>Đăng ký</h4>
+        <h4>RegisterModel</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -60,10 +60,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.IndentifyID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.IdentifyID, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IndentifyID, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.IndentifyID, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.IdentifyID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IdentifyID, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -84,6 +84,17 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.Interested, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.LabelFor(model => model.Interested.IsEducation, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Interested.IsEducation)
+                    @Html.ValidationMessageFor(model => model.Interested.IsEducation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -92,7 +103,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to Home", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>

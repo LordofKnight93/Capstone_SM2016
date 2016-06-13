@@ -1,4 +1,3 @@
-F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\ApplicationInsights.config
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\roslyn\csc.exe
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll

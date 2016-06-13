@@ -17,9 +17,9 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public ProjectInformation ProjectInformation { get; set; }
         public ProjectStructure ProjectStructure { get; set; }
         public RequestList RequestList { get; set; }
-        public List<AlbumSD> AlbumList { get; set; }
         public List<Team> Teams { get; set; }
         public Agenda Agenda { get; set; }
+        public TagsList TagsList { get; set; }
 
         public Mongo_Project()
         {
@@ -27,19 +27,17 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.ProjectInformation = new ProjectInformation();
             this.ProjectStructure = new ProjectStructure();
             this.RequestList = new RequestList();
-            this.AlbumList = new List<AlbumSD>();
             this.Teams = new List<Team>();
-            this.Agenda = new Agenda();
         }
 
         public Mongo_Project(UserSD creator, ProjectInformation projectInfo)
         {
             this._id = ObjectId.GenerateNewId();
+            this.ProjectInformation = new ProjectInformation();
             this.ProjectInformation.ProjectID = this._id.ToString();
             this.ProjectInformation = projectInfo;
             this.ProjectStructure = new ProjectStructure(creator);
             this.RequestList = new RequestList();
-            this.AlbumList = new List<AlbumSD>();
             this.Teams = new List<Team>();
             this.Agenda = new Agenda();
         }

@@ -16,7 +16,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public GroupStructure GroupStructure { get; set; }
         public HistoryInformation HistoryInformation { get; set; }
         public List<ProjectSD> CurrentProjects { get; set; }
-        public List<AlbumSD> AlbumList { get; set; }
 
         public Mongo_Group()
         {
@@ -25,7 +24,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.GroupStructure = new GroupStructure();
             this.HistoryInformation = new HistoryInformation();
             this.CurrentProjects = new List<ProjectSD>();
-            this.AlbumList = new List<AlbumSD>();
         }
 
         public Mongo_Group(UserSD creator, GroupInformation groupInfo)
@@ -35,7 +33,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
             this.GroupStructure = new GroupStructure(creator);
             this.HistoryInformation = new HistoryInformation();
             this.CurrentProjects = new List<ProjectSD>();
-            this.AlbumList = new List<AlbumSD>();
         }
     }
 }

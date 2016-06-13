@@ -70,13 +70,15 @@ namespace iVolunteer.Controllers
             //this code will change user information, will add later
 
             //start transaction
+            /*
             using (var transaction = new TransactionScope())
             {
                 try
-                {
+                {*/
                     Mongo_Group_DAO.Add_Group(mongo_Group);
                     SQL_Group_DAO.Add_Group(sql_Group);
                     SQL_User_Group_DAO.Add_Relation(relation);
+            /*
                     transaction.Complete();
                 }
                 catch
@@ -86,6 +88,7 @@ namespace iVolunteer.Controllers
                     return View();
                 }
             }
+            */
             ViewBag.Message = "Tạo nhóm tình nguyện thành công";
             return RedirectToAction("Newfeed","Home");
         }

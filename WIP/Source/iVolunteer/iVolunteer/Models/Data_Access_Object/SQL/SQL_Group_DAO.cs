@@ -8,7 +8,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public static class SQL_Group_DAO
     {
-        static iVolunteerEntities dbEntitied = new iVolunteerEntities();
+        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+
+        public static List<SQL_Group> Get_All_Group()
+        {
+            return dbEntities.SQL_Group.ToList();
+        }
         /// <summary>
         /// Add group to SQL DB
         /// </summary>
@@ -18,8 +23,8 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntitied.SQL_Group.Add(group);
-                dbEntitied.SaveChangesAsync();
+                dbEntities.SQL_Group.Add(group);
+                dbEntities.SaveChangesAsync();
                 return true;
             }
             catch
@@ -36,7 +41,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Group group = dbEntitied.SQL_Group.FirstOrDefault(g => g.GroupID == groupID);
+                SQL_Group group = dbEntities.SQL_Group.FirstOrDefault(g => g.GroupID == groupID);
                 return group.IsActivate;
             }
             catch
@@ -54,9 +59,9 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Group group = dbEntitied.SQL_Group.FirstOrDefault(g => g.GroupID == groupID);
+                SQL_Group group = dbEntities.SQL_Group.FirstOrDefault(g => g.GroupID == groupID);
                 group.IsActivate = status;
-                dbEntitied.SaveChanges();
+                dbEntities.SaveChanges();
                 return true;
             }
             catch

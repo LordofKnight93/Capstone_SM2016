@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
 {
@@ -6,6 +6,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
     /// This class is used to store simple information of a group.
     /// Stored in project structure, user's joined group, and used as model in user joined group view, project structure view
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class GroupSD
     {
         public string GroupID { get; set; }

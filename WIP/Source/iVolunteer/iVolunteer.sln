@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iVolunteer", "iVolunteer\iV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iVolunteer.UnitTest", "iVolunteer.UnitTest\iVolunteer.UnitTest.csproj", "{9B5EF4D8-6400-418A-A93B-BC966844D2CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDBTest", "MongoDBTest\MongoDBTest.csproj", "{67FC449D-BF97-4A28-991F-4E81C09C1896}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9B5EF4D8-6400-418A-A93B-BC966844D2CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B5EF4D8-6400-418A-A93B-BC966844D2CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B5EF4D8-6400-418A-A93B-BC966844D2CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67FC449D-BF97-4A28-991F-4E81C09C1896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FC449D-BF97-4A28-991F-4E81C09C1896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FC449D-BF97-4A28-991F-4E81C09C1896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FC449D-BF97-4A28-991F-4E81C09C1896}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

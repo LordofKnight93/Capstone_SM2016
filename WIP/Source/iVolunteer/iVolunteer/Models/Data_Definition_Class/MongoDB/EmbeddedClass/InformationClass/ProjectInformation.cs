@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using System.Collections.Generic;
 using iVolunteer.Common;
+using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {
@@ -16,7 +17,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
         public string ProjectDescription { get; set; }
-        public List<string> Tags { get; set; }
         public string Location { get; set; }
         public int MemberCount { get; set; }
         public int FollowerCount { get; set; }
@@ -24,6 +24,8 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public string CoverImgLink { get; set; }
         public bool IsRecruit { get; set; }
         public bool IsActivate { get; set; }
+        public TagsList TagList { get; set; }
+
 
         public ProjectInformation()
         {
@@ -33,7 +35,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.DateStart = new DateTime();
             this.DateEnd = new DateTime();
             this.ProjectDescription = "";
-            this.Tags = new List<string>();
             this.Location = "";
             this.MemberCount = 0;
             this.FollowerCount = 0;
@@ -41,6 +42,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.CoverImgLink = Constant.DEFAULT_COVER;
             this.IsRecruit = Constant.IS_RECRUITING;
             this.IsActivate = Constant.IS_ACTIVATE;
+            this.TagList = new TagsList();
         }
     }
 }

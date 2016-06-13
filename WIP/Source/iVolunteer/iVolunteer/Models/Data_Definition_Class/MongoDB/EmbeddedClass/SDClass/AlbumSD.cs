@@ -1,5 +1,5 @@
 ﻿using System;
-using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
 {
@@ -7,12 +7,11 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
     /// This class is used to store simple information of a album, store in project and group.
     /// And used as model for view project/group gallery 
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class AlbumSD
     {
         public string AlbumID  { get; set; }
         public string AlbumName { get; set; }
-        public DateTime DateCreate { get; set; }
-        public DateTime DateLastActivity { get; set; }
         public string CoverImgLink { get; set; }
         public int ImageCount { get; set; }
         public int LikeCount { get; set; }
@@ -23,8 +22,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.SDClass
         {
             this.AlbumID = "";
             this.AlbumName = "";
-            this.DateCreate = new DateTime();
-            this.DateLastActivity = new DateTime();
             this.CoverImgLink = "";
             this.ImageCount = 0;
             this.CommentCount = 0;

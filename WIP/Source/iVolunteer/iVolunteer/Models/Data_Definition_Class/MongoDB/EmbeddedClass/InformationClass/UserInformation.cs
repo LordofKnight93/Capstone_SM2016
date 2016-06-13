@@ -10,6 +10,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
     /// </summary>
     public class UserInformation
     {
+        public string UserID { get; set; }
         public string RealName { get; set; }
         public DateTime Birthday { get; set; }
         public string IdentifyID { get; set; }
@@ -21,6 +22,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
 
         public UserInformation()
         {
+            this.UserID = "";
             this.RealName = "";
             this.Birthday = new DateTime();
             this.IdentifyID = "";

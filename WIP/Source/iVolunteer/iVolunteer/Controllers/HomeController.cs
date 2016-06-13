@@ -29,7 +29,7 @@ namespace iVolunteer.Controllers
 
         public ActionResult FrontPage()
         {
-            return View();
+            return View(SQL_Group_DAO.Get_All_Group());
         }
         public ActionResult Newfeed()
         {
@@ -86,7 +86,13 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Register(RegisterModel registerModel)
         {
-            //give data to account in SQL
+            if(!ValidationHelper.IsValidEmail(registerModel.Email) 
+                    || !ValidationHelper.IsValidIdentifyID(registerModel.IdentifyID))
+            {
+                ViewBag.Message = "Thông tin không hợp lệ";
+                return View("Register");
+            }
+            //create account in SQL
             ObjectId _id = ObjectId.GenerateNewId();
             SQL_Account account = new SQL_Account();
             account.UserID = _id.ToString();
@@ -99,7 +105,7 @@ namespace iVolunteer.Controllers
             account.IsActivate = Constant.IS_ACTIVATE;
             account.IsConfirm = Constant.IS_NOT_CONFIRMED;
 
-            //give data to account in MongoDB
+            //create account in MongoDB
             Mongo_User user = new Mongo_User(registerModel);
             //write to DB
             
