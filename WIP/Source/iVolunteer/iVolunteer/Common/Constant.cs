@@ -15,7 +15,7 @@ namespace iVolunteer.Common
         public const bool IS_BANNED = true;
         //confirmation status
         public const bool IS_CONFIRMED = true;
-        public const bool IS_NOT_CONFIRMED = true;
+        public const bool IS_NOT_CONFIRMED = false;
         //realation type
         public const int DIRECT_RELATION = 1;
         public const int INDIRECT_RELATION = 2;

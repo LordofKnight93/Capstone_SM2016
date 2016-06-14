@@ -7,15 +7,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Project_DAO
+    public class SQL_Project_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add new project to SQL DB
         /// </summary>
         /// <param name="project">SQL_Project instance</param>
         /// <returns>true if success</returns>
-        public static bool Add_Project(SQL_Project project)
+        public bool Add_Project(SQL_Project project)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="projectID">projectIDt want to check</param>
         /// <returns>activation status of account to compare with Constant</returns>
-        public static bool IsActivate(string projectID)
+        public bool IsActivate(string projectID)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="projectID"></param>
         /// <param name="status">get in Constant</param>
         /// <returns></returns>
-        public static bool Set_Avtivation_Status(string projectID, bool status)
+        public bool Set_Avtivation_Status(string projectID, bool status)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Project(string projectID)
+        public bool Delete_Project(string projectID)
         {
             try
             {

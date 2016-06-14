@@ -18,7 +18,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public bool IsAdmin { get; set; }
         public bool IsActivate { get; set; }
         public bool IsConfirmed { get; set; }
-        public TagsList Interested { get; set; }
 
         public AccountInformation()
         {
@@ -32,7 +31,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.IsAdmin = Constant.IS_USER;
             this.IsActivate = Constant.IS_ACTIVATE;
             this.IsConfirmed = Constant.IS_NOT_CONFIRMED;
-            this.Interested = new TagsList();
         }
 
         public AccountInformation(RegisterModel registerModel)
@@ -46,7 +44,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.IsAdmin = Constant.IS_USER;
             this.IsActivate = Constant.IS_ACTIVATE;
             this.IsConfirmed = Constant.IS_NOT_CONFIRMED;
-            this.Interested = registerModel.Interested;
         }
     }
 }

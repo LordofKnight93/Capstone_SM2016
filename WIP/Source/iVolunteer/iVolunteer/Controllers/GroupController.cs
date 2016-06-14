@@ -70,15 +70,20 @@ namespace iVolunteer.Controllers
             //this code will change user information, will add later
 
             //start transaction
-            /*
+            
             using (var transaction = new TransactionScope())
             {
                 try
-                {*/
-                    Mongo_Group_DAO.Add_Group(mongo_Group);
-                    SQL_Group_DAO.Add_Group(sql_Group);
-                    SQL_User_Group_DAO.Add_Relation(relation);
-            /*
+                {
+                    // create DAO instance
+                    Mongo_Group_DAO mongo_Group_DAO = new Mongo_Group_DAO();
+                    SQL_Group_DAO sql_Group_DAO = new SQL_Group_DAO();
+                    SQL_User_Group_DAO sql_User_Group_DAO = new SQL_User_Group_DAO();
+
+                    //write to DB
+                    mongo_Group_DAO.Add_Group(mongo_Group);
+                    sql_Group_DAO.Add_Group(sql_Group);
+                    sql_User_Group_DAO.Add_Relation(relation);
                     transaction.Complete();
                 }
                 catch
@@ -88,9 +93,15 @@ namespace iVolunteer.Controllers
                     return View();
                 }
             }
-            */
             ViewBag.Message = "Tạo nhóm tình nguyện thành công";
             return RedirectToAction("Newfeed","Home");
+        }
+
+        public ActionResult GroupInformation(string groupID)
+        {
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            var result = groupDAO.Get_GroupInformation(groupID);
+            return View(result);
         }
     }
 }

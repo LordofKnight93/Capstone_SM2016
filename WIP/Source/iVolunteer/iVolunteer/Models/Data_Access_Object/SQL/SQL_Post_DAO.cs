@@ -7,15 +7,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Post_DAO
+    public class SQL_Post_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// add new post to SQL DB
         /// </summary>
         /// <param name="post"></param>
         /// <returns>true if success</returns>
-        public static bool Add_Post(SQL_Post post)
+        public bool Add_Post(SQL_Post post)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="postID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Post(string postID)
+        public bool Delete_Post(string postID)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="postID"></param>
         /// <param name="permission"></param>
         /// <returns></returns>
-        public static bool Set_Permission(string postID, bool permission)
+        public bool Set_Permission(string postID, bool permission)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="postID"></param>
         /// <param name="date"></param>
         /// <returns>true if success</returns>
-        public static bool Set_DateLastActivity(string postID, DateTime date)
+        public bool Set_DateLastActivity(string postID, DateTime date)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="albumID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Post_By_AlbumID(string albumID)
+        public bool Delete_Post_By_AlbumID(string albumID)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID"></param>
         /// <param name="postID"></param>
         /// <returns></returns>
-        public static bool IsAccessable(string userID, string postID)
+        public bool IsAccessable(string userID, string postID)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public static List<string> Get_Post_For_Newfeed_By_DateCreate(string userID, int number, int skip)
+        public List<string> Get_Post_For_Newfeed_By_DateCreate(string userID, int number, int skip)
         {
             List<string> posts = new List<string>();
             // get user project relation and proejct is activate

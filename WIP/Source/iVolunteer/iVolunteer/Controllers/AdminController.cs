@@ -27,9 +27,10 @@ namespace iVolunteer.Controllers
             return View();
         }
 
-        public ActionResult GroupList()
+        public ActionResult ListGroup(int skip = 0, int number = 5)
         {
-            var result = Mongo_Group_DAO.Get_All_GroupInformation();
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            var result = groupDAO.Get_All_GroupInformation(skip, number);
             return View(result);
         }
     }

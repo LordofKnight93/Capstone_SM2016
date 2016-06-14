@@ -7,15 +7,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Plan_DAO
+    public class SQL_Plan_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add new plan to SQL DB
         /// </summary>
         /// <param name="plan">SQL_Plan instantce</param>
         /// <returns>true if succeess</returns>
-        public static bool Add_Plan(SQL_Plan plan)
+        public bool Add_Plan(SQL_Plan plan)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="planID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Plan(string planID)
+        public bool Delete_Plan(string planID)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID"></param>
         /// <param name="planID"></param>
         /// <returns>true if accessable, false if not</returns>
-        public static bool IsAccessable(string userID, string planID)
+        public bool IsAccessable(string userID, string planID)
         {
             try
             {

@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Models\Data_Access_Object\SQL\SQL_Account_DAOTests.cs" />
+    <Compile Include="Common\ValidationHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

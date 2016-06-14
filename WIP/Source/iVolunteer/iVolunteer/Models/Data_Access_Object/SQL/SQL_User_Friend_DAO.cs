@@ -6,15 +6,15 @@ using iVolunteer.Models.Data_Definition_Class.SQL;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_User_Friend_DAO
+    public class SQL_User_Friend_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add a relaton between a user and another usser to SQLDB
         /// </summary>
         /// <param name="relation">a SQL_User_Friend instance</param>
         /// <returns>true if add success</returns>
-        public static bool Add_Relation( SQL_User_Friend relation)
+        public bool Add_Relation( SQL_User_Friend relation)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID1"></param>
         /// <param name="userID2"></param>
         /// <returns>true if is friend, false if not</returns>
-        public static bool Is_Friend(string userID1, string userID2)
+        public bool Is_Friend(string userID1, string userID2)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">user ID in relation</param>
         /// <param name="friendID">other user id in relation</param>
         /// <returns>true if delete success</returns>
-        public static bool Delete_Specific_Relation(string userID, string friendID)
+        public bool Delete_Specific_Relation(string userID, string friendID)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="userID">deleted userID</param>
         /// <returns>true if delete success</returns>
-        public static bool Delete_Relation_By_UserID(string userID)
+        public bool Delete_Relation_By_UserID(string userID)
         {
             try
             {

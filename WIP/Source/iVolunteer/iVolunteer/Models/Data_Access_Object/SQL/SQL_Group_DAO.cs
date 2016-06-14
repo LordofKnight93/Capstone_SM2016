@@ -6,20 +6,27 @@ using iVolunteer.Models.Data_Definition_Class.SQL;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Group_DAO
+    public class SQL_Group_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
 
-        public static List<SQL_Group> Get_All_Group()
+        public List<SQL_Group> Get_All_Group()
         {
-            return dbEntities.SQL_Group.ToList();
+            try
+            {
+                return dbEntities.SQL_Group.ToList();
+            }
+            catch
+            {
+                throw;
+            }
         }
         /// <summary>
         /// Add group to SQL DB
         /// </summary>
         /// <param name="group">SQL_Group instance</param>
         /// <returns>true if success</returns>
-        public static bool Add_Group(SQL_Group group)
+        public bool Add_Group(SQL_Group group)
         {
             try
             {
@@ -37,7 +44,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns>return value compare with Constant</returns>
-        public static bool IsActivate(string groupID)
+        public bool IsActivate(string groupID)
         {
             try
             {
@@ -55,7 +62,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="groupID"></param>
         /// <param name="status">get in Constant</param>
         /// <returns>true if success</returns>
-        public static bool Set_Activation_Status(string groupID, bool status)
+        public bool Set_Activation_Status(string groupID, bool status)
         {
             try
             {

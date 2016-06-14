@@ -5,6 +5,12 @@
     @Html.ActionLink("Tạo dự án tình nguyện", "CreateProject", "Project")
 </div>
 <div>
+    @Html.ActionLink("Danh sách các nhóm tình nguyện", "ListGroup", "Admin", new { skip = 0, number = 5 },null)
+</div>
+<div>
+    @Html.ActionLink("Danh sách các dự án tình nguyện", "CreateProject", "Project", new { skip = 0, number = 5 },null)
+</div>
+<div>
     @ViewBag.Message
 </div>
 

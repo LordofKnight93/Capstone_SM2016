@@ -11,17 +11,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.MongoDB
 {
-    public static class Mongo_Post_DAO
+    public class Mongo_Post_DAO : Mongo_DAO
     {
-        static IMongoClient client = new MongoClient();
-        static IMongoDatabase db = client.GetDatabase("iVolunteer");
-        static IMongoCollection<Mongo_Post> collection = db.GetCollection<Mongo_Post>("Post");
+        IMongoCollection<Mongo_Post> collection = db.GetCollection<Mongo_Post>("Post");
         /// <summary>
         /// Add new post to mongoDB
         /// </summary>
         /// <param name="post">Mongo_Post instance</param>
         /// <returns>true if success</returns>
-        public static bool Add_Post(Mongo_Post post)
+        public bool Add_Post(Mongo_Post post)
         {
             try
             {
@@ -38,7 +36,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// </summary>
         /// <param name="postID"></param>
         /// <returns></returns>
-        public static bool Delete_Post(string postID)
+        public bool Delete_Post(string postID)
         {
             try
             {
@@ -56,7 +54,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// </summary>
         /// <param name="postID"></param>
         /// <returns>Mongo_Post instance</returns>
-        public static Mongo_Post Get_Post_By_ID(string postID)
+        public Mongo_Post Get_Post_By_ID(string postID)
         {
             try
             {
@@ -76,7 +74,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// <param name="number"></param>
         /// <param name="skip"></param>
         /// <returns></returns>
-        public static List<Mongo_Post> Get_Public_Post_By_ProjectID(string projectID, int number, int skip)
+        public List<Mongo_Post> Get_Public_Post_By_ProjectID(string projectID, int number, int skip)
         {
             try
             {
@@ -98,7 +96,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// <param name="number"></param>
         /// <param name="skip"></param>
         /// <returns></returns>
-        public static List<Mongo_Post> Get_Private_Post_By_ProjectID(string projectID, int number, int skip)
+        public List<Mongo_Post> Get_Private_Post_By_ProjectID(string projectID, int number, int skip)
         {
             try
             {

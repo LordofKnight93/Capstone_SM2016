@@ -6,15 +6,15 @@ using iVolunteer.Models.Data_Definition_Class.SQL;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Message_DAO
+    public class SQL_Message_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add message to SQL DB
         /// </summary>
         /// <param name="message">SQL_Message instance</param>
         /// <returns>true if success</returns>
-        public static bool Add_Message(SQL_Message message)
+        public bool Add_Message(SQL_Message message)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="messageID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Message(string messageID)
+        public bool Delete_Message(string messageID)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID"></param>
         /// <param name="messageID"></param>
         /// <returns>true if accessable, false if not</returns>
-        public static bool IsAccessable(string userID, string messageID)
+        public bool IsAccessable(string userID, string messageID)
         {
             try
             {

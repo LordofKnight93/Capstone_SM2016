@@ -19,7 +19,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         public RequestList RequestList { get; set; }
         public List<Team> Teams { get; set; }
         public Agenda Agenda { get; set; }
-        public TagsList TagsList { get; set; }
 
         public Mongo_Project()
         {

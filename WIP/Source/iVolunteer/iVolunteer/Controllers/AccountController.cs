@@ -29,7 +29,8 @@ namespace iVolunteer.Controllers
 
         public ActionResult Confirm(string userID)
         {
-            SQL_Account_DAO.Set_Confirmation_Status(userID, Constant.IS_CONFIRMED);
+            SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+            accountDAO.Set_Confirmation_Status(userID, Constant.IS_CONFIRMED);
             return RedirectToAction("Login","Home");
         }
     }

@@ -197,6 +197,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
+    <Compile Include="Models\Data_Access_Object\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -314,6 +315,7 @@
     </Compile>
     <Compile Include="Models\Data_Definition_Class\ViewModel\LoginModel.cs" />
     <Compile Include="Models\Data_Definition_Class\ViewModel\RegisterModel.cs" />
+    <Compile Include="Models\Data_Definition_Class\ViewModel\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -329,7 +331,8 @@
     <Content Include="Views\Home\Newfeed.cshtml" />
     <Content Include="Views\Project\CreateProject.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
-    <Content Include="Views\Admin\GroupList.cshtml" />
+    <Content Include="Views\Admin\ListGroup.cshtml" />
+    <Content Include="Views\Group\GroupInformation.cshtml" />
     <Content Include="Views\Home\FrontPage.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <None Include="Web.Debug.config">

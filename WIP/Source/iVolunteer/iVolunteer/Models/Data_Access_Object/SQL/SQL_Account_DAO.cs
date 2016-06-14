@@ -7,7 +7,7 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Account_DAO
+    public class SQL_Account_DAO
     {
         static iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
@@ -15,7 +15,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="account">SQL_Account instance</param>
         /// <returns>true if add success</returns>
-        public static bool Add_Account(SQL_Account account)
+        public bool Add_Account(SQL_Account account)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// Get all account in system with no condition, used by admin only, 
         /// </summary>
         /// <returns>A list of SQL_Account</returns>
-        public static List<SQL_Account> Get_All_Account()
+        public List<SQL_Account> Get_All_Account()
         {
             try
             {
@@ -50,7 +50,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="email">account email</param>
         /// <returns> SQL_Account instance that have the same email value as nput</returns>
-        public static SQL_Account Get_Account_By_Email(string email)
+        public SQL_Account Get_Account_By_Email(string email)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">userID of account want to set</param>
         /// <param name="status">status, get in Constant</param>
         /// <returns>true if success</returns>
-        public static bool Set_Activation_Status(string userID, bool status)
+        public bool Set_Activation_Status(string userID, bool status)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID"> userID of account want to set</param>
         /// <param name="status">status, get in Constant</param>
         /// <returns>true if success</returns>
-        public static bool Set_Confirmation_Status(string userID, bool status)
+        public bool Set_Confirmation_Status(string userID, bool status)
         {
             try
             {
@@ -109,11 +109,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">userID of account want to set</param>
         /// <param name="password">new password, should be encrypted</param>
         /// <returns>true if success</returns>
-        public static bool Set_Password(string userID, string password)
+        public bool Set_Password(string userID, string password)
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                 account.Password = password;
                 dbEntities.SaveChanges();
                 return true;
@@ -129,11 +129,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">userID of account want to set</param>
         /// <param name="imgLink">new image link</param>
         /// <returns>true if success</returns>
-        public static bool Set_Avatar(string userID, string imgLink)
+        public bool Set_Avatar(string userID, string imgLink)
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                 account.AvtImgLink = imgLink;
                 dbEntities.SaveChanges();
                 return true;
@@ -149,11 +149,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">userID of account want to set</param>
         /// <param name="displayname">new display name</param>
         /// <returns> true if success </returns>
-        public static bool Set_DisplayName(string userID, string displayname)
+        public bool Set_DisplayName(string userID, string displayname)
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                 account.DisplayName = displayname;
                 dbEntities.SaveChanges();
                 return true;
@@ -168,12 +168,46 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="userID">userID of account want to check</param>
         /// <returns>activation status of account to compare with Constant</returns>
-        public static bool IsActivate(string userID)
+        public bool IsActivate(string userID)
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                 return account.IsActivate;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if an email exist in system
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public bool Is_Email_Exist(string email)
+        {
+            try
+            {
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.Email == email);
+                return account==null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if an identifyID exist in system
+        /// </summary>
+        /// <param name="identifyID"></param>
+        /// <returns></returns>
+        public bool Is_IdentifyID_Exist(string identifyID)
+        {
+            try
+            {
+                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.IndentifyID == identifyID);
+                return account == null;
             }
             catch
             {

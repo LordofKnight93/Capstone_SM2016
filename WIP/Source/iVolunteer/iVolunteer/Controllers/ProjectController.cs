@@ -73,9 +73,15 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
-                    Mongo_Project_DAO.Add_Project(mongo_Project);
-                    SQL_Project_DAO.Add_Project(sql_Project);
-                    SQL_User_Project_DAO.Add_Relation(relation);
+                    //crreate DAO instance 
+                    Mongo_Project_DAO mongo_Project_DAO = new Mongo_Project_DAO();
+                    SQL_Project_DAO sql_Project_DAO = new SQL_Project_DAO();
+                    SQL_User_Project_DAO sql_User_Project_DAO = new SQL_User_Project_DAO();
+                    //write to DB
+                    mongo_Project_DAO.Add_Project(mongo_Project);
+                    sql_Project_DAO.Add_Project(sql_Project);
+                    sql_User_Project_DAO.Add_Relation(relation);
+
                     transaction.Complete();
                 }
                 catch

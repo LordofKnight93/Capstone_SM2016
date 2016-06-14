@@ -18,7 +18,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
         public string Address { get; set; }
         public string Phone { get; set; }
         public bool Gender { get; set; }
-        public List<string> Interest { get; set; }
 
         public UserInformation()
         {
@@ -30,7 +29,6 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.Address = "";
             this.Phone = "";
             this.Gender = false;
-            this.Interest = new List<string>();
         }
 
         public UserInformation(RegisterModel registerModel)

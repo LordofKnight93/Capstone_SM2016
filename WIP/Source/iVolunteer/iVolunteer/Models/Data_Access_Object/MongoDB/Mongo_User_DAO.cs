@@ -10,17 +10,15 @@ using MongoDB.Bson;
 
 namespace iVolunteer.Models.Data_Access_Object.MongoDB
 {
-    public static class Mongo_User_DAO
+    public class Mongo_User_DAO : Mongo_DAO
     {
-        static MongoClient client = new MongoClient();
-        static IMongoDatabase db = client.GetDatabase("iVolunteer");
-        static IMongoCollection<Mongo_User> collection = db.GetCollection<Mongo_User>("User");
+        IMongoCollection<Mongo_User> collection = db.GetCollection<Mongo_User>("User");
         /// <summary>
         /// add new user to mongoDB
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public static bool Add_User(Mongo_User user)
+        public bool Add_User(Mongo_User user)
         {
             try
             {
@@ -38,7 +36,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// <param name="userID"></param>
         /// <param name="status"></param>
         /// <returns>true if success</returns>
-        public static bool Set_Activation_Status(string userID, bool status)
+        public bool Set_Activation_Status(string userID, bool status)
         {
             try
             {

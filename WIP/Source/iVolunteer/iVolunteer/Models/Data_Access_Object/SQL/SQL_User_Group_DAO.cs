@@ -7,15 +7,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_User_Group_DAO
+    public class SQL_User_Group_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add a relaton between a user and group to SQLDB
         /// </summary>
         /// <param name="relation">a SQL_User_Group instance</param>
         /// <returns>true if add success</returns>
-        public static bool Add_Relation(SQL_User_Group relation)
+        public bool Add_Relation(SQL_User_Group relation)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">ID of User</param>
         /// <param name="groupID">ID of Group</param>
         /// <returns>return relation's type to compare with Constant</returns>
-        public static int Get_Specific_Relation(string userID, string groupID)
+        public int Get_Specific_Relation(string userID, string groupID)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID">user ID in relation</param>
         /// <param name="groupID">group id in relation</param>
         /// <returns>true if delete success</returns>
-        public static bool Delete_Specific_Relation(string userID, string groupID)
+        public bool Delete_Specific_Relation(string userID, string groupID)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="userID">deleted userID</param>
         /// <returns>true if delete success</returns>
-        public static bool Delete_Relation_By_OneID(string userID)
+        public bool Delete_Relation_By_OneID(string userID)
         {
             try
             {

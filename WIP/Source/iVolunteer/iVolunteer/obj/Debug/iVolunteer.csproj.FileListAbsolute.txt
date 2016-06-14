@@ -64,3 +64,4 @@ F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunte
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\System.Web.Mvc.xml
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache

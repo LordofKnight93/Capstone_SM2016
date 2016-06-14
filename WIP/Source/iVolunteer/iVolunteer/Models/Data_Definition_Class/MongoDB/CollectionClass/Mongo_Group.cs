@@ -30,6 +30,7 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.CollectionClass
         {
             this._id = ObjectId.GenerateNewId();
             this.GroupInformation = groupInfo;
+            this.GroupInformation.GroupID = this._id.ToString();
             this.GroupStructure = new GroupStructure(creator);
             this.HistoryInformation = new HistoryInformation();
             this.CurrentProjects = new List<ProjectSD>();

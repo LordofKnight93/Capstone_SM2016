@@ -1,33 +1,5 @@
-﻿@model IEnumerable<iVolunteer.Models.Data_Definition_Class.SQL.SQL_Group>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.GroupID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActivate)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.GroupID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActivate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
-
-</table>
+﻿<div>
+    @Html.ActionLink("Đăng nhập", "Login", "Home")
+</div><div>
+    @Html.ActionLink("Đăng ký", "Register", "Home")
+</div>

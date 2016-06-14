@@ -35,13 +35,12 @@ namespace iVolunteer.Models.Data_Definition_Class.ViewModel
         public DateTime Birthday { get; set; }
         [Required]
         [DisplayName("Số chứng minh thư")]
+        [RegularExpression(@"^[0-9]*$")]
         [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
         public string IdentifyID { get; set; }
         [DisplayName("Địa chỉ")]
         public string Address { get; set; }
         [DisplayName("Số điện thoại")]
         public string Phone { get; set; }
-        [DisplayName("Các chủ dề quan tâm")]
-        public TagsList Interested { get; set; }
     }
 }

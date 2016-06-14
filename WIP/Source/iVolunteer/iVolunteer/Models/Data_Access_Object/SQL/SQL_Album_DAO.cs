@@ -7,15 +7,15 @@ using iVolunteer.Common;
 
 namespace iVolunteer.Models.Data_Access_Object.SQL
 {
-    public static class SQL_Album_DAO
+    public class SQL_Album_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
+        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add album to project
         /// </summary>
         /// <param name="album">SQL_Album instance</param>
         /// <returns>true if success</returns>
-        public static bool Add_Album(SQL_Album album)
+        public bool Add_Album(SQL_Album album)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="albumID"></param>
         /// <param name="permission">get in Constant</param>
         /// <returns>true if success</returns>
-        public static bool Set_Permission(string albumID, bool permission)
+        public bool Set_Permission(string albumID, bool permission)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// </summary>
         /// <param name="albumID"></param>
         /// <returns>true if success</returns>
-        public static bool Delete_Album(string albumID)
+        public bool Delete_Album(string albumID)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <param name="userID"></param>
         /// <param name="albumID"></param>
         /// <returns>true if accessalble, false if not</returns>
-        public static bool IsAccessable(string userID, string albumID)
+        public bool IsAccessable(string userID, string albumID)
         {
             try
             {

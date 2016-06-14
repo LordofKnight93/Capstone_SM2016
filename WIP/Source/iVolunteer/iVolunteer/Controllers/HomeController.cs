@@ -22,14 +22,9 @@ namespace iVolunteer.Controllers
 {
     public class HomeController : Controller
     {
-        public void GenerateDB()
-        {
-
-        }
-
         public ActionResult FrontPage()
         {
-            return View(SQL_Group_DAO.Get_All_Group());
+            return View();
         }
         public ActionResult Newfeed()
         {
@@ -47,7 +42,17 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel loginModel)
         {
-            SQL_Account account = SQL_Account_DAO.Get_Account_By_Email(loginModel.Email);
+            SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+            SQL_Account account = new SQL_Account();
+            try
+            {
+                account = accountDAO.Get_Account_By_Email(loginModel.Email);
+            }
+            catch
+            {
+                account = null;
+            }
+
             if (account == null)
             {
                 ViewBag.Message = "Tài khoản không tồn tại";
@@ -113,8 +118,13 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
-                    Mongo_User_DAO.Add_User(user);
-                    SQL_Account_DAO.Add_Account(account);
+                    //create DAO instance
+                    Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+                    SQL_Account_DAO sql_Account_DAO = new SQL_Account_DAO();
+                    //write to DB
+                    mongo_User_DAO.Add_User(user);
+                    sql_Account_DAO.Add_Account(account);
+
                     transaction.Complete();
                 }
                 catch
