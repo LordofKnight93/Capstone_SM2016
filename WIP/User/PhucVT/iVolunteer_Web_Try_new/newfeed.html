@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>iVolunteer</title>
+
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Bootstrap -->
+  <link rel="stylesheet" type="text/css" href="css/custom-bootstrap.css">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+
+  <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #049f88">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#" style="padding: 2px 20px"><img src="images/logo.png" height="50px"></a>
+      </div>
+
+      <!-- Navbar left -->
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="divider-vertical"></li>
+          <li class="notification-container">
+            <a href="">
+              <span class="glyphicon glyphicon-bell glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Notification"></span>
+            </a>
+            <span class="notification-counter">1</span>
+          </li>
+          <li class="notification-container">
+            <a href="">
+              <span class="glyphicon glyphicon-user glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Friend"></span>
+            </a>
+            <span class="notification-counter">12</span>
+          </li>
+          <li class="notification-container">
+            <a href="">
+              <span class="glyphicon glyphicon-comment glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Message"></span>
+            </a>
+            <span class="notification-counter">20</span>
+          </li>
+          <li class="divider-vertical"></li>
+        </ul>
+
+        <div class="col-sm-5 col-md-5 search-box-nav">
+          <form class="navbar-form" role="search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search" name="q">
+              <div class="input-group-btn">
+                <button class="btn btn-search-nav" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Navbar Right -->
+        <ul class="nav navbar-nav navbar-right">
+          <!--<li><a href="" style="color: #fff; font-weight: bold">PROFILE</a></li>
+          <li><a href="" style="color: #fff; font-weight: bold">PROJECT</a></li>
+          <li><a href="" style="color: #fff; font-weight: bold">GROUP</a></li>-->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 4px 10px 1.5px 15px">
+              <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="home.html">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <div class="container" style="margin-top: 55px">
+    <div class="row">
+      <div class="col-md-3">
+
+        <!-- Slibar -->
+        <div class="card-panel">
+          <div class="row" style="text-align: center;">
+            <div class="col-sm-12">
+              <object type="image/svg+xml" data="images/avatar.svg" width="80" height="80" border="1"></object>
+            </div>
+            <div class="col-sm-12">
+              <p style="color: #049f88; font-weight: bold">Võ Tôn Phúc</p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+              <i class="material-icons" data-toggle="tooltip" title="Projects">assignment</i>
+              <p style="text-align: center; font-weight: bold">4</p>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+              <i class="material-icons" data-toggle="tooltip" title="Groups">group</i>
+              <p style="text-align: center; font-weight: bold">5</p>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+              <i class="material-icons" data-toggle="tooltip" title="Posts">web_asset</i>
+              <p style="text-align: center; font-weight: bold">125</p>
+            </div>
+
+            <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+              <i class="material-icons" data-toggle="tooltip" title="Friends">person</i>
+              <p style="text-align: center; font-weight: bold">95</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide Bar Project -->
+        <div class="card-panel">
+          <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+            <div class="col-sm-12">
+              <h4>Dự Án</h4>
+            </div>
+          </div>
+          <div class="divider-holizon"></div>
+
+          <!-- List Project -->
+          <div class="row">
+            <div class="col-sm-12 col-xs-12">
+              <ul class="list-navi">
+                <li><a href="">Áo ấm Hà Giang</a></li>
+                <li><a href="">Thu gom vỏ chai</a></li>
+                <li><a href="">Tiếng Anh Tân Xã</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Add New Project -->
+          <div class="row" style="text-align: right">
+            <button class="btn btn-addnew" style="margin: 10px 15px 0px 10px;">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Slide Bar Group -->
+        <div class="card-panel">
+          <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+            <div class="col-sm-12">
+              <h4>Nhóm</h4>
+            </div>
+          </div>
+          <div class="divider-holizon"></div>
+
+          <!-- List Project -->
+          <div class="row">
+            <div class="col-sm-12 col-xs-12">
+              <ul class="list-navi">
+                <li><a href="">Tôi Tình Nguyện</a></li>
+                <li><a href="">Quỹ Vỏ Chai</a></li>
+                <li><a href="">iGo</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Add New Project -->
+          <div class="row" style="text-align: right">
+            <button class="btn btn-addnew" style="margin: 10px 15px 0px 10px;">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-9">
+
+        <!--  Text Post -->
+        <div class="card-panel">
+            <div class="row">
+              <div class="col-sm-7 col-md-7">
+
+                <!-- Post Owner -->
+                <table class="table-post-ava">
+                  <tr>
+                    <td rowspan="2"><object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object></td>
+                    <td class="td">
+                      <a href="" class="user-name">Võ Tôn Phúc</a>
+                      <i class="glyphicon glyphicon-triangle-right" style="font-size: smaller"></i>
+                      <a href="project.html" class="user-name">Tôi Tình Nguyện</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td" style="color: gray; font-size:90%">16 minutes</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Navigation button -->
+              <div class="col-sm-5 col-md-5" style="text-align: right;">
+                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Xóa"><i class="glyphicon glyphicon-trash"></i></button>
+                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Thu gọn"><i class="glyphicon glyphicon-menu-right"></i></button>
+              </div>
+            </div>
+
+            <!-- Post Content -->
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="card-content">
+                  <p>Hiện tại nhóm mình vẫn đang tổ chức Project Toa Tàu Trẻ Em. Tuy nhiên mình muốn mọi người nghĩ dần idea cho hoạt động sắp tới sau khi Toa Tàu Trẻ Em kết thúc. Mọi người cố gắng nghĩ ra các ý tưởng trong tuần này, cuối tuần chung ta sẽ vote ý tưởng và bắt đầu xây plan các kiểu cho dự án sắp tới của bọn mình luôn nhé.<br>Cám ơn mọi người nhiều. :))) </p> 
+                </div>
+              </div>
+            </div>  
+
+            <div class="divider-holizon"></div>
+
+            <!-- Interaction Panel -->
+            <div class="row">
+
+              <!-- Interaction Button -->
+              <div class="col-md-6 col-sm-6">
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-heart-empty"></span>
+                  Like
+                </button>
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-comment"></span>
+                  Comment
+                </button>
+              </div>
+              
+              <!-- Interaction Counter -->
+              <div class="col-md-6 col-sm-6" style="text-align: right">
+                <div class="row">
+                  <ul class="list-interaction">
+                    <li>
+                      <i class="glyphicon glyphicon-heart"></i>
+                      <span><strong>15</strong></span>
+                    </li>
+                    <li>
+                      <i class="glyphicon glyphicon-comment"></i>
+                      <span><strong>2</strong></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider-holizon"></div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" class="user-name">Đặng Thị Bình</a>
+                  <span>&bull; 5 phút trước</span>
+                </div>
+                <div class="row">
+                  <p>Mình thấy dạy tiếng anh cho mấy đứa nhỏ ở Tân Xã cũng hợp lí...</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" style="color: #049f88; font-weight: bold">Nguyễn Bá Long</a>
+                  <span>&bull; 2 phút trước</span>
+                </div>
+                <div class="row">
+                  <p>Cũng được đấy nhỉ :))).</p>
+                </div>
+                <div class="row">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" style="color: #049f88; font-weight: bold">Võ Tôn Phúc</a>
+                </div>
+                <div class="row">
+                  <input type="text" class="text-comment" placeholder="Write a comment...">
+                </div>
+                <div class="row">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!--  Text Post -->
+        <div class="card-panel">
+            <div class="row">
+              <div class="col-sm-7 col-md-7">
+
+                <!-- Post Owner -->
+                <table class="table-post-ava">
+                  <tr>
+                    <td rowspan="2"><object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object></td>
+                    <td class="td">
+                      <a href="" class="user-name">Nguyễn Duy Linh</a>
+                      <i class="glyphicon glyphicon-triangle-right" style="font-size: smaller"></i>
+                      <a href="project.html" class="user-name">Thu gom vỏ chai</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td" style="color: gray; font-size:90%">16 minutes</td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+
+            <!-- Post Content -->
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="card-content">
+                  <p>Hôm nay chúng ta sẽ đi thu gom vỏ chai của tuần này nhé<br>Mọi người nhớ đúng 7h tập trung trước cửa của Dom D, chúng ta sẽ chia nhóm và thu gom đồng thời ở các Dom.<br>Ai không đi được nhớ báo mình sớm nhé<br>Cám ơn mọi người.</p> 
+                </div>
+              </div>
+            </div>  
+
+            <div class="divider-holizon"></div>
+
+            <!-- Interaction Panel -->
+            <div class="row">
+
+              <!-- Interaction Button -->
+              <div class="col-md-6 col-sm-6">
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-heart-empty"></span>
+                  Like
+                </button>
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-comment"></span>
+                  Comment
+                </button>
+              </div>
+              
+              <!-- Interaction Counter -->
+              <div class="col-md-6 col-sm-6" style="text-align: right">
+                <div class="row">
+                  <ul class="list-interaction">
+                    <li>
+                      <i class="glyphicon glyphicon-heart"></i>
+                      <span><strong>15</strong></span>
+                    </li>
+                    <li>
+                      <i class="glyphicon glyphicon-comment"></i>
+                      <span><strong>1</strong></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider-holizon"></div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" class="user-name">Nguyễn Ngọc Minh</a>
+                  <span>&bull; 5 phút trước</span>
+                </div>
+                <div class="row">
+                  <p>Hẹn mọi người tối nay</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" style="color: #049f88; font-weight: bold">Võ Tôn Phúc</a>
+                </div>
+                <div class="row">
+                  <input type="text" class="text-comment" placeholder="Write a comment...">
+                </div>
+                <div class="row">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!--  Text Post -->
+        <div class="card-panel">
+            <div class="row">
+              <div class="col-sm-7 col-md-7">
+
+                <!-- Post Owner -->
+                <table class="table-post-ava">
+                  <tr>
+                    <td rowspan="2"><object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object></td>
+                    <td class="td">
+                      <a href="" class="user-name">Thu gom vỏ chai</a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="td" style="color: gray; font-size:90%">20 minutes</td>
+                  </tr>
+                </table>
+              </div>
+
+            </div>
+
+            <!-- Post Content -->
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="card-content">
+                  <p>Hôm nay, từ 7h30 bọn mình sẽ đi thu chai nhựa ở tất cả các Dom. Ai có chai lọ gì thì tập trung lại hộ bọn mình nhé.<br><br>Cám ơn mọi người.<br>--- Duy Linh ---</p> 
+                </div>
+              </div>
+            </div>  
+
+            <div class="divider-holizon"></div>
+
+            <!-- Interaction Panel -->
+            <div class="row">
+
+              <!-- Interaction Button -->
+              <div class="col-md-6 col-sm-6">
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-heart-empty"></span>
+                  Like
+                </button>
+                <button type="button" class="btn-card" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-comment"></span>
+                  Comment
+                </button>
+              </div>
+              
+              <!-- Interaction Counter -->
+              <div class="col-md-6 col-sm-6" style="text-align: right">
+                <div class="row">
+                  <ul class="list-interaction">
+                    <li>
+                      <i class="glyphicon glyphicon-heart"></i>
+                      <span><strong>5</strong></span>
+                    </li>
+                    <li>
+                      <i class="glyphicon glyphicon-comment"></i>
+                      <span><strong>1</strong></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider-holizon"></div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" class="user-name">Nguyễn Minh Ngọc</a>
+                </div>
+                <div class="row">
+                  <p>Mình đợi các cậu cả tuần nay rồi...</p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Comment -->
+            <div class="row">
+              <div class="col-md-1 col-sm-1">
+                <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
+              </div>
+              
+              <div class="col-md-9 col-sm-9">
+                <div class="row">
+                  <a href="" style="color: #049f88; font-weight: bold">Võ Tôn Phúc</a>
+                </div>
+                <div class="row">
+                  <input type="text" class="text-comment" placeholder="Write a comment...">
+                </div>
+                <div class="row">
+                  <div></div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="panel-footer">
+    asdas
+  </footer>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/phucvt_custom.js"></script>
+</body>
+</html>
