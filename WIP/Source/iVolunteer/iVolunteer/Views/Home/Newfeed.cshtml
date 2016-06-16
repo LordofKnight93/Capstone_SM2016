@@ -7,11 +7,14 @@
 <div>
     @Html.ActionLink("Danh sách các nhóm tình nguyện", "ListGroup", "Admin", new { skip = 0, number = 5 },null)
 </div>
+@*<div>
+    @Html.ActionLink("Danh sách các dự án tình nguyện", "ListProject", "Admin", new { skip = 0, number = 5 },null)
+</div>*@
 <div>
-    @Html.ActionLink("Danh sách các dự án tình nguyện", "CreateProject", "Project", new { skip = 0, number = 5 },null)
+    @Html.ActionLink("Danh sách người dùng", "ListUser", "Admin", new { skip = 0, number = 5 }, null)
 </div>
 <div>
-    @ViewBag.Message
+    @Html.ActionLink("Thông tin của tôi", "UserInformationDetail", "User", new { userID = Session["UserID"].ToString() },null)
 </div>
 
 

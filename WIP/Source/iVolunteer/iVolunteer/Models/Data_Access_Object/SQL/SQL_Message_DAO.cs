@@ -8,7 +8,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_Message_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add message to SQL DB
         /// </summary>
@@ -18,9 +17,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_Message.Add(message);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_Message.Add(message);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -36,10 +38,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var msg = dbEntities.SQL_Message.Where(m => m.MessageID == messageID);
-                dbEntities.SQL_Message.RemoveRange(msg);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var msg = dbEntities.SQL_Message.Where(m => m.MessageID == messageID);
+                    dbEntities.SQL_Message.RemoveRange(msg);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -56,9 +61,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_Message.FirstOrDefault(msg => msg.UserID == userID && msg.MessageID == messageID);
-                if (result == null) return false;
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Message.FirstOrDefault(msg => msg.UserID == userID && msg.MessageID == messageID);
+                    if (result == null) return false;
+                    return true;
+                }
             }
             catch
             {

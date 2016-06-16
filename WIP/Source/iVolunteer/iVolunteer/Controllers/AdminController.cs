@@ -26,11 +26,51 @@ namespace iVolunteer.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// Get group list
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
         public ActionResult ListGroup(int skip = 0, int number = 5)
         {
+            //check input, use default value if not pass
+            if (skip < 0||number <=0)
+            {
+                skip = 0;
+                number = 5;
+            }
+
             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
             var result = groupDAO.Get_All_GroupInformation(skip, number);
+            return View(result);
+        }
+
+        public ActionResult ListProject(int skip = 0, int number = 5)
+        {
+            //check input, use default value if not pass
+            if (skip < 0 || number <= 0)
+            {
+                skip = 0;
+                number = 5;
+            }
+
+            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+            var result = projectDAO.Get_All_ProjectInformation(skip, number);
+            return View(result);
+        }
+
+        public ActionResult ListUser(int skip = 0, int number = 5)
+        {
+            //check input, use default value if not pass
+            if (skip < 0 || number <= 0)
+            {
+                skip = 0;
+                number = 5;
+            }
+
+            Mongo_User_DAO projectDAO = new Mongo_User_DAO();
+            var result = projectDAO.Get_All_UserInformations(skip, number);
             return View(result);
         }
     }

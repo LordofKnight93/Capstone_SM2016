@@ -25,28 +25,9 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Structur
             this.CreatorID = creator.UserID;
             this.Leaders = new List<UserSD>();
             this.JoinedUsers = new List<Member>();
-            this.Add_Leader(creator);
-            this.Add_Member(creator);
+            this.Leaders.Add(creator);
+            this.JoinedUsers.Add(new Member(creator));
             
-        }
-        public void Add_Leader(UserSD leader)
-        {
-            this.Leaders.Add(leader);
-        }
-        public void Delete_Leader(string leaderID)
-        {
-            UserSD leader = this.Leaders.Find(l => l.UserID == leaderID);
-            this.Leaders.Remove(leader);
-        }
-        public void Add_Member(UserSD user)
-        {
-            Member member = new Member(user);
-            this.JoinedUsers.Add(member);
-        }
-        public void Delete_Member(string memberID)
-        {
-            Member member = this.JoinedUsers.Find(m => m.User.UserID == memberID);
-            this.JoinedUsers.Remove(member);
         }
     }
 }

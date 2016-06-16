@@ -1,0 +1,12 @@
+﻿@model iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass.AccountInformation
+
+<div>
+    <hr />
+        <img id="imgPreview" width="200" src="@Model.AvtImgLink">
+    <hr />
+        <img id="imgPreview" width="1000" src="@Model.CoverImgLink"/>
+</div>
+<p>
+    @Html.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar","Account", new { id = Model.UserID  },null) |
+    @Html.ActionLink("Thay đổi ảnh bìa", "ChangeCover","Account", new { id = Model.UserID }, null)
+</p>

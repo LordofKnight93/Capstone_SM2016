@@ -9,7 +9,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_Account_DAO
     {
-        static iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add new account to SQL DB
         /// </summary>
@@ -19,9 +18,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_Account.Add(account);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_Account.Add(account);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch (Exception)
             {
@@ -37,8 +39,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_Account.ToList();
-                return result;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Account.ToList();
+                    return result;
+                }
             }
             catch
             {
@@ -54,8 +59,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_Account.Where(acc => acc.Email == email).First();
-                return result;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Account.Where(acc => acc.Email == email).First();
+                    return result;
+                }
             }
             catch
             {
@@ -73,10 +81,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
-                account.IsActivate = status;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                    account.IsActivate = status;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -93,10 +104,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
-                account.IsConfirm = status;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                    account.IsConfirm = status;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -113,10 +127,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                account.Password = password;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    account.Password = password;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -133,10 +150,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                account.AvtImgLink = imgLink;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    account.AvtImgLink = imgLink;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -153,10 +173,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                account.DisplayName = displayname;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    account.DisplayName = displayname;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -172,8 +195,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                return account.IsActivate;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    return account.IsActivate;
+                }
             }
             catch
             {
@@ -189,8 +215,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.Email == email);
-                return account==null;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.Email == email);
+                    return account != null;
+                }
             }
             catch
             {
@@ -206,8 +235,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.IndentifyID == identifyID);
-                return account == null;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.IndentifyID == identifyID);
+                    return account != null;
+                }
             }
             catch
             {

@@ -154,6 +154,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Image\Avatar.jpeg" />
+    <Content Include="Image\Cover.jpg" />
     <Content Include="Models\Data_Definition_Class\SQL\iVolunteerSQL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
@@ -335,6 +337,11 @@
     <Content Include="Views\Group\GroupInformation.cshtml" />
     <Content Include="Views\Home\FrontPage.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\User\ImageCover.cshtml" />
+    <Content Include="Views\User\UserInformationDetail.cshtml" />
+    <Content Include="Views\Admin\ListUser.cshtml" />
+    <Content Include="Views\User\UpdateInformation.cshtml" />
+    <Content Include="Views\Shared\ImageUpload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -349,7 +356,6 @@
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Post\" />
     <Folder Include="Views\Register\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

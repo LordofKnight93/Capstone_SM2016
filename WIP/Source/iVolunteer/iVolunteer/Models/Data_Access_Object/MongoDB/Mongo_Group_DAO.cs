@@ -26,7 +26,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// Add new group to mongoDB
         /// </summary>
         /// <param name="group"></param>
-        /// <returns>true ì success</returns>
+        /// <returns>true if success</returns>
         public bool Add_Group(Mongo_Group group)
         {
             try
@@ -40,7 +40,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             }
         }
         /// <summary>
-        /// delete a project
+        /// delete a group
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -48,8 +48,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         {
             try
             {
-                collection.DeleteOne(gr => gr._id == new ObjectId(groupID));
-                return true;
+                var result = collection.DeleteOne(gr => gr._id == new ObjectId(groupID));
+                return result.IsAcknowledged; ;
             }
             catch
             {
@@ -92,18 +92,39 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             }
         }
         /// <summary>
-        /// search group by name, only activate group
+        /// search group by name, only activate group, for user use
         /// </summary>
         /// <param name="name">keyword</param>
         /// <param name="skip">number of result skip</param>
         /// <param name="number">bumber of result get</param>
         /// <returns></returns>
-        public List<GroupInformation> Search_Group_By_Name(string name, int skip, int number)
+        public List<GroupInformation> User_Search_Group_By_Name(string name, int skip, int number)
         {
             try
             {
                 var result = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.Contains(name)
                                                                && gr.GroupInformation.IsActivate == Constant.IS_ACTIVATE)
+                                                     .Select(gr => gr.GroupInformation)
+                                                     .Skip(skip).Take(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// search group by name, for admin use
+        /// </summary>
+        /// <param name="name">keyword</param>
+        /// <param name="skip">number of result skip</param>
+        /// <param name="number">bumber of result get</param>
+        /// <returns></returns>
+        public List<GroupInformation> Admin_Search_Group_By_Name(string name, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.Contains(name))
                                                      .Select(gr => gr.GroupInformation)
                                                      .Skip(skip).Take(number).ToList();
                 return result;
@@ -176,8 +197,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id,new ObjectId(groupID));
                 var update = Builders<Mongo_Group>.Update.Set(gr => gr.GroupInformation.IsActivate, status);
-                collection.UpdateOne(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -196,8 +217,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var update = Builders<Mongo_Group>.Update.AddToSet<ProjectSD>(gr => gr.CurrentProjects,project);
-                collection.UpdateOne(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -217,8 +238,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
                 var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var project_filter = Builders<ProjectSD>.Filter.Eq(p => p.ProjectID,projectID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.CurrentProjects, project_filter);
-                collection.UpdateOne(group_filter, update);
-                return true;
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -237,8 +258,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var update = Builders<Mongo_Group>.Update.Set(gr => gr.GroupInformation.AvtImgLink, imgLink);
-                collection.FindOneAndUpdate(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -257,8 +278,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var update = Builders<Mongo_Group>.Update.Set(gr => gr.GroupInformation.CoverImgLink, imgLink);
-                collection.FindOneAndUpdate(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -276,8 +297,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var update = Builders<Mongo_Group>.Update.AddToSet<UserSD>(gr => gr.GroupStructure.Leaders, user);
-                collection.FindOneAndUpdate(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -297,8 +318,169 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
                 var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
                 var user_filter = Builders<UserSD>.Filter.Eq(u => u.UserID, userID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.GroupStructure.Leaders, user_filter);
-                collection.FindOneAndUpdate(group_filter, update);
-                return true;
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Add a user to group
+        /// </summary>
+        /// <param name="gtoupID"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public bool Add_Member(string groupID, Member member)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var update = Builders<Mongo_Group>.Update.AddToSet<Member>(gr => gr.GroupStructure.JoinedUsers, member);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// expell a user from a group's joineduser list
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Delete_Member(string groupID, string userID)
+        {
+            try
+            {
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var user_filter = Builders<Member>.Filter.Eq(m => m.User.UserID, userID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.GroupStructure.JoinedUsers, user_filter);
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add joined project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="project"></param>
+        public bool Add_JoinedProject(string groupID, ProjectSD project)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var update = Builders<Mongo_Group>.Update.AddToSet<ProjectSD>(gr => gr.HistoryInformation.JoinedProjects, project);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// remove joined project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_JoinedProject(string groupID, string projectID)
+        {
+            try
+            {
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var project_filter = Builders<ProjectSD>.Filter.Eq(p => p.ProjectID, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.JoinedProjects, projectID);
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add organized project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="project"></param>
+        public bool Add_OrganizedProject(string groupID, ProjectSD project)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var update = Builders<Mongo_Group>.Update.AddToSet<ProjectSD>(gr => gr.HistoryInformation.OrganizedProjects, project);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// remove organized project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_OrganizedProject(string groupID, string projectID)
+        {
+            try
+            {
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var project_filter = Builders<ProjectSD>.Filter.Eq(p => p.ProjectID, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.OrganizedProjects, projectID);
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add sponsored project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="project"></param>
+        public bool Add_SponsoredProject(string groupID, ProjectSD project)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var update = Builders<Mongo_Group>.Update.AddToSet<ProjectSD>(gr => gr.HistoryInformation.SponsoredProjects, project);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// remove sponsored project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_SponsoredProject(string groupID, string projectID)
+        {
+            try
+            {
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var project_filter = Builders<ProjectSD>.Filter.Eq(p => p.ProjectID, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.SponsoredProjects, projectID);
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {

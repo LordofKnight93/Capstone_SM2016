@@ -23,8 +23,8 @@ namespace iVolunteer.Common
         public const bool IS_ADMIN = true;
         public const bool IS_USER = false;
         // default avt, cover
-        public const string DEFAULT_AVATAR = "Avatar";
-        public const string DEFAULT_COVER = "Cover";
+        public const string DEFAULT_AVATAR = "/Image/Avatar/Default.jpg";
+        public const string DEFAULT_COVER = "/Image/Avatar/Default.jpg";
         //recruitment status
         public const bool IS_RECRUITING = true;
         public const bool IS_NOT_RECRUITING = false;

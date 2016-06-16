@@ -27,14 +27,5 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClas
             this.TeamName = name;
             this.Members = new List<UserSD>();
         }
-        public void Add_Member(UserSD newMember)
-        {
-            this.Members.Add(newMember);
-        }
-        public void Delete_Member(string memberID)
-        {
-            UserSD member = this.Members.Find(mem => mem.UserID == memberID);
-            this.Members.Remove(member);
-        }
     }
 }

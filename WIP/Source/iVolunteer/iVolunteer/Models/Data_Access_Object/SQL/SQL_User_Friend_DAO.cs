@@ -8,7 +8,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_User_Friend_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add a relaton between a user and another usser to SQLDB
         /// </summary>
@@ -18,9 +17,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_User_Friend.Add(relation);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_User_Friend.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -37,10 +39,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID1 && rls.FriendID == userID2
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID1 && rls.FriendID == userID2
                                                                   || rls.UserID == userID2 && rls.FriendID == userID1);
-                if (result == null) return false;
-                return true;
+                    if (result == null) return false;
+                    return true;
+                }
             }
             catch
             {
@@ -57,11 +62,14 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID && rls.FriendID == friendID 
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID && rls.FriendID == friendID
                                                                   || rls.UserID == friendID && rls.FriendID == userID);
-                dbEntities.SQL_User_Friend.RemoveRange(result);
-                dbEntities.SaveChanges();
-                return true;
+                    dbEntities.SQL_User_Friend.RemoveRange(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -77,10 +85,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID || rls.FriendID == userID);
-                dbEntities.SQL_User_Friend.RemoveRange(result);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Friend.Where(rls => rls.UserID == userID || rls.FriendID == userID);
+                    dbEntities.SQL_User_Friend.RemoveRange(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {

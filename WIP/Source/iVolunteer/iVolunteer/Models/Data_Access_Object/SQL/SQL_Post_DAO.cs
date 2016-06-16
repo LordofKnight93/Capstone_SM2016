@@ -9,7 +9,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_Post_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// add new post to SQL DB
         /// </summary>
@@ -19,9 +18,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_Post.Add(post);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_Post.Add(post);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -37,10 +39,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
-                dbEntities.SQL_Post.Remove(post);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    dbEntities.SQL_Post.Remove(post);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -57,10 +62,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
-                post.Permission = permission;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    post.Permission = permission;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -77,10 +85,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
-                post.DateLastActivity = date;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    post.DateLastActivity = date;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -96,10 +107,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_Post.Where(p => p.AlbumID == albumID);
-                dbEntities.SQL_Post.RemoveRange(result);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Post.Where(p => p.AlbumID == albumID);
+                    dbEntities.SQL_Post.RemoveRange(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -116,26 +130,29 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                //get the post
-                SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
-                //check post is public or not
-                if(post.Permission == Constant.IS_PUBLIC) return true;
-                //if not check user has direct relation with [roject or group post belong to
-                if (post.ProjectID != null)
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_User_Project project_relation = dbEntities.SQL_User_Project.FirstOrDefault(pr => pr.ProjectID == post.ProjectID && pr.UserID == userID
-                                                                                                            && pr.RelationType == Constant.DIRECT_RELATION);
-                    if (project_relation != null) return true;
-                }
-                else
-                {
-                    SQL_User_Group group_relation = dbEntities.SQL_User_Group.FirstOrDefault(gr => gr.GroupID == post.GroupID && gr.UserID == userID
-                                                                                                            && gr.RelationType == Constant.DIRECT_RELATION);
-                    if (group_relation != null) return true;
-                }
+                    //get the post
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    //check post is public or not
+                    if (post.Permission == Constant.IS_PUBLIC) return true;
+                    //if not check user has direct relation with [roject or group post belong to
+                    if (post.ProjectID != null)
+                    {
+                        SQL_User_Project project_relation = dbEntities.SQL_User_Project.FirstOrDefault(pr => pr.ProjectID == post.ProjectID && pr.UserID == userID
+                                                                                                                && pr.RelationType == Constant.DIRECT_RELATION);
+                        if (project_relation != null) return true;
+                    }
+                    else
+                    {
+                        SQL_User_Group group_relation = dbEntities.SQL_User_Group.FirstOrDefault(gr => gr.GroupID == post.GroupID && gr.UserID == userID
+                                                                                                                && gr.RelationType == Constant.DIRECT_RELATION);
+                        if (group_relation != null) return true;
+                    }
 
-                // case else is not have permission
-                return false;
+                    // case else is not have permission
+                    return false;
+                }
             }
             catch
             {
@@ -149,30 +166,40 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         /// <returns></returns>
         public List<string> Get_Post_For_Newfeed_By_DateCreate(string userID, int number, int skip)
         {
-            List<string> posts = new List<string>();
-            // get user project relation and proejct is activate
-            var related_project = from rl in dbEntities.SQL_User_Project
-                                  join p in dbEntities.SQL_Project on rl.ProjectID equals p.ProjectID
-                                  where p.IsActivate == Constant.IS_ACTIVATE
-                                  select rl;
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    List<string> posts = new List<string>();
+                    // get user project relation and proejct is activate
+                    var related_project = from rl in dbEntities.SQL_User_Project
+                                          join p in dbEntities.SQL_Project on rl.ProjectID equals p.ProjectID
+                                          where p.IsActivate == Constant.IS_ACTIVATE
+                                          select rl;
 
-            //get user group relation and group is activate
-            var related_group = from rl in dbEntities.SQL_User_Group
-                                join g in dbEntities.SQL_Group on rl.GroupID equals g.GroupID
-                                where g.IsActivate == Constant.IS_ACTIVATE
-                                select rl;
+                    //get user group relation and group is activate
+                    var related_group = from rl in dbEntities.SQL_User_Group
+                                        join g in dbEntities.SQL_Group on rl.GroupID equals g.GroupID
+                                        where g.IsActivate == Constant.IS_ACTIVATE
+                                        select rl;
 
-            //get posts accessable
-            var accessable_posts = from p in dbEntities.SQL_Post
-                                  join pr in related_project on p.ProjectID equals pr.ProjectID
-                                  join gr in related_group on p.GroupID equals gr.GroupID
-                                  where p.Permission == Constant.IS_PUBLIC 
-                                        || p.Permission == Constant.IS_PRIVATE && pr.RelationType == Constant.DIRECT_RELATION
-                                        || p.Permission == Constant.IS_PRIVATE && gr.RelationType == Constant.DIRECT_RELATION
-                                  orderby p.DateCreate descending
-                                  select p.PostID;
-            posts = accessable_posts.Skip(skip).Take(number).ToList() ;
-            return posts;
+                    //get posts accessable
+                    var accessable_posts = from p in dbEntities.SQL_Post
+                                           join pr in related_project on p.ProjectID equals pr.ProjectID
+                                           join gr in related_group on p.GroupID equals gr.GroupID
+                                           where p.Permission == Constant.IS_PUBLIC
+                                                 || p.Permission == Constant.IS_PRIVATE && pr.RelationType == Constant.DIRECT_RELATION
+                                                 || p.Permission == Constant.IS_PRIVATE && gr.RelationType == Constant.DIRECT_RELATION
+                                           orderby p.DateCreate descending
+                                           select p.PostID;
+                    posts = accessable_posts.Skip(skip).Take(number).ToList();
+                    return posts;
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

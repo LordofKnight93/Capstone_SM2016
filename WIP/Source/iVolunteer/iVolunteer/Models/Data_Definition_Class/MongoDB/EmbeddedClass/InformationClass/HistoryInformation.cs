@@ -18,38 +18,5 @@ namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.Informat
             this.JoinedProjects = new List<ProjectSD>();
             this.SponsoredProjects = new List<ProjectSD>();
         }
-
-        public void Add_OrganizedProject(ProjectSD project)
-        {
-            this.OrganizedProjects.Add(project);
-        }
-
-        public void Delete_OrganizedProject(string projectID)
-        {
-            ProjectSD project = this.OrganizedProjects.Find(p => p.ProjectID == projectID);
-            this.OrganizedProjects.Remove(project);
-        }
-
-        public void Add_JoinedProject(ProjectSD project)
-        {
-            this.JoinedProjects.Add(project);
-        }
-
-        public void Delete_JoinedProject(string projectID)
-        {
-            ProjectSD project = this.JoinedProjects.Find(p => p.ProjectID == projectID);
-            this.JoinedProjects.Remove(project);
-        }
-
-        public void Add_SponsoredProject(ProjectSD project)
-        {
-            this.OrganizedProjects.Add(project);
-        }
-
-        public void Delete_SponsoredProject(string projectID)
-        {
-            ProjectSD project = this.OrganizedProjects.Find(p => p.ProjectID == projectID);
-            this.OrganizedProjects.Remove(project);
-        }
     }
 }

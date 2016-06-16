@@ -91,11 +91,37 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Register(RegisterModel registerModel)
         {
-            if(!ValidationHelper.IsValidEmail(registerModel.Email) 
-                    || !ValidationHelper.IsValidIdentifyID(registerModel.IdentifyID))
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+            SQL_Account_DAO sql_Account_DAO = new SQL_Account_DAO();
+            string err = "";
+            bool isValid = true;
+            // validate information
+            if (!ValidationHelper.IsValidEmail(registerModel.Email) 
+                    || !ValidationHelper.IsValidIdentifyID(registerModel.IdentifyID)
+                    || !ValidationHelper.IsValidPassword(registerModel.Password)
+                    || !ValidationHelper.IsValidPhone(registerModel.Phone))
             {
-                ViewBag.Message = "Thông tin không hợp lệ";
-                return View("Register");
+                err = "Thông tin không hợp lệ" + Environment.NewLine;
+                isValid = false;
+            }
+
+            // check if email existed
+            if (sql_Account_DAO.Is_Email_Exist(registerModel.Email))
+            {
+                err = err + "Email đã được đăng ký" + Environment.NewLine;
+                isValid = false;
+            }
+
+            // check if identifyID exist
+            if (sql_Account_DAO.Is_IdentifyID_Exist(registerModel.IdentifyID))
+            {
+                err = err + "Số chứng minh nhân dân này đã được đăng ký" + Environment.NewLine;
+                isValid = false;
+            }
+            if (!isValid)
+            {
+                ViewBag.Message = err;
+                return View(registerModel);
             }
             //create account in SQL
             ObjectId _id = ObjectId.GenerateNewId();
@@ -119,8 +145,6 @@ namespace iVolunteer.Controllers
                 try
                 {
                     //create DAO instance
-                    Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
-                    SQL_Account_DAO sql_Account_DAO = new SQL_Account_DAO();
                     //write to DB
                     mongo_User_DAO.Add_User(user);
                     sql_Account_DAO.Add_Account(account);
@@ -134,7 +158,6 @@ namespace iVolunteer.Controllers
                     return View();
                 }
             }
-
             return RedirectToAction("Login");
         }
     }

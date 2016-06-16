@@ -8,7 +8,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_User_Project_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add a relaton between a user and project to SQLDB
         /// </summary>
@@ -18,9 +17,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_User_Project.Add(relation);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_User_Project.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
+                } 
             }
             catch
             {
@@ -38,8 +40,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Project.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
-                return result.RelationType;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Project.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
+                    return result.RelationType;
+                }
             }
             catch
             {
@@ -56,10 +61,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Project.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
-                dbEntities.SQL_User_Project.Remove(result);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Project.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
+                    dbEntities.SQL_User_Project.Remove(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                } 
             }
             catch
             {
@@ -75,10 +83,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var result = dbEntities.SQL_User_Project.Where(rls => rls.UserID == userID);
-                dbEntities.SQL_User_Project.RemoveRange(result);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_User_Project.Where(rls => rls.UserID == userID);
+                    dbEntities.SQL_User_Project.RemoveRange(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {

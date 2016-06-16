@@ -9,7 +9,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_Plan_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add new plan to SQL DB
         /// </summary>
@@ -19,9 +18,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_Plan.Add(plan);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_Plan.Add(plan);
+                    dbEntities.SaveChanges();
+                    return true;
+                } 
             }
             catch
             {
@@ -37,10 +39,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                var plan = dbEntities.SQL_Plan.FirstOrDefault(p => p.PlanID == planID);
-                dbEntities.SQL_Plan.Remove(plan);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var plan = dbEntities.SQL_Plan.FirstOrDefault(p => p.PlanID == planID);
+                    dbEntities.SQL_Plan.Remove(plan);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -57,13 +62,18 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                //get plan
-                SQL_Plan plan = dbEntities.SQL_Plan.FirstOrDefault(p => p.PlanID == planID);
-                //get direct relation between user and project plan belong to
-                SQL_User_Project result = dbEntities.SQL_User_Project.FirstOrDefault(p => p.UserID == userID && p.ProjectID == plan.ProjectID
-                                                                                            && p.RelationType == Constant.DIRECT_RELATION); 
-                if (result == null) return false;
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    //get plan
+                    var result = from plan in dbEntities.SQL_Plan
+                                 join project in dbEntities.SQL_Project on plan.ProjectID equals project.ProjectID
+                                 join relation in dbEntities.SQL_User_Project on plan.ProjectID equals relation.ProjectID
+                                 where plan.PlanID == planID && project.IsActivate == Constant.IS_ACTIVATE
+                                        && relation.UserID == userID && relation.RelationType == Constant.DIRECT_RELATION
+                                 select plan;
+                    if (result == null) return false;
+                    return true;
+                }
             }
             catch
             {

@@ -49,8 +49,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         {
             try
             {
-                collection.DeleteOne(pr => pr._id == new ObjectId(projectID));
-                return true;
+                var result = collection.DeleteOne(pr => pr._id == new ObjectId(projectID));
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -63,7 +63,7 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
         /// <param name="number">number of information get</param>
         /// <param name="skip">number of Project skip</param>
         /// <returns></returns>
-        public List<ProjectInformation> Get_All_ProjectInformation(int number, int skip)
+        public List<ProjectInformation> Get_All_ProjectInformation(int skip, int number)
         {
             try
             {
@@ -93,11 +93,11 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             }
         }
         /// <summary>
-        /// search project, activate project only
+        /// search activate project, user use
         /// </summary>
         /// <param name="searchModel"></param>
         /// <returns></returns>
-        public List<ProjectInformation> Search_ProjectInformation(SearchModel searchModel)
+        public List<ProjectInformation> User_Search_ProjectInformation(SearchModel searchModel)
         {
             var result = new List<ProjectInformation>();
             return result;
@@ -182,8 +182,8 @@ namespace iVolunteer.Models.Data_Access_Object.MongoDB
             {
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
                 var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.IsActivate, status);
-                collection.UpdateOne(filter, update);
-                return true;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {

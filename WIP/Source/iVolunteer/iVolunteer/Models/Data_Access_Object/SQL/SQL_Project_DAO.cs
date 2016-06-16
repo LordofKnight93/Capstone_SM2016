@@ -9,7 +9,6 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
 {
     public class SQL_Project_DAO
     {
-        iVolunteerEntities dbEntities = new iVolunteerEntities();
         /// <summary>
         /// Add new project to SQL DB
         /// </summary>
@@ -19,9 +18,12 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                dbEntities.SQL_Project.Add(project);
-                dbEntities.SaveChangesAsync();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    dbEntities.SQL_Project.Add(project);
+                    dbEntities.SaveChangesAsync();
+                    return true;
+                }
             }
             catch
             {
@@ -37,8 +39,11 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p =>p.ProjectID == projectID);
-                return project.IsActivate;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
+                    return project.IsActivate;
+                }
             }
             catch
             {
@@ -55,10 +60,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
-                project.IsActivate = status;
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
+                    project.IsActivate = status;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {
@@ -74,10 +82,13 @@ namespace iVolunteer.Models.Data_Access_Object.SQL
         {
             try
             {
-                SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
-                dbEntities.SQL_Project.Remove(project);
-                dbEntities.SaveChanges();
-                return true;
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
+                    dbEntities.SQL_Project.Remove(project);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
             }
             catch
             {

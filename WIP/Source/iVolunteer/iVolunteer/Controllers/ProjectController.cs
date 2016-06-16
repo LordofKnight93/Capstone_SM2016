@@ -73,7 +73,7 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
-                    //crreate DAO instance 
+                    //create DAO instance 
                     Mongo_Project_DAO mongo_Project_DAO = new Mongo_Project_DAO();
                     SQL_Project_DAO sql_Project_DAO = new SQL_Project_DAO();
                     SQL_User_Project_DAO sql_User_Project_DAO = new SQL_User_Project_DAO();
