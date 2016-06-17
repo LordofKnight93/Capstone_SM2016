@@ -1,0 +1,66 @@
+﻿@model IEnumerable<iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateCreate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MemberCount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AvtImgLink)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CoverImgLink)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActivate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MemberCount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AvtImgLink)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CoverImgLink)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActivate)
+        </td>
+        <td>
+            @Html.ActionLink("Chi tiết", "GroupInformation","Group", new { groupID = item.GroupID }, null)
+        </td>
+    </tr>
+}
+</table>
