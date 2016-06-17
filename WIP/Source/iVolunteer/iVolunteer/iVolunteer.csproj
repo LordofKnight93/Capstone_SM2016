@@ -153,6 +153,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\material-icons.css" />
+    <Content Include="fonts\MaterialIcons-Regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Image\Avatar.jpeg" />
     <Content Include="Image\Cover.jpg" />
@@ -183,6 +185,11 @@
     <Content Include="Models\Data_Definition_Class\SQL\iVolunteerSQL.edmx.diagram">
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\MaterialIcons-Regular.eot" />
+    <Content Include="fonts\MaterialIcons-Regular.ijmap" />
+    <Content Include="fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="fonts\MaterialIcons-Regular.woff" />
+    <Content Include="fonts\MaterialIcons-Regular.woff2" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -194,6 +201,7 @@
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -329,7 +337,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Newfeed.cshtml" />
     <Content Include="Views\Project\CreateProject.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
@@ -342,6 +349,10 @@
     <Content Include="Views\Admin\ListUser.cshtml" />
     <Content Include="Views\User\UpdateInformation.cshtml" />
     <Content Include="Views\Shared\ImageUpload.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Shared\_LeftSideBar.cshtml" />
+    <Content Include="Views\Shared\Login.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -351,7 +362,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Account\" />
     <Folder Include="Views\Album\" />
     <Folder Include="Views\Image\" />
     <Folder Include="Views\Post\" />

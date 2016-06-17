@@ -66,5 +66,9 @@ namespace iVolunteer.Controllers
             else return View("ImageUpload");
             
         }
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
     }
 }
