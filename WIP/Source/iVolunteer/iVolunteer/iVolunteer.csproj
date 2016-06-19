@@ -156,8 +156,12 @@
     <Content Include="fonts\material-icons.css" />
     <Content Include="fonts\MaterialIcons-Regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Image\Avatar.jpeg" />
-    <Content Include="Image\Cover.jpg" />
+    <Content Include="images\Avatar.jpeg" />
+    <Content Include="images\avatar.svg" />
+    <Content Include="images\Cover.jpg" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\quyvochai.jpg" />
+    <Content Include="images\thugom_cover.jpg" />
     <Content Include="Models\Data_Definition_Class\SQL\iVolunteerSQL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
@@ -196,12 +200,16 @@
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="scripts\jquery.validate.js" />
     <Content Include="scripts\jquery.validate.min.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="scripts\phucvt_custom.js" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="images\logo_lite.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +361,19 @@
     <Content Include="Views\Shared\_LeftSideBar.cshtml" />
     <Content Include="Views\Shared\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Shared\create_project_layout.cshtml" />
+    <Content Include="Views\Shared\create_group_layout.cshtml" />
+    <Content Include="Views\Shared\main_layout.cshtml" />
+    <Content Include="Views\Shared\navbar_left_layout.cshtml" />
+    <Content Include="Views\Shared\notification_popup_layout.cshtml" />
+    <Content Include="Views\Shared\friends_popup_layout.cshtml" />
+    <Content Include="Views\Shared\message_popup_layout.cshtml" />
+    <Content Include="Views\Project\ProjectHome.cshtml" />
+    <Content Include="Views\Project\_Discussion.cshtml" />
+    <Content Include="Views\Project\_Public.cshtml" />
+    <Content Include="Views\Group\public_layout.cshtml" />
+    <Content Include="Views\Group\discussion_layout.cshtml" />
+    <Content Include="Views\Group\group_master.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -363,7 +384,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Album\" />
-    <Folder Include="Views\Image\" />
+    <Folder Include="Views\Images\" />
     <Folder Include="Views\Post\" />
     <Folder Include="Views\Register\" />
   </ItemGroup>

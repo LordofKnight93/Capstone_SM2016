@@ -94,5 +94,19 @@ namespace iVolunteer.Controllers
             ViewBag.Message = "Tạo dự án tình nguyện thành công";
             return RedirectToAction("Newfeed", "Home");
         }
+        public ActionResult ProjectHome()
+        {
+            return View();
+        }
+
+        public PartialViewResult DisplayPublic()
+        {
+            return PartialView("_Public");
+        }
+
+        public PartialViewResult DisplayDiscussion()
+        {
+            return PartialView("_Discussion");
+        }
     }
 }

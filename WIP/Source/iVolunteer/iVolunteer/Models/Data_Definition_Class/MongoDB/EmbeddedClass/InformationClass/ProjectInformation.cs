@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using iVolunteer.Common;
 using iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.ItemClass;
+using System.ComponentModel;
 
 namespace iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass
 {

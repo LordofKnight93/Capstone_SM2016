@@ -1,0 +1,83 @@
+﻿@model iVolunteer.Models.Data_Definition_Class.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+@Html.AntiForgeryToken()
+<div id="createGroupForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+
+                    <!-- Login -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row" style="margin: -10px 0 -5px 0;">
+                                <div class="col-sm-12">
+                                    <h4>Tạo nhóm mới</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Html.BeginForm("Newfeed", "Home", FormMethod.Post, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                {
+                                    <!-- Group Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="groupName">Tên nhóm:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @id = "groupName", @class = "form-control", @placeholder = "Tên nhóm..." } })
+                                            @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Group Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="groupDescription">Mô tả: </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.GroupDescription, new { @id = "groupDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.GroupDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Avata Link-->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.AvtImgLink, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="avaLink">Ảnh đại diện:</label>
+                                        </div>
+                                        <div class="col-xs-4 text-input">
+                                            @Html.EditorFor(model => model.AvtImgLink, new { htmlAttributes = new { @id = "avaLink", @class = "form-control", @placeholder = "Nhập link hoặc ấn nút tải lên", @onclick = "return false" } })
+                                            @Html.ValidationMessageFor(model => model.AvtImgLink, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-xs-1" style="margin-left: -5px">
+                                            <button class="btn btn-image" type="submit" rel="tooltip" title="Tải ảnh lên" style="padding-left: 0px"><i class="material-icons md-24 md-mygreen">file_upload</i></button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-9 text-input">
+                                            <button type="submit" class="btn btn-register">TẠO</button>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div>
+                                    @ViewBag.Message
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

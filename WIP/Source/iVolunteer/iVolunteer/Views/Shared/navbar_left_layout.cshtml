@@ -1,0 +1,73 @@
+﻿<ul class="nav navbar-nav noti">
+    <li class="divider-vertical"></li>
+    <li class="noti_Container">
+        <div class="noti_Counter" id="noti_Counter"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div class="noti_Button" id="noti_Button">
+            <span id="notiication_icon" class="glyphicon glyphicon-bell glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Thông báo"></span>
+        </div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div class="notifications" id="notifications">
+            <div style="height:350px;">
+                <div class="row" style="margin: 0">
+                    <div class="col-xs-12">
+                        <h3>Thông báo</h3>
+                        <div class="divider-holizon"></div>
+                        <div class="partial-view-container" id="noti-scroll-panel">
+                            @Html.Partial("notification_popup_layout")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="seeAll"><a href="#">Xem thêm ...</a></div>
+        </div>
+    </li>
+    <li class="noti_Container">
+        <div class="noti_Counter" id="friend_Counter"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div class="noti_Button" id="friend_Button">
+            <span id="friend_icon" class="glyphicon glyphicon-user glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Bạn bè"></span>
+        </div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div class="notifications" id="friend">
+            <div style="height:350px;">
+                <div class="row" style="margin: 0">
+                    <div class="col-xs-12">
+                        <h3>Bạn bè</h3>
+                        <div class="divider-holizon"></div>
+                        <div class="partial-view-container" id="noti-scroll-panel">
+                            @Html.Partial("friends_popup_layout")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="seeAll"><a href="#">Xem thêm ...</a></div>
+        </div>
+    </li>
+    <li class="noti_Container">
+        <div class="noti_Counter" id="mess_Counter"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div class="noti_Button" id="mess_Button" style="margin-right: 18px">
+            <span id="message_icon" class="glyphicon glyphicon-comment glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Tin nhắn"></span>
+        </div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div class="notifications" id="message">
+            <div style="height:350px;">
+                <div class="row" style="margin: 0">
+                    <div class="col-xs-12">
+                        <h3>Tin nhắn</h3>
+                        <div class="divider-holizon"></div>
+                        <div class="partial-view-container" id="noti-scroll-panel">
+                            @Html.Partial("message_popup_layout")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="seeAll"><a href="#">Xem thêm ...</a></div>
+        </div>
+    </li>
+    <li class="divider-vertical"></li>
+</ul>

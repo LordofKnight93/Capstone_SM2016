@@ -103,5 +103,20 @@ namespace iVolunteer.Controllers
             var result = groupDAO.Get_GroupInformation(groupID);
             return View(result);
         }
+
+        public ActionResult group_master()
+        {
+            return View();
+        }
+
+        public PartialViewResult DisplayPublic()
+        {
+            return PartialView("public_layout");
+        }
+
+        public PartialViewResult DisplayDiscussion()
+        {
+            return PartialView("discussion_layout");
+        }
     }
 }

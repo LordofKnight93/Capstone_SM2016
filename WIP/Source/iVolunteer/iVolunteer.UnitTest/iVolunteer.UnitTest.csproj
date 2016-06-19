@@ -63,6 +63,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
