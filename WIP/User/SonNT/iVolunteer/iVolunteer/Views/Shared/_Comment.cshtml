@@ -1,0 +1,17 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment
+
+<!-- Comment -->
+<div class="row">
+    <div class="col-md-1 col-sm-1">
+        <object type="image/svg+xml" data="../images/avatar.svg" width="40" height="40" border="1"></object>
+    </div>
+    <div class="col-md-9 col-sm-9">
+        <div class="row">
+            <a href="" class="user-name">@Model.Creater.DisplayName</a>
+            <span>&bull; @Model.DateCreate</span>
+        </div>
+        <div class="row">
+            <p>@Model.Content</p>
+        </div>
+    </div>
+</div>

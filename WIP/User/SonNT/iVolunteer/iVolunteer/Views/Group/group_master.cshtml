@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Quỹ Vỏ Chai";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3" style="margin: 0 0 1rem 0;; margin-right: -10px">
+        @Html.Partial("_LeftSideBar")
+    </div>
+    <div class="col-md-9" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        <div class="card">
+            <div class="card-image">
+                <img src="../images/thugom_cover.jpg" height="250px" style="object-fit: cover;">
+                <div class="col-md-3 card-ava">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <img src="../images/quyvochai.jpg">
+                        </div>
+                    </div>
+                    <div class="row" style="text-align: center">
+                        <h4 style="text-shadow: 2px 2px 6px #69656E;">Quỹ Vỏ Chai</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*-------------------Navigation Bar----------------*@
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                <li class="col-md-2">
+                    <!--<a id="publictab" href="@**@*@@Url.Action("DisplayPublic", "Project", new AjaxOptions {UpdateTargetId = "tabContent", InsertionMode = InsertionMode.Replace  })" data-toggle="tab">CÔNG KHAI</a>-->
+                    @Ajax.ActionLink("CÔNG KHAI", "DisplayPublic", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                </li>
+                <li class="col-md-2">
+                    @*<a id="discusstab" href="@Url.Action("DisplayDiscussion", "Project")" data-toggle="tab">THẢO LUẬN</a>*@
+                    @Ajax.ActionLink("THẢO LUẬN", "DisplayDiscussion", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                </li>
+                <li class="col-md-2">
+                    <a id="plantab" href="#project" data-toggle="tab">DỰ ÁN</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="budgettab" href="#member" data-toggle="tab">THÀNH VIÊN</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="information" href="#information" data-toggle="tab">THÔNG TIN</a>
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane active" id="group-tab">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+</div>
+
+@**@
+
+
+
+
+

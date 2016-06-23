@@ -1,0 +1,37 @@
+﻿@{  string actionName = "";
+    string controller = "";
+    string option = ViewBag.Option;
+    switch (option)
+    {
+        case "UserAvatar":
+            controller = "Account";
+            actionName = "ChangeAvatar";
+            break;
+        case "UserCover":
+            controller = "Account";
+            actionName = "ChangeCover";
+            break;
+        case "GroupAvatar":
+            controller = "Group";
+            actionName = "ChangeAvatar";
+            break;
+        case "GroupCover":
+            controller = "Group";
+            actionName = "ChangeCover";
+            break;
+        case "ProjectAvatar":
+            controller = "Project";
+            actionName = "ChangeAvatar";
+            break;
+        case "ProjectCover":
+            controller = "Project";
+            actionName = "ChangeCover";
+            break;
+    }
+    }
+@using(Html.BeginForm(actionName, controller, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Upload Image:</label>
+    <input type="file" name="fileuploadImage" id="file" style="width: 100%;" />
+    <input type="submit" value="Upload" class="submit" />
+}

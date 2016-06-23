@@ -1,0 +1,100 @@
+﻿@model String
+<div class="card-panel">
+    <div class="row" style="text-align: center;">
+        <div class="col-sm-12">
+            <object type="image/svg+xml" data="../images/avatar.svg" width="80" height="80" border="1"></object>
+        </div>
+        <div class="col-sm-12" style="margin-bottom: 10px">
+            <a style="color: #049f88; font-weight: bold;" href="">Võ Tôn Phúc</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="Dự án">assignment</i>
+            <p style="text-align: center; font-weight: bold">4</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="Nhóm">group</i>
+            <p style="text-align: center; font-weight: bold">5</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="Bài đăng">web_asset</i>
+            <p style="text-align: center; font-weight: bold">125</p>
+        </div>
+        <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="Bạn bè">person</i>
+            <p style="text-align: center; font-weight: bold">95</p>
+        </div>
+    </div>
+</div>
+<!-- Slide Bar Project -->
+<div class="card-panel">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Dự Án</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    <!-- List Project -->
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <ul class="list-navi">
+                <li><a href="">Áo ấm Hà Giang</a></li>
+                <li><a href="">Thu gom vỏ chai</a></li>
+                <li><a href="">Tiếng Anh Tân Xã</a></li>
+                <li>@Html.ActionLink("TẤT CẢ", "ListGroup", "Admin", new { skip = 0, number = 5 }, null)</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Add New Project -->
+    <div class="row" style="text-align: right">
+        <button class="btn-addnew" style="margin: 10px 15px 0px 10px;" data-container="body" rel="tooltip" data-toggle="modal" title="Tạo dự án mới" data-placement="left" data-target="#createProjectForm">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</div>
+<!-- Slide Bar Group -->
+<div class="card-panel">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Nhóm</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    <!-- List Group -->
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <ul class="list-navi">
+                <li><a href="">Tôi Tình Nguyện</a></li>
+                <li><a href="">Quỹ Vỏ Chai</a></li>
+                <li><a href="">iGo</a></li>
+                <li>@Html.ActionLink("TẤT CẢ", "ListGroup", "Admin", new { skip = 0, number = 5 }, null)</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Add New Group -->
+    <div class="row" style="text-align: right">
+        <button class="btn-addnew" style="margin: 10px 15px 0px 10px;" data-container="body" rel="tooltip" data-toggle="modal" title="Tạo nhóm mới" data-placement="left" data-target="#createGroupForm">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</div>
+
+
+@*<div>
+
+    </div>
+    <div>
+
+    </div>
+    <div>
+       
+    </div>
+    <div>
+        @Html.ActionLink("Danh sách các dự án tình nguyện", "CreateProject", "Project", new { skip = 0, number = 5 },null)
+    </div>
+    <div>
+        @ViewBag.Message
+    </div>*@
+
+

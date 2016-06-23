@@ -1,0 +1,69 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PostInformation
+
+<div class="col-md-9">
+    <div class="card-panel">
+        <div class="row">
+            <div class="col-sm-7 col-md-7">
+                <!-- Post Owner -->
+                <table class="table-post-ava">
+                    <tr>
+                        @{ var avatarlnk = "../Images/User/Avatar/" + Model.Creator.UserID + ".jpg"}
+                        <td rowspan="2"><object type="image/svg+xml" data=@avatarlnk width="40" height="40" border="1"></object></td>
+                        <td class="td">
+                            <a href="" class="user-name">@Model.Creator.DisplayName</a>
+                            <i class="glyphicon glyphicon-triangle-right" style="font-size: smaller"></i>
+                            <a href="project.html" class="user-name">Tôi Tình Nguyện</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="td" style="color: gray; font-size:90%">@Model.DateCreate</td>
+                    </tr>
+                </table>
+            </div>
+            <!-- Navigation button -->
+            <div class="col-sm-5 col-md-5" style="text-align: right;">
+                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Xóa"><i class="glyphicon glyphicon-trash"></i></button>
+                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Thu gọn"><i class="glyphicon glyphicon-menu-right"></i></button>
+            </div>
+        </div>
+        <!-- Post Content -->
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="card-content">
+                    <p>@Model.Content</p>
+                </div>
+            </div>
+        </div>
+        <div class="divider-holizon"></div>
+        <!-- Interaction Panel -->
+        <div class="row">
+            <!-- Interaction Button -->
+            <div class="col-md-6 col-sm-6">
+                <button type="button" class="btn-card" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-heart-empty"></span>
+                    Like
+                </button>
+                <button type="button" class="btn-card" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    Comment
+                </button>
+            </div>
+            <!-- Interaction Counter -->
+            <div class="col-md-6 col-sm-6" style="text-align: right">
+                <div class="row">
+                    <ul class="list-interaction">
+                        <li>
+                            <i class="glyphicon glyphicon-heart"></i>
+                            <span><strong>@Model.LikeCount</strong></span>
+                        </li>
+                        <li>
+                            <i class="glyphicon glyphicon-comment"></i>
+                            <span><strong>@Model.comm</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="divider-holizon"></div>
+    </div>
+</div>

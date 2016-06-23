@@ -1,0 +1,27 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+<div>
+    <hr />
+        <img id="imgPreview" width="200" src=@Model.Get_AvatarLink()>
+    <hr />
+        <img id="imgPreview" width="1000" src=@Model.Get_CoverLink()>
+    <p>@Model.DisplayName</p>
+</div>
+
+<p>
+    @{ switch (Model.Handler)
+        {
+            case "User":
+                @Html.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", "Account", new { userID = Model.ID }, null);
+                @Html.ActionLink("Thay đổi ảnh bìa", "ChangeCover", "Account", new { userID = Model.ID }, null);
+                 break; 
+            case "Group":
+                @Html.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", "Group", new { groupID = Model.ID }, null);
+                @Html.ActionLink("Thay đổi ảnh bìa", "ChangeCover", "Group", new { groupID = Model.ID }, null);
+                break;
+            case "Project":
+                @Html.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", "Project", new { projectID = Model.ID }, null);
+                @Html.ActionLink("Thay đổi ảnh bìa", "ChangeCover", "Project", new { projectID = Model.ID }, null);
+                break;
+        }
+    }
+ </p>

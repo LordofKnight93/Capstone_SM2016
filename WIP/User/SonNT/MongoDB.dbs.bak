@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MongoDb" id="Project_c21774c" html="y" template="Default" database="MongoDb" >
+	<schema name="iVolunteer" catalogname="iVolunteer" >
+		<table name="Album" >
+			<column name="_id" type="string" jt="12" />
+			<column name="AlbumInformation" type="map" jt="4999544" mandatory="y" >
+				<column name="AlbumID" type="string" jt="12" />
+				<column name="AlbumName" type="string" jt="12" />
+				<column name="Description" type="string" jt="12" />
+				<column name="Creator" type="map" jt="4999544" >
+					<column name="UserID" type="string" jt="12" />
+					<column name="DisplayName" type="string" jt="12" />
+				</column>
+				<column name="CoverImgLInk" type="string" jt="12" />
+				<column name="ProjectLink" type="map" jt="4999544" >
+					<column name="ProjectID" type="string" jt="12" />
+					<column name="ProjectName" type="string" jt="12" />
+				</column>
+				<column name="GroupLink" type="map" jt="4999544" >
+					<column name="GroupID" type="string" jt="12" />
+					<column name="GroupName" type="string" jt="12" />
+				</column>
+				<column name="LikeCount" type="string" jt="12" />
+				<column name="CommentCount" type="string" jt="12" />
+				<column name="Permission" type="boolean" jt="16" />
+			</column>
+			<column name="LikerList" type="list" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" />
+				<column name="DisplayName" type="string" jt="12" />
+			</column>
+			<column name="FollowerIDs" type="list" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" />
+			</column>
+			<column name="CommentList" type="list" jt="4999545" mandatory="y" >
+				<column name="CommentID" type="string" jt="12" />
+				<column name="Creator" type="map" jt="4999544" >
+					<column name="UserID" type="string" jt="12" />
+					<column name="DiaplayName" type="string" jt="12" />
+				</column>
+				<column name="DateCreate" type="date" jt="91" />
+				<column name="Content" type="string" jt="12" />
+			</column>
+		</table>
+		<table name="Group" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="GroupInformation" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="GroupID" type="string" jt="12" mandatory="y" />
+				<column name="GroupName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="DateCreate" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="GroupDescription" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="MemberCount" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="IsActivate" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+			</column>
+			<column name="GroupStructure" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="Creator" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+					<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+				<column name="Leaders" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+				<column name="JoinedUsers" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="User" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+						<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+						<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					</column>
+					<column name="JoinDate" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				</column>
+			</column>
+			<column name="ActivityHistory" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="OrganizedProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+				<column name="JoinedProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+				<column name="SponsoredProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+			</column>
+			<column name="CurrentProjects" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="ProjectID" type="string" jt="12" mandatory="y" />
+				<column name="ProjectName" type="string" jt="12" mandatory="y" />
+				<column name="DateStart" type="date" jt="91" />
+				<column name="DateEnd" type="date" jt="91" />
+			</column>
+			<column name="RequestList" type="list" jt="4999545" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="Message" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="DateLastActivity" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+			<column name="MessageList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="ItemID" type="integer" jt="4" />
+				<column name="DateSend" type="date" jt="91" />
+				<column name="Sender" type="map" jt="4999544" >
+					<column name="UserID" type="string" jt="12" />
+					<column name="DisplayName" type="string" jt="12" />
+				</column>
+				<column name="Content" type="string" jt="12" />
+				<column name="SeenBy" type="list" jt="4999545" >
+					<column name="UserID" type="string" jt="12" />
+					<column name="DisplayName" type="string" jt="12" />
+				</column>
+			</column>
+			<column name="Participants" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" mandatory="y" />
+				<column name="DisplayName" type="string" jt="12" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="Plan" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="Project" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="ProjectID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="ProjectName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			</column>
+			<column name="PlanName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+			<column name="ItemList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="ItemID" type="string" jt="12" />
+				<column name="DateEffect" type="date" jt="91" />
+				<column name="Content" type="date" jt="91" />
+				<column name="Team" type="map" jt="4999544" >
+					<column name="TeamID" type="string" jt="12" />
+					<column name="TeamName" type="string" jt="12" />
+				</column>
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="Post" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="PostInfomation" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="Creator" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="AlbumLink" type="map" jt="4999544" >
+					<column name="AlbumID" type="string" jt="12" />
+					<column name="AlbumName" type="string" jt="12" />
+				</column>
+				<column name="GroupLink" type="map" jt="4999544" >
+					<column name="GroupID" type="string" jt="12" />
+					<column name="GroupName" type="string" jt="12" />
+				</column>
+				<column name="ProjectLink" type="map" jt="4999544" >
+					<column name="ProjectID" type="string" jt="12" />
+					<column name="ProjectName" type="string" jt="12" />
+				</column>
+				<column name="DateCreate" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="DateLastActivity" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="PostType" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="Content" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="ImgLink" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="LikeCount" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="CommentCount" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="IsPinned" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+				<column name="Permission" type="boolean" jt="16" mandatory="y" />
+			</column>
+			<column name="LikerList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" mandatory="y" />
+				<column name="DisplayName" type="string" jt="12" mandatory="y" />
+			</column>
+			<column name="FollowerIDs" type="list" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" />
+			</column>
+			<column name="CommentList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="CommentID" type="string" jt="12" mandatory="y" />
+				<column name="Creator" type="map" jt="4999544" mandatory="y" >
+					<column name="UserID" type="string" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" jt="12" mandatory="y" />
+				</column>
+				<column name="DateCrate" type="date" jt="91" mandatory="y" />
+				<column name="Content" type="string" jt="12" mandatory="y" />
+			</column>
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="Project" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="ProjectInformation" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="ProjectID" type="string" jt="12" mandatory="y" />
+				<column name="ProjectName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="DateCreate" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="DateStart" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="DateEnd" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="ProjectDescription" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Tags" type="list" length="800" decimal="0" jt="4999545" mandatory="y" />
+				<column name="Location" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="MemberCount" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="FollowerCount" type="integer" length="800" decimal="0" jt="4" mandatory="y" />
+				<column name="IsCompleted" type="boolean" jt="16" />
+				<column name="IsRecruit" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+				<column name="IsActivate" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+			</column>
+			<column name="ProjectStructure" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="CreatorID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Leaders" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+				<column name="OrganizeUsers" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				</column>
+				<column name="OrganizeGroups" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="GroupID" type="string" jt="12" mandatory="y" />
+					<column name="GroupName" type="string" jt="12" mandatory="y" />
+				</column>
+				<column name="JoinedUsers" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="User" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+						<column name="UserID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+						<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+					</column>
+					<column name="JoinDate" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				</column>
+				<column name="JoinedGroups" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="GroupID" type="string" jt="12" mandatory="y" />
+					<column name="GroupName" type="string" jt="12" mandatory="y" />
+				</column>
+				<column name="SponsoredUsers" type="list" jt="4999545" >
+					<column name="UserID" type="string" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" jt="12" mandatory="y" />
+				</column>
+				<column name="SponsorGroups" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="GroupID" type="string" jt="12" mandatory="y" />
+					<column name="GroupName" type="string" jt="12" mandatory="y" />
+				</column>
+				<column name="SponsoredGuest" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="SponsorID" type="string" jt="12" mandatory="y" />
+					<column name="SponsorName" type="string" jt="12" mandatory="y" />
+					<column name="SponsorAddress" type="string" jt="12" mandatory="y" />
+					<column name="SponsorEmail" type="string" jt="12" mandatory="y" />
+					<column name="SponsorPhone" type="string" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<column name="Teams" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="TeamID" type="string" jt="12" mandatory="y" />
+				<column name="TeamName" type="string" jt="12" mandatory="y" />
+				<column name="TeamMembers" type="list" jt="4999545" mandatory="y" >
+					<column name="UserID" type="string" jt="12" mandatory="y" />
+					<column name="DisplayName" type="string" jt="12" mandatory="y" />
+				</column>
+			</column>
+			<column name="Agenda" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="AgendaName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="ItemList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ItemID" type="string" jt="12" mandatory="y" />
+					<column name="DateOccur" type="date" jt="91" mandatory="y" />
+					<column name="HourStart" type="date" jt="91" mandatory="y" />
+					<column name="HourEnd" type="date" jt="91" mandatory="y" />
+					<column name="Content" type="string" jt="12" mandatory="y" />
+					<column name="Location" type="string" jt="12" />
+				</column>
+			</column>
+			<column name="RequestList" type="list" jt="4999545" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+		<table name="User" >
+			<column name="_id" type="oid" length="800" decimal="0" jt="-8" mandatory="y" autoincrement="y" />
+			<column name="UserInformation" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="UserID" type="integer" jt="4" />
+				<column name="RealName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Birthday" type="date" length="800" decimal="0" jt="91" mandatory="y" />
+				<column name="IdentifyID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Address" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Phone" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Gender" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+			</column>
+			<column name="AccountInformation" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="UserID" type="string" jt="12" mandatory="y" />
+				<column name="Email" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="Password" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="DisplayName" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="IdentifyID" type="string" length="800" decimal="0" jt="12" mandatory="y" />
+				<column name="IsAdmin" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+				<column name="IsActivate" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+				<column name="IsConfirmed" type="boolean" length="800" decimal="0" jt="16" mandatory="y" />
+			</column>
+			<column name="JoinedGroup" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="GroupID" type="string" jt="12" mandatory="y" />
+				<column name="GroupName" type="string" jt="12" mandatory="y" />
+				<column name="AvtImgLink" type="string" jt="12" mandatory="y" />
+			</column>
+			<column name="FriendList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="UserID" type="string" jt="12" mandatory="y" />
+				<column name="DisplayName" type="string" jt="12" mandatory="y" />
+			</column>
+			<column name="ActivityHistory" type="map" length="800" decimal="0" jt="4999544" mandatory="y" >
+				<column name="OrganizedProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+				<column name="JoinedProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+				<column name="SponsoredProject" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+					<column name="ProjectID" type="string" jt="12" mandatory="y" />
+					<column name="ProjectName" type="string" jt="12" mandatory="y" />
+					<column name="DateStart" type="date" jt="91" />
+					<column name="DateEnd" type="date" jt="91" />
+				</column>
+			</column>
+			<column name="CurrentProjects" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="ProjectID" type="string" jt="12" mandatory="y" />
+				<column name="ProejctName" type="string" jt="12" mandatory="y" />
+				<column name="DateStart" type="date" jt="91" />
+				<column name="DateEnd" type="date" jt="91" />
+			</column>
+			<column name="NotificationList" type="list" length="800" decimal="0" jt="4999545" mandatory="y" >
+				<column name="ItemID" type="integer" jt="4" />
+				<column name="DateRecieve" type="date" jt="91" />
+				<column name="IsSeen" type="boolean" jt="16" />
+				<column name="Type" type="integer" jt="4" />
+				<column name="Actors" type="list" jt="4999545" />
+				<column name="Content" type="string" jt="12" />
+				<column name="GroupLink" type="map" jt="4999544" />
+				<column name="ProjectLink" type="map" jt="4999544" />
+				<column name="PostID" type="string" jt="12" />
+			</column>
+			<column name="RequestList" type="list" jt="4999545" />
+			<index name="_id_" unique="PRIMARY_KEY" >
+				<column name="_id" />
+			</index>
+		</table>
+	</schema>
+	<connector name="MongoDb" database="MongoDb" driver_class="com.dbschema.MongoJdbcDriver" driver_jar="mongojdbc1.2.jar" driver_desc="Without Authentication" host="localhost" port="27017" instance="iVolunteer" />
+	<layout id="Layout_a29141b" name="Layout" show_relation_columns="y" >
+		<entity schema="iVolunteer" name="Group" column="GroupStructure" color="b3ccf5" x="975" y="270" />
+		<entity schema="iVolunteer" name="Group" column="GroupStructure.JoinedUsers" color="b3ccf5" x="1140" y="45" />
+		<entity schema="iVolunteer" name="Group" column="ActivityHistory" color="b3ccf5" x="975" y="570" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedUsers" color="cab3f5" x="750" y="1170" />
+		<entity schema="iVolunteer" name="Project" column="Agenda" color="cab3f5" x="495" y="1575" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsoredGuest" color="b3cef5" x="810" y="1275" />
+		<entity schema="iVolunteer" name="User" column="ActivityHistory" color="b3ccf5" x="420" y="435" />
+		<entity schema="iVolunteer" name="Group" column="ActivityHistory.SponsoredProject" color="b3ccf5" x="1155" y="570" />
+		<entity schema="iVolunteer" name="Group" column="ActivityHistory.JoinedProject" color="b3ccf5" x="1155" y="435" />
+		<entity schema="iVolunteer" name="Group" column="ActivityHistory.OrganizedProject" color="b3ccf5" x="1155" y="705" />
+		<entity schema="iVolunteer" name="Plan" column="Project" color="f5d8b3" x="570" y="660" />
+		<entity schema="iVolunteer" name="User" column="CurrentProjects" color="b3cef5" x="240" y="450" />
+		<entity schema="iVolunteer" name="Group" column="CurrentProjects" color="b3cef5" x="780" y="585" />
+		<entity schema="iVolunteer" name="User" column="JoinedGroup" color="b3cef5" x="210" y="90" />
+		<entity schema="iVolunteer" name="User" column="ActivityHistory.OrganizedProject" color="b3cef5" x="600" y="225" />
+		<entity schema="iVolunteer" name="User" column="ActivityHistory.JoinedProject" color="b3cef5" x="600" y="360" />
+		<entity schema="iVolunteer" name="User" column="ActivityHistory.SponsoredProject" color="b3cef5" x="600" y="480" />
+		<entity schema="iVolunteer" name="Project" column="Teams.TeamMembers" color="b3cef5" x="180" y="1440" />
+		<entity schema="iVolunteer" name="Project" column="Agenda.ItemList" color="b3cef5" x="645" y="1575" />
+		<entity schema="iVolunteer" name="User" column="FriendList" color="b3cef5" x="90" y="240" />
+		<entity schema="iVolunteer" name="User" column="AccountInformation" color="b3ccf5" x="405" y="225" />
+		<entity schema="iVolunteer" name="Group" column="GroupStructure.JoinedUsers.User" color="b3ccf5" x="1290" y="45" />
+		<entity schema="iVolunteer" name="Group" column="GroupStructure.Creator" color="b3ccf5" x="1140" y="150" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.OrganizeGroups" color="b3cef5" x="435" y="990" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.OrganizeUsers" color="cab3f5" x="315" y="1050" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsoredUsers" color="b3cef5" x="555" y="990" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsorGroups" color="b3cef5" x="720" y="1005" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedUsers.User" color="cab3f5" x="885" y="1140" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedGroups" color="b3cef5" x="645" y="1200" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure.Leaders" color="cab3f5" x="315" y="1170" />
+		<entity schema="iVolunteer" name="Post" column="PostInfomation.ProjectLink" color="b3cef5" x="1440" y="1155" />
+		<entity schema="iVolunteer" name="Post" column="PostInfomation.AlbumLink" color="b3cef5" x="1440" y="975" />
+		<entity schema="iVolunteer" name="Post" column="PostInfomation.GroupLink" color="b3cef5" x="1440" y="1065" />
+		<entity schema="iVolunteer" name="Post" column="CommentList.Creator" color="b3cef5" x="1050" y="1170" />
+		<entity schema="iVolunteer" name="Post" column="LikerList" color="b3cef5" x="1035" y="975" />
+		<entity schema="iVolunteer" name="Post" column="PostInfomation" color="b3b3f5" x="1290" y="975" />
+		<entity schema="iVolunteer" name="Project" column="ProjectStructure" color="cab3f5" x="495" y="1110" />
+		<entity schema="iVolunteer" name="Post" column="CommentList" color="b3cef5" x="1185" y="1140" />
+		<entity schema="iVolunteer" name="Project" column="Teams" color="b3cef5" x="180" y="1320" />
+		<entity schema="iVolunteer" name="Plan" color="f5d8b3" x="405" y="660" />
+		<entity schema="iVolunteer" name="Album" column="CommentList" color="b3cef5" x="1065" y="1590" />
+		<entity schema="iVolunteer" name="Album" column="LikerList" color="b3cef5" x="1245" y="1545" />
+		<entity schema="iVolunteer" name="Album" column="CommentList.Creator" color="b3cef5" x="1245" y="1620" />
+		<entity schema="iVolunteer" name="User" column="UserInformation" color="b3ccf5" x="420" y="45" />
+		<entity schema="iVolunteer" name="Post" color="b3b3f5" x="1170" y="975" />
+		<entity schema="iVolunteer" name="Post" column="FollowerIDs" color="b3cef5" x="1035" y="1080" />
+		<entity schema="iVolunteer" name="Album" color="b3cef5" x="1065" y="1395" />
+		<entity schema="iVolunteer" name="Album" column="FollowerIDs" color="b3cef5" x="1065" y="1305" />
+		<entity schema="iVolunteer" name="Plan" column="ItemList" color="b3cef5" x="495" y="780" />
+		<entity schema="iVolunteer" name="Plan" column="ItemList.Team" color="b3cef5" x="600" y="780" />
+		<entity schema="iVolunteer" name="Message" color="bef5b3" x="45" y="645" />
+		<entity schema="iVolunteer" name="Message" column="Participants" color="b3cef5" x="195" y="645" />
+		<entity schema="iVolunteer" name="Message" column="MessageList" color="b3cef5" x="45" y="780" />
+		<entity schema="iVolunteer" name="Message" column="MessageList.Sender" color="b3cef5" x="210" y="750" />
+		<entity schema="iVolunteer" name="Message" column="MessageList.SeenBy" color="b3cef5" x="210" y="840" />
+		<entity schema="iVolunteer" name="Group" column="GroupStructure.Leaders" color="b3ccf5" x="1140" y="270" />
+		<entity schema="iVolunteer" name="Album" column="AlbumInformation.ProjectLink" color="b3cef5" x="1380" y="1395" />
+		<entity schema="iVolunteer" name="Album" column="AlbumInformation.Creator" color="b3cef5" x="1380" y="1320" />
+		<entity schema="iVolunteer" name="Album" column="AlbumInformation.GroupLink" color="b3cef5" x="1395" y="1470" />
+		<entity schema="iVolunteer" name="User" column="NotificationList" color="b3cef5" x="45" y="345" />
+		<entity schema="iVolunteer" name="Project" column="ProjectInformation" color="cab3f5" x="495" y="1305" />
+		<entity schema="iVolunteer" name="Group" column="GroupInformation" color="b3ccf5" x="975" y="390" />
+		<entity schema="iVolunteer" name="Album" column="AlbumInformation" color="b3cef5" x="1230" y="1335" />
+		<entity schema="iVolunteer" name="User" color="b3ccf5" x="225" y="225" />
+		<entity schema="iVolunteer" name="User" column="RequestList" color="b3cef5" x="45" y="90" />
+		<entity schema="iVolunteer" name="Group" color="b3ccf5" x="795" y="390" />
+		<entity schema="iVolunteer" name="Group" column="RequestList" color="b3cef5" x="795" y="195" />
+		<entity schema="iVolunteer" name="Project" color="cab3f5" x="315" y="1290" />
+		<entity schema="iVolunteer" name="Project" column="RequestList" color="b3cef5" x="315" y="1590" />
+		<group name="Group" color="f0f3f7" >
+			<entity schema="iVolunteer" name="Group" column="GroupInformation" />
+			<entity schema="iVolunteer" name="Group" column="ActivityHistory.SponsoredProject" />
+			<entity schema="iVolunteer" name="Group" column="ActivityHistory.JoinedProject" />
+			<entity schema="iVolunteer" name="Group" column="ActivityHistory.OrganizedProject" />
+			<entity schema="iVolunteer" name="Group" />
+			<entity schema="iVolunteer" name="Group" column="GroupStructure.JoinedUsers.User" />
+			<entity schema="iVolunteer" name="Group" column="GroupStructure.Leaders" />
+			<entity schema="iVolunteer" name="Group" column="GroupStructure.Creator" />
+			<entity schema="iVolunteer" name="Group" column="GroupStructure" />
+			<entity schema="iVolunteer" name="Group" column="ActivityHistory" />
+			<entity schema="iVolunteer" name="Group" column="GroupStructure.JoinedUsers" />
+			<entity schema="iVolunteer" name="Group" column="CurrentProjects" />
+			<entity schema="iVolunteer" name="Group" column="RequestList" />
+		</group>
+		<group name="Message" color="f1f7f0" >
+			<entity schema="iVolunteer" name="Message" />
+			<entity schema="iVolunteer" name="Message" column="Participants" />
+			<entity schema="iVolunteer" name="Message" column="MessageList" />
+			<entity schema="iVolunteer" name="Message" column="MessageList.Sender" />
+			<entity schema="iVolunteer" name="Message" column="MessageList.SeenBy" />
+		</group>
+		<group name="Plan" color="f7f4f0" >
+			<entity schema="iVolunteer" name="Plan" column="Project" />
+			<entity schema="iVolunteer" name="Plan" />
+			<entity schema="iVolunteer" name="Plan" column="ItemList" />
+			<entity schema="iVolunteer" name="Plan" column="ItemList.Team" />
+		</group>
+		<group name="Post" color="f0f0f7" >
+			<entity schema="iVolunteer" name="Post" column="PostInfomation" />
+			<entity schema="iVolunteer" name="Post" />
+			<entity schema="iVolunteer" name="Post" column="CommentList" />
+			<entity schema="iVolunteer" name="Post" column="CommentList.Creator" />
+			<entity schema="iVolunteer" name="Post" column="LikerList" />
+			<entity schema="iVolunteer" name="Post" column="PostInfomation.GroupLink" />
+			<entity schema="iVolunteer" name="Post" column="PostInfomation.ProjectLink" />
+			<entity schema="iVolunteer" name="Post" column="PostInfomation.AlbumLink" />
+			<entity schema="iVolunteer" name="Post" column="FollowerIDs" />
+		</group>
+		<group name="Project" color="f3f0f7" >
+			<entity schema="iVolunteer" name="Project" column="ProjectInformation" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure" />
+			<entity schema="iVolunteer" name="Project" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedUsers.User" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.OrganizeUsers" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.Leaders" />
+			<entity schema="iVolunteer" name="Project" column="Agenda" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedUsers" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.OrganizeGroups" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsoredGuest" />
+			<entity schema="iVolunteer" name="Project" column="Agenda.ItemList" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.JoinedGroups" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsorGroups" />
+			<entity schema="iVolunteer" name="Project" column="ProjectStructure.SponsoredUsers" />
+			<entity schema="iVolunteer" name="Project" column="Teams" />
+			<entity schema="iVolunteer" name="Project" column="Teams.TeamMembers" />
+			<entity schema="iVolunteer" name="Project" column="RequestList" />
+		</group>
+		<group name="User" color="f0f3f7" >
+			<entity schema="iVolunteer" name="User" column="AccountInformation" />
+			<entity schema="iVolunteer" name="User" column="UserInformation" />
+			<entity schema="iVolunteer" name="User" />
+			<entity schema="iVolunteer" name="User" column="ActivityHistory" />
+			<entity schema="iVolunteer" name="User" column="ActivityHistory.OrganizedProject" />
+			<entity schema="iVolunteer" name="User" column="ActivityHistory.JoinedProject" />
+			<entity schema="iVolunteer" name="User" column="ActivityHistory.SponsoredProject" />
+			<entity schema="iVolunteer" name="User" column="CurrentProjects" />
+			<entity schema="iVolunteer" name="User" column="JoinedGroup" />
+			<entity schema="iVolunteer" name="User" column="FriendList" />
+			<entity schema="iVolunteer" name="User" column="NotificationList" />
+			<entity schema="iVolunteer" name="User" column="RequestList" />
+		</group>
+		<group name="Album" color="c4e0f9" >
+			<entity schema="iVolunteer" name="Album" />
+			<entity schema="iVolunteer" name="Album" column="LikerList" />
+			<entity schema="iVolunteer" name="Album" column="CommentList" />
+			<entity schema="iVolunteer" name="Album" column="CommentList.Creator" />
+			<entity schema="iVolunteer" name="Album" column="AlbumInformation" />
+			<entity schema="iVolunteer" name="Album" column="FollowerIDs" />
+			<entity schema="iVolunteer" name="Album" column="AlbumInformation.GroupLink" />
+			<entity schema="iVolunteer" name="Album" column="AlbumInformation.ProjectLink" />
+			<entity schema="iVolunteer" name="Album" column="AlbumInformation.Creator" />
+		</group>
+	</layout>
+</project>

@@ -1,0 +1,97 @@
+﻿@model iVolunteer.Models.ViewModel.LoginModel
+
+@Html.AntiForgeryToken()
+<div id="loginForm" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="row">
+
+                <!-- Register -->
+                <div class="col-sm-6 col-xs-6">
+                    <div class="row">
+                        <h3 style="text-align: center; font-weight: bold; color: #049f88;">Tôi là người dùng mới</h3>
+                    </div>
+                    <div class="row" style="line-height: 250px; text-align: center">
+                        <div class="col-xs-12 login-register-label">
+                            <label>Đăng kí ngay</label>
+                            <a href="@Url.Action("Register","Home")"><i class="material-icons md-mygreen md-48"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider-vertical-login"></div>
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { id = "formValidation" }))
+                {
+                    <!-- Login -->
+                    <div class="col-sm-5 col-xs-5">
+                        <div class="row">
+                            <h3 style="text-align: center; font-weight: bold; color: #049f88">Đăng nhập</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12">
+                                <form role="form" class="login-form">
+                                    <div class="row">
+                                        <div class="col-xs-4 login-label">
+                                            @Html.LabelFor(model => model.Email, htmlAttributes: new
+                                       { @*@class = "control-label col-md-2"*@ })
+                                            @*<label for="email">Email:</label>*@
+                                        </div>
+                                        <div class="col-xs-8 text-input">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập Email", @id = "email", @name = "txtEmail" } })
+                                            @*<input type="text" name="txtEmail" class="form-control" id="email" placeholder="Nhập Email ...">*@
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 login-label">
+                                            @Html.LabelFor(model => model.Password, htmlAttributes: new { })
+                                            @*<label for="password">Mật khẩu:</label>*@
+                                        </div>
+                                        <div class="col-xs-8 text-input">
+                                            @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập mật khẩu", @id = "password" }, type = "password" })
+                                            @*<input type="text" name="txtPass" class="form-control" id="password" placeholder="Nhập mật khẩu ...">*@
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-4">
+                                            <div class="checkbox">
+                                                <label>
+                                                    @Html.EditorFor(model => model.IsRemember)
+                                                    @Html.LabelFor(model => model.IsRemember, htmlAttributes: new
+                                               { @*@class = "control-label col-md-2"*@ })
+                                                    @*<input type="checkbox"> Ghi nhớ đăng nhập*@
+
+                                                    @Html.ValidationMessageFor(model => model.IsRemember, "", new { @class = "text-danger" })
+
+
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-4 text-input">
+                                            <button class="btn btn-login" type="submit" id="login">ĐĂNG NHẬP</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        @ViewBag.Message
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-11 col-xs-offset-1" style="margin-top: 20px">
+                                <a href="@Url.Action("ForgotPassword", "Account")">Quên mật khẩu?</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</div>
