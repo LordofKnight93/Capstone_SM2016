@@ -1,30 +1,17 @@
-﻿
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
 @{
-    ViewBag.Title = "ProjectHome";
+    ViewBag.Title = Model.DisplayName;
     //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
     <div class="col-md-3" style="margin: 0 0 1rem 0;; margin-right: -10px">
-        @Html.Partial("_LeftSideBar")
+        @{ Html.RenderAction("NavigationPanel", "Home");}
     </div>
     <div class="col-md-9" id="main_content">
         @*-------------------Cover Photo----------------*@
-        <div class="card">
-            <div class="card-image">
-                <img src="../images/thugom_cover.jpg" height="250px" style="object-fit: cover;">
-                <div class="col-md-3 card-ava">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <img src="../images/quyvochai.jpg">
-                        </div>
-                    </div>
-                    <div class="row" style="text-align: center">
-                        <h4 style="text-shadow: 2px 2px 6px #69656E;">Thu gom vỏ chai</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @{ Html.RenderAction("AvatarCover", "Project", new { projectID = Model.ID });}
         @*-------------------Navigation Bar----------------*@
         <div id="exTab1">
             <ul class="nav nav-tabs">
@@ -63,7 +50,6 @@
 
 </div>
 
-</div>
 
 @**@
 

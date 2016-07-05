@@ -17,22 +17,22 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SQL_Project()
         {
+            this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
             this.SQL_Album = new HashSet<SQL_Album>();
             this.SQL_Plan = new HashSet<SQL_Plan>();
             this.SQL_Post = new HashSet<SQL_Post>();
-            this.SQL_User_Project = new HashSet<SQL_User_Project>();
         }
     
         public string ProjectID { get; set; }
         public bool IsActivate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Album> SQL_Album { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Plan> SQL_Plan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Post> SQL_Post { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Project> SQL_User_Project { get; set; }
     }
 }

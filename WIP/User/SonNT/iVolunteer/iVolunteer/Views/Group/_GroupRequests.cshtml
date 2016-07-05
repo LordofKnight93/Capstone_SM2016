@@ -1,0 +1,18 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ListClass.RequestItem>
+<table>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <a href="@Url.Action("UserProfile","User", new { userID = item.Actor.ID })" >
+                @Html.DisplayFor(modelItem => item.Actor.DisplayName)
+            </a>
+        </td>
+
+        <td>
+            @Html.ActionLink("Đồng ý", "AcceptRequest","Group", new { groupID = ViewBag.GroupID, requestID = item.RequestID },null) |
+            @Html.ActionLink("Từ chối", "DeniedRequest", "Group", new { groupID = ViewBag.GroupID, requestID = item.RequestID },null)
+        </td>
+    </tr>
+}
+
+</table>

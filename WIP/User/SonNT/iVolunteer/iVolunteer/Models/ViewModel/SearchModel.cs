@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 
 namespace iVolunteer.Models.ViewModel
 {

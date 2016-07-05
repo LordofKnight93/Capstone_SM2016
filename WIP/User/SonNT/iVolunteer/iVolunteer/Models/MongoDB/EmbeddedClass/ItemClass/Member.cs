@@ -1,8 +1,10 @@
 ﻿using System;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
 {
+    [BsonIgnoreExtraElements]
     public class Member
     {
         public SDLink SDInfo { get; set; }

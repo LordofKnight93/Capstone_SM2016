@@ -17,11 +17,13 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SQL_Account()
         {
+            this.SQL_AcAl_Relation = new HashSet<SQL_AcAl_Relation>();
             this.SQL_Message = new HashSet<SQL_Message>();
-            this.SQL_User_Friend = new HashSet<SQL_User_Friend>();
-            this.SQL_User_Friend1 = new HashSet<SQL_User_Friend>();
-            this.SQL_User_Group = new HashSet<SQL_User_Group>();
-            this.SQL_User_Project = new HashSet<SQL_User_Project>();
+            this.SQL_AcPo_Relation = new HashSet<SQL_AcPo_Relation>();
+            this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
+            this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
+            this.SQL_Account1 = new HashSet<SQL_Account>();
+            this.SQL_Account2 = new HashSet<SQL_Account>();
         }
     
         public string UserID { get; set; }
@@ -35,14 +37,18 @@ namespace iVolunteer.Models.SQL
         public bool IsConfirm { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAl_Relation> SQL_AcAl_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Message> SQL_Message { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Friend> SQL_User_Friend { get; set; }
+        public virtual ICollection<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Friend> SQL_User_Friend1 { get; set; }
+        public virtual ICollection<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Group> SQL_User_Group { get; set; }
+        public virtual ICollection<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Project> SQL_User_Project { get; set; }
+        public virtual ICollection<SQL_Account> SQL_Account1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_Account> SQL_Account2 { get; set; }
     }
 }

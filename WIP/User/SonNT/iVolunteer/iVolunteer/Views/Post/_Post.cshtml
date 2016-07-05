@@ -7,8 +7,7 @@
                 <!-- Post Owner -->
                 <table class="table-post-ava">
                     <tr>
-                        @{ var avatarlnk = "../Images/User/Avatar/" + Model.Creator.UserID + ".jpg"}
-                        <td rowspan="2"><object type="image/svg+xml" data=@avatarlnk width="40" height="40" border="1"></object></td>
+                        <td rowspan="2"><object type="image/svg+xml" data=@Model.Creator.Get_AvatarLink() width="40" height="40" border="1"></object></td>
                         <td class="td">
                             <a href="" class="user-name">@Model.Creator.DisplayName</a>
                             <i class="glyphicon glyphicon-triangle-right" style="font-size: smaller"></i>
@@ -58,7 +57,7 @@
                         </li>
                         <li>
                             <i class="glyphicon glyphicon-comment"></i>
-                            <span><strong>@Model.comm</strong></span>
+                            <span><strong>@Model.CommentCount</strong></span>
                         </li>
                     </ul>
                 </div>

@@ -28,7 +28,7 @@ namespace iVolunteer.Controllers
         }
         public ActionResult Newfeed()
         {
-            if (Session["Role"].ToString() != "User") return RedirectToAction("FrontPage","Home");
+            if (Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("Newfeed");
         }
 
@@ -36,7 +36,7 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
@@ -150,10 +150,7 @@ namespace iVolunteer.Controllers
             account.IsActivate = Status.IS_ACTIVATE;
             account.IsConfirm = Status.IS_NOT_CONFIRMED;
 
-
-
             //write to DB
-            
             using (TransactionScope transaction = new TransactionScope())
             {
                 try
@@ -163,10 +160,10 @@ namespace iVolunteer.Controllers
                     mongo_User_DAO.Add_User(user);
 
                     // copy default avatar and cover
-                    FileInfo avatar = new FileInfo(Server.MapPath("~") + Default.DEFAULT_AVATAR);
-                    avatar.CopyTo(Server.MapPath("~") + "/Images/Project/Avatar/" + account.UserID + ".jpg", true);
-                    FileInfo cover = new FileInfo(Server.MapPath("~") + Default.DEFAULT_COVER);
-                    cover.CopyTo(Server.MapPath("~") + "/Images/Project/Cover/" + account.UserID + ".jpg", true);
+                    FileInfo avatar = new FileInfo(Server.MapPath(Default.DEFAULT_AVATAR));
+                    avatar.CopyTo(Server.MapPath("/Images/User/Avatar/" + account.UserID + ".jpg"));
+                    FileInfo cover = new FileInfo(Server.MapPath(Default.DEFAULT_COVER));
+                    cover.CopyTo(Server.MapPath("/Images/User/Cover/" + account.UserID + ".jpg"));
 
                     transaction.Complete();
                 }
@@ -174,11 +171,35 @@ namespace iVolunteer.Controllers
                 {
                     transaction.Dispose();
                     ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View();
+                    return View("ErrorMessage");
                 }
             }
 
-            return RedirectToAction("FrontPage","Home");
+            return View("Activate",account);
+        }
+        [ChildActionOnly]
+        public ActionResult NavigationPanel()
+        {
+            AccountInformation result = null;
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO mongoDAO = new Mongo_User_DAO();
+                result = mongoDAO.Get_AccountInformation(userID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+            return PartialView("_NavigationPanel", result);
+        }
+
+        public ActionResult Search(string name)
+        {
+            SearchModel searchModel = new SearchModel();
+            searchModel.Name = name;
+            return View("Search", searchModel);
         }
     }
 }

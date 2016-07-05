@@ -22,6 +22,9 @@ namespace iVolunteer.Common
         // pinned status
         public const bool IS_PINNED = true;
         public const bool IS_NOT_PINNED = false;
+        // seen status
+        public const bool IS_SEEN = true;
+        public const bool IS_NOT_SEEN = false;
     }
 
     public static class Default
@@ -43,6 +46,7 @@ namespace iVolunteer.Common
         public const int LEADER_RELATION = 1;
         public const int MEMBER_RELATION = 2;
         public const int FOLLOW_RELATION = 3;
+        public const int SPONSOR_RELATION = 4;
     }
 
     public static class PostType
@@ -53,11 +57,22 @@ namespace iVolunteer.Common
         public const int POST_ANNOUNCE = 3;
     }
 
-    public static class Message
+    public class RequestType
     {
+        public const int JOIN_REQUEST = 1;
+        public const int SPONSOR_REQUEST = 2;
+        public const int FRIEND_REQUEST = 3;
+        public const int SUGGEST_REQUEST = 4;
+        public const int INVITE_TO = 5;
+    }
+
+    public static class RequestContent
+    {
+        public const string JOIN_REQUEST = " muốn tham gia.";
+        public const string SPONSOR_REQUEST = " muốn tài trợ, quyên góp cho sự kiện.";
         public const string FRIEND_REQUEST = " gửi lời mời kết bạn.";
-        public const string JOIN_PROJECT_REQUEST = " mời bạn tham gia sự kiện ";
-        public const string SUGGEST_FRIEND = " đề xuất ";
+        public const string SUGGEST_REQUEST = " đề xuất ";
+        public const string INVITE_TO = " mời bạn tham gia ";
     }
 
     public static class Error
@@ -70,6 +85,8 @@ namespace iVolunteer.Common
         public const string IDENTIFYID_EXIST = "Số chứng minh thư đã được sử dụng";
         public const string UNEXPECT_ERROR = "Có lỗi xảy ra, vui lòng thử lại sau ít phút";
         public const string INVALID_INFORMATION = "Thông tin không hợp lệ, vui lòng nhập lại.";
+        public const string ACCESS_DENIED = "Trang này không tồn tại hoặc bạn không có quyền truy cập.";
+        public const string DISPLAYNAME_FAIL = "Không thể đổi tên quá nhiều lần trong vòng 90 ngày.";
     }
 
     public static class Handler

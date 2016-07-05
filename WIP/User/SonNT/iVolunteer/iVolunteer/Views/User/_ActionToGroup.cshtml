@@ -1,0 +1,10 @@
+﻿    @if (ViewBag.IsJoined == "false")
+    {
+        @Html.ActionLink(" Xin gia nhập ", "GroupJoinRequest", "User", new { groupID = ViewBag.GroupID }, null);
+    }
+
+    @if (ViewBag.IsFollowing == "false")
+    {
+        @Html.ActionLink(" Theo dõi ", "FollowGroup", "User", new { groupID = ViewBag.GroupID }, null);
+    }
+        @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", new { groupID = ViewBag.GroupID }, null)

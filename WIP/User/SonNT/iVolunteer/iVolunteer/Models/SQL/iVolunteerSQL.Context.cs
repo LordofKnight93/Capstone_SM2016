@@ -25,16 +25,17 @@ namespace iVolunteer.Models.SQL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<SQL_AcAl_Relation> SQL_AcAl_Relation { get; set; }
         public virtual DbSet<SQL_Account> SQL_Account { get; set; }
+        public virtual DbSet<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
+        public virtual DbSet<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
         public virtual DbSet<SQL_Album> SQL_Album { get; set; }
         public virtual DbSet<SQL_Group> SQL_Group { get; set; }
         public virtual DbSet<SQL_Message> SQL_Message { get; set; }
         public virtual DbSet<SQL_Plan> SQL_Plan { get; set; }
         public virtual DbSet<SQL_Post> SQL_Post { get; set; }
         public virtual DbSet<SQL_Project> SQL_Project { get; set; }
-        public virtual DbSet<SQL_User_Friend> SQL_User_Friend { get; set; }
-        public virtual DbSet<SQL_User_Group> SQL_User_Group { get; set; }
-        public virtual DbSet<SQL_User_Project> SQL_User_Project { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
     }
 }

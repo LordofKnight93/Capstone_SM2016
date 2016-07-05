@@ -225,6 +225,8 @@
     <Compile Include="Controllers\PostController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -241,9 +243,8 @@
     <Compile Include="DAL\SQL\SQL_Plan_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Post_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Project_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_User_Friend_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_User_Group_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_User_Project_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
@@ -259,11 +260,10 @@
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\UserInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\HistoryItem.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Member.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TagsList.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\TagsList.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Team.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
@@ -285,7 +285,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\SQL\SQL_AcAl_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SQL\SQL_Account.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcGr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcPo_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcPr_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Album.cs">
@@ -306,15 +318,6 @@
     <Compile Include="Models\SQL\SQL_Project.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SQL\SQL_User_Friend.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SQL\SQL_User_Group.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SQL\SQL_User_Project.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\SQL\sysdiagram.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
@@ -330,13 +333,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\GuestLayout.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Newfeed.cshtml" />
     <Content Include="Views\Project\CreateProject.cshtml" />
     <Content Include="Views\Group\CreateGroup.cshtml" />
     <Content Include="Views\Admin\_ListGroup.cshtml" />
-    <Content Include="Views\Group\Information.cshtml" />
     <Content Include="Views\Home\FrontPage.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Shared\_AvatarCover.cshtml" />
@@ -344,12 +346,12 @@
     <Content Include="Views\User\_UpdateInformation.cshtml" />
     <Content Include="Views\Shared\_ImageUpload.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Shared\_LeftSideBar.cshtml" />
+    <Content Include="Views\Shared\_NavigationPanel.cshtml" />
     <Content Include="Views\Shared\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\create_project_layout.cshtml" />
     <Content Include="Views\Shared\create_group_layout.cshtml" />
-    <Content Include="Views\Shared\main_layout.cshtml" />
+    <Content Include="Views\Shared\UserLayout.cshtml" />
     <Content Include="Views\Shared\navbar_left_layout.cshtml" />
     <Content Include="Views\Shared\notification_popup_layout.cshtml" />
     <Content Include="Views\Shared\friends_popup_layout.cshtml" />
@@ -363,8 +365,26 @@
     <Content Include="Views\Shared\_Comment.cshtml" />
     <Content Include="Views\Post\_Post.cshtml" />
     <Content Include="Views\Admin\_ListProject.cshtml" />
-    <Content Include="Views\Admin\_Manage.cshtml" />
+    <Content Include="Views\Admin\Manage.cshtml" />
     <Content Include="Views\Admin\_ListAccount.cshtml" />
+    <Content Include="Views\User\_JoinedGroups.cshtml" />
+    <Content Include="Views\User\_CurrentProjects.cshtml" />
+    <Content Include="Views\User\_JoinedProjects.cshtml" />
+    <Content Include="Views\Group\GroupHome.cshtml" />
+    <Content Include="Views\User\UserProfile.cshtml" />
+    <Content Include="Views\Post\_CreatePost.cshtml" />
+    <Content Include="Views\Project\_ProjectSD.cshtml" />
+    <Content Include="Views\Project\_SearchProject.cshtml" />
+    <Content Include="Views\Home\Activate.cshtml" />
+    <Content Include="Views\Account\_ChangeDisplayName.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\Group\_GroupResult.cshtml" />
+    <Content Include="Views\User\_ActionToGroup.cshtml" />
+    <Content Include="Views\Group\_GroupRequests.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\User\_AccountResult.cshtml" />
+    <Content Include="Views\User\_ActionToOtherUser.cshtml" />
+    <Content Include="Views\Admin\_ActionToUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -374,7 +394,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\MongoDB\EmbeddedClass\SDClass\" />
+    <Folder Include="BL\" />
     <Folder Include="Views\Album\" />
     <Folder Include="Views\Images\" />
   </ItemGroup>

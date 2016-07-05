@@ -2,22 +2,27 @@
 using MongoDB.Bson;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Common;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
     /// <summary>
     /// This class store post's infomation
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class PostInformation
     {
         public string PostID { get; set; }
         public SDLink Creator { get; set; }
         public SDLink Destination { get; set; }
+        [BsonIgnoreIfDefault]
         public SDLink AlbumLink { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateLastActivity { get; set; }
         public int Type { get; set; }
+        [BsonIgnoreIfDefault]
         public string Content { get; set; }
+        [BsonIgnoreIfDefault]
         public string ImgLink { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }

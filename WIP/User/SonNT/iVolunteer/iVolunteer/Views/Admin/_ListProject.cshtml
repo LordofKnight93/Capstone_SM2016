@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
 
+<input type="hidden" id="currentPage" name="currentPage" value=@ViewBag.CurrentPage/>
 <table class="table">
     <tr>
         <th>
@@ -36,7 +37,7 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>>
+    <tr>
         <td>
             @Html.DisplayFor(modelItem => item.ProjectName)
         </td>
@@ -62,26 +63,24 @@
             @Html.DisplayFor(modelItem => item.IsActivate)
         </td>
         <td>
-            @Html.ActionLink("Chi tiết", "Information","Project", new { projectID = item.ProjectID },null) | 
+            @Html.ActionLink("Chi tiết", "GroupHome","Project", new { projectID = item.ProjectID },null) | 
             @if (item.IsActivate)
             {
-                @Html.ActionLink("Khóa", "ProjectBanned", "Admin", new { groupID = item.GroupID }, null)
+                @Html.ActionLink("Khóa", "ProjectBanned", "Admin", new { ProjectID = item.ProjectID, currentPage = ViewBag.CurrentPage }, null)
             }
             else
             {
-                @Html.ActionLink("Kích hoạt", "ProjectActivate", "Admin", new { groupID = item.GroupID }, null)
+                @Html.ActionLink("Kích hoạt", "ProjectActivate", "Admin", new { groupID = item.ProjectID, currentPage = ViewBag.CurrentPage }, null)
             }
         </td>
     </tr>
 }
-
 </table>
-
-@if (ViewBag.Previous >= 0)
+@if (ViewBag.CurrentPage > 1)
 {
-    @Html.ActionLink("Trang trước", "ListProject", "Admin", new { skip = ViewBag.Previous, number = 10 }, null);
+    @Html.ActionLink("Trang trước", "ListProject", "Admin", new { page = ViewBag.CurrentPage - 1 }, null);
 }
-@if (ViewBag.Next >= 0)
+@if (Model.Count() == 10)
 {
-    @Html.ActionLink("Trang sau", "ListProject", "Admin", new { skip = ViewBag.Next, number = 10 }, null);
+    @Html.ActionLink("Trang sau", "ListProject", "Admin", new { page = ViewBag.CurrentPage + 1 }, null);
 }

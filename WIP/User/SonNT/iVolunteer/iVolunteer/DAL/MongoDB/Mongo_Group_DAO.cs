@@ -47,7 +47,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.DeleteOne(gr => gr._id == new ObjectId(groupID));
+                var result = collection.DeleteOne(gr => gr.GroupInformation.GroupID == groupID);
                 return result.IsAcknowledged; ;
             }
             catch
@@ -82,7 +82,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return result.GroupInformation;
             }
             catch
@@ -91,18 +91,18 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// search group by name, only activate group, for user use
+        /// search group by name and status
         /// </summary>
         /// <param name="name">keyword</param>
         /// <param name="skip">number of result skip</param>
         /// <param name="number">number of result get</param>
         /// <returns></returns>
-        public List<GroupInformation> User_Search_Group_By_Name(string name, int skip, int number)
+        public List<GroupInformation> Search_Group_By_Name(string name,bool status, int skip, int number)
         {
             try
             {
                 var result = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.Contains(name)
-                                                               && gr.GroupInformation.IsActivate == Status.IS_ACTIVATE)
+                                                               && gr.GroupInformation.IsActivate == status)
                                                      .Select(gr => gr.GroupInformation)
                                                      .Skip(skip).Take(number).ToList();
                 return result;
@@ -119,7 +119,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="skip">number of result skip</param>
         /// <param name="number">number of result get</param>
         /// <returns></returns>
-        public List<GroupInformation> Admin_Search_Group_By_Name(string name, int skip, int number)
+        public List<GroupInformation> Search_Group_By_Name(string name, int skip, int number)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return result.GroupStructure;
             }
             catch
@@ -159,7 +159,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return result.HistoryInformation;
             }
             catch
@@ -176,7 +176,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return result.CurrentProjects;
             }
             catch
@@ -193,7 +193,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return result.RequestList;
             }
             catch
@@ -211,7 +211,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id,new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.Set(gr => gr.GroupInformation.IsActivate, status);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -231,7 +231,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.CurrentProjects,project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -251,7 +251,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID,projectID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.CurrentProjects, project_filter);
                 var result = collection.UpdateOne(group_filter, update);
@@ -271,7 +271,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<Member>(gr => gr.GroupStructure.Leaders, user);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -291,7 +291,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var user_filter = Builders<Member>.Filter.Eq(u => u.SDInfo.ID, userID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.GroupStructure.Leaders, user_filter);
                 var result = collection.UpdateOne(group_filter, update);
@@ -303,7 +303,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// Add a user to group
+        /// Add a user to group and increase member count by 1
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="user"></param>
@@ -313,8 +313,9 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(user);
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
-                var update = Builders<Mongo_Group>.Update.AddToSet<Member>(gr => gr.GroupStructure.JoinedUsers, member);
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
+                var update = Builders<Mongo_Group>.Update.AddToSet<Member>(gr => gr.GroupStructure.JoinedUsers, member)
+                                                         .Inc(g => g.GroupInformation.MemberCount,1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -324,7 +325,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// expell a user from a group's joineduser list
+        /// expell a user from a group's joineduser list and decrease member count by 1
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="userID"></param>
@@ -333,9 +334,10 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var user_filter = Builders<Member>.Filter.Eq(m => m.SDInfo.ID, userID);
-                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.GroupStructure.JoinedUsers, user_filter);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.GroupStructure.JoinedUsers, user_filter)
+                                                         .Inc(g => g.GroupInformation.MemberCount, 1);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
             }
@@ -353,7 +355,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.JoinedProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -373,7 +375,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.JoinedProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
@@ -393,7 +395,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.OrganizedProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -413,7 +415,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.OrganizedProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
@@ -433,7 +435,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.SponsoredProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -453,7 +455,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
                 var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.SponsoredProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
@@ -474,7 +476,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var update = Builders<Mongo_Group>.Update.AddToSet<RequestItem>(gr => gr.RequestList, request);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
@@ -494,9 +496,9 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr._id, new ObjectId(groupID));
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
-                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.RequestList, requestID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.RequestList, request_filter);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
             }
@@ -534,8 +536,49 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(g => g._id == new ObjectId(groupID));
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
                 return new SDLink(result.GroupInformation);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a specific request
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public RequestItem Get_Request(string groupID, string requestID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID)
+                                                     .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if a request is exist
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Is_Request_Exist(string groupID, RequestItem request)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(gr => gr.GroupInformation.GroupID == groupID)
+                                                     .RequestList.FirstOrDefault(rq => rq.Type == request.Type
+                                                                                    && rq.Actor.ID == request.Actor.ID
+                                                                                    && rq.Destination.ID == request.Destination.ID);
+                return result != null;
             }
             catch
             {

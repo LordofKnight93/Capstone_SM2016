@@ -48,7 +48,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.DeleteOne(pr => pr._id == new ObjectId(projectID));
+                var result = collection.DeleteOne(pr => pr.ProjectInformation.ProjectID == projectID);
                 return result.IsAcknowledged;
             }
             catch
@@ -83,7 +83,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
                 return result.ProjectInformation;
             }
             catch
@@ -110,7 +110,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
                 return result.ProjectStructure;
             }
             catch
@@ -119,16 +119,70 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get project requests
+        /// get project join requests
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public RequestList Get_RequestList(string projectID)
+        public List<RequestItem> Get_JoinRequests(string projectID)
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
-                return result.RequestList;
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
+                return result.RequestList.JoinRequests;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get project sponsor requests
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<RequestItem> Get_SponsorRequests(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
+                return result.RequestList.SponsorRequests;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get project suggest user  requests
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<RequestItem> Get_SuggestUsers(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
+                return result.RequestList.SuggestUsers;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get project guest sponsor requests
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<Sponsor> Get_GuestSponsorRequests(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
+                return result.RequestList.GuestSponsorRequests;
             }
             catch
             {
@@ -144,7 +198,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
                 return result.Agenda;
             }
             catch
@@ -161,7 +215,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
                 return result.Teams;
             }
             catch
@@ -179,7 +233,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.IsActivate, status);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -199,7 +253,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<AgendaItem>(pr => pr.Agenda.ItemList, item);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -219,7 +273,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var item_filter = Builders<AgendaItem>.Filter.Eq(it => it.ItemID, itemID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<AgendaItem>(pr => pr.Agenda.ItemList, item_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -240,7 +294,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.Leaders, leader);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -260,7 +314,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(gr => gr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var user_filter = Builders<Member>.Filter.Eq(m => m.SDInfo.ID, userID);
                 var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.ProjectStructure.Leaders, user_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -282,7 +336,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(user);
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.JoinedUsers, member);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -302,7 +356,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var user_filter = Builders<Member>.Filter.Eq(m => m.SDInfo.ID, userID);
                 var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.ProjectStructure.JoinedUsers, user_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -323,7 +377,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.OrganizeUsers, user);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -344,7 +398,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(user);
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.OrganizeUsers, member);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -364,7 +418,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var user_filter = Builders<Member>.Filter.Eq(u => u.SDInfo.ID, userID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Member>(pr => pr.ProjectStructure.OrganizeUsers , user_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -385,7 +439,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.SponsoredUsers, user);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -405,7 +459,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var user_filter = Builders<Member>.Filter.Eq(u => u.SDInfo.ID, userID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Member>(pr => pr.ProjectStructure.SponsoredUsers, user_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -426,7 +480,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Sponsor>(pr => pr.ProjectStructure.SponsoredGuests, guest);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -446,7 +500,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var guest_filter = Builders<Sponsor>.Filter.Eq(sp => sp.SponsorID, sponsorID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Sponsor>(pr => pr.ProjectStructure.SponsoredGuests, guest_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -468,7 +522,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(group);
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.OrganizeGroups, member);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -488,7 +542,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.OrganizeGroups, group);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -508,7 +562,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var group_filter = Builders<Member>.Filter.Eq(gr => gr.SDInfo.ID, groupID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Member>(pr => pr.ProjectStructure.OrganizeGroups, group_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -530,7 +584,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(group);
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.JoinedGroups, member);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -550,7 +604,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var group_filter = Builders<Member>.Filter.Eq(gr => gr.SDInfo.ID, groupID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Member>(pr => pr.ProjectStructure.JoinedGroups, group_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -572,7 +626,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 Member member = new Member(group);
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.SponsoredGroups, member);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -592,7 +646,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.SponsoredGroups, group);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -612,7 +666,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var group_filter = Builders<Member>.Filter.Eq(gr => gr.SDInfo.ID, groupID);
                 var update = Builders<Mongo_Project>.Update.PullFilter<Member>(pr => pr.ProjectStructure.SponsoredGroups, group_filter);
                 var result = collection.UpdateOne(project_filter, update);
@@ -633,7 +687,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr._id, new ObjectId(projectID));
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation, projectInfo);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -652,8 +706,334 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(p => p._id == new ObjectId(projectID));
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID);
                 return new SDLink(result.ProjectInformation);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if a join request is exist
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Is_JoinRequest_Exist(string projectID, RequestItem request)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(gr => gr.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.JoinRequests.FirstOrDefault(rq => rq.Type == request.Type
+                                                                                    && rq.Actor.ID == request.Actor.ID
+                                                                                    && rq.Actor.Handler == request.Actor.Handler);
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add join request to project request list
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Add_JoinRequest(string projectID, RequestItem request)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet<RequestItem>(pr => pr.RequestList.JoinRequests, request);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete join request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public bool Delete_JoinRequest(string projectID, string requestID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.RequestList.JoinRequests, request_filter);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a join request details
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public RequestItem Get_JoinRequest(string projectID, string requestID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.JoinRequests.FirstOrDefault(rq => rq.RequestID == requestID);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if a sponsor request is exist
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Is_SponsorRequest_Exist(string projectID, RequestItem request)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(gr => gr.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.SponsorRequests.FirstOrDefault(rq => rq.Type == request.Type
+                                                                                    && rq.Actor.ID == request.Actor.ID
+                                                                                    && rq.Actor.Handler == request.Actor.Handler);
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add sponsor request to project request list
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Add_SponsorRequest(string projectID, RequestItem request)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet<RequestItem>(pr => pr.RequestList.SponsorRequests, request);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete sponsor request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public bool Delete_SponsorRequest(string projectID, string requestID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.RequestList.SponsorRequests, request_filter);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a sponsor request details
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public RequestItem Get_SponsorRequest(string projectID, string requestID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.SponsorRequests.FirstOrDefault(rq => rq.RequestID == requestID);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if a suggest request is exist
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Is_SuggestUser_Exist(string projectID, RequestItem request)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(gr => gr.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.SuggestUsers.FirstOrDefault(rq => rq.Type == request.Type
+                                                                                    && rq.Actor.ID == request.Actor.ID
+                                                                                    && rq.Actor.Handler == request.Actor.Handler
+                                                                                    && rq.Destination.ID == request.Destination.ID);
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add sponsor suggest user
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Add_SuggestUser(string projectID, RequestItem request)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet(pr => pr.RequestList.SuggestUsers, request);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete suggest user
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public bool Delete_SuggestUser(string projectID, string requestID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.RequestList.SuggestUsers, request_filter);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a suggest user request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public RequestItem Get_SuggestUser(string projectID, string requestID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.SuggestUsers.FirstOrDefault(rq => rq.RequestID == requestID);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if a guest sponsor request is exist
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="sponsor"></param>
+        /// <returns></returns>
+        public bool Is_GuestSponsorRequest_Exist(string projectID, Sponsor sponsor)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(gr => gr.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.GuestSponsorRequests.FirstOrDefault(sp => sp.SponsorName == sponsor.SponsorName
+                                                                                                         && sp.SponsorMail == sponsor.SponsorMail
+                                                                                                         && sp.SponsorPhone == sponsor.SponsorName);
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add guest sponsor request to project request list
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Add_GuestSponsorRequest(string projectID, Sponsor sponsor)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet(pr => pr.RequestList.GuestSponsorRequests, sponsor);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete sponsor request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="sponsorID"></param>
+        /// <returns></returns>
+        public bool Delete_GuestSponsorRequest(string projectID, string sponsorID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var sponsor_filter = Builders<Sponsor>.Filter.Eq(rq => rq.SponsorID, sponsorID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.RequestList.GuestSponsorRequests, sponsor_filter);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a sponsor request details
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="sponsorID"></param>
+        /// <returns></returns>
+        public Sponsor Get_GuestSponsorRequest(string projectID, string sponsorID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID)
+                                                     .RequestList.GuestSponsorRequests.FirstOrDefault(rq => rq.SponsorID == sponsorID);
+                return result;
             }
             catch
             {

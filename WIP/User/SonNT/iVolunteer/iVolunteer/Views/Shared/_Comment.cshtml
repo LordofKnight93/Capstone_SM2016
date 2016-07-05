@@ -1,17 +1,20 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
 
-<!-- Comment -->
-<div class="row">
-    <div class="col-md-1 col-sm-1">
-        <object type="image/svg+xml" data="../images/avatar.svg" width="40" height="40" border="1"></object>
-    </div>
-    <div class="col-md-9 col-sm-9">
-        <div class="row">
-            <a href="" class="user-name">@Model.Creater.DisplayName</a>
-            <span>&bull; @Model.DateCreate</span>
+@foreach (var item in Model)
+{
+    <!-- Comment -->
+    <div class="row">
+        <div class="col-md-1 col-sm-1">
+            <object type="image/svg+xml" data=@item.Creator.Get_AvatarLink() width="40" height="40" border="1"></object>
         </div>
-        <div class="row">
-            <p>@Model.Content</p>
+        <div class="col-md-9 col-sm-9">
+            <div class="row">
+                <a href="@Url.Action("Information",item.Creator.Handler, item.Creator.ID)" class="user-name">@item.Creator.DisplayName</a>
+                <span>&bull; @item.DateCreate</span>
+            </div>
+            <div class="row">
+                <p>@item.Content</p>
+            </div>
         </div>
     </div>
-</div>
+}

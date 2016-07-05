@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="iVolunteerModelStoreContainer" CdmEntityContainer="iVolunteerEntities">
+    <EntitySetMapping Name="SQL_AcAl_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAl_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcAl_Relation">
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SQL_Account">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Account">
         <MappingFragment StoreEntitySet="SQL_Account">
@@ -16,13 +25,31 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcGr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcGr_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcGr_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcPr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcPr_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcPr_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SQL_Album">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Album">
         <MappingFragment StoreEntitySet="SQL_Album">
           <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
-          <ScalarProperty Name="Permission" ColumnName="Permission" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -37,7 +64,6 @@
     <EntitySetMapping Name="SQL_Message">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Message">
         <MappingFragment StoreEntitySet="SQL_Message">
-          <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="MessageID" ColumnName="MessageID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
         </MappingFragment>
@@ -60,7 +86,7 @@
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
           <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
-          <ScalarProperty Name="Permission" ColumnName="Permission" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -69,35 +95,6 @@
         <MappingFragment StoreEntitySet="SQL_Project">
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_User_Friend">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_User_Friend">
-        <MappingFragment StoreEntitySet="SQL_User_Friend">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="FriendID" ColumnName="FriendID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_User_Group">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_User_Group">
-        <MappingFragment StoreEntitySet="SQL_User_Group">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
-          <ScalarProperty Name="RelationType" ColumnName="RelationType" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_User_Project">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_User_Project">
-        <MappingFragment StoreEntitySet="SQL_User_Project">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-          <ScalarProperty Name="RelationType" ColumnName="RelationType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -112,5 +109,22 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcPo_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcPo_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcPo_Relation">
+          <ScalarProperty Name="PostID" ColumnName="PostID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="SQL_Friendship" TypeName="iVolunteerModel.SQL_Friendship" StoreEntitySet="SQL_Friendship">
+      <EndProperty Name="SQL_Account">
+        <ScalarProperty Name="UserID" ColumnName="UserID" />
+      </EndProperty>
+      <EndProperty Name="SQL_Account1">
+        <ScalarProperty Name="UserID" ColumnName="FriendID" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

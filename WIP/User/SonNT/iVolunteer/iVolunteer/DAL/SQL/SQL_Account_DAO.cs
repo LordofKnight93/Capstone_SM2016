@@ -140,6 +140,22 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
+        public DateTime? Get_DateOfChange(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    return account.DateOfChange;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// Set display name of an account
         /// </summary>
@@ -154,6 +170,29 @@ namespace iVolunteer.DAL.SQL
                 {
                     var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                     account.DisplayName = displayname;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// set date change display name to change display name time
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public bool Set_DateOfChange(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    account.DateOfChange = DateTime.Now.Date;
                     dbEntities.SaveChanges();
                     return true;
                 }

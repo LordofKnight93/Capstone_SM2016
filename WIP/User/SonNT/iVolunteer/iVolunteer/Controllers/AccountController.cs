@@ -22,51 +22,77 @@ namespace iVolunteer.Controllers
 {
     public class AccountController : Controller
     {
-        [HttpPost]
         public ActionResult Confirm(string userID)
         {
-            SQL_Account_DAO accountDAO = new SQL_Account_DAO();
-            accountDAO.Set_Confirmation_Status(userID, Status.IS_CONFIRMED);
-            return RedirectToAction("Login","Home");
+            try
+            {
+                SQL_Account_DAO sqlDAO = new SQL_Account_DAO();
+                sqlDAO.Set_Confirmation_Status(userID, Status.IS_CONFIRMED);
+                Mongo_User_DAO mongoDAO = new Mongo_User_DAO();
+                mongoDAO.Set_Comfirmation_Status(userID, Status.IS_CONFIRMED);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+            return RedirectToAction("Login", "Home");
         }
-        
-        public ActionResult ChangeAvatar()
+        [HttpGet]
+        public ActionResult ChangeDisplayName()
         {
-            ViewBag.Option = "UserAvatar";
-            return View("_ImageUpload");
+            if (Session["UserID"] == null) return RedirectToAction("FrontPage", "Home");
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                SQL_Account_DAO sqlDAO = new SQL_Account_DAO();
+                DateTime? date = sqlDAO.Get_DateOfChange(userID);
+
+                if (date == null) return View("_ChangeDisplayName");
+
+                DateTime now = DateTime.Now.Date;
+                TimeSpan? span = now - date;
+                if(span.Value.Days <= 90 && span != null)
+                {
+                    ViewBag.Message = Error.DISPLAYNAME_FAIL;
+                    return View("ErrorMessage");
+                }
+                else return View("_ChangeDisplayName");
+            }
+            catch 
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
         }
         [HttpPost]
-        public ActionResult UploadAvatar()
+        public ActionResult ChangeDisplayName(string name)
         {
-            HttpPostedFileBase file = Request.Files["fileuploadImage"];
-            if (file != null)
+            if (Session["UserID"] == null) return RedirectToAction("FrontPage", "Home");
+            string userID = Session["UserID"].ToString();
+            using (TransactionScope transaction = new TransactionScope())
             {
-                string userID = Session["UserID"].ToString();
-                // write your code to save image
-                string uploadPath = Server.MapPath("/Images/User/Avatar/" + userID + ".jpg");
-                file.SaveAs(uploadPath);
-                return RedirectToAction("InformationDetail", "User", new { userID = userID });
+                try
+                {
+                    SQL_Account_DAO sqlDAO = new SQL_Account_DAO();
+                    Mongo_User_DAO mongoDAO = new Mongo_User_DAO();
+                    sqlDAO.Set_DisplayName(userID, name);
+                    sqlDAO.Set_DateOfChange(userID);
+                    mongoDAO.Set_DisplayName(userID, name);
+                    //perform more change name here
 
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
             }
-            else return View("_ImageUpload");
-            
+            return RedirectToAction("UserProfile", "User", new { userID = userID });
         }
-        [HttpPost]
-        public ActionResult UploadCover()
-        {
-            HttpPostedFileBase file = Request.Files["fileuploadImage"];
-            if (file != null)
-            {
-                string userID = Session["UserID"].ToString();
-                // write your code to save image
-                string uploadPath = Server.MapPath("/Images/User/Cover/" + userID + ".jpg");
-                file.SaveAs(uploadPath);
-                return RedirectToAction("InformationDetail", "User", new { userID = userID });
 
-            }
-            else return View("_ImageUpload");
-
-        }
         public ActionResult ChangePassword()
         {
             return View();
@@ -94,10 +120,10 @@ namespace iVolunteer.Controllers
                 {
                     transaction.Dispose();
                     ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View();
+                    return View("ErrorMessage");
                 }
             }
-            return RedirectToAction("InformationDetail", "User", new { userID = userID });
+            return RedirectToAction("UserProfile", "User", new { userID = userID });
         }
         public ActionResult ForgotPassword()
         {

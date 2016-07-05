@@ -12,12 +12,11 @@ namespace iVolunteer.Models.SQL
     using System;
     using System.Collections.Generic;
     
-    public partial class SQL_User_Project
+    public partial class SQL_AcPr_Relation
     {
-        public int ID { get; set; }
         public string UserID { get; set; }
         public string ProjectID { get; set; }
-        public int RelationType { get; set; }
+        public int Relation { get; set; }
     
         public virtual SQL_Account SQL_Account { get; set; }
         public virtual SQL_Project SQL_Project { get; set; }

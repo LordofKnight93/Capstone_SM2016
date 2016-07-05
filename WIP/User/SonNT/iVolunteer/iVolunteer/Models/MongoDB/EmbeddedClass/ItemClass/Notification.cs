@@ -2,9 +2,12 @@
 using MongoDB.Bson;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
+using iVolunteer.Common;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
 {
+    [BsonIgnoreExtraElements]
     public class Notification
     {
         public string NotifyID { get; set; }
@@ -35,7 +38,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
             this.Type = type;
             this.Target = target;
             this.Destination = destination;
-            this.IsSeen = false;
+            this.IsSeen = Status.IS_NOT_SEEN;
         }
     }
 }

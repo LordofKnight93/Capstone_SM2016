@@ -14,16 +14,24 @@ namespace iVolunteer.Models.SQL
     
     public partial class SQL_Post
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SQL_Post()
+        {
+            this.SQL_AcPo_Relation = new HashSet<SQL_AcPo_Relation>();
+        }
+    
         public string PostID { get; set; }
         public System.DateTime DateCreate { get; set; }
         public System.DateTime DateLastActivity { get; set; }
         public string ProjectID { get; set; }
         public string GroupID { get; set; }
         public string AlbumID { get; set; }
-        public bool Permission { get; set; }
+        public bool IsPublic { get; set; }
     
         public virtual SQL_Album SQL_Album { get; set; }
         public virtual SQL_Group SQL_Group { get; set; }
         public virtual SQL_Project SQL_Project { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
     }
 }

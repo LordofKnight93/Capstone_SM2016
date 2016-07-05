@@ -1,8 +1,10 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
 {
+    [BsonIgnoreExtraElements]
     public class Sponsor
     {
         // guest create new or get from logined user

@@ -4,34 +4,34 @@
     switch (option)
     {
         case "UserAvatar":
-            controller = "Account";
-            actionName = "ChangeAvatar";
+            controller = "User";
+            actionName = "UploadAvatar";
             break;
         case "UserCover":
-            controller = "Account";
-            actionName = "ChangeCover";
+            controller = "User";
+            actionName = "UploadCover";
             break;
         case "GroupAvatar":
             controller = "Group";
-            actionName = "ChangeAvatar";
+            actionName = "UploadAvatar";
             break;
         case "GroupCover":
             controller = "Group";
-            actionName = "ChangeCover";
+            actionName = "UploadCover";
             break;
         case "ProjectAvatar":
             controller = "Project";
-            actionName = "ChangeAvatar";
+            actionName = "UploadAvatar";
             break;
         case "ProjectCover":
             controller = "Project";
-            actionName = "ChangeCover";
+            actionName = "UploadCover";
             break;
     }
     }
-@using(Html.BeginForm(actionName, controller, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using(Html.BeginForm(actionName, controller, new { id = ViewBag.ID }, FormMethod.Post, new { enctype = "multipart/form-data"}))
 {
     <label for="file">Upload Image:</label>
-    <input type="file" name="fileuploadImage" id="file" style="width: 100%;" />
+    <input type="file" name="Image" id="file" style="width: 100%;" />
     <input type="submit" value="Upload" class="submit" />
 }

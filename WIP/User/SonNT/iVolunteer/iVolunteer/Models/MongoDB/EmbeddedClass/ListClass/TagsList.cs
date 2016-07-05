@@ -6,7 +6,7 @@ using System.ComponentModel;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.Core.Bindings;
 
-namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
+namespace iVolunteer.Models.MongoDB.EmbeddedClass.ListClass
 {
     [BsonIgnoreExtraElements]
     public class TagsList
@@ -30,7 +30,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         //method tag
         [DisplayName("Quyên góp")]
         public bool IsDonation { get; set; }
-        [DisplayName("Hoạt động")]
+        [DisplayName("Đi thực tế")]
         public bool IsActivity { get; set; }
     }
 }

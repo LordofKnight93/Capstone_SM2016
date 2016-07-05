@@ -1,7 +1,7 @@
 ﻿
     <div class="row">
         <div class="col-md-3">
-            @Html.Partial("_LeftSideBar")
+            @{Html.RenderAction("NavigationPanel", "Home");}
         </div>
         <div class="col-md-9">
             <div class="card-panel">

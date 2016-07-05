@@ -1,9 +1,8 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.UserInformation
 
-<div>
-    @{ Html.RenderAction("AvatarCover", Model.UserID); }
+<div class="card-panel">
     <hr />
-    <dl class="dl-horizontal">
+    <dl>
         <dt>
             @Html.DisplayNameFor(model => model.RealName)
         </dt>

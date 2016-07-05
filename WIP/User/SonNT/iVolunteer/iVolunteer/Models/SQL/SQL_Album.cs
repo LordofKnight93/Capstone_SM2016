@@ -17,14 +17,17 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SQL_Album()
         {
+            this.SQL_AcAl_Relation = new HashSet<SQL_AcAl_Relation>();
             this.SQL_Post = new HashSet<SQL_Post>();
         }
     
         public string AlbumID { get; set; }
         public string ProjectID { get; set; }
         public string GroupID { get; set; }
-        public bool Permission { get; set; }
+        public bool IsPublic { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAl_Relation> SQL_AcAl_Relation { get; set; }
         public virtual SQL_Group SQL_Group { get; set; }
         public virtual SQL_Project SQL_Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

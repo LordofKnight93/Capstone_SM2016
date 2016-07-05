@@ -1,6 +1,7 @@
 ﻿using System;
 using iVolunteer.Models.ViewModel;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
@@ -8,6 +9,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     /// <summary>
     /// This class store user's infomation
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class UserInformation
     {
         public string UserID { get; set; }

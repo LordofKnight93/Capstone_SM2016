@@ -17,19 +17,19 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SQL_Group()
         {
+            this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
             this.SQL_Album = new HashSet<SQL_Album>();
             this.SQL_Post = new HashSet<SQL_Post>();
-            this.SQL_User_Group = new HashSet<SQL_User_Group>();
         }
     
         public string GroupID { get; set; }
         public bool IsActivate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Album> SQL_Album { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Post> SQL_Post { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_User_Group> SQL_User_Group { get; set; }
     }
 }

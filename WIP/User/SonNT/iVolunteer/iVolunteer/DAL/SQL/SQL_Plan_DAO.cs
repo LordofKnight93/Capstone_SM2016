@@ -67,9 +67,9 @@ namespace iVolunteer.DAL.SQL
                     //get plan
                     var result = from plan in dbEntities.SQL_Plan
                                  join project in dbEntities.SQL_Project on plan.ProjectID equals project.ProjectID
-                                 join relation in dbEntities.SQL_User_Project on plan.ProjectID equals relation.ProjectID
+                                 join relation in dbEntities.SQL_AcPr_Relation on plan.ProjectID equals relation.ProjectID
                                  where plan.PlanID == planID && project.IsActivate == Status.IS_ACTIVATE
-                                        && relation.UserID == userID && relation.RelationType != Relation.FOLLOW_RELATION
+                                        && relation.UserID == userID && relation.Relation != Relation.FOLLOW_RELATION
                                  select plan;
                     if (result == null) return false;
                     return true;

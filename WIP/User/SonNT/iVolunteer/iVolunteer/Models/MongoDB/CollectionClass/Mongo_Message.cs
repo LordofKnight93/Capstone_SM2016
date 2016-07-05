@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 
 
@@ -11,6 +12,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
     /// <summary>
     /// This class define structure of "Message" collection in MongoDB
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class Mongo_Message
     {
         public ObjectId _id { get; set; }

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Common;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
+    [BsonIgnoreExtraElements]
     public class AlbumInformation
     {
         public string AlbumID { get; set; }

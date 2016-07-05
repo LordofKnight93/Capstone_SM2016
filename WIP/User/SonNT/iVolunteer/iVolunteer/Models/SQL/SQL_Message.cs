@@ -14,7 +14,6 @@ namespace iVolunteer.Models.SQL
     
     public partial class SQL_Message
     {
-        public int ID { get; set; }
         public string MessageID { get; set; }
         public string UserID { get; set; }
     

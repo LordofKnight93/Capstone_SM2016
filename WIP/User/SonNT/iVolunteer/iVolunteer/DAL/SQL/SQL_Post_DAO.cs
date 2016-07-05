@@ -58,14 +58,14 @@ namespace iVolunteer.DAL.SQL
         /// <param name="postID"></param>
         /// <param name="permission"></param>
         /// <returns></returns>
-        public bool Set_Permission(string postID, bool permission)
+        public bool Set_IsPublic(string postID, bool permission)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
-                    post.Permission = permission;
+                    post.IsPublic = permission;
                     dbEntities.SaveChanges();
                     return true;
                 }
@@ -135,18 +135,18 @@ namespace iVolunteer.DAL.SQL
                     //get the post
                     SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
                     //check post is public or not
-                    if (post.Permission == Status.IS_PUBLIC) return true;
+                    if (post.IsPublic == Status.IS_PUBLIC) return true;
                     //if not check user has direct relation with [roject or group post belong to
                     if (post.ProjectID != null)
                     {
-                        SQL_User_Project project_relation = dbEntities.SQL_User_Project.FirstOrDefault(pr => pr.ProjectID == post.ProjectID && pr.UserID == userID
-                                                                                                                && pr.RelationType != Relation.FOLLOW_RELATION);
+                        SQL_AcPr_Relation project_relation = dbEntities.SQL_AcPr_Relation.FirstOrDefault(pr => pr.ProjectID == post.ProjectID && pr.UserID == userID
+                                                                                                                && pr.Relation != Relation.FOLLOW_RELATION);
                         if (project_relation != null) return true;
                     }
                     else
                     {
-                        SQL_User_Group group_relation = dbEntities.SQL_User_Group.FirstOrDefault(gr => gr.GroupID == post.GroupID && gr.UserID == userID
-                                                                                                                && gr.RelationType != Relation.FOLLOW_RELATION);
+                        SQL_AcGr_Relation group_relation = dbEntities.SQL_AcGr_Relation.FirstOrDefault(gr => gr.GroupID == post.GroupID && gr.UserID == userID
+                                                                                                                && gr.Relation != Relation.FOLLOW_RELATION);
                         if (group_relation != null) return true;
                     }
 
@@ -172,13 +172,13 @@ namespace iVolunteer.DAL.SQL
                 {
                     List<string> posts = new List<string>();
                     // get user project relation and proejct is activate
-                    var related_project = from rl in dbEntities.SQL_User_Project
+                    var related_project = from rl in dbEntities.SQL_AcPr_Relation
                                           join p in dbEntities.SQL_Project on rl.ProjectID equals p.ProjectID
                                           where p.IsActivate == Status.IS_ACTIVATE
                                           select rl;
 
                     //get user group relation and group is activate
-                    var related_group = from rl in dbEntities.SQL_User_Group
+                    var related_group = from rl in dbEntities.SQL_AcGr_Relation
                                         join g in dbEntities.SQL_Group on rl.GroupID equals g.GroupID
                                         where g.IsActivate == Status.IS_ACTIVATE
                                         select rl;
@@ -187,9 +187,9 @@ namespace iVolunteer.DAL.SQL
                     var accessable_posts = from p in dbEntities.SQL_Post
                                            join pr in related_project on p.ProjectID equals pr.ProjectID
                                            join gr in related_group on p.GroupID equals gr.GroupID
-                                           where p.Permission == Status.IS_PUBLIC
-                                                 || p.Permission == Status.IS_PRIVATE && pr.RelationType != Relation.FOLLOW_RELATION
-                                                 || p.Permission == Status.IS_PRIVATE && gr.RelationType != Relation.FOLLOW_RELATION
+                                           where p.IsPublic == Status.IS_PUBLIC
+                                                 || p.IsPublic == Status.IS_PRIVATE && pr.Relation != Relation.FOLLOW_RELATION
+                                                 || p.IsPublic == Status.IS_PRIVATE && gr.Relation != Relation.FOLLOW_RELATION
                                            orderby p.DateCreate descending
                                            select p.PostID;
                     posts = accessable_posts.Skip(skip).Take(number).ToList();
@@ -214,13 +214,13 @@ namespace iVolunteer.DAL.SQL
                 {
                     List<string> posts = new List<string>();
                     // get user project relation and proejct is activate
-                    var related_project = from rl in dbEntities.SQL_User_Project
+                    var related_project = from rl in dbEntities.SQL_AcPr_Relation
                                           join p in dbEntities.SQL_Project on rl.ProjectID equals p.ProjectID
                                           where p.IsActivate == Status.IS_ACTIVATE
                                           select rl;
 
                     //get user group relation and group is activate
-                    var related_group = from rl in dbEntities.SQL_User_Group
+                    var related_group = from rl in dbEntities.SQL_AcGr_Relation
                                         join g in dbEntities.SQL_Group on rl.GroupID equals g.GroupID
                                         where g.IsActivate == Status.IS_ACTIVATE
                                         select rl;
@@ -229,9 +229,9 @@ namespace iVolunteer.DAL.SQL
                     var accessable_posts = from p in dbEntities.SQL_Post
                                            join pr in related_project on p.ProjectID equals pr.ProjectID
                                            join gr in related_group on p.GroupID equals gr.GroupID
-                                           where p.Permission == Status.IS_PUBLIC
-                                                 || p.Permission == Status.IS_PRIVATE && pr.RelationType != Relation.FOLLOW_RELATION
-                                                 || p.Permission == Status.IS_PRIVATE && gr.RelationType != Relation.FOLLOW_RELATION
+                                           where p.IsPublic == Status.IS_PUBLIC
+                                                 || p.IsPublic == Status.IS_PRIVATE && pr.Relation != Relation.FOLLOW_RELATION
+                                                 || p.IsPublic == Status.IS_PRIVATE && gr.Relation != Relation.FOLLOW_RELATION
                                            orderby p.DateLastActivity descending
                                            select p.PostID;
                     posts = accessable_posts.Skip(skip).Take(number).ToList();

@@ -38,21 +38,25 @@
             @Html.DisplayFor(modelItem => item.IsConfirmed)
         </td>
         <td>
-            @Html.ActionLink("Chi tiết", "Information", "User", new { userID = item.UserID }, null) | 
+            @Html.ActionLink("Chi tiết", "UserProfile", "User", new { userID = item.UserID }, null) | 
             @if (item.IsActivate)
             {
-                @Html.ActionLink("Khóa", "AccountBanned", "Admin", new { userID = item.UserID }, null)
+                @Html.ActionLink("Khóa", "AccountBanned", "Admin", new { userID = item.UserID, currentPage = ViewBag.CurrentPage }, null)
             }
             else
             {
-                @Html.ActionLink("Kích hoạt", "AccountActivate", "Admin", new { userID = item.UserID }, null)
+                @Html.ActionLink("Kích hoạt", "AccountActivate", "Admin", new { userID = item.UserID, currentPage = ViewBag.CurrentPage }, null)
             }
         </td>
     </tr>
 }
 
 </table>
-@if (ViewBag.Previous >= 0) { 
-    @Html.ActionLink("Trang trước", "ListAccount", "Admin", new { skip = ViewBag.Previous, number = 10 }, null); }
-@if (ViewBag.Next >= 0) { 
-     @Html.ActionLink("Trang sau", "ListAccount", "Admin", new { skip = ViewBag.Next, number = 10 }, null); }
+@if (ViewBag.CurrentPage > 1)
+{
+    @Html.ActionLink("Trang trước", "ListAccount", "Admin", new { page = ViewBag.CurrentPage - 1 }, null);
+}
+@if (Model.Count() == 10)
+{
+    @Html.ActionLink("Trang sau", "ListAccount", "Admin", new { page = ViewBag.CurrentPage + 1 }, null);
+}

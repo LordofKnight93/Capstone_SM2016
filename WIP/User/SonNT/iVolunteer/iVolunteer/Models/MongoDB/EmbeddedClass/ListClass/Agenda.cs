@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.ListClass
 {
+    [BsonIgnoreExtraElements]
     public class AgendaItem
     {
         public string ItemID { get; set; }
@@ -23,10 +25,11 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ListClass
             this.Content = content;
         }
     }
-
-        public class Agenda
+    [BsonIgnoreExtraElements]
+    public class Agenda
     {
         public string AgendaName { get; set; }
+        [BsonIgnoreIfDefault]
         public List<AgendaItem> ItemList { get; set; }
 
         public Agenda()

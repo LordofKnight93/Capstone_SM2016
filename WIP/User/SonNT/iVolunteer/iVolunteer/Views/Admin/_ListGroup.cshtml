@@ -44,25 +44,24 @@
             @Html.DisplayFor(modelItem => item.IsActivate)
         </td>
         <td>
-            @Html.ActionLink("Chi tiết", "Information","Group", new { groupID = item.GroupID }, null) | 
+            @Html.ActionLink("Chi tiết", "GroupHome","Group", new { groupID = item.GroupID }, null) | 
             @if (item.IsActivate)
             {
-                @Html.ActionLink("Khóa", "GroupBanned", "Admin", new { groupID = item.GroupID }, null)
+                @Html.ActionLink("Khóa", "GroupBanned", "Admin", new { groupID = item.GroupID, currentPage = ViewBag.CurrentPage }, null)
             }
             else
             {
-                @Html.ActionLink("Kích hoạt", "GroupActivate", "Admin", new { groupID = item.GroupID }, null)
+                @Html.ActionLink("Kích hoạt", "GroupActivate", "Admin", new { groupID = item.GroupID, currentPage = ViewBag.CurrentPage }, null)
             }
         </td>
     </tr>
 }
 </table>
-
-@if (ViewBag.Previous >= 0)
+@if (ViewBag.CurrentPage > 1)
 {
-    @Html.ActionLink("Trang trước", "ListGroup", "Admin", new { skip = ViewBag.Previous, number = 10 }, null);
+    @Html.ActionLink("Trang trước", "ListGroup", "Admin", new { page = ViewBag.CurrentPage - 1 }, null);
 }
-@if (ViewBag.Next >= 0)
+@if (Model.Count() == 10)
 {
-    @Html.ActionLink("Trang sau", "ListGroup", "Admin", new { skip = ViewBag.Next, number = 10 }, null);
+    @Html.ActionLink("Trang sau", "ListGroup", "Admin", new { page = ViewBag.CurrentPage + 1 }, null);
 }

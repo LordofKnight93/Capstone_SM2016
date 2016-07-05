@@ -17,8 +17,11 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public ObjectId _id { get; set; }
         public GroupInformation GroupInformation { get; set; }
         public GroupStructure GroupStructure { get; set; }
+        [BsonIgnoreIfDefault]
         public ActivityInformation HistoryInformation { get; set; }
+        [BsonIgnoreIfDefault]
         public List<SDLink> CurrentProjects { get; set; }
+        [BsonIgnoreIfDefault]
         public List<RequestItem> RequestList { get; set; }
 
         public Mongo_Group()

@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using iVolunteer.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     /// <summary>
     /// This class store group's infomation
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class GroupInformation 
     {
         public string GroupID { get; set; }

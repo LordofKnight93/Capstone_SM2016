@@ -4,9 +4,11 @@ using System.Linq;
 using System.Web;
 using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass
 {
+    [BsonIgnoreExtraElements]
     public class SDLink
     {
         public string ID { get; set; }

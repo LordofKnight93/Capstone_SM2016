@@ -3,12 +3,15 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using iVolunteer.Common;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
     /// <summary>
     /// This class store project's infomation
     /// </summary>
+    [BsonIgnoreExtraElements]
     public class ProjectInformation
     {
         public string ProjectID { get; set; }

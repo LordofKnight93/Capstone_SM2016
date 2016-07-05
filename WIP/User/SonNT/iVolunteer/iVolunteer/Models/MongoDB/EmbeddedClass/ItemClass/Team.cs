@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using System.Collections.Generic;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
 {
+    [BsonIgnoreExtraElements]
     public class Team
     {
         // team ID
@@ -13,6 +15,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         public string TeamName { get; set; }
         public int MemberCount { get; set; }
         // array members of team
+        [BsonIgnoreIfDefault]
         public List<SDLink> Members { get; set; }
 
         public Team()
