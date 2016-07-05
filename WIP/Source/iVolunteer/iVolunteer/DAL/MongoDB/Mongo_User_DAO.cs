@@ -56,24 +56,6 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get all user information, for admin only
-        /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<UserInformation> Get_All_UserInformations(int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable().Select(u => u.UserInformation).Skip(skip).Take(number).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
         /// get account information
         /// </summary>
         /// <param name="skip"></param>
@@ -611,13 +593,14 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public bool Delete_Request(string userID, RequestItem request)
+        public bool Delete_Request(string userID, string requestID)
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.RequestList, request);
-                var result = collection.UpdateOne(filter, update);
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.RequestList, request_filter);
+                var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
             catch
@@ -658,27 +641,6 @@ namespace iVolunteer.DAL.MongoDB
                 var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
                                                      .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
                 return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// check if a request is exist
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public bool Is_Request_Exist(string userID, RequestItem request)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
-                                                     .RequestList.FirstOrDefault(rq => rq.Type == request.Type 
-                                                                                    && rq.Actor.ID  == request.Actor.ID
-                                                                                    && rq.Destination.ID == request.Destination.ID);
-                return result != null;
             }
             catch
             {

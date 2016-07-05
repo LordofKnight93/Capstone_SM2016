@@ -8,9 +8,9 @@ namespace iVolunteer.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Login()
+        public ActionResult FrontPage()
         {
-            return PartialView();
+            return View();
         }
     }
 }

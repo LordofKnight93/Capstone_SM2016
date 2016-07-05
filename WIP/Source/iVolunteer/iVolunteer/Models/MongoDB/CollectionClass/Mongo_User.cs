@@ -21,6 +21,8 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         [BsonIgnoreIfDefault]
         public List<SDLink> JoinedGroups { get; set; }
         [BsonIgnoreIfDefault]
+        public List<SDLink> JoinedProjects { get; set; }
+        [BsonIgnoreIfDefault]
         public List<Member> FriendList { get; set; }
         [BsonIgnoreIfDefault]
         public ActivityInformation ActivityHistory { get; set; }
@@ -36,6 +38,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.UserInformation = new UserInformation();
             this.AccountInformation = new AccountInformation();
             this.JoinedGroups = new List<SDLink>();
+            this.JoinedProjects = new List<SDLink>();
             this.FriendList = new List<Member>();
             this.ActivityHistory = new ActivityInformation();
             this.CurrentProjects = new List<SDLink>();
@@ -51,6 +54,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.AccountInformation = new AccountInformation(registerModel);
             this.AccountInformation.UserID = this._id.ToString();
             this.JoinedGroups = new List<SDLink>();
+            this.JoinedProjects = new List<SDLink>();
             this.FriendList = new List<Member>();
             this.ActivityHistory = new ActivityInformation();
             this.CurrentProjects = new List<SDLink>();
