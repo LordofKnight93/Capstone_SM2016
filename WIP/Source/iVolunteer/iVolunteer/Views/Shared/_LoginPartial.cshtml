@@ -1,0 +1,24 @@
+﻿@*@using Microsoft.AspNet.identity*@
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            Hello, 
+            @Html.ActionLink(Session["DisplayName"].ToString() + "!", "Information", "User", routeValues: Session["UserID"].ToString(), htmlAttributes : null)
+        </li>
+        <li>@Html.ActionLink("Log Out", "LogOut", "Home",null, null)</li>
+    </ul>
+    }
+}
+else
+{
+        <button class="btn btn-default" data-toggle="modal" data-target="#loginForm">
+            Đăng nhập hoặc Đăng ký
+        </button>
+}
+
