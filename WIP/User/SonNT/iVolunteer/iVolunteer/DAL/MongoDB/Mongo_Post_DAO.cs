@@ -244,47 +244,7 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-        /// <summary>
-        /// add a follower
-        /// </summary>
-        /// <param name="postID"></param>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public bool Add_FollowerID(string postID, string userID)
-        {
-            try
-            {
-                var filter = Builders<Mongo_Post>.Filter.Eq(p => p._id, new ObjectId(postID));
-                var update = Builders<Mongo_Post>.Update.AddToSet<string>(p => p.FollowerIDs, userID);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete a liker
-        /// </summary>
-        /// <param name="postID"></param>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public bool Delete_FollowerID(string postID, string userID)
-        {
-            try
-            {
-                var post_filter = Builders<Mongo_Post>.Filter.Eq(p => p._id, new ObjectId(postID));
-                var user_filter = Builders<string>.Filter.Eq(s => s, userID);
-                var update = Builders<Mongo_Post>.Update.PullFilter(p => p.FollowerIDs, user_filter);
-                var result = collection.UpdateOne(post_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+
         /// <summary>
         /// Get public post of a group
         /// </summary>
@@ -324,28 +284,6 @@ namespace iVolunteer.DAL.MongoDB
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.GROUP)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PRIVATE);
                 var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
-                var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// Get private post of a album
-        /// </summary>
-        /// <param name="albumID"></param>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<Mongo_Post> Get_Post_By_AlbumID(string albumID, int skip, int number)
-        {
-            try
-            {
-                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.AlbumLink.ID, albumID);
-                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
                 var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
                 return result;
             }

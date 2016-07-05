@@ -31,25 +31,7 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        /// <summary>
-        /// Get all account in system with no condition, used by admin only, 
-        /// </summary>
-        /// <returns>A list of SQL_Account</returns>
-        public List<SQL_Account> Get_All_Account()
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_Account.ToList();
-                    return result;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
+
         /// <summary>
         /// Get an account by email
         /// </summary>

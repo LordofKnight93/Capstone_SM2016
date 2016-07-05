@@ -25,6 +25,9 @@ namespace iVolunteer.Common
         // seen status
         public const bool IS_SEEN = true;
         public const bool IS_NOT_SEEN = false;
+        // status of request
+        public const bool ACCEPTED = true;
+        public const bool PENDING = false;
     }
 
     public static class Default
@@ -45,8 +48,9 @@ namespace iVolunteer.Common
         //realation type
         public const int LEADER_RELATION = 1;
         public const int MEMBER_RELATION = 2;
-        public const int FOLLOW_RELATION = 3;
-        public const int SPONSOR_RELATION = 4;
+        public const int SPONSOR_RELATION = 3;
+        public const int FOLLOW_RELATION = 4;
+        public const int LIKE_RELATION = 5;
     }
 
     public static class PostType
@@ -96,6 +100,7 @@ namespace iVolunteer.Common
         public const string GROUP = "Group";
         public const string ALBUM = "Album";
         public const string POST = "Post";
+        public const string IMAGE = "Image";
     }
 
     public static class Gender

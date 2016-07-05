@@ -4,26 +4,21 @@ using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
-
 namespace iVolunteer.Models.MongoDB.CollectionClass
 {
-    /// <summary>
-    /// This class define structure of "Post" collection in MongoDB
-    /// </summary>
-    [BsonIgnoreExtraElements]
-    public class Mongo_Post
+    public class Mongo_Image
     {
         public ObjectId _id { get; set; }
-        public PostInformation PostInfomation { get; set; }
+        public ImageInformation ImageInformation { get; set; }
         [BsonIgnoreIfDefault]
         public List<SDLink> LikerList { get; set; }
         [BsonIgnoreIfDefault]
         public List<Comment> CommentList { get; set; }
 
-        public Mongo_Post()
+        public Mongo_Image()
         {
             this._id = new ObjectId();
-            this.PostInfomation = new PostInformation();
+            this.ImageInformation = new ImageInformation();
             this.LikerList = new List<SDLink>();
             this.CommentList = new List<Comment>();
         }

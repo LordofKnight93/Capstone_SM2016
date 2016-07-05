@@ -28,14 +28,16 @@ namespace iVolunteer.Models.SQL
         public virtual DbSet<SQL_AcAl_Relation> SQL_AcAl_Relation { get; set; }
         public virtual DbSet<SQL_Account> SQL_Account { get; set; }
         public virtual DbSet<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
+        public virtual DbSet<SQL_AcIm_Relation> SQL_AcIm_Relation { get; set; }
+        public virtual DbSet<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
         public virtual DbSet<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
         public virtual DbSet<SQL_Album> SQL_Album { get; set; }
+        public virtual DbSet<SQL_Friendship> SQL_Friendship { get; set; }
         public virtual DbSet<SQL_Group> SQL_Group { get; set; }
+        public virtual DbSet<SQL_Image> SQL_Image { get; set; }
         public virtual DbSet<SQL_Message> SQL_Message { get; set; }
         public virtual DbSet<SQL_Plan> SQL_Plan { get; set; }
         public virtual DbSet<SQL_Post> SQL_Post { get; set; }
         public virtual DbSet<SQL_Project> SQL_Project { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
     }
 }

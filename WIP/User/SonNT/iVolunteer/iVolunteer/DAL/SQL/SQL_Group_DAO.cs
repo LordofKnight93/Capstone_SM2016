@@ -72,5 +72,27 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// delete a group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Delete_Group(string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Group group = dbEntities.SQL_Group.FirstOrDefault(p => p.GroupID == groupID);
+                    dbEntities.SQL_Group.Remove(group);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

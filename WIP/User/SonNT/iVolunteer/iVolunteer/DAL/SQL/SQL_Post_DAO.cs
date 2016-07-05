@@ -99,28 +99,6 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// delete all post belong to a album
-        /// </summary>
-        /// <param name="albumID"></param>
-        /// <returns>true if success</returns>
-        public bool Delete_Post_By_AlbumID(string albumID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_Post.Where(p => p.AlbumID == albumID);
-                    dbEntities.SQL_Post.RemoveRange(result);
-                    dbEntities.SaveChanges();
-                    return true;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
         /// check if a user can access to 1 post
         /// </summary>
         /// <param name="userID"></param>

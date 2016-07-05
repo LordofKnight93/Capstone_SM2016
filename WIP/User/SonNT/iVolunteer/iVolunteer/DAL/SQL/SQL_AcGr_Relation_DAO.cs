@@ -30,41 +30,23 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
         /// <summary>
-        /// Get relation between a user and a group
+        /// set status of a relation
         /// </summary>
-        /// <param name="userID">ID of User</param>
-        /// <param name="groupID">ID of Group</param>
-        /// <returns>return relation's type to compare with Constant</returns>
-        public int Get_Specific_Relation(string userID, string groupID)
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <param name="relationType"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool Update_Relation(string userID, string groupID, int relationType, bool status)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rls => rls.UserID == userID && rls.GroupID == groupID);
-                    return result == null ? 0 : result.Relation;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// Delete a relation between a user and group
-        /// </summary>
-        /// <param name="userID">user ID in relation</param>
-        /// <param name="groupID">group id in relation</param>
-        /// <returns>true if delete success</returns>
-        public bool Delete_Specific_Relation(string userID, string groupID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(b => b.UserID == userID && b.GroupID == groupID);
-                    dbEntities.SQL_AcGr_Relation.Remove(result);
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == relationType);
+                    result.Status = status;
                     dbEntities.SaveChanges();
                     return true;
                 }
@@ -75,14 +57,20 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
-        public bool Update_Relation(string userID, string groupID, int relationType)
+        /// <summary>
+        /// Delete a relation between a user and group
+        /// </summary>
+        /// <param name="userID">user ID in relation</param>
+        /// <param name="groupID">group id in relation</param>
+        /// <returns>true if delete success</returns>
+        public bool Delete_Specific_Relation(string userID, string groupID, int relationType)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(b => b.UserID == userID && b.GroupID == groupID);
-                    result.Relation = relationType;
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == relationType);
+                    dbEntities.SQL_AcGr_Relation.Remove(result);
                     dbEntities.SaveChanges();
                     return true;
                 }
@@ -93,20 +81,19 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Delete all relation with group of a user, use when delete user, maybe not be used
+        /// get relation between a user and group
         /// </summary>
-        /// <param name="userID">deleted userID</param>
-        /// <returns>true if delete success</returns>
-        public bool Delete_Relation_By_OneID(string userID)
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public int Get_Relation(string userID, string groupID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.Where(b => b.UserID == userID);
-                    dbEntities.SQL_AcGr_Relation.RemoveRange(result);
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Status == Status.ACCEPTED);
+                    return result.Relation;
                 }
             }
             catch
@@ -114,5 +101,28 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// check if a user had send join request to a group
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Is_Requested(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID 
+                                                                                && rl.Relation == Relation.MEMBER_RELATION && rl.Status == Status.PENDING);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

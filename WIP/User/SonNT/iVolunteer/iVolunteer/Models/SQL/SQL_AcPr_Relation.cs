@@ -17,6 +17,7 @@ namespace iVolunteer.Models.SQL
         public string UserID { get; set; }
         public string ProjectID { get; set; }
         public int Relation { get; set; }
+        public bool Status { get; set; }
     
         public virtual SQL_Account SQL_Account { get; set; }
         public virtual SQL_Project SQL_Project { get; set; }

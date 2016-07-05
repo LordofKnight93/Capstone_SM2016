@@ -1,6 +1,0 @@
-﻿@if (ViewBag.IsFriend == "false")
-{
-    @Html.ActionLink(" Kết bạn ", "FriendRequest", "User", new { userID = ViewBag.OtherID }, null);
-}
-@Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", new { groupID = ViewBag.GroupID }, null);
-

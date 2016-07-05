@@ -12,14 +12,13 @@ namespace iVolunteer.Models.SQL
     using System;
     using System.Collections.Generic;
     
-    public partial class SQL_AcGr_Relation
+    public partial class SQL_Friendship
     {
         public string UserID { get; set; }
-        public string GroupID { get; set; }
-        public int Relation { get; set; }
+        public string FriendID { get; set; }
         public bool Status { get; set; }
     
         public virtual SQL_Account SQL_Account { get; set; }
-        public virtual SQL_Group SQL_Group { get; set; }
+        public virtual SQL_Account SQL_Account1 { get; set; }
     }
 }

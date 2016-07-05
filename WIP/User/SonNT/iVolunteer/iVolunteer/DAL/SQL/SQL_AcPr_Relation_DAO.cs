@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using iVolunteer.Models.SQL;
+using iVolunteer.Common;
 
 namespace iVolunteer.DAL.SQL
 {
@@ -29,21 +30,27 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        /// <summary>
-        /// Get relation between a user and a project
-        /// </summary>
-        /// <param name="userID">ID of User</param>
-        /// <param name="projectID">ID of Project</param>
-        /// <returns>return relation's type to compare with Constant</returns>
 
-        public int Get_Specific_Relation(string userID, string projectID)
+        /// <summary>
+        /// set status of a relation
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <param name="relationType"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public bool Update_Relation(string userID, string projectID, int relationType, bool status)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
-                    return result == null ? 0 : result.Relation;
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                          && rl.ProjectID == projectID 
+                                                                          && rl.Relation == relationType);
+                    result.Status = status;
+                    dbEntities.SaveChanges();
+                    return true;
                 }
             }
             catch
@@ -51,19 +58,23 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
         /// <summary>
-        /// Delete a relation between a user and project
+        /// delete a relation between a user and project
         /// </summary>
-        /// <param name="userID">user ID in relation</param>
-        /// <param name="projectID">project id in relation</param>
-        /// <returns>true if delete success</returns>
-        public bool Delete_Specific_Relation(string userID, string projectID)
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <param name="relationTYpe"></param>
+        /// <returns></returns>
+        public bool Delete_Specific_Relation(string userID, string projectID, int relationTYpe)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rls => rls.UserID == userID && rls.ProjectID == projectID);
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID 
+                                                                            && rl.ProjectID == projectID 
+                                                                            && rl.Relation == relationTYpe);
                     dbEntities.SQL_AcPr_Relation.Remove(result);
                     dbEntities.SaveChanges();
                     return true;
@@ -74,21 +85,24 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
+        public bool De
         /// <summary>
-        /// Delete all relation with project of a user, use when delete user, maybe not be used
+        /// get relation between a user and a project
         /// </summary>
-        /// <param name="userID">deleted userID</param>
-        /// <returns>true if delete success</returns>
-        public bool Delete_Relation_By_UserID(string userID)
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public int Get_Relation(string userID, string projectID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcPr_Relation.Where(rls => rls.UserID == userID);
-                    dbEntities.SQL_AcPr_Relation.RemoveRange(result);
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID 
+                                                                                && rl.ProjectID == projectID 
+                                                                                && rl.Status == Status.ACCEPTED);
+                    return result.Relation;
                 }
             }
             catch

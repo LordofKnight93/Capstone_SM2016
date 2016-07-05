@@ -206,25 +206,16 @@
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="scripts\phucvt_custom.js" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Images\logo_lite.png" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AlbumController.cs" />
-    <Compile Include="Controllers\GroupController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImagesController.cs" />
-    <Compile Include="Controllers\PostController.cs" />
-    <Compile Include="Controllers\ProjectController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="Global.asax.cs">
@@ -247,6 +238,7 @@
     <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Plan.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
@@ -255,6 +247,7 @@
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ActivityInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\UserInformation.cs" />
@@ -294,6 +287,9 @@
     <Compile Include="Models\SQL\SQL_AcGr_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SQL\SQL_AcIm_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SQL\SQL_AcPo_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
@@ -303,7 +299,13 @@
     <Compile Include="Models\SQL\SQL_Album.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SQL\SQL_Friendship.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SQL\SQL_Group.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Image.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Message.cs">
@@ -316,9 +318,6 @@
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Project.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SQL\sysdiagram.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModel\LoginModel.cs" />
@@ -335,17 +334,8 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\GuestLayout.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Home\Newfeed.cshtml" />
-    <Content Include="Views\Project\CreateProject.cshtml" />
-    <Content Include="Views\Group\CreateGroup.cshtml" />
-    <Content Include="Views\Admin\_ListGroup.cshtml" />
-    <Content Include="Views\Home\FrontPage.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Shared\_AvatarCover.cshtml" />
-    <Content Include="Views\User\_Information.cshtml" />
-    <Content Include="Views\User\_UpdateInformation.cshtml" />
     <Content Include="Views\Shared\_ImageUpload.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_NavigationPanel.cshtml" />
     <Content Include="Views\Shared\Login.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
@@ -356,35 +346,8 @@
     <Content Include="Views\Shared\notification_popup_layout.cshtml" />
     <Content Include="Views\Shared\friends_popup_layout.cshtml" />
     <Content Include="Views\Shared\message_popup_layout.cshtml" />
-    <Content Include="Views\Project\ProjectHome.cshtml" />
-    <Content Include="Views\Project\_Discussion.cshtml" />
-    <Content Include="Views\Project\_Public.cshtml" />
-    <Content Include="Views\Group\public_layout.cshtml" />
-    <Content Include="Views\Group\discussion_layout.cshtml" />
-    <Content Include="Views\Group\group_master.cshtml" />
     <Content Include="Views\Shared\_Comment.cshtml" />
-    <Content Include="Views\Post\_Post.cshtml" />
-    <Content Include="Views\Admin\_ListProject.cshtml" />
-    <Content Include="Views\Admin\Manage.cshtml" />
-    <Content Include="Views\Admin\_ListAccount.cshtml" />
-    <Content Include="Views\User\_JoinedGroups.cshtml" />
-    <Content Include="Views\User\_CurrentProjects.cshtml" />
-    <Content Include="Views\User\_JoinedProjects.cshtml" />
-    <Content Include="Views\Group\GroupHome.cshtml" />
-    <Content Include="Views\User\UserProfile.cshtml" />
-    <Content Include="Views\Post\_CreatePost.cshtml" />
-    <Content Include="Views\Project\_ProjectSD.cshtml" />
-    <Content Include="Views\Project\_SearchProject.cshtml" />
-    <Content Include="Views\Home\Activate.cshtml" />
-    <Content Include="Views\Account\_ChangeDisplayName.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
-    <Content Include="Views\Group\_GroupResult.cshtml" />
-    <Content Include="Views\User\_ActionToGroup.cshtml" />
-    <Content Include="Views\Group\_GroupRequests.cshtml" />
-    <Content Include="Views\Home\Search.cshtml" />
-    <Content Include="Views\User\_AccountResult.cshtml" />
-    <Content Include="Views\User\_ActionToOtherUser.cshtml" />
-    <Content Include="Views\Admin\_ActionToUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -395,8 +358,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="BL\" />
-    <Folder Include="Views\Album\" />
-    <Folder Include="Views\Images\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

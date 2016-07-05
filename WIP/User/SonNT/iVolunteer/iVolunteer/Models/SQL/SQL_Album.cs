@@ -18,7 +18,7 @@ namespace iVolunteer.Models.SQL
         public SQL_Album()
         {
             this.SQL_AcAl_Relation = new HashSet<SQL_AcAl_Relation>();
-            this.SQL_Post = new HashSet<SQL_Post>();
+            this.SQL_Image = new HashSet<SQL_Image>();
         }
     
         public string AlbumID { get; set; }
@@ -31,6 +31,6 @@ namespace iVolunteer.Models.SQL
         public virtual SQL_Group SQL_Group { get; set; }
         public virtual SQL_Project SQL_Project { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_Post> SQL_Post { get; set; }
+        public virtual ICollection<SQL_Image> SQL_Image { get; set; }
     }
 }
