@@ -64,9 +64,9 @@ namespace iVolunteer.DAL.SQL
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
-        /// <param name="relationTYpe"></param>
+        /// <param name="relationType"></param>
         /// <returns></returns>
-        public bool Delete_Specific_Relation(string userID, string projectID, int relationTYpe)
+        public bool Delete_Specific_Relation(string userID, string projectID, int relationType)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace iVolunteer.DAL.SQL
                 {
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID 
                                                                             && rl.ProjectID == projectID 
-                                                                            && rl.Relation == relationTYpe);
+                                                                            && rl.Relation == relationType);
                     dbEntities.SQL_AcPr_Relation.Remove(result);
                     dbEntities.SaveChanges();
                     return true;
@@ -86,7 +86,6 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
-        public bool De
         /// <summary>
         /// get relation between a user and a project
         /// </summary>

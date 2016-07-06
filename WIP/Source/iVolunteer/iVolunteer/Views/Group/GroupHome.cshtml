@@ -1,0 +1,46 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{ViewBag.Title = Model.DisplayName; }
+
+<div class="row">
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0;; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+    }
+    <div class="col-md-9" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Group", new { groupID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                <li class="col-md-2">
+                    <a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="structuretab" href="#structure" data-toggle="tab">THÀNH VIÊN</a>
+                </li>
+                <li class="col-md-2">
+                    <a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>
+                </li>
+                <li class="col-md-2">
+                    @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                </li>
+                <li class="col-md-2">
+                    @Ajax.ActionLink("Hoạt động", "ActivityHistory", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane active" id="group-tab">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

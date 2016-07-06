@@ -82,7 +82,22 @@
                                         </div>
                                     </div>
 
-                                    <!--Tag select-->
+                                    @*<!--Tag select-->
+                                    <div class="row">
+                                        <div class="col-xs-5 text-input">
+                                            <!--Education tcheck box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsEducation)
+                                            @Html.CheckBoxFor(model => model.TagList.IsEducation)
+
+                                            <!--Social check box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsSocial)
+                                            @Html.CheckBoxFor(model => model.TagList.IsSocial)
+
+                                            <!--Medical check box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsMedical)
+                                            @Html.CheckBoxFor(model => model.TagList.IsMedical)
+                                        </div>
+                                    </div>*@
 
                                     <!-- Button -->
                                     <div class="row" style="margin-top: 60px">

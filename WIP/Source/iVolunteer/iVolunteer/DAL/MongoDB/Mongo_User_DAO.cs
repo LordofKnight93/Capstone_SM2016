@@ -144,6 +144,23 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
+        /// get user joined projects
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<SDLink> Get_JoinedProjects(string userID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return result.JoinedProjects;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
         /// get user's current projects
         /// </summary>
         /// <param name="userID"></param>
@@ -309,7 +326,8 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.JoinedGroups, group);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.JoinedGroups, group)
+                                                        .Inc(u => u.AccountInformation.GroupCount, 1); ;
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -330,7 +348,8 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
                 var group_filter = Builders<SDLink>.Filter.Eq(g => g.ID, groupID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedGroups, group_filter);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedGroups, group_filter)
+                                                 .Inc(u => u.AccountInformation.GroupCount, -1);
                 var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
@@ -339,6 +358,51 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        /// <summary>
+        /// add joined project
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="project"></param>
+        /// <returns></returns>
+        public bool Add_JoinedProject(string userID, SDLink project)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.JoinedProjects, project)
+                                                        .Inc(u => u.AccountInformation.ProjectCount, 1); ;
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete joined group
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_JoinedProject(string userID, string projectID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var project_filter = Builders<SDLink>.Filter.Eq(g => g.ID, projectID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedProjects, project_filter)
+                                                        .Inc(u => u.AccountInformation.GroupCount, -1); ;
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// add new project to current projects
         /// </summary>
@@ -386,7 +450,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="project"></param>
         /// <returns></returns>
-        public bool Add_JoinedProject(string userID, SDLink project)
+        public bool Add_JoinedProject_ActivityHistory(string userID, SDLink project)
         {
             try
             {
@@ -406,7 +470,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Delete_JoinedProject(string userID, string projectID)
+        public bool Delete_JoinedProject_ActivityHistory(string userID, string projectID)
         {
             try
             {
@@ -427,7 +491,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="project"></param>
         /// <returns></returns>
-        public bool Add_OrganizedProject(string userID, SDLink project)
+        public bool Add_OrganizedProject_ActivityHistory(string userID, SDLink project)
         {
             try
             {
@@ -447,7 +511,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Delete_OrganizedProject(string userID, string projectID)
+        public bool Delete_OrganizedProject_ActivityHistory(string userID, string projectID)
         {
             try
             {
@@ -468,7 +532,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="project"></param>
         /// <returns></returns>
-        public bool Add_SponsoredProject(string userID, SDLink project)
+        public bool Add_SponsoredProject_ActivityHistory(string userID, SDLink project)
         {
             try
             {
@@ -488,7 +552,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Delete_SponsoredProject(string userID, string projectID)
+        public bool Delete_SponsoredProject_ActivityHistory(string userID, string projectID)
         {
             try
             {
@@ -668,7 +732,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// function search user for user
+        /// function search user for admin
         /// </summary>
         /// <param name="displayName"></param>
         /// <param name="skip"></param>

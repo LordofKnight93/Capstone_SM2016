@@ -155,12 +155,12 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public ActivityInformation Get_HistoryInfomation(string groupID)
+        public ActivityInformation Get_ActivityHistory(string groupID)
         {
             try
             {
                 var result = collection.AsQueryable().FirstOrDefault(g => g.GroupInformation.GroupID == groupID);
-                return result.HistoryInformation;
+                return result.ActivityHistory;
             }
             catch
             {
@@ -356,7 +356,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
-                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.JoinedProjects, project);
+                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.ActivityHistory.JoinedProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -377,7 +377,7 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.JoinedProjects, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.ActivityHistory.JoinedProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
             }
@@ -396,7 +396,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
-                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.OrganizedProjects, project);
+                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.ActivityHistory.OrganizedProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -417,7 +417,7 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.OrganizedProjects, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.ActivityHistory.OrganizedProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
             }
@@ -436,7 +436,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
-                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.HistoryInformation.SponsoredProjects, project);
+                var update = Builders<Mongo_Group>.Update.AddToSet<SDLink>(gr => gr.ActivityHistory.SponsoredProjects, project);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -457,7 +457,7 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
                 var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.HistoryInformation.SponsoredProjects, projectID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.ActivityHistory.SponsoredProjects, projectID);
                 var result = collection.UpdateOne(group_filter, update);
                 return result.IsAcknowledged;
             }

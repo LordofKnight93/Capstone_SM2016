@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iVolunteer</title>
-    <link rel="icon" href="../Images/logo_lite.png" type="image/x-icon" sizes="16x16">
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/Images/logo_lite.png" type="image/x-icon" sizes="16x16">
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
@@ -21,14 +21,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" title="Trang chủ" id="logo" href="@Url.Action("Newfeed","Home")" style="padding: 2px 20px"><img src="../Images/logo.png" alt="iVolunteer" height="45"></a>
+                <a class="navbar-brand" title="Trang chủ" id="logo" href="@Url.Action("Newfeed","Home")" style="padding: 2px 20px"><img src="~/Images/logo.png" alt="iVolunteer" height="45"></a>
             </div>
 
             <!-- Navbar left -->
             <div id="navbar" class="navbar-collapse collapse">
                 
-                @{ Html.RenderPartial("navbar_left_layout", new ViewDataDictionary());  }    
-
                 <div class="col-sm-5 col-md-5 search-box-nav">
                     @using (Html.BeginForm("Search", "Home", FormMethod.Post))
                     {
@@ -43,18 +41,17 @@
 
                 <!-- Navbar Right -->
                 <ul class="nav navbar-nav navbar-right">
-                    <!--<li><a href="" style="color: #fff; font-weight: bold">PROFILE</a></li>
-                    <li><a href="" style="color: #fff; font-weight: bold">PROJECT</a></li>
-                    <li><a href="" style="color: #fff; font-weight: bold">GROUP</a></li>-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 4px 10px 1.5px 15px">
-                            <object type="image/svg+xml" data="../images/avatar.svg" width="40" height="40" border="1"></object>
+                            <object type="image/svg+xml" data="~/Images/avatar.svg" width="40" height="40" border="1"></object>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Nav header</li>
-                            <li><a href="home.html">Logout</a></li>
+                            <li><a href="@Url.Action("ChangePassword","Account")">Đổi mật khẩu</a></li>
+                            <li><a href="@Url.Action("ChangeInformation","Account")">Đổi thông tin cá nhân</a></li>
+                            <li><a href="@Url.Action("LogOut","Account")">Đăng xuất</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -64,6 +61,7 @@
 
     <!-------------Body Container------------>
     <div class="container background-container">
+
          @RenderBody()
 
     </div>
@@ -73,10 +71,9 @@
     </footer>
 
     <!------------Create New Project Fade Modal-------------->
-    @{ Html.RenderPartial("create_project_layout", new ViewDataDictionary());  }
-
+    @{ Html.RenderPartial("~/Views/Project/_CreateProject.cshtml", new ViewDataDictionary());  }
     <!------------Create New Group Fade Modal-------------->
-    @{ Html.RenderPartial("create_group_layout", new ViewDataDictionary());  }
+    @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>

@@ -18,7 +18,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public GroupInformation GroupInformation { get; set; }
         public GroupStructure GroupStructure { get; set; }
         [BsonIgnoreIfDefault]
-        public ActivityInformation HistoryInformation { get; set; }
+        public ActivityInformation ActivityHistory { get; set; }
         [BsonIgnoreIfDefault]
         public List<SDLink> CurrentProjects { get; set; }
         [BsonIgnoreIfDefault]
@@ -29,7 +29,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this._id = new ObjectId();
             this.GroupInformation = new GroupInformation();
             this.GroupStructure = new GroupStructure();
-            this.HistoryInformation = new ActivityInformation();
+            this.ActivityHistory = new ActivityInformation();
             this.CurrentProjects = new List<SDLink>();
             this.RequestList = new List<RequestItem>();
         }
@@ -40,7 +40,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.GroupInformation = groupInfo;
             this.GroupInformation.GroupID = this._id.ToString();
             this.GroupStructure = new GroupStructure(creator);
-            this.HistoryInformation = new ActivityInformation();
+            this.ActivityHistory = new ActivityInformation();
             this.CurrentProjects = new List<SDLink>();
             this.RequestList = new List<RequestItem>();
         }

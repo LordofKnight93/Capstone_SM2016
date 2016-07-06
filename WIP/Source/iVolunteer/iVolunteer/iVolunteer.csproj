@@ -212,12 +212,17 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -336,18 +341,31 @@
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_AvatarCover.cshtml" />
     <Content Include="Views\Shared\_ImageUpload.cshtml" />
-    <Content Include="Views\Shared\_NavigationPanel.cshtml" />
-    <Content Include="Views\Shared\Login.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Shared\create_project_layout.cshtml" />
-    <Content Include="Views\Shared\create_group_layout.cshtml" />
+    <Content Include="Views\Account\_NavigationPanel.cshtml" />
     <Content Include="Views\Shared\UserLayout.cshtml" />
-    <Content Include="Views\Shared\navbar_left_layout.cshtml" />
-    <Content Include="Views\Shared\notification_popup_layout.cshtml" />
-    <Content Include="Views\Shared\friends_popup_layout.cshtml" />
-    <Content Include="Views\Shared\message_popup_layout.cshtml" />
     <Content Include="Views\Shared\_Comment.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\_Login.cshtml" />
+    <Content Include="Views\Home\FrontPage.cshtml" />
+    <Content Include="Views\Group\_CreateGroup.cshtml" />
+    <Content Include="Views\Project\_CreateProject.cshtml" />
+    <Content Include="Views\Home\Newfeed.cshtml" />
+    <Content Include="Views\Account\Confirm.cshtml" />
+    <Content Include="Views\Group\GroupHome.cshtml" />
+    <Content Include="Views\Account\_CurrentProjects.cshtml" />
+    <Content Include="Views\Account\_JoinedGroups.cshtml" />
+    <Content Include="Views\Account\_JoinedProjects.cshtml" />
+    <Content Include="Views\User\UserProfile.cshtml" />
+    <Content Include="Views\Project\ProjectHome.cshtml" />
+    <Content Include="Views\User\_UserInformation.cshtml" />
+    <Content Include="Views\User\_JoinedGroups.cshtml" />
+    <Content Include="Views\User\_CurrentProjects.cshtml" />
+    <Content Include="Views\User\_ActivityHistory.cshtml" />
+    <Content Include="Views\Group\_GroupInformation.cshtml" />
+    <Content Include="Views\Group\_CurrentProjects.cshtml" />
+    <Content Include="Views\Project\_ProjectInformation.cshtml" />
+    <Content Include="Views\Group\_ActivityHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -358,7 +376,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="BL\" />
-    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

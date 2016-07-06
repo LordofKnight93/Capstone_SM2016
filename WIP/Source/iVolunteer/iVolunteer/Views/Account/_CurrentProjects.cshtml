@@ -1,0 +1,27 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>
+
+<div class="card-panel">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Sự kiện đang tham gia</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    <!-- List Project -->
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <ul class="list-navi">
+                @foreach (var item in Model)
+                {
+                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <!-- Add New Project -->
+    <div class="row" style="text-align: right">
+        <button class="btn-addnew" style="margin: 10px 15px 0px 10px;" data-container="body" rel="tooltip" data-toggle="modal" title="Tạo dự án mới" data-placement="left" data-target="#createProjectForm">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</div>

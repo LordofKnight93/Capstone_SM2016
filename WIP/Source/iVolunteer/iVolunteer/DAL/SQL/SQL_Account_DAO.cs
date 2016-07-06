@@ -43,7 +43,7 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Account.Where(acc => acc.Email == email).First();
+                    var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.Email == email);
                     return result;
                 }
             }
@@ -52,6 +52,26 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
 
+        }
+        /// <summary>
+        /// get password of user, for change pass word check usage
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public string Get_Password(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
+                    return result.Password;
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
         /// <summary>
         /// Set activation status of an account
@@ -65,7 +85,7 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                     account.IsActivate = status;
                     dbEntities.SaveChanges();
                     return true;
@@ -88,7 +108,7 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var account = dbEntities.SQL_Account.First(acc => acc.UserID == userID);
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
                     account.IsConfirm = status;
                     dbEntities.SaveChanges();
                     return true;

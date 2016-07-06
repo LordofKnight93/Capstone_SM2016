@@ -1,0 +1,46 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Thông tin về nhóm</h4>
+        </div>
+    </div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateCreate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MemberCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MemberCount)
+        </dd>
+    </dl>
+</div>
+
+@{ Html.RenderAction("CurrentProjects", "Group", new { groupID = Model.GroupID });
+}
+

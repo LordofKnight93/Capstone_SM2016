@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iVolunteer</title>
+    <title>@ViewBag.Title</title>
     <link rel="icon" href="../Images/logo_lite.png" type="image/x-icon" sizes="16x16">
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -50,7 +50,7 @@
     </nav>
     <!------------Login Fade Modal-------------->
 
-    @{Html.RenderPartial("Login", new ViewDataDictionary());}
+    @{Html.RenderPartial("~/Views/Home/_Login.cshtml", new ViewDataDictionary());}
 
 
     <!-------------Body Container------------>
@@ -63,15 +63,6 @@
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
-
-    <!------------Create New Project Fade Modal-------------->
-    @{ Html.RenderPartial("create_project_layout", new ViewDataDictionary());  }
-    <!------------Create New Group Fade Modal-------------->
-    @{ Html.RenderPartial("create_group_layout", new ViewDataDictionary());  }
-
-
-
-
 
     
 

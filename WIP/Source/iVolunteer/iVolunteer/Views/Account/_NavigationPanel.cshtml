@@ -12,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
-            <i class="material-icons" data-toggle="tooltip" title="Dự án">project</i>
+            <i class="material-icons" data-toggle="tooltip" title="" data-original-title="Projects">assignment</i>
             <p style="text-align: center; font-weight: bold">@Model.ProjectCount</p>
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
@@ -26,9 +26,9 @@
     </div>
 </div>
 <!-- Slide Bar Current Projects -->
-@{ Html.RenderAction("CurrentProjects", "User", new { userID = Model.UserID }); }
+@{ Html.RenderAction("CurrentProjects", "Account"); }
 <!-- Slide Bar Groups -->
-@{ Html.RenderAction("JoinedGroups", "User", new { userID = Model.UserID }); }
+@{ Html.RenderAction("JoinedGroups", "Account"); }
 <!-- Slide Bar Joined Projects -->
-@{ Html.RenderAction("JoinedProjects", "User", new { userID = Model.UserID}); }
+@{ Html.RenderAction("JoinedProjects", "Account"); }
 
