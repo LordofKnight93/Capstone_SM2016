@@ -11,7 +11,10 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-
+    @{ 
+        string userID = Session["UserID"].ToString();
+        string avtlink = "/Images/User/Avatar/" + userID + ".jpg";
+    }
     <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #049f88">
         <div class="container">
             <div class="navbar-header">
@@ -43,15 +46,16 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 4px 10px 1.5px 15px">
-                            <object type="image/svg+xml" data="~/Images/avatar.svg" width="40" height="40" border="1"></object>
+                            <object type="image/svg+xml" data="images/avatar.svg" width="40" height="40" border="1"></object>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a href="#"></a></li>
+                            <li><a href="@Url.Action("UserProfile","User", new { userID = userID })">Hồ sơ cá nhân</a></li>
+                            <li><a href="@Url.Action("ChangePassword","Account")">Đổi mật khẩu</a></li>
                             <li role="separator" class="divider"></li>
                             <li class="dropdown-header">Nav header</li>
-                            <li><a href="@Url.Action("ChangePassword","Account")">Đổi mật khẩu</a></li>
-                            <li><a href="@Url.Action("ChangeInformation","Account")">Đổi thông tin cá nhân</a></li>
-                            <li><a href="@Url.Action("LogOut","Account")">Đăng xuất</a></li>
+                            <li><a href="@Url.Action("LogOut","Home")">Đăng xuất</a></li>
                         </ul>
                     </li>
                 </ul>

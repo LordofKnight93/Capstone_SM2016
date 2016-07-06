@@ -507,6 +507,28 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        /// <summary>
+        /// cacel a request 
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public bool Cancel_Request(string userID, string groupID)
+        {
+            try
+            {
+                var group_filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.Actor.ID, userID);
+                var update = Builders<Mongo_Group>.Update.PullFilter(gr => gr.RequestList, request_filter);
+                var result = collection.UpdateOne(group_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// update group information
         /// </summary>

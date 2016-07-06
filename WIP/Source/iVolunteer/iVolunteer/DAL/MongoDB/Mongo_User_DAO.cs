@@ -673,6 +673,27 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
+        /// cancel a request
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public bool Cancel_Request(string userID, string otherID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, otherID);
+                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.Actor.ID, userID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.RequestList, request_filter);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
         /// get a number of user request
         /// </summary>
         /// <param name="userID"></param>

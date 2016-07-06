@@ -39,14 +39,69 @@ namespace iVolunteer.DAL.SQL
         /// <param name="relationType"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public bool Update_Relation(string userID, string groupID, int relationType, bool status)
+        public bool Accept_Member(string userID, string groupID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == relationType);
-                    result.Status = status;
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID 
+                                                                                && rl.GroupID == groupID 
+                                                                                && rl.Relation == Relation.MEMBER_RELATION);
+                    result.Status = Status.ACCEPTED;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// set a member to leader
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Set_Leader(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID 
+                                                                                && rl.GroupID == groupID 
+                                                                                && rl.Relation == Relation.MEMBER_RELATION
+                                                                                && rl.Status == Status.ACCEPTED);
+                    result.Relation = Relation.LEADER_RELATION;
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// set a leader to member
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Set_Member(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                                && rl.GroupID == groupID
+                                                                                && rl.Relation == Relation.LEADER_RELATION
+                                                                                && rl.Status == Status.ACCEPTED);
+                    result.Relation = Relation.MEMBER_RELATION;
                     dbEntities.SaveChanges();
                     return true;
                 }
@@ -80,20 +135,71 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
         /// <summary>
-        /// get relation between a user and group
+        /// check if a user is leader of a group
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public int Get_Relation(string userID, string groupID)
+        public bool Is_Leader(string userID, string groupID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Status == Status.ACCEPTED);
-                    return result.Relation;
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                                && rl.GroupID == groupID
+                                                                                && rl.Relation == Relation.LEADER_RELATION);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if a user is member of a group
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Is_Member(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                                && rl.GroupID == groupID
+                                                                                && rl.Relation == Relation.MEMBER_RELATION
+                                                                                && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if a user is following a group
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Is_Following(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                                && rl.GroupID == groupID
+                                                                                && rl.Relation == Relation.FOLLOW_RELATION);
+                    return result != null;
                 }
             }
             catch
@@ -113,8 +219,10 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID 
-                                                                                && rl.Relation == Relation.MEMBER_RELATION && rl.Status == Status.PENDING);
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID 
+                                                                                && rl.GroupID == groupID 
+                                                                                && rl.Relation == Relation.MEMBER_RELATION 
+                                                                                && rl.Status == Status.PENDING);
                     return result != null;
                 }
             }
@@ -124,5 +232,52 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
+        /// <summary>
+        /// get all userID follow a group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public List<string> Get_All_Followers(string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.Where(rl => rl.GroupID == groupID
+                                                                       && rl.Relation == Relation.FOLLOW_RELATION
+                                                                       && rl.Status == Status.ACCEPTED)
+                                                             .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get all userID is member, leader with group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public List<string> Get_All_Members(string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.Where(rl => rl.GroupID == groupID 
+                                                                       && rl.Relation != Relation.FOLLOW_RELATION
+                                                                       && rl.Status == Status.ACCEPTED)
+                                                             .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

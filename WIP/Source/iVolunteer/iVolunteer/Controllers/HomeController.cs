@@ -194,9 +194,17 @@ namespace iVolunteer.Controllers
             return RedirectToAction("FrontPage", "Home");
         }
 
+        [HttpGet]
+        public ActionResult Search()
+        {
+            return View("Search");
+        }
+        [HttpPost]
         public ActionResult Search(string name)
         {
-            return View("Search", name);
+            SearchModel searchModel = new SearchModel();
+            searchModel.Name = name;
+            return View("Search", searchModel);
         }
     }
 }

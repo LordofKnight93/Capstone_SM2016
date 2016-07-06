@@ -142,7 +142,7 @@ namespace iVolunteer.Controllers
                 else
                 {
                     string userID = Session["UserID"].ToString();
-                    if (relationDAO.Get_Relation(userID, groupID) == Relation.LEADER_RELATION)
+                    if (relationDAO.Is_Leader(userID, groupID))
                         ViewBag.CanChange = "true";
                     else ViewBag.CanChange = "false";
                 }
@@ -358,8 +358,9 @@ namespace iVolunteer.Controllers
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
 
                         //update relation
-                        relationDAO.Update_Relation(request.Actor.ID, request.Destination.ID, Relation.MEMBER_RELATION, Status.ACCEPTED);
-
+                        relationDAO.Accept_Member(request.Actor.ID, request.Destination.ID);
+                        //delete follow relation
+                        relationDAO.Delete_Specific_Relation(request.Actor.ID, request.Destination.ID, Relation.FOLLOW_RELATION);
                         //add user to group
                         groupDAO.Add_JoinedUser(request.Destination.ID, request.Actor);
                         //add grup to user joined groups
@@ -390,11 +391,15 @@ namespace iVolunteer.Controllers
         {
             try
             {
+                if (page <= 0) page = 1;
+
                 List<GroupInformation> result = new List<GroupInformation>();
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 if(Session["Role"] != null && Session["Role"].ToString() == "Admin")
                     result = groupDAO.Search_Group_By_Name(name, 10 * (page - 1), 10);
                 else result = groupDAO.Search_Group_By_Name(name, Status.IS_ACTIVATE, 10 * (page - 1), 10);
+                ViewBag.CurentPage = page;
+
                 return PartialView("_GroupResult", result);
             }
             catch

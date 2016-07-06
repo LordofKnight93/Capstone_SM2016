@@ -92,8 +92,56 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_Friendship.FirstOrDefault(rl => rl.UserID == userID
-                                                                            && rl.FriendID == friendID);
-                    return result.Status;
+                                                                            && rl.FriendID == friendID
+                                                                            && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if a friend request is send
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public bool Is_Requested(string userID, string friendID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Friendship.FirstOrDefault(rl => rl.UserID == userID
+                                                                            && rl.FriendID == friendID 
+                                                                            && rl.Status == Status.PENDING);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if a user is being requested by otheruser
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public bool Is_Be_Requested(string userID, string friendID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Friendship.FirstOrDefault(rl => rl.UserID == friendID
+                                                                            && rl.FriendID == userID
+                                                                            && rl.Status == Status.PENDING);
+                    return result != null;
                 }
             }
             catch

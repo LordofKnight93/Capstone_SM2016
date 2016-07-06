@@ -366,6 +366,11 @@
     <Content Include="Views\Group\_CurrentProjects.cshtml" />
     <Content Include="Views\Project\_ProjectInformation.cshtml" />
     <Content Include="Views\Group\_ActivityHistory.cshtml" />
+    <Content Include="Views\Group\_GroupResult.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Account\_ActionToGroup.cshtml" />
+    <Content Include="Views\User\_UserResult.cshtml" />
+    <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
