@@ -76,6 +76,25 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public ActionResult CancelReport(string groupID)
+        {
+            try
+            {
+                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
+                string userID = Session["UserID"].ToString();
+
+                reportDAO.DeleteSentReport(userID, groupID);
+
+                ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
+                return PartialView("ErrorMessage");
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
             
     }
 }

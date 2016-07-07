@@ -478,6 +478,12 @@ namespace iVolunteer.Controllers
                 if (relationDAO.Is_Following(userID, groupID))
                     ViewBag.IsFollowing = true;
                 ViewBag.GroupID = groupID;
+
+                //Check if report has been sent
+                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
+                if (reportDAO.IsSentReport(userID, groupID))
+                    ViewBag.IsSentReport = true;
+
                 return PartialView("_ActionToGroup");
 
             }
