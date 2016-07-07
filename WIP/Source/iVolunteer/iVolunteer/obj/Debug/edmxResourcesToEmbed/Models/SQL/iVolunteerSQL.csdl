@@ -32,6 +32,7 @@
     <NavigationProperty Name="SQL_Friendship1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Account" ToRole="SQL_Friendship" />
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
+    <NavigationProperty Name="SQL_AcGr_Report" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Report" />
   </EntityType>
   <EntityType Name="SQL_AcGr_Relation">
     <Key>
@@ -116,6 +117,7 @@
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_GroupSD" FromRole="SQL_Group" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Album" />
     <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Post" />
+    <NavigationProperty Name="SQL_AcGr_Report" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group" FromRole="SQL_Group" ToRole="SQL_AcGr_Report" />
   </EntityType>
   <EntityType Name="SQL_Image">
     <Key>
@@ -487,5 +489,51 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
+    <EntitySet Name="SQL_AcGr_Report" EntityType="iVolunteerModel.SQL_AcGr_Report" />
+    <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Account" Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Group" Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="SQL_AcGr_Report">
+    <Key>
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="ReportType" />
+    </Key>
+    <Property Name="GroupID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="ReportType" Type="Int16" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account" FromRole="SQL_AcGr_Report" ToRole="SQL_Account" />
+    <NavigationProperty Name="SQL_Group" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group" FromRole="SQL_AcGr_Report" ToRole="SQL_Group" />
+  </EntityType>
+  <Association Name="FK_SQL_AcGr_Report_SQL_Account">
+    <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
+    <End Type="iVolunteerModel.SQL_AcGr_Report" Role="SQL_AcGr_Report" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcGr_Report">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcGr_Report_SQL_Group">
+    <End Type="iVolunteerModel.SQL_Group" Role="SQL_Group" Multiplicity="1" />
+    <End Type="iVolunteerModel.SQL_AcGr_Report" Role="SQL_AcGr_Report" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_AcGr_Report">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>
