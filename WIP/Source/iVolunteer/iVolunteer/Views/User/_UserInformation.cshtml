@@ -4,6 +4,10 @@
     <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
         <div class="col-sm-12">
             <h4>Thông tin về người dùng</h4>
+            @if(ViewBag.IsMyHome == true)
+            {
+                @Ajax.ActionLink("Thay đổi", "ChangeInformation", "Account", new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace });
+            }
         </div>
     </div>
     <dl class="dl-horizontal">

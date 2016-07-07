@@ -27,7 +27,9 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DisplayName)
+                    <a href="@Url.Action("UserHome","User",new { userID = item.UserID })">
+                        @Html.DisplayFor(modelItem => item.DisplayName)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FriendCount)

@@ -22,6 +22,9 @@
                     @Ajax.ActionLink("Thông tin", "UserInformation", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
+                    @Ajax.ActionLink("Bạn bè", "FriendList", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace })
+                </li>
+                <li class="col-md-2">
                     @*<a id="discusstab" href="@Url.Action("DisplayDiscussion", "Project")" data-toggle="tab">THẢO LUẬN</a>*@
                     @Ajax.ActionLink("Nhóm", "JoinedGroups", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace })
                 </li>

@@ -125,8 +125,11 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == relationType);
-                    dbEntities.SQL_AcGr_Relation.Remove(result);
-                    dbEntities.SaveChanges();
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcGr_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                    }
                     return true;
                 }
             }

@@ -675,8 +675,8 @@ namespace iVolunteer.DAL.MongoDB
         /// <summary>
         /// cancel a request
         /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="request"></param>
+        /// <param name="userID">senderID</param>
+        /// <param name="request">receiverID</param>
         /// <returns></returns>
         public bool Cancel_Request(string userID, string otherID)
         {

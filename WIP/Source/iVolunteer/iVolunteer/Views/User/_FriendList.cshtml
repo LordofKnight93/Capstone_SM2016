@@ -1,0 +1,41 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Member>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Danh sách bạn bè</h4>
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                Tên
+            </th>
+            <th>
+                Ngày
+            </th>
+            <th>
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("UserHome","User",new { userID = item.SDInfo.ID })">
+                        @Html.DisplayFor(modelItem => item.SDInfo.DisplayName)
+                    </a>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JoinDate)
+                </td>
+                <td>
+                    @{ Html.RenderAction("ActionToOtherUser","Account");}
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

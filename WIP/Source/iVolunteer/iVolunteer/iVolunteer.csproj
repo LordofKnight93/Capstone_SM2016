@@ -356,7 +356,7 @@
     <Content Include="Views\Account\_CurrentProjects.cshtml" />
     <Content Include="Views\Account\_JoinedGroups.cshtml" />
     <Content Include="Views\Account\_JoinedProjects.cshtml" />
-    <Content Include="Views\User\UserProfile.cshtml" />
+    <Content Include="Views\User\UserHome.cshtml" />
     <Content Include="Views\Project\ProjectHome.cshtml" />
     <Content Include="Views\User\_UserInformation.cshtml" />
     <Content Include="Views\User\_JoinedGroups.cshtml" />
@@ -371,6 +371,9 @@
     <Content Include="Views\Account\_ActionToGroup.cshtml" />
     <Content Include="Views\User\_UserResult.cshtml" />
     <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
+    <Content Include="Views\Group\_GroupStructure.cshtml" />
+    <Content Include="Views\Group\_RequestList.cshtml" />
+    <Content Include="Views\User\_FriendList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

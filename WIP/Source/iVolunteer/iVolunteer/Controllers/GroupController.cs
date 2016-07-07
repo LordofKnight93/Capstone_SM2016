@@ -279,11 +279,27 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
-
+            //get group structure
             try
             {
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupStructure(groupID);
+
+                //get current user subrole
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.IsLeader = false;
+                    return PartialView("_GroupStructure", result);
+                }
+                else
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                    if (relationDAO.Is_Leader(userID, groupID))
+                        ViewBag.IsLeader = true;
+                }
+
+                ViewBag.GroupID = groupID;
                 return PartialView("_GroupStructure", result);
             }
             catch
@@ -306,6 +322,7 @@ namespace iVolunteer.Controllers
             {
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_RequestList(groupID);
+                ViewBag.GroupID = groupID;
                 return PartialView("_RequestList", result);
             }
             catch
@@ -339,7 +356,8 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            return RedirectToAction("RequestList", "Group", new { groupID = groupID });
+            ViewBag.Message = "Đã từ chối";
+            return View("ErrorMessage");
         }
 
         public ActionResult AcceptRequest(string groupID, string requestID)
@@ -378,7 +396,8 @@ namespace iVolunteer.Controllers
                     }
                 }
 
-                return RedirectToAction("RequestList", "Group", new { groupID = groupID });
+                ViewBag.Message = " Đã đồng ý";
+                return View("ErrorMessage");
             }
             catch
             {

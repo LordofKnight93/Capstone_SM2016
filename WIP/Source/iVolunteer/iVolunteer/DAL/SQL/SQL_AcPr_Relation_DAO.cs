@@ -75,8 +75,11 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID 
                                                                             && rl.ProjectID == projectID 
                                                                             && rl.Relation == relationType);
-                    dbEntities.SQL_AcPr_Relation.Remove(result);
-                    dbEntities.SaveChanges();
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcPr_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                    }
                     return true;
                 } 
             }

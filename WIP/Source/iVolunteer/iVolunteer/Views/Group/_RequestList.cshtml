@@ -1,0 +1,32 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ListClass.RequestItem>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Sự kiện đang tham gia</h4>
+            @Ajax.ActionLink(" Danh sách thành viên ", "GroupStructure", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                Người gửi
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("UserHome","User",new { userID = item.Actor.ID })">@item.Actor.DisplayName</a>
+                </td>
+                <td>
+                    @Html.ActionLink(" Đồng ý ", "AcceptRequest", "Group", new { groupID = ViewBag.GroupID, requestID = item.RequestID}, null) |
+                    @Html.ActionLink(" Từ chối ", "DeniedRequest", "Group", new { groupID = ViewBag.GroupID, requestID = item.RequestID }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

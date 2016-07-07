@@ -26,7 +26,9 @@
         {
             <tr>
                 <td>
+                    <a href="@Url.Action("GroupHome","Group",new { groupID = item.GroupID })">
                     @Html.DisplayFor(modelItem => item.GroupName)
+                    </a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.GroupDescription)

@@ -69,8 +69,11 @@ namespace iVolunteer.DAL.SQL
                 {
                     var result = dbEntities.SQL_Friendship.FirstOrDefault(rl => rl.UserID == userID
                                                                             && rl.FriendID == friendID);
-                    dbEntities.SQL_Friendship.Remove(result);
-                    dbEntities.SaveChanges();
+                    if (result != null)
+                    {
+                        dbEntities.SQL_Friendship.Remove(result);
+                        dbEntities.SaveChanges();
+                    }
                     return true;
                 }
             }
