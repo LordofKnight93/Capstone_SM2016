@@ -316,7 +316,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// add joined group
+        /// add joined group and increase group count by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="group"></param>
@@ -336,8 +336,8 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-        /// <summary>
-        /// delete joined group
+        /// <summary> 
+        /// delete joined group and decrease group count by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="groupID"></param>
@@ -360,7 +360,7 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// add joined project
+        /// add joined project and increase project count by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="project"></param>
@@ -381,7 +381,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// delete joined group
+        /// delete joined group and decrease project count by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
@@ -393,7 +393,7 @@ namespace iVolunteer.DAL.MongoDB
                 var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
                 var project_filter = Builders<SDLink>.Filter.Eq(g => g.ID, projectID);
                 var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedProjects, project_filter)
-                                                        .Inc(u => u.AccountInformation.GroupCount, -1); ;
+                                                        .Inc(u => u.AccountInformation.ProjectCount, -1); ;
                 var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }

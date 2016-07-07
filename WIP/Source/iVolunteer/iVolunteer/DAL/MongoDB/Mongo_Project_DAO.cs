@@ -326,7 +326,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// Add a user to project
+        /// Add a user to project and increase member count by 1
         /// </summary>
         /// <param name="projectID"></param>
         /// <param name="user"></param>
@@ -337,7 +337,8 @@ namespace iVolunteer.DAL.MongoDB
             {
                 Member member = new Member(user);
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
-                var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.JoinedUsers, member);
+                var update = Builders<Mongo_Project>.Update.AddToSet<Member>(pr => pr.ProjectStructure.JoinedUsers, member)
+                                                           .Inc(pr => pr.ProjectInformation.MemberCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -347,7 +348,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// expell a user from a project's joineduser list
+        /// expell a user from a project's joineduser list and dcrease member count by 1
         /// </summary>
         /// <param name="projectID"></param>
         /// <param name="userID"></param>
@@ -358,7 +359,8 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var user_filter = Builders<Member>.Filter.Eq(m => m.SDInfo.ID, userID);
-                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.ProjectStructure.JoinedUsers, user_filter);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.ProjectStructure.JoinedUsers, user_filter)
+                                                           .Inc(pr => pr.ProjectInformation.MemberCount, -1);
                 var result = collection.UpdateOne(project_filter, update);
                 return result.IsAcknowledged;
             }
@@ -1034,6 +1036,50 @@ namespace iVolunteer.DAL.MongoDB
                 var result = collection.AsQueryable().FirstOrDefault(p => p.ProjectInformation.ProjectID == projectID)
                                                      .RequestList.GuestSponsorRequests.FirstOrDefault(rq => rq.SponsorID == sponsorID);
                 return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add a follower to project and increase follow count by 1
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="follower"></param>
+        /// <returns></returns>
+        public bool Add_Follower(string projectID, SDLink follower)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet(pr => pr.Followers, follower)
+                                                           .Inc(pr => pr.ProjectInformation.FollowerCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// delete a follower to project and decrease follow count by 1
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="follower"></param>
+        /// <returns></returns>
+        public bool Delete_Follower(string projectID, string followerID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var follower_filter = Builders<SDLink>.Filter.Eq(fl => fl.ID, followerID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.Followers, follower_filter)
+                                                           .Inc(pr => pr.ProjectInformation.FollowerCount, -1);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
