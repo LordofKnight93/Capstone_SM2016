@@ -42,32 +42,46 @@ namespace iVolunteer.Controllers
                 creator.DisplayName = Session["DisplayName"].ToString();
                 creator.Handler = Handler.USER;
 
-                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
+                // create report destination
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                SDLink destination = groupDAO.Get_SDLink(groupID);
                 
+                SQL_AcGr_Report_DAO sqlReportDAO = new SQL_AcGr_Report_DAO();
+                Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
                 //If report has been sent 
-                if (reportDAO.IsSentReport(creator.ID, groupID))
-                {
-                    ViewBag.Message = "Bạn đã báo cáo vi phạm nhóm tình nguyện này rồi.";
-                    return PartialView("ErrorMessage");
-                }
-                
-                //create SQL Report 
-                try
-                {
-                    SQL_AcGr_Report report = new SQL_AcGr_Report();
-                    report.UserID = creator.ID;
-                    report.GroupID = groupID;
-                    report.ReportType = 1;
-                    report.Status = Status.PENDING_REPORT;
+                //if (reportDAO.IsSentReport(creator.ID, groupID))
+                //{
+                //    ViewBag.Message = "Bạn đã báo cáo vi phạm nhóm tình nguyện này rồi.";
+                //    return PartialView("ErrorMessage");
+                //}
 
-                    reportDAO.Add_Report(report);
-                }
-                catch
+                
+                using (var transaction = new TransactionScope())
                 {
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return PartialView("ErrorMessage");
+                    try
+                    {
+                        //create SQL Report 
+                        SQL_AcGr_Report report = new SQL_AcGr_Report();
+                        report.UserID = creator.ID;
+                        report.GroupID = groupID;
+                        report.ReportType = 1;
+                        report.Status = Status.PENDING_REPORT;
+
+                        sqlReportDAO.Add_Report(report);
+
+                        //create Mongo Report
+                        Mongo_Report mgReport = new Mongo_Report(creator, destination, 0);
+                        mongoReportDAO.Add_Report(mgReport);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return PartialView("ErrorMessage");
+                    }
                 }
-                ViewBag.Message = "Gửi yêu cầu thành công. <br /> Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh";
+                ViewBag.Message = "Gửi yêu cầu thành công. Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh";
                 return PartialView("ErrorMessage");
             }
             catch
@@ -95,6 +109,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-            
+
     }
 }
