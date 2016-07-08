@@ -21,6 +21,8 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         [BsonIgnoreIfDefault]
         public RequestList RequestList { get; set; }
         [BsonIgnoreIfDefault]
+        public List<SDLink> Followers { get; set; }
+        [BsonIgnoreIfDefault]
         public List<Team> Teams { get; set; }
         [BsonIgnoreIfDefault]
         public Agenda Agenda { get; set; }

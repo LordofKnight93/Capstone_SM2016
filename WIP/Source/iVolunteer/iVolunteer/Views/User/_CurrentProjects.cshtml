@@ -14,6 +14,10 @@
                 @foreach (var item in Model)
                 {
                     <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
+                    if (ViewBag.IsMyHome == true)
+                    {
+                        @Html.ActionLink("Rời sự kiện", "ProjectResign", "Account", new { projectID = item.ID }, null);
+                    }
                 }
             </ul>
         </div>

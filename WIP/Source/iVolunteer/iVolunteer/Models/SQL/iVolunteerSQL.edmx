@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="SQL_AcAl_Relation">
           <Key>
             <PropertyRef Name="AlbumID" />
@@ -37,17 +37,6 @@
           <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
           <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
           <Property Name="Relation" Type="int" Nullable="false" />
-          <Property Name="Status" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="SQL_AcGr_Report">
-          <Key>
-            <PropertyRef Name="GroupID" />
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="ReportType" />
-          </Key>
-          <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
-          <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
-          <Property Name="ReportType" Type="smallint" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="SQL_AcIm_Relation">
@@ -242,30 +231,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_SQL_AcGr_Report_SQL_Account">
-          <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-          <End Role="SQL_AcGr_Report" Type="Self.SQL_AcGr_Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SQL_Account">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="SQL_AcGr_Report">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SQL_AcGr_Report_SQL_Group">
-          <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
-          <End Role="SQL_AcGr_Report" Type="Self.SQL_AcGr_Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SQL_Group">
-              <PropertyRef Name="GroupID" />
-            </Principal>
-            <Dependent Role="SQL_AcGr_Report">
-              <PropertyRef Name="GroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SQL_AcIm_Relation_SQL_Account">
           <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
           <End Role="SQL_AcIm_Relation" Type="Self.SQL_AcIm_Relation" Multiplicity="*" />
@@ -402,7 +367,6 @@
           <EntitySet Name="SQL_AcAl_Relation" EntityType="Self.SQL_AcAl_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Account" EntityType="Self.SQL_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcGr_Relation" EntityType="Self.SQL_AcGr_Relation" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="SQL_AcGr_Report" EntityType="Self.SQL_AcGr_Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcIm_Relation" EntityType="Self.SQL_AcIm_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
@@ -445,14 +409,6 @@
           <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Album" Association="Self.FK_SQL_AcAl_Relation_SQL_Album">
             <End Role="SQL_Album" EntitySet="SQL_Album" />
             <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Account" Association="Self.FK_SQL_AcGr_Report_SQL_Account">
-            <End Role="SQL_Account" EntitySet="SQL_Account" />
-            <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Group" Association="Self.FK_SQL_AcGr_Report_SQL_Group">
-            <End Role="SQL_Group" EntitySet="SQL_Group" />
-            <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
           </AssociationSet>
           <AssociationSet Name="FK_SQL_AcIm_Relation_SQL_Account" Association="Self.FK_SQL_AcIm_Relation_SQL_Account">
             <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -499,7 +455,8 @@
             <End Role="SQL_AcPr_Relation" EntitySet="SQL_AcPr_Relation" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="iVolunteerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -535,7 +492,6 @@
           <NavigationProperty Name="SQL_Friendship1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Account" ToRole="SQL_Friendship" />
           <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
           <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
-          <NavigationProperty Name="SQL_AcGr_Report" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Report" />
         </EntityType>
         <EntityType Name="SQL_AcGr_Relation">
           <Key>
@@ -620,7 +576,6 @@
           <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_GroupSD" FromRole="SQL_Group" ToRole="SQL_AcGr_Relation" />
           <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Album" />
           <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Post" />
-          <NavigationProperty Name="SQL_AcGr_Report" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group" FromRole="SQL_Group" ToRole="SQL_AcGr_Report" />
         </EntityType>
         <EntityType Name="SQL_Image">
           <Key>
@@ -992,53 +947,7 @@
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_Post" EntitySet="SQL_Post" />
           </AssociationSet>
-          <EntitySet Name="SQL_AcGr_Report" EntityType="iVolunteerModel.SQL_AcGr_Report" />
-          <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Account" Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account">
-            <End Role="SQL_Account" EntitySet="SQL_Account" />
-            <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Group" Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group">
-            <End Role="SQL_Group" EntitySet="SQL_Group" />
-            <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="SQL_AcGr_Report">
-          <Key>
-            <PropertyRef Name="GroupID" />
-            <PropertyRef Name="UserID" />
-            <PropertyRef Name="ReportType" />
-          </Key>
-          <Property Name="GroupID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-          <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-          <Property Name="ReportType" Type="Int16" Nullable="false" />
-          <Property Name="Status" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account" FromRole="SQL_AcGr_Report" ToRole="SQL_Account" />
-          <NavigationProperty Name="SQL_Group" Relationship="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group" FromRole="SQL_AcGr_Report" ToRole="SQL_Group" />
-        </EntityType>
-        <Association Name="FK_SQL_AcGr_Report_SQL_Account">
-          <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
-          <End Type="iVolunteerModel.SQL_AcGr_Report" Role="SQL_AcGr_Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SQL_Account">
-              <PropertyRef Name="UserID" />
-            </Principal>
-            <Dependent Role="SQL_AcGr_Report">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SQL_AcGr_Report_SQL_Group">
-          <End Type="iVolunteerModel.SQL_Group" Role="SQL_Group" Multiplicity="1" />
-          <End Type="iVolunteerModel.SQL_AcGr_Report" Role="SQL_AcGr_Report" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SQL_Group">
-              <PropertyRef Name="GroupID" />
-            </Principal>
-            <Dependent Role="SQL_AcGr_Report">
-              <PropertyRef Name="GroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1175,16 +1084,6 @@
               <MappingFragment StoreEntitySet="SQL_Project">
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SQL_AcGr_Report">
-            <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcGr_Report">
-              <MappingFragment StoreEntitySet="SQL_AcGr_Report">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

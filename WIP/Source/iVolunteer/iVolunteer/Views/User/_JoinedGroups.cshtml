@@ -7,13 +7,17 @@
         </div>
     </div>
     <div class="divider-holizon"></div>
-    <!-- List Group -->
+    <!-- List Project -->
     <div class="row">
         <div class="col-sm-12 col-xs-12">
             <ul class="list-navi">
 @foreach (var item in Model)
 {
                 <li><a href="@Url.Action("GroupHome","Group", new { groupID = item.ID })">@item.DisplayName</a></li>
+                if (ViewBag.IsMyHome == true)
+                {
+                    @Html.ActionLink("Rời nhóm", "GroupResign", "Account", new { groupID = item.ID }, null);
+                }
 }
             </ul>
         </div>

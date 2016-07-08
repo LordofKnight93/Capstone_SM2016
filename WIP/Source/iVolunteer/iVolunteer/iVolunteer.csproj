@@ -216,13 +216,11 @@
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_AcGr_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
     <Compile Include="Global.asax.cs">
@@ -294,9 +292,6 @@
     <Compile Include="Models\SQL\SQL_AcGr_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SQL\SQL_AcGr_Report.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\SQL\SQL_AcIm_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
@@ -361,7 +356,7 @@
     <Content Include="Views\Account\_CurrentProjects.cshtml" />
     <Content Include="Views\Account\_JoinedGroups.cshtml" />
     <Content Include="Views\Account\_JoinedProjects.cshtml" />
-    <Content Include="Views\User\UserProfile.cshtml" />
+    <Content Include="Views\User\UserHome.cshtml" />
     <Content Include="Views\Project\ProjectHome.cshtml" />
     <Content Include="Views\User\_UserInformation.cshtml" />
     <Content Include="Views\User\_JoinedGroups.cshtml" />
@@ -376,6 +371,9 @@
     <Content Include="Views\Account\_ActionToGroup.cshtml" />
     <Content Include="Views\User\_UserResult.cshtml" />
     <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
+    <Content Include="Views\Group\_GroupStructure.cshtml" />
+    <Content Include="Views\Group\_RequestList.cshtml" />
+    <Content Include="Views\User\_FriendList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -386,7 +384,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="BL\" />
-    <Folder Include="Views\Report\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

@@ -7,7 +7,7 @@
             <img type="image/svg+xml" src=@avtlink width="80" height="80" border="1">
         </div>
         <div class="col-sm-12" style="margin-bottom: 10px">
-            <a style="color: #049f88; font-weight: bold;" href="@Url.Action("UserProfile", "User", new { userID = Model.UserID})">@Model.DisplayName</a>
+            <a style="color: #049f88; font-weight: bold;" href="@Url.Action("UserHome", "User", new { userID = Model.UserID})">@Model.DisplayName</a>
         </div>
     </div>
     <div class="row">

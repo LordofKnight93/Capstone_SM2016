@@ -20,11 +20,6 @@
             @Html.ActionLink(" Theo dõi ", "FollowGroup", "Account", new { groupID = ViewBag.GroupID }, null);
         }
     }
-    if (ViewBag.IsSentReport == true)
-    {
-        @Html.ActionLink(" Hủy báo cáo vi phạm ", "CancelReport", "Report", new { groupID = ViewBag.GroupID }, null);
-    }
-    else {
-        @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Report", new { groupID = ViewBag.GroupID }, null);
-    }
+
+    @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Account", new { groupID = ViewBag.GroupID }, null);
 }

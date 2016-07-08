@@ -290,6 +290,9 @@ namespace iVolunteer.Controllers
 
                             userDAO.Add_Friend(actor.ID, destination);
                             userDAO.Add_Friend(destination.ID, actor);
+                            //delete request
+                            userDAO.Cancel_Request(otherID, actor.ID);
+
                             ViewBag.Message = " Kết bạn thành công.";
                         }
                         else
@@ -412,15 +415,36 @@ namespace iVolunteer.Controllers
             try
             {
                 if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
+                //create actor
+                SDLink actor = new SDLink();
+                actor.ID = Session["UserID"].ToString();
+                actor.DisplayName = Session["DisplayName"].ToString();
+                actor.Handler = Handler.USER;
+
                 ///create relation
                 SQL_AcPr_Relation relation = new SQL_AcPr_Relation();
                 relation.UserID = Session["UserID"].ToString();
                 relation.ProjectID = projectID;
                 relation.Relation = Relation.FOLLOW_RELATION;
                 relation.Status = Status.ACCEPTED;
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                        relationDAO.Add_Relation(relation);
+                        Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                        projectDAO.Add_Follower(projectID, actor);
 
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                relationDAO.Add_Relation(relation);
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+                }
 
                 ViewBag.Message = " Bạn đã theo dõi hoạt động công khai của sự kiện này. ";
                 return PartialView("ErrorMessage");
@@ -439,8 +463,25 @@ namespace iVolunteer.Controllers
                 if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
                 string userID = Session["UserID"].ToString();
 
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                relationDAO.Delete_Specific_Relation(userID, projectID, Relation.FOLLOW_RELATION);
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                        relationDAO.Delete_Specific_Relation(userID, projectID, Relation.FOLLOW_RELATION);
+
+                        Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                        projectDAO.Delete_Follower(projectID, userID);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+                }
 
                 ViewBag.Message = " Bạn đã ngừng theo dõi hoạt động công khai của sự kiện này. ";
                 return PartialView("ErrorMessage");
@@ -478,12 +519,6 @@ namespace iVolunteer.Controllers
                 if (relationDAO.Is_Following(userID, groupID))
                     ViewBag.IsFollowing = true;
                 ViewBag.GroupID = groupID;
-
-                //Check if report has been sent
-                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
-                if (reportDAO.IsSentReport(userID, groupID))
-                    ViewBag.IsSentReport = true;
-
                 return PartialView("_ActionToGroup");
 
             }

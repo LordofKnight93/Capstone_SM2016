@@ -28,9 +28,6 @@ namespace iVolunteer.Common
         // status of request
         public const bool ACCEPTED = true;
         public const bool PENDING = false;
-        // status of sent report
-        public const bool PENDING_REPORT = false;
-        public const bool ACCEPTED_REPORT = true;
     }
 
     public static class Default

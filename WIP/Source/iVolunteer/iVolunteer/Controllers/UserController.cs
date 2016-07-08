@@ -22,7 +22,7 @@ namespace iVolunteer.Controllers
     public class UserController : Controller
     {
         [HttpGet]
-        public ActionResult UserProfile(string userID)
+        public ActionResult UserHome(string userID)
         {
             SDLink result = null;
             try
@@ -41,7 +41,7 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
-            return View("UserProfile", result);
+            return View("UserHome", result);
         }
 
         [ChildActionOnly]
@@ -86,7 +86,7 @@ namespace iVolunteer.Controllers
                 // write your code to save image
                 string uploadPath = Server.MapPath("/Images/User/Avatar/" + userID + ".jpg");
                 file.SaveAs(uploadPath);
-                return RedirectToAction("UserProfile", "User", new { userID = userID });
+                return RedirectToAction("UserHome", "User", new { userID = userID });
 
             }
             else return View("_ImageUpload");
@@ -111,7 +111,7 @@ namespace iVolunteer.Controllers
                 // write your code to save image
                 string uploadPath = Server.MapPath("/Images/User/Cover/" + userID + ".jpg");
                 file.SaveAs(uploadPath);
-                return RedirectToAction("UserProfile", "User", new { userID = userID });
+                return RedirectToAction("UserHome", "User", new { userID = userID });
 
             }
             else return View("_ImageUpload");
@@ -125,6 +125,10 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
+
+            if (Session["UserID"] != null && Session["UserID"].ToString() == userID)
+                ViewBag.IsMyHome = true;
+            else ViewBag.IsMyHome = false;
 
             try
             {
@@ -170,6 +174,10 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
 
+            if (Session["UserID"] != null && Session["UserID"].ToString() == userID)
+                ViewBag.IsMyHome = true;
+            else ViewBag.IsMyHome = false;
+
             try
             {
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
@@ -192,11 +200,41 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
 
+            if (Session["UserID"] != null && Session["UserID"].ToString() == userID)
+                ViewBag.IsMyHome = true;
+            else ViewBag.IsMyHome = false;
+
             try
             {
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
                 var result = userDAO.Get_CurrentProjects(userID);
                 return PartialView("_CurrentProjects", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult FriendList(string userID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(userID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            if (Session["UserID"] != null && Session["UserID"].ToString() == userID)
+                ViewBag.IsMyHome = true;
+            else ViewBag.IsMyHome = false;
+            
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_FriendList(userID);
+                return PartialView("_FriendList", result);
             }
             catch
             {
