@@ -13,6 +13,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
     [BsonIgnoreExtraElements]
     public class Mongo_Post
     {
+
         public ObjectId _id { get; set; }
         public PostInformation PostInfomation { get; set; }
         [BsonIgnoreIfDefault]
@@ -26,6 +27,14 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.PostInfomation = new PostInformation();
             this.LikerList = new List<SDLink>();
             this.CommentList = new List<Comment>();
+        }
+        public Mongo_Post(SDLink creator, PostInformation postInfor)
+        {
+            this._id = ObjectId.GenerateNewId();
+            this.PostInfomation = postInfor;
+            this.LikerList = new List<SDLink>();
+            this.CommentList = new List<Comment>();
+
         }
     }
 }

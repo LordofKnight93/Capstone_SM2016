@@ -25,6 +25,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public string ImgLink { get; set; }
         public int LikeCount { get; set; }
         public int CommentCount { get; set; }
+        public int FollowCount { get; set; }
         public bool IsPinned { get; set; }
         public bool IsPublic { get; set; }
 
@@ -39,6 +40,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.Content = "";
             this.ImgLink = "";
             this.LikeCount = 0;
+            this.FollowCount = 1;
             this.CommentCount = 0;
             this.IsPinned = Status.IS_PINNED;
             this.IsPublic = Status.IS_PRIVATE;

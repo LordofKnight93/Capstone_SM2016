@@ -1,0 +1,28 @@
+﻿
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PostInformation
+<!-- Write post -->
+@using (Html.BeginForm("AddPost", "Post", FormMethod.Post, new { @id = "formValidation", @class = "register-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+        <form class="form-group" style="margin-bottom: 0;">
+            <div class="row nav-project">
+                <textarea type="text" class="write-post-txt">
+                    @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @id = "PostContent", @class = "form-control", @placeholder = "Chia sẻ của bạn..." } })
+                </textarea>
+            </div>
+            <div class="row" style="margin-top: 10px">
+                <!-- Post button -->
+                <div class="col-md-10" style="text-align: right">
+                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Ảnh"><i class="material-icons">landscape</i></button>
+                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chèn link"><i class="material-icons">insert_link</i></button>
+                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Tag"><i class="material-icons md-18">local_offer</i></button>
+                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Địa Điểm"><i class="material-icons md-20">place</i></button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-post" type="submit">ĐĂNG BÀI</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}
