@@ -45,8 +45,8 @@ namespace iVolunteer.Controllers
                 // create report destination
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 SDLink destination = groupDAO.Get_SDLink(groupID);
-                
-                SQL_AcGr_Report_DAO sqlReportDAO = new SQL_AcGr_Report_DAO();
+
+                SQL_AcGr_Relation_DAO sqlReportDAO = new SQL_AcGr_Relation_DAO();
                 Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
                 //If report has been sent 
                 //if (reportDAO.IsSentReport(creator.ID, groupID))
@@ -55,17 +55,17 @@ namespace iVolunteer.Controllers
                 //    return PartialView("ErrorMessage");
                 //}
 
-                
+
                 using (var transaction = new TransactionScope())
                 {
                     try
                     {
                         //create SQL Report 
-                        SQL_AcGr_Report report = new SQL_AcGr_Report();
+                        SQL_AcGr_Relation report = new SQL_AcGr_Relation();
                         report.UserID = creator.ID;
                         report.GroupID = groupID;
-                        report.ReportType = 1;
-                        report.Status = Status.PENDING_REPORT;
+                        report.Status = Status.PENDING;
+                        report.Relation = Relation.REPORT_RELATION;
 
                         sqlReportDAO.Add_Report(report);
 
@@ -92,22 +92,37 @@ namespace iVolunteer.Controllers
         }
         public ActionResult CancelReport(string groupID)
         {
-            try
-            {
-                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
-                string userID = Session["UserID"].ToString();
-
-                reportDAO.DeleteSentReport(userID, groupID);
-
-                ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
-                return PartialView("ErrorMessage");
-
-            }
-            catch
+            if (Session["UserID"] == null)
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
+
+            string userID = Session["UserID"].ToString();
+
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    //Delete Report in SQL
+                    SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
+                    reportDAO.DeleteSentReport(userID, groupID);
+
+                    //Delete Report in Mongo
+                    Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
+                    mgReportDAO.Delete_Report(userID, groupID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return PartialView("ErrorMessage");
+                }
+            }
+            ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
+            return PartialView("ErrorMessage");
         }
 
     }
