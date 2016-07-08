@@ -25,6 +25,8 @@ namespace iVolunteer.Models.SQL
             this.SQL_Friendship1 = new HashSet<SQL_Friendship>();
             this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
             this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
+            this.SQL_AcAc_Relation = new HashSet<SQL_AcAc_Relation>();
+            this.SQL_AcAc_Relation1 = new HashSet<SQL_AcAc_Relation>();
         }
     
         public string UserID { get; set; }
@@ -53,5 +55,9 @@ namespace iVolunteer.Models.SQL
         public virtual ICollection<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation1 { get; set; }
     }
 }

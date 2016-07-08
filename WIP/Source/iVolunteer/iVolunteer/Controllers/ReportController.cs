@@ -54,6 +54,7 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //create SQL Report relation
+                        // Case 1: Report Target is Group
                         if (targetType == 1)
                         {
                             SQL_AcGr_Relation_DAO sqlReportDAO = new SQL_AcGr_Relation_DAO();
@@ -66,6 +67,7 @@ namespace iVolunteer.Controllers
 
                             sqlReportDAO.Add_Report(report);
                         }
+                        // Case 2: Report Target is Project
                         else if (targetType == 2)
                         {
                             SQL_AcPr_Relation_DAO sqlReportDAO = new SQL_AcPr_Relation_DAO();
@@ -73,6 +75,19 @@ namespace iVolunteer.Controllers
                             SQL_AcPr_Relation report = new SQL_AcPr_Relation();
                             report.UserID = creator.ID;
                             report.ProjectID = targetID;
+                            report.Status = Status.PENDING;
+                            report.Relation = Relation.REPORT_RELATION;
+
+                            sqlReportDAO.Add_Report(report);
+                        }
+                        // Case 3: Report Target is Other User
+                        else if (targetType == 3)
+                        {
+                            SQL_AcAc_Relation_DAO sqlReportDAO = new SQL_AcAc_Relation_DAO();
+
+                            SQL_AcAc_Relation report = new SQL_AcAc_Relation();
+                            report.UserID = creator.ID;
+                            report.TargetUserID = targetID;
                             report.Status = Status.PENDING;
                             report.Relation = Relation.REPORT_RELATION;
 
@@ -113,10 +128,25 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
-                    //Delete Report in SQL
-                    SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
-                    reportDAO.DeleteSentReport(userID, targetID);
-
+                    // Delete Report in SQL
+                    // Case 1: Report Target is Group
+                    if (targetType == 1)
+                    {
+                        SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
+                        reportDAO.DeleteSentReport(userID, targetID);
+                    }
+                    // Case 2: Report Target is Project
+                    else if (targetType == 2)
+                    {
+                        SQL_AcPr_Relation_DAO reportDAO = new SQL_AcPr_Relation_DAO();
+                        reportDAO.DeleteSentReport(userID, targetID);
+                    }
+                    // Case 3: Report Target is Other User
+                    else if (targetType == 3)
+                    {
+                        SQL_AcAc_Relation_DAO reportDAO = new SQL_AcAc_Relation_DAO();
+                        reportDAO.DeleteSentReport(userID, targetID);
+                    }
                     //Delete Report in Mongo
                     Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
                     mgReportDAO.Delete_Report(userID, targetID);

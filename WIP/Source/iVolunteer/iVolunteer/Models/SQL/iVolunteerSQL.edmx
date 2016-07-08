@@ -4,7 +4,18 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SQL_AcAc_Relation">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="TargetUserID" />
+            <PropertyRef Name="Relation" />
+          </Key>
+          <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="TargetUserID" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="Relation" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="SQL_AcAl_Relation">
           <Key>
             <PropertyRef Name="AlbumID" />
@@ -207,6 +218,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SQL_AcAc_Relation_SQL_Account">
+          <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+          <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_AcAc_Relation">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SQL_AcAc_Relation_SQL_Account1">
+          <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+          <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_AcAc_Relation">
+              <PropertyRef Name="TargetUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SQL_AcAl_Relation_SQL_Account">
           <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
           <End Role="SQL_AcAl_Relation" Type="Self.SQL_AcAl_Relation" Multiplicity="*" />
@@ -364,6 +399,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="iVolunteerModelStoreContainer">
+          <EntitySet Name="SQL_AcAc_Relation" EntityType="Self.SQL_AcAc_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcAl_Relation" EntityType="Self.SQL_AcAl_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Account" EntityType="Self.SQL_Account" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcGr_Relation" EntityType="Self.SQL_AcGr_Relation" Schema="dbo" store:Type="Tables" />
@@ -401,6 +437,14 @@
           <AssociationSet Name="FK_PostSD_ProjectSD" Association="Self.FK_PostSD_ProjectSD">
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_Post" EntitySet="SQL_Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account" Association="Self.FK_SQL_AcAc_Relation_SQL_Account">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account1" Association="Self.FK_SQL_AcAc_Relation_SQL_Account1">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
           </AssociationSet>
           <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Account" Association="Self.FK_SQL_AcAl_Relation_SQL_Account">
             <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -455,8 +499,7 @@
             <End Role="SQL_AcPr_Relation" EntitySet="SQL_AcPr_Relation" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="iVolunteerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -492,6 +535,8 @@
           <NavigationProperty Name="SQL_Friendship1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Account" ToRole="SQL_Friendship" />
           <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
           <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
+          <NavigationProperty Name="SQL_AcAc_Relation" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
+          <NavigationProperty Name="SQL_AcAc_Relation1" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
         </EntityType>
         <EntityType Name="SQL_AcGr_Relation">
           <Key>
@@ -947,7 +992,53 @@
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_Post" EntitySet="SQL_Post" />
           </AssociationSet>
+          <EntitySet Name="SQL_AcAc_Relation" EntityType="iVolunteerModel.SQL_AcAc_Relation" />
+          <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account" Association="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account1" Association="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="SQL_AcAc_Relation">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="TargetUserID" />
+            <PropertyRef Name="Relation" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="TargetUserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="Relation" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
+          <NavigationProperty Name="SQL_Account1" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
+        </EntityType>
+        <Association Name="FK_SQL_AcAc_Relation_SQL_Account">
+          <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
+          <End Type="iVolunteerModel.SQL_AcAc_Relation" Role="SQL_AcAc_Relation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_AcAc_Relation">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SQL_AcAc_Relation_SQL_Account1">
+          <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
+          <End Type="iVolunteerModel.SQL_AcAc_Relation" Role="SQL_AcAc_Relation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_AcAc_Relation">
+              <PropertyRef Name="TargetUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1084,6 +1175,16 @@
               <MappingFragment StoreEntitySet="SQL_Project">
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SQL_AcAc_Relation">
+            <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAc_Relation">
+              <MappingFragment StoreEntitySet="SQL_AcAc_Relation">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Relation" ColumnName="Relation" />
+                <ScalarProperty Name="TargetUserID" ColumnName="TargetUserID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
