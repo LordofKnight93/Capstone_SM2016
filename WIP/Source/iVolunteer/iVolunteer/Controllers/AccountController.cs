@@ -480,7 +480,7 @@ namespace iVolunteer.Controllers
                 ViewBag.GroupID = groupID;
 
                 //Check if report has been sent
-                SQL_AcGr_Report_DAO reportDAO = new SQL_AcGr_Report_DAO();
+                SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
                 if (reportDAO.IsSentReport(userID, groupID))
                     ViewBag.IsSentReport = true;
 

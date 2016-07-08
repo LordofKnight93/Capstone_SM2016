@@ -279,5 +279,71 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Add Report that made bt User to Group
+        /// </summary>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        public bool Add_Report(SQL_AcGr_Relation report)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntitiies = new iVolunteerEntities())
+                {
+                    dbEntitiies.SQL_AcGr_Relation.Add(report);
+                    dbEntitiies.SaveChanges();
+                    return true;
+
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// User check if Report has been sent
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool IsSentReport(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == Relation.REPORT_RELATION);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// User delete sent Report
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool DeleteSentReport(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.GroupID == groupID && rl.Relation == Relation.REPORT_RELATION);
+                    dbEntities.SQL_AcGr_Relation.Remove(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

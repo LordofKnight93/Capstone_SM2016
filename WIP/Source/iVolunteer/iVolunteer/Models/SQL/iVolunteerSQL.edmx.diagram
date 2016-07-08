@@ -38,10 +38,7 @@
         <AssociationConnector Association="iVolunteerModel.FK_PostSD_GroupSD" ManuallyRouted="false" />
         <AssociationConnector Association="iVolunteerModel.FK_Plan_ProjectSD" ManuallyRouted="false" />
         <AssociationConnector Association="iVolunteerModel.FK_PostSD_ProjectSD" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcGr_Report" Width="1.5" PointX="6" PointY="13.5" />
-        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Account" />
-        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcGr_Report_SQL_Group" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

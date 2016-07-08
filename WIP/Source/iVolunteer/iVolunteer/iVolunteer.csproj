@@ -223,7 +223,6 @@
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_AcGr_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
     <Compile Include="Global.asax.cs">
@@ -294,9 +293,6 @@
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_AcGr_Relation.cs">
-      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SQL\SQL_AcGr_Report.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_AcIm_Relation.cs">

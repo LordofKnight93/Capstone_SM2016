@@ -34,17 +34,6 @@
     <Property Name="Relation" Type="int" Nullable="false" />
     <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="SQL_AcGr_Report">
-    <Key>
-      <PropertyRef Name="GroupID" />
-      <PropertyRef Name="UserID" />
-      <PropertyRef Name="ReportType" />
-    </Key>
-    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="ReportType" Type="smallint" Nullable="false" />
-    <Property Name="Status" Type="bit" Nullable="false" />
-  </EntityType>
   <EntityType Name="SQL_AcIm_Relation">
     <Key>
       <PropertyRef Name="ImageID" />
@@ -237,30 +226,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SQL_AcGr_Report_SQL_Account">
-    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_AcGr_Report" Type="Self.SQL_AcGr_Report" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_AcGr_Report">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SQL_AcGr_Report_SQL_Group">
-    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
-    <End Role="SQL_AcGr_Report" Type="Self.SQL_AcGr_Report" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Group">
-        <PropertyRef Name="GroupID" />
-      </Principal>
-      <Dependent Role="SQL_AcGr_Report">
-        <PropertyRef Name="GroupID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_SQL_AcIm_Relation_SQL_Account">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
     <End Role="SQL_AcIm_Relation" Type="Self.SQL_AcIm_Relation" Multiplicity="*" />
@@ -397,7 +362,6 @@
     <EntitySet Name="SQL_AcAl_Relation" EntityType="Self.SQL_AcAl_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Account" EntityType="Self.SQL_Account" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcGr_Relation" EntityType="Self.SQL_AcGr_Relation" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="SQL_AcGr_Report" EntityType="Self.SQL_AcGr_Report" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcIm_Relation" EntityType="Self.SQL_AcIm_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
@@ -440,14 +404,6 @@
     <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Album" Association="Self.FK_SQL_AcAl_Relation_SQL_Album">
       <End Role="SQL_Album" EntitySet="SQL_Album" />
       <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Account" Association="Self.FK_SQL_AcGr_Report_SQL_Account">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SQL_AcGr_Report_SQL_Group" Association="Self.FK_SQL_AcGr_Report_SQL_Group">
-      <End Role="SQL_Group" EntitySet="SQL_Group" />
-      <End Role="SQL_AcGr_Report" EntitySet="SQL_AcGr_Report" />
     </AssociationSet>
     <AssociationSet Name="FK_SQL_AcIm_Relation_SQL_Account" Association="Self.FK_SQL_AcIm_Relation_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
