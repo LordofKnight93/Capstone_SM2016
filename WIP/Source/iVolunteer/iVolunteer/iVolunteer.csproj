@@ -381,6 +381,7 @@
     <Content Include="Views\Group\_GroupStructure.cshtml" />
     <Content Include="Views\Group\_RequestList.cshtml" />
     <Content Include="Views\User\_FriendList.cshtml" />
+    <Content Include="Views\Report\ReportList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -391,7 +392,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="BL\" />
-    <Folder Include="Views\Report\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

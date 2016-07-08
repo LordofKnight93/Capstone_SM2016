@@ -1,0 +1,32 @@
+﻿@model Tuple<List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Report>, List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>>
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Kết quả</h4>
+        </div>
+    </div>
+    <table class="table">
+        @foreach (var group in Model.Item2)
+        {
+            <tr>
+                <th>Nhóm vi phạm</th>
+                <td><a>@group.DisplayName</a></td>
+            </tr>
+            <tr>
+                <td>Người báo cáo</td>
+                <td>Nội dung báo cáo</td>
+            </tr>
+            foreach (var item in Model.Item1)
+            {
+                if (item.Destination.ID == group.ID)
+                {
+                    <tr>
+                        <td><a>@item.Actor.DisplayName</a></td>
+                        <td><a>@item.Type</a></td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+
