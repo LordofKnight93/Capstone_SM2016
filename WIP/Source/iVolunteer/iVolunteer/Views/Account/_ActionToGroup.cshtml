@@ -22,9 +22,9 @@
     }
     if (ViewBag.IsSentReport == true)
     {
-        @Html.ActionLink(" Hủy báo cáo vi phạm ", "CancelReport", "Report", new { groupID = ViewBag.GroupID }, null);
+        @Html.ActionLink(" Hủy báo cáo vi phạm ", "CancelReport", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, null);
     }
     else {
-        @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Report", new { groupID = ViewBag.GroupID }, null);
+        @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, null);
     }
 }

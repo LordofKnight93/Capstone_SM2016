@@ -112,5 +112,71 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Add Report that made bt User to Project
+        /// </summary>
+        /// <param name="report"></param>
+        /// <returns></returns>
+        public bool Add_Report(SQL_AcPr_Relation report)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntitiies = new iVolunteerEntities())
+                {
+                    dbEntitiies.SQL_AcPr_Relation.Add(report);
+                    dbEntitiies.SaveChanges();
+                    return true;
+
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// User check if Report has been sent
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool IsSentReport(string userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.ProjectID == projectID && rl.Relation == Relation.REPORT_RELATION);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// User delete sent Report
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool DeleteSentReport(string userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.ProjectID == projectID && rl.Relation == Relation.REPORT_RELATION);
+                    dbEntities.SQL_AcPr_Relation.Remove(result);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

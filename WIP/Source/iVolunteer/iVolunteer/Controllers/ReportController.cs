@@ -27,7 +27,7 @@ namespace iVolunteer.Controllers
         {
             return View();
         }
-        public ActionResult ReportGroup(string groupID)
+        public ActionResult ReportGroup(string targetID, int targetType)
         {
             try
             {
@@ -42,33 +42,42 @@ namespace iVolunteer.Controllers
                 creator.DisplayName = Session["DisplayName"].ToString();
                 creator.Handler = Handler.USER;
 
-                // create report destination
+                // create report Target
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                SDLink destination = groupDAO.Get_SDLink(groupID);
+                SDLink destination = groupDAO.Get_SDLink(targetID);
 
-                SQL_AcGr_Relation_DAO sqlReportDAO = new SQL_AcGr_Relation_DAO();
+                
                 Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
-                //If report has been sent 
-                //if (reportDAO.IsSentReport(creator.ID, groupID))
-                //{
-                //    ViewBag.Message = "Bạn đã báo cáo vi phạm nhóm tình nguyện này rồi.";
-                //    return PartialView("ErrorMessage");
-                //}
-
 
                 using (var transaction = new TransactionScope())
                 {
                     try
                     {
-                        //create SQL Report 
-                        SQL_AcGr_Relation report = new SQL_AcGr_Relation();
-                        report.UserID = creator.ID;
-                        report.GroupID = groupID;
-                        report.Status = Status.PENDING;
-                        report.Relation = Relation.REPORT_RELATION;
+                        //create SQL Report relation
+                        if (targetType == 1)
+                        {
+                            SQL_AcGr_Relation_DAO sqlReportDAO = new SQL_AcGr_Relation_DAO();
 
-                        sqlReportDAO.Add_Report(report);
+                            SQL_AcGr_Relation report = new SQL_AcGr_Relation();
+                            report.UserID = creator.ID;
+                            report.GroupID = targetID;
+                            report.Status = Status.PENDING;
+                            report.Relation = Relation.REPORT_RELATION;
 
+                            sqlReportDAO.Add_Report(report);
+                        }
+                        else if (targetType == 2)
+                        {
+                            SQL_AcPr_Relation_DAO sqlReportDAO = new SQL_AcPr_Relation_DAO();
+
+                            SQL_AcPr_Relation report = new SQL_AcPr_Relation();
+                            report.UserID = creator.ID;
+                            report.ProjectID = targetID;
+                            report.Status = Status.PENDING;
+                            report.Relation = Relation.REPORT_RELATION;
+
+                            sqlReportDAO.Add_Report(report);
+                        }
                         //create Mongo Report
                         Mongo_Report mgReport = new Mongo_Report(creator, destination, 0);
                         mongoReportDAO.Add_Report(mgReport);
@@ -90,7 +99,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult CancelReport(string groupID)
+        public ActionResult CancelReport(string targetID, int targetType)
         {
             if (Session["UserID"] == null)
             {
@@ -106,11 +115,11 @@ namespace iVolunteer.Controllers
                 {
                     //Delete Report in SQL
                     SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
-                    reportDAO.DeleteSentReport(userID, groupID);
+                    reportDAO.DeleteSentReport(userID, targetID);
 
                     //Delete Report in Mongo
                     Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
-                    mgReportDAO.Delete_Report(userID, groupID);
+                    mgReportDAO.Delete_Report(userID, targetID);
 
                     transaction.Complete();
                 }
