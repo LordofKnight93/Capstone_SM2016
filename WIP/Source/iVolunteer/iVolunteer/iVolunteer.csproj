@@ -222,6 +222,7 @@
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
@@ -285,6 +286,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcAc_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_AcAl_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>

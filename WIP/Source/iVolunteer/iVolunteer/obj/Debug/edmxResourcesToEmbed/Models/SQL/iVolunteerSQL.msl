@@ -134,5 +134,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcAc_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAc_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcAc_Relation">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="TargetUserID" ColumnName="TargetUserID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>
