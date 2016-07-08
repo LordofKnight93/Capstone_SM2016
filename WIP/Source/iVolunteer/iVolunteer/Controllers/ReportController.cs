@@ -165,12 +165,60 @@ namespace iVolunteer.Controllers
         }
         public ActionResult DisplayReport()
         {
-            Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
-            var result = reportDAO.Get_Report();
-            var reportedGroups = reportDAO.Get_ReportedGroup().ToList();
-            var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedGroups);
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+            
+            return View("ReportList");
+        }
+        public ActionResult DisplayReportedGroup()
+        {
+            try {
+                Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                var result = reportDAO.Get_GroupReport();
+                var reportedGroups = reportDAO.Get_ReportedGroup().ToList();
+                var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedGroups);
 
-            return View("ReportList", tuple);
+                return PartialView("_ReportedGroupList", tuple);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ActionResult DisplayReportedProject()
+        {
+            try
+            {
+                Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                var result = reportDAO.Get_ProjectReport();
+                var reportedProjects = reportDAO.Get_ReportedProject().ToList();
+                var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedProjects);
+
+                return PartialView("_ReportedProjectList", tuple);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ActionResult DisplayReportedUser()
+        {
+            try
+            {
+                Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                var result = reportDAO.Get_UserReport();
+                var reportedUsers = reportDAO.Get_ReportedUser().ToList();
+                var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedUsers);
+
+                return PartialView("_ReportedUserList", tuple);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
     }
