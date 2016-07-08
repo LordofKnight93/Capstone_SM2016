@@ -163,6 +163,15 @@ namespace iVolunteer.Controllers
             ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
             return PartialView("ErrorMessage");
         }
+        public ActionResult DisplayReport()
+        {
+            Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+            var result = reportDAO.Get_Report();
+            var reportedGroups = reportDAO.Get_ReportedGroup().ToList();
+            var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedGroups);
+
+            return View("ReportList", tuple);
+        }
 
     }
 }
