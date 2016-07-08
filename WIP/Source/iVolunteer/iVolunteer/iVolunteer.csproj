@@ -220,6 +220,7 @@
     <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
@@ -248,6 +249,7 @@
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Plan.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
