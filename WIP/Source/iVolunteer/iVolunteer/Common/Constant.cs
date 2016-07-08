@@ -51,6 +51,7 @@ namespace iVolunteer.Common
         public const int SPONSOR_RELATION = 3;
         public const int FOLLOW_RELATION = 4;
         public const int LIKE_RELATION = 5;
+        public const int REPORT_RELATION = 6;
     }
 
     public static class PostType
