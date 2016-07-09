@@ -27,7 +27,13 @@ namespace iVolunteer.Controllers
         {
             return View();
         }
-        public ActionResult ReportGroup(string targetID, int targetType)
+        /// <summary>
+
+        /// </summary>
+        /// <param name="targetID"></param>
+        /// <param name="targetType"></param>
+        /// <returns></returns>
+        public ActionResult ReportTarget(string targetID, int targetType)
         {
             try
             {
@@ -46,7 +52,7 @@ namespace iVolunteer.Controllers
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 SDLink destination = groupDAO.Get_SDLink(targetID);
 
-                
+
                 Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
 
                 using (var transaction = new TransactionScope())
@@ -163,32 +169,33 @@ namespace iVolunteer.Controllers
             ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
             return PartialView("ErrorMessage");
         }
-        public ActionResult DisplayReport()
+        public ActionResult DisplayPendingReport()
         {
             if (Session["UserID"] == null)
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
-            
-            return View("ReportList");
+
+            return View("PendingReportList");
         }
-        public ActionResult DisplayReportedGroup()
+        public ActionResult DisplayPendingReportedGroup()
         {
-            try {
+            try
+            {
                 Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
                 var result = reportDAO.Get_GroupReport();
                 var reportedGroups = reportDAO.Get_ReportedGroup().ToList();
                 var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedGroups);
 
-                return PartialView("_ReportedGroupList", tuple);
+                return PartialView("_PendingReportedGroups", tuple);
             }
             catch
             {
                 throw;
             }
         }
-        public ActionResult DisplayReportedProject()
+        public ActionResult DisplayPendingReportedProject()
         {
             try
             {
@@ -197,14 +204,14 @@ namespace iVolunteer.Controllers
                 var reportedProjects = reportDAO.Get_ReportedProject().ToList();
                 var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedProjects);
 
-                return PartialView("_ReportedProjectList", tuple);
+                return PartialView("_PendingReportedProjects", tuple);
             }
             catch
             {
                 throw;
             }
         }
-        public ActionResult DisplayReportedUser()
+        public ActionResult DisplayPendingReportedUser()
         {
             try
             {
@@ -213,12 +220,71 @@ namespace iVolunteer.Controllers
                 var reportedUsers = reportDAO.Get_ReportedUser().ToList();
                 var tuple = new Tuple<List<Mongo_Report>, List<SDLink>>(result, reportedUsers);
 
-                return PartialView("_ReportedUserList", tuple);
+                return PartialView("_PendingReportedUsers", tuple);
             }
             catch
             {
                 throw;
             }
+        }
+        public ActionResult DeactivateGroup(string groupID)
+        {
+
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set Banned status in SQL
+                    SQL_Group_DAO sqlGroupDAO = new SQL_Group_DAO();
+                    sqlGroupDAO.Set_Activation_Status(groupID, Status.IS_BANNED);
+
+                    // Delete pending request in SQL
+                    SQL_AcGr_Relation_DAO sqlRelation = new SQL_AcGr_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(groupID);
+
+                    //Set banned status in Mongo
+                    Mongo_Group_DAO mgGroupDAO = new Mongo_Group_DAO();
+                    mgGroupDAO.Set_Activation_Status(groupID, Status.IS_BANNED);
+
+                    // Delete report in Mongo
+                    Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
+                    mgReportDAO.Delete_Reports(groupID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
+        }
+        public ActionResult IgnoreGroupReport(string groupID)
+        {
+            using(var transaction = new TransactionScope())
+            {
+                try
+                {
+                    //Delete pending request in SQL
+                    SQL_AcGr_Relation_DAO sqlRelation = new SQL_AcGr_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(groupID);
+
+                    //Delete report in Mongo
+                    Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                    reportDAO.Delete_Reports(groupID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
         }
 
     }

@@ -11,7 +11,7 @@
             <tr>
                 <th>Người dùng vi phạm</th>
                 <td><a>@user.DisplayName</a></td>
-                <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeActivateGroup","Report", new { userID = user.ID })'" />
+                <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeactivateGroup","Report", new { userID = user.ID })'" />
                 <input type="button" class ="btn btn-default" value="Bỏ qua" onlcick="location.href ='@Url.Action("IgnoreReportedGroup","Report", new { userID = user.ID })'" /></td>
             </tr>
             <tr>

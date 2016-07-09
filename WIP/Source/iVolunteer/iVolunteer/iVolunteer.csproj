@@ -381,10 +381,10 @@
     <Content Include="Views\Group\_GroupStructure.cshtml" />
     <Content Include="Views\Group\_RequestList.cshtml" />
     <Content Include="Views\User\_FriendList.cshtml" />
-    <Content Include="Views\Report\_ReportedGroupList.cshtml" />
-    <Content Include="Views\Report\_ReportedProjectList.cshtml" />
-    <Content Include="Views\Report\_ReportedUserList.cshtml" />
-    <Content Include="Views\Report\ReportList.cshtml" />
+    <Content Include="Views\Report\_PendingReportedGroups.cshtml" />
+    <Content Include="Views\Report\_PendingReportedProjects.cshtml" />
+    <Content Include="Views\Report\_PendingReportedUsers.cshtml" />
+    <Content Include="Views\Report\PendingReportList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
