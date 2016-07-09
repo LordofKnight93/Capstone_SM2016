@@ -1,0 +1,20 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Danh sách nhóm bị đình chỉ</h4>
+        </div>
+    </div>
+    <table class="table">
+        @foreach (var group in Model)
+        {
+            <tr>
+                <td><a>@group.DisplayName</a></td>
+                <td>
+                    <input type="button" class="btn" value="Kích hoạt" onclick="location.href ='@Url.Action("ReactivateGroup","Report", new { groupID = group.ID })'" />
+                </td>
+            </tr>
+        }
+    </table>
+</div>

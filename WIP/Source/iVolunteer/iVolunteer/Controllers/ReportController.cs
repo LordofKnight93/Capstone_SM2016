@@ -286,6 +286,25 @@ namespace iVolunteer.Controllers
             }
             return RedirectToAction("DisplayPendingReport", "Report");
         }
+        public ActionResult DisplayBannedObjects()
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+            try
+            {
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                var result = groupDAO.Get_Banned_Group();
+
+                return View("BannedObjects", result);
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
     }
 }

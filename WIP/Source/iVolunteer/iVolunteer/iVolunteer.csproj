@@ -385,6 +385,7 @@
     <Content Include="Views\Report\_PendingReportedProjects.cshtml" />
     <Content Include="Views\Report\_PendingReportedUsers.cshtml" />
     <Content Include="Views\Report\PendingReportList.cshtml" />
+    <Content Include="Views\Report\BannedObjects.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
