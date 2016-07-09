@@ -1,0 +1,38 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
+
+@*@foreach (var item in Model)
+{
+    <!-- Comment -->
+    <div class="row">
+        <div class="col-md-1 col-sm-1">
+            <object type="image/svg+xml" data=@item.Creator.Get_AvatarLink() width="40" height="40" border="1"></object>
+        </div>
+        <div class="col-md-9 col-sm-9">
+            <div class="row">
+                <a href="@Url.Action("Information",item.Creator.Handler, item.Creator.ID)" class="user-name">@item.Creator.DisplayName</a>
+                <span>&bull; @item.DateCreate</span>
+            </div>
+            <div class="row">
+                <p>@item.Content</p>
+            </div>
+        </div>
+    </div>
+}*@
+
+<!-- Comment -->
+<div class="row">
+    <div class="col-md-1 col-sm-1">
+        <object type="image/svg+xml" data="~/images/avatar.svg" width="40" height="40" border="1"></object>
+    </div>
+
+    <div class="col-md-9 col-sm-9">
+        <div class="row">
+            <a href="" class="user-name">Nguyễn Minh Ngọc</a>
+            <span>&bull; 5 phút trước</span>
+        </div>
+        <div class="row">
+            <p>Mình đợi các cậu cả tuần nay rồi...</p>
+        </div>
+    </div>
+
+</div>

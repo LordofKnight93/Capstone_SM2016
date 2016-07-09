@@ -1,0 +1,114 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="../Images/logo_lite.png" type="image/x-icon" sizes="16x16">
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top background-container" style="background-color: #049f88">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" title="Trang chủ" id="logo" href="@Url.Action("FrontPage", "Home")" style="padding: 2px 20px"><img src="../Images/logo.png" alt="iVolunteer" height="45"></a>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <!-- Navbar left -->
+                
+                
+                <!-- Search bar -->
+                <div class="col-sm-5 col-md-5">
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search" }))
+                    {
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="q" style="width: 75%; border-right: 0">
+                            <select class="form-control" style="width: 25%; border-left:0">
+                                <option>Bạn Bè</option>
+                                <option>Dự Án</option>
+                                <option>Nhóm</option>
+                            </select>
+                            <div class="input-group-btn" style="width: 1%">
+                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+
+                <!-- Navbar Right -->
+                <div class="nav navbar-nav navbar-right">
+                    <div class="btn-group navbar-btn">
+                        <button class="btn btn-default" data-toggle="modal" data-target="#loginForm">
+                            Đăng nhập hoặc Đăng ký
+                        </button>                       
+                    </div>
+                </div>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <!------------Login Fade Modal-------------->
+
+    @{Html.RenderPartial("~/Views/Home/_Login.cshtml", new ViewDataDictionary());}
+
+
+    <!-------------Body Container------------>
+      <div class="container background-container">
+        
+           @RenderBody()
+
+     </div>
+
+    
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @section scripts {
+        <script type="text/javascript">
+        var frmnewprovider = $("#formValidation");
+        $(document).ready(function () {
+            frmnewprovider.submit(function (e) {
+                e.preventDefault();
+                frmnewprovider.validate();
+                if (frmnewprovider.valid()) {
+                    $.ajax({
+                        url: "/Home/Login",
+                        type: "POST",
+                        contentType: "application/json; charset=utf-8",
+                        data: JSON.stringify({
+                            Email: frmnewprovider.find('#Email').val(),
+                            Password: frmnewprovider.find('#Password').val(),
+                        }),
+                        success: function (result) {
+                            //if record was added to db, then...
+                            window.location.replace('/Home/Newfeed'); //we can redirect
+                            //or simply close our modal.
+                            //$('#mdlnewprovider').modal('hide');
+                        },
+                        error: function (result) {
+                            alert('error');
+                        }
+                    });
+                }
+            });
+        });
+        </script>
+    }
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/scripts/phucvt_custom.js"></script>
+    <script src="~/scripts/jquery.validate.js"></script>
+</body>
+</html>

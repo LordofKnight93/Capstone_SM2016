@@ -1,0 +1,27 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>
+
+<div class="card-panel">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Nhóm đã tham gia</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    <!-- List Group -->
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <ul class="list-navi">
+                @foreach (var item in Model)
+                {
+                    <li><a href="@Url.Action("GroupHome", "Group", new { groupID = item.ID })">@item.DisplayName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <!-- Add New Group -->
+    <div class="row">
+        <div class="col-xs-12" style="margin-top: 20px">
+            <a style="font-weight: bold; color: #049f88; cursor: pointer" data-container="body" data-toggle="modal" data-target="#createGroupForm">TẠO NHÓM MỚI ...</a>
+        </div>
+    </div>
+</div>

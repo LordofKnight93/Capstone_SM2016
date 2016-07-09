@@ -1,0 +1,119 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
+
+@Html.AntiForgeryToken()
+<div id="createProjectForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                   
+                    <!-- Login -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row" style="margin: -10px 0 -5px 0;">
+                                <div class="col-sm-12">
+                                    <h4>Tạo dự án mới</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Html.BeginForm("CreateProject", "Project", FormMethod.Post, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                {
+                                    <!-- Project Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                           @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Tên dự án:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                                            @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Start -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateStart">Ngày bắt đầu:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @id = "dateStart", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date" } })
+                                            @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Date End-->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateEnd">Ngày kết thúc:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
+                                            @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Project Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                           @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="projectDescription">Mô tả: </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.ProjectDescription, new { @id = "projectDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.ProjectDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Địa điểm</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @id = "location", @class = "form-control", @placeholder = "Địa điểm" } })
+                                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    @*<!--Tag select-->
+                                    <div class="row">
+                                        <div class="col-xs-5 text-input">
+                                            <!--Education tcheck box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsEducation)
+                                            @Html.CheckBoxFor(model => model.TagList.IsEducation)
+
+                                            <!--Social check box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsSocial)
+                                            @Html.CheckBoxFor(model => model.TagList.IsSocial)
+
+                                            <!--Medical check box-->
+                                            @Html.DisplayNameFor(model => model.TagList.IsMedical)
+                                            @Html.CheckBoxFor(model => model.TagList.IsMedical)
+                                        </div>
+                                    </div>*@
+
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-7 text-input">
+                                            <a class=" close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                                        </div>
+                                        <div class="col-xs-2 text-input">
+                                            <button type="submit" class="btn btn-register">TẠO</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

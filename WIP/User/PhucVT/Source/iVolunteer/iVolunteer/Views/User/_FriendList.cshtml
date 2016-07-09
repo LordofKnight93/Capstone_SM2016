@@ -1,0 +1,199 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Member>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Danh sách bạn bè</h4>
+        </div>
+    </div>
+    <table class="table">
+        <tr>
+            <th>
+                Tên
+            </th>
+            <th>
+                Ngày
+            </th>
+            <th>
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("UserHome","User",new { userID = item.SDInfo.ID })">
+                        @Html.DisplayFor(modelItem => item.SDInfo.DisplayName)
+                    </a>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JoinDate)
+                </td>
+                <td>
+                    @{ Html.RenderAction("ActionToOtherUser","Account");}
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <!-- Member -->
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- Content -->
+            <div class="row">
+
+                <!-- Member -->
+                <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                    <div class="member-container">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="~/images/5.jpg" height="70" width="70">
+                            </div>
+
+                            <div class="col-xs-8">
+                                <div class="row">
+                                    <label class="friend-name">
+                                        Nguyễn Duy Linh
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -7px">
+                                    <label class="member-sumerise">
+                                        Đại học FPT
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -5px">
+                                    <button type="button" class="btn btn-default btn-view-action" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-18">done</i> <span style="display: none">Bạn bè</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-view-action" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">forum</i> <span style="display: none">Nhắn tin</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-view-action" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">star</i> <span style="display: none">Theo dõi</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member -->
+                <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                    <div class="member-container">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="~/images/5.jpg" height="70" width="70">
+                            </div>
+
+                            <div class="col-xs-8">
+                                <div class="row">
+                                    <label class="friend-name">
+                                        Nguyễn Trạng Nguyên
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -7px">
+                                    <label class="member-sumerise">
+                                        Đại học FPT
+                                    </label>
+                                </div>
+
+                                <div class="row" style="margin-top: -5px">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-18">done</i> Bạn bè
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">forum</i> Nhắn tin
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">star_border</i> Theo dõi
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member -->
+                <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                    <div class="member-container">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="~/images/5.jpg" height="70" width="70">
+                            </div>
+
+                            <div class="col-xs-8">
+                                <div class="row">
+                                    <label class="friend-name">
+                                        Phạm Băng Băng
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -7px">
+                                    <label class="member-sumerise">
+                                        Đại học FPT
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -5px">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-18">done</i> Bạn bè
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">forum</i> Nhắn tin
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">star_border</i> Theo dõi
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member -->
+                <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                    <div class="member-container">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img src="~/images/5.jpg" height="70" width="70">
+                            </div>
+
+                            <div class="col-xs-8">
+                                <div class="row">
+                                    <label class="friend-name">
+                                        Bùi Kiều Trang
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -7px">
+                                    <label class="member-sumerise">
+                                        Hà Nội, Việt Nam
+                                    </label>
+                                </div>
+                                <div class="row" style="margin-top: -5px">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-18">done</i><span style="display: none">Bạn bè</span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">forum</i> Nhắn tin
+                                    </button>
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" style="padding: 2px 5px">
+                                        <i class="material-icons md-mygreen md-18">star_border</i> Theo dõi
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

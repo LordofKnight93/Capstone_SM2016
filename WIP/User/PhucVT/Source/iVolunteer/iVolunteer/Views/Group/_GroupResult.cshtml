@@ -1,0 +1,50 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Kết quả</h4>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActivate)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("GroupHome","Group",new { groupID = item.GroupID })">
+                    @Html.DisplayFor(modelItem => item.GroupName)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GroupDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MemberCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActivate)
+                </td>
+                <td>
+                    @{ Html.RenderAction("ActionToGroup", "Account", new { groupID = item.GroupID });}
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
