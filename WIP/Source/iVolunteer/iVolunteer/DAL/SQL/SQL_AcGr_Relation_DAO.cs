@@ -348,5 +348,22 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        public bool DeleteReportRelation(string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.RemoveRange(dbEntities.SQL_AcGr_Relation.Where(rl => rl.GroupID == groupID
+                                                                                                            && rl.Relation == Relation.REPORT_RELATION));
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -42,6 +42,18 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public bool Delete_Reports(string destinationID)
+        {
+            try
+            {
+                var result = collection.DeleteMany(rp => rp.Destination.ID == destinationID);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public List<Mongo_Report> Get_GroupReport()
         {
             try {
