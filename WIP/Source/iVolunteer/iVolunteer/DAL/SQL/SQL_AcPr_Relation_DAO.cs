@@ -178,5 +178,27 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Delete all Report Relations of a Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool DeleteReportRelation(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.RemoveRange(dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                                                            && rl.Relation == Relation.REPORT_RELATION));
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

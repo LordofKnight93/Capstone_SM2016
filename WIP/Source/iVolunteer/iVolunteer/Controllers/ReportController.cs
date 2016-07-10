@@ -49,20 +49,20 @@ namespace iVolunteer.Controllers
                 creator.Handler = Handler.USER;
 
                 // create report Target
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                SDLink destination = groupDAO.Get_SDLink(targetID);
-
-
-                Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
-
+                SDLink destination = new SDLink();
+                
                 using (var transaction = new TransactionScope())
                 {
                     try
                     {
-                        //create SQL Report relation
                         // Case 1: Report Target is Group
                         if (targetType == 1)
                         {
+                            // Target is Group
+                            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                            destination = groupDAO.Get_SDLink(targetID);
+
+                            // Create SQL Report relation
                             SQL_AcGr_Relation_DAO sqlReportDAO = new SQL_AcGr_Relation_DAO();
 
                             SQL_AcGr_Relation report = new SQL_AcGr_Relation();
@@ -76,6 +76,11 @@ namespace iVolunteer.Controllers
                         // Case 2: Report Target is Project
                         else if (targetType == 2)
                         {
+                            // Target is Project
+                            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                            destination = projectDAO.Get_SDLink(targetID);
+
+                            // Create SQL Report relation
                             SQL_AcPr_Relation_DAO sqlReportDAO = new SQL_AcPr_Relation_DAO();
 
                             SQL_AcPr_Relation report = new SQL_AcPr_Relation();
@@ -89,6 +94,11 @@ namespace iVolunteer.Controllers
                         // Case 3: Report Target is Other User
                         else if (targetType == 3)
                         {
+                            // Target is Group
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            destination = userDAO.Get_SDLink(targetID);
+
+                            // Create SQL Report relation
                             SQL_AcAc_Relation_DAO sqlReportDAO = new SQL_AcAc_Relation_DAO();
 
                             SQL_AcAc_Relation report = new SQL_AcAc_Relation();
@@ -100,6 +110,7 @@ namespace iVolunteer.Controllers
                             sqlReportDAO.Add_Report(report);
                         }
                         //create Mongo Report
+                        Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
                         Mongo_Report mgReport = new Mongo_Report(creator, destination, 0);
                         mongoReportDAO.Add_Report(mgReport);
 
@@ -227,6 +238,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// Deactivate Group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult DeactivateGroup(string groupID)
         {
 
@@ -261,6 +277,11 @@ namespace iVolunteer.Controllers
             }
             return RedirectToAction("DisplayPendingReport", "Report");
         }
+        /// <summary>
+        /// Ignore Reports to Group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult IgnoreGroupReport(string groupID)
         {
             using(var transaction = new TransactionScope())
@@ -286,6 +307,144 @@ namespace iVolunteer.Controllers
             }
             return RedirectToAction("DisplayPendingReport", "Report");
         }
+        /// <summary>
+        /// Deactivate Project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public ActionResult DeactivateProject(string projectID)
+        {
+
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set Banned status in SQL
+                    SQL_Project_DAO sqlProjectDAO = new SQL_Project_DAO();
+                    sqlProjectDAO.Set_Activation_Status(projectID, Status.IS_BANNED);
+
+                    // Delete pending request in SQL
+                    SQL_AcPr_Relation_DAO sqlRelation = new SQL_AcPr_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(projectID);
+
+                    //Set banned status in Mongo
+                    Mongo_Project_DAO mgProjectDAO = new Mongo_Project_DAO();
+                    mgProjectDAO.Set_Activation_Status(projectID, Status.IS_BANNED);
+
+                    // Delete report in Mongo
+                    Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
+                    mgReportDAO.Delete_Reports(projectID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
+        }
+        /// <summary>
+        /// Ignore Reports to Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public ActionResult IgnoreProjectReport(string projectID)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    //Delete pending request in SQL
+                    SQL_AcPr_Relation_DAO sqlRelation = new SQL_AcPr_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(projectID);
+
+                    //Delete report in Mongo
+                    Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                    reportDAO.Delete_Reports(projectID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
+        }
+        /// <summary>
+        /// Deactivate User
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public ActionResult DeactivateUser(string userID)
+        {
+
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set Banned status in SQL
+                    SQL_Account_DAO sqlUserDAO = new SQL_Account_DAO();
+                    sqlUserDAO.Set_Activation_Status(userID, Status.IS_BANNED);
+
+                    // Delete pending request in SQL
+                    SQL_AcAc_Relation_DAO sqlRelation = new SQL_AcAc_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(userID);
+
+                    //Set banned status in Mongo
+                    Mongo_User_DAO mgUserDAO = new Mongo_User_DAO();
+                    mgUserDAO.Set_Activation_Status(userID, Status.IS_BANNED);
+
+                    // Delete report in Mongo
+                    Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
+                    mgReportDAO.Delete_Reports(userID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
+        }
+        /// <summary>
+        /// Ignore Reports to User
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public ActionResult IgnoreUserReport(string userID)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    //Delete pending request in SQL
+                    SQL_AcAc_Relation_DAO sqlRelation = new SQL_AcAc_Relation_DAO();
+                    sqlRelation.DeleteReportRelation(userID);
+
+                    //Delete report in Mongo
+                    Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
+                    reportDAO.Delete_Reports(userID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayPendingReport", "Report");
+        }
         public ActionResult DisplayBannedObjects()
         {
             if (Session["UserID"] == null)
@@ -296,14 +455,111 @@ namespace iVolunteer.Controllers
             try
             {
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                var result = groupDAO.Get_Banned_Group();
+                var groups = groupDAO.Get_Banned_Groups();
 
-                return View("BannedObjects", result);
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                var projects = projectDAO.Get_Banned_Projects();
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var users = userDAO.Get_Banned_Users();
+
+                var tuple = new Tuple<List<SDLink>, List<SDLink>, List<SDLink>>(groups, projects, users);
+                return View("BannedObjects", tuple);
             }
             catch
             {
                 throw;
             }
+        }
+        /// <summary>
+        /// Reactivate Banned Group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public ActionResult ReactivateGroup(string groupID)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set activate status in SQL
+                    SQL_Group_DAO sqlGroupDAO = new SQL_Group_DAO();
+                    sqlGroupDAO.Set_Activation_Status(groupID, Status.IS_ACTIVATE);
+
+                    //Set activate status in Mongo
+                    Mongo_Group_DAO mgGroupDAO = new Mongo_Group_DAO();
+                    mgGroupDAO.Set_Activation_Status(groupID, Status.IS_ACTIVATE);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayBannedObjects", "Report");
+        }
+        /// <summary>
+        /// Reactivate banned Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public ActionResult ReactivateProject(string projectID)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set activate status in SQL
+                    SQL_Project_DAO sqlProjectDAO = new SQL_Project_DAO();
+                    sqlProjectDAO.Set_Activation_Status(projectID, Status.IS_ACTIVATE);
+
+                    //Set activate status in Mongo
+                    Mongo_Project_DAO mgProjectDAO = new Mongo_Project_DAO();
+                    mgProjectDAO.Set_Activation_Status(projectID, Status.IS_ACTIVATE);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayBannedObjects", "Report");
+        }
+        /// <summary>
+        /// Reactivate banned User
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public ActionResult ReactivateUser(string userID)
+        {
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    // Set activate status in SQL
+                    SQL_Account_DAO sqlAccountDAO = new SQL_Account_DAO();
+                    sqlAccountDAO.Set_Activation_Status(userID, Status.IS_ACTIVATE);
+
+                    //Set activate status in Mongo
+                    Mongo_User_DAO mgUserDAO = new Mongo_User_DAO();
+                    mgUserDAO.Set_Activation_Status(userID, Status.IS_ACTIVATE);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return View("ErrorMessage");
+                }
+            }
+            return RedirectToAction("DisplayBannedObjects", "Report");
         }
 
     }

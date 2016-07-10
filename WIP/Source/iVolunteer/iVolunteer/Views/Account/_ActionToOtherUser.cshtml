@@ -15,7 +15,13 @@
             @Html.ActionLink(" Kết bạn ", "FriendRequest", "Account", new { otherID = ViewBag.OtherID }, null);
         }
     }
-
-    @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Account", new { otherID = ViewBag.OtherID }, null);
+    if (ViewBag.IsSentReport != true)
+    {
+        @Html.ActionLink(" Báo cáo vi phạm ", "ReportTarget", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, null);
+    }
+    else
+    {
+        @Html.ActionLink(" Hủy báo cáo vi phạm ", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, null);
+    }
 }
 

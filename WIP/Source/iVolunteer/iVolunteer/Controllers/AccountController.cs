@@ -656,6 +656,10 @@ namespace iVolunteer.Controllers
                     ViewBag.IsUser = false;
                     return PartialView("_ActionToOtherUser");
                 }
+                //Check if report has been sent
+                SQL_AcAc_Relation_DAO reportDAO = new SQL_AcAc_Relation_DAO();
+                if (reportDAO.IsSentReport(userID, otherID))
+                    ViewBag.IsSentReport = true;
 
                 SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
                 //check if is friend

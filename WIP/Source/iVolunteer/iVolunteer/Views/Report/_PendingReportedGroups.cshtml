@@ -12,7 +12,7 @@
                 <th>Nhóm vi phạm</th>
                 <td><a>@group.DisplayName</a></td>
                 <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeactivateGroup","Report", new { groupID = group.ID })'" />
-                <input type="button" class ="btn btn-default" value="Bỏ qua" onlcick="location.href ='@Url.Action("IgnoreReportedGroup","Report", new { groupID = group.ID })'" /></td>
+                <input type="button" class ="btn btn-default" value="Bỏ qua" onclick="location.href ='@Url.Action("IgnoreGroupReport","Report", new { groupID = group.ID })'" /></td>
             </tr>
             <tr>
                 <td>Người báo cáo</td>
