@@ -12,7 +12,7 @@
                 <th>Dự án vi phạm</th>
                 <td><a>@project.DisplayName</a></td>
                 <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeactivateProject","Report", new { projectID = project.ID })'" />
-                <input type="button" class ="btn btn-default" value="Bỏ qua" onlcick="location.href ='@Url.Action("IgnoreReportedProject","Report", new { projectID = project.ID })'" /></td>
+                <input type="button" class ="btn btn-default" value="Bỏ qua" onclick="location.href ='@Url.Action("IgnoreProjectReport","Report", new { projectID = project.ID })'" /></td>
             </tr>
             <tr>
                 <td>Người báo cáo</td>

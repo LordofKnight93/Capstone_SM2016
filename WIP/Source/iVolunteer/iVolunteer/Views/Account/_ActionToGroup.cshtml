@@ -25,6 +25,6 @@
         @Html.ActionLink(" Hủy báo cáo vi phạm ", "CancelReport", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, null);
     }
     else {
-        @Html.ActionLink(" Báo cáo vi phạm ", "ReportGroup", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, null);
+        @Html.ActionLink(" Báo cáo vi phạm ", "ReportTarget", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, null);
     }
 }

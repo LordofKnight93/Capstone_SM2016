@@ -75,5 +75,27 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Delete all Report Relations of a User
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool DeleteReportRelation(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.RemoveRange(dbEntities.SQL_AcAc_Relation.Where(rl => rl.TargetUserID == userID
+                                                                                                            && rl.Relation == Relation.REPORT_RELATION));
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

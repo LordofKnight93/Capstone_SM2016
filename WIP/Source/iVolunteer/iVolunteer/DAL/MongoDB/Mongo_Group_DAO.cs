@@ -607,7 +607,7 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-        public List<SDLink> Get_Banned_Group()
+        public List<SDLink> Get_Banned_Groups()
         {
             try
             {

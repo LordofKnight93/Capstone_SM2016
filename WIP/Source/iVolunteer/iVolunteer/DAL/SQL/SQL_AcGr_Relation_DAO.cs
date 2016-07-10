@@ -348,6 +348,11 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Delete all Report Relations of a Group
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public bool DeleteReportRelation(string groupID)
         {
             try

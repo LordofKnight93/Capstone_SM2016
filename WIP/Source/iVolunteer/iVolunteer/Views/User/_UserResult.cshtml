@@ -41,7 +41,7 @@
                     @Html.DisplayFor(modelItem => item.ProjectCount)
                 </td>
                 <td>
-                    @{ Html.RenderAction("ACtionToOtherUser", "Account", new { otherID = item.UserID });
+                    @{ Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.UserID });
                     }
                 </td>
             </tr>

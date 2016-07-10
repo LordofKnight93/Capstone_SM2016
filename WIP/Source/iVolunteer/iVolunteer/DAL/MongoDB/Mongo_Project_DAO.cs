@@ -1086,5 +1086,24 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public List<SDLink> Get_Banned_Projects()
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(gr => gr.ProjectInformation.IsActivate, Status.IS_BANNED);
+                var result = collection.Find(filter).ToList();
+                List<SDLink> BannedProjects = new List<SDLink>();
+                foreach (var item in result)
+                {
+                    BannedProjects.Add(Get_SDLink(item.ProjectInformation.ProjectID));
+                }
+                return BannedProjects;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
     }
 }
