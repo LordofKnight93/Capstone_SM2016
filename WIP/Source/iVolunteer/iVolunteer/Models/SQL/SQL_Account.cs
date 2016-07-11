@@ -17,16 +17,14 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SQL_Account()
         {
+            this.SQL_AcAc_Relation = new HashSet<SQL_AcAc_Relation>();
+            this.SQL_AcAc_Relation1 = new HashSet<SQL_AcAc_Relation>();
             this.SQL_AcAl_Relation = new HashSet<SQL_AcAl_Relation>();
             this.SQL_Message = new HashSet<SQL_Message>();
             this.SQL_AcIm_Relation = new HashSet<SQL_AcIm_Relation>();
             this.SQL_AcPo_Relation = new HashSet<SQL_AcPo_Relation>();
-            this.SQL_Friendship = new HashSet<SQL_Friendship>();
-            this.SQL_Friendship1 = new HashSet<SQL_Friendship>();
             this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
             this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
-            this.SQL_AcAc_Relation = new HashSet<SQL_AcAc_Relation>();
-            this.SQL_AcAc_Relation1 = new HashSet<SQL_AcAc_Relation>();
         }
     
         public string UserID { get; set; }
@@ -40,6 +38,10 @@ namespace iVolunteer.Models.SQL
         public bool IsConfirm { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcAl_Relation> SQL_AcAl_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Message> SQL_Message { get; set; }
@@ -48,16 +50,8 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_Friendship> SQL_Friendship { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_Friendship> SQL_Friendship1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_AcAc_Relation> SQL_AcAc_Relation1 { get; set; }
     }
 }

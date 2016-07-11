@@ -11,7 +11,6 @@ using MongoDB.Driver.Builders;
 using iVolunteer.Models.MongoDB.CollectionClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Common;
-using System.Threading.Tasks;
 
 namespace iVolunteer.DAL.MongoDB
 {
@@ -56,7 +55,8 @@ namespace iVolunteer.DAL.MongoDB
         }
         public List<Mongo_Report> Get_GroupReport()
         {
-            try {
+            try
+            {
                 var filter = Builders<Mongo_Report>.Filter.Eq(re => re.Destination.Handler, Handler.GROUP);
                 var result = collection.Find(filter).ToList();
                 return result;
@@ -68,7 +68,8 @@ namespace iVolunteer.DAL.MongoDB
         }
         public List<SDLink> Get_ReportedGroup()
         {
-            try {
+            try
+            {
                 var filter = Builders<Mongo_Report>.Filter.Eq(re => re.Destination.Handler, Handler.GROUP);
                 List<SDLink> reportedGroups = new List<SDLink>();
                 reportedGroups = collection.Distinct(rs => rs.Destination, filter).ToList();
@@ -134,4 +135,5 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+    @using iVolunteer.Common;
 
 <div class="card">
     <div class="card-image">
@@ -22,7 +23,7 @@
 
 }
 else
-{ 
+{
     <img src=@Model.Get_CoverLink() height="250px" style="object-fit: cover;">
     <div class="col-md-3 card-ava">
         <div class="row">
@@ -35,5 +36,19 @@ else
         </div>
     </div>
 }
+        <div class="row" style="text-align: center" id="@Model.ID">
+            @switch (Model.Handler)
+            {
+                case Handler.USER:
+                    Html.RenderAction("ActionToOtherUser", "Account", new { otherID = Model.ID });
+                    break;
+                case Handler.PROJECT:
+                    Html.RenderAction("ActionToProject", "Account", new { otherID = Model.ID });
+                    break;
+                case Handler.GROUP:
+                    Html.RenderAction("ActionToGroup", "Account", new { otherID = Model.ID });
+                    break;
+            }
+        </div>
     </div>
 </div>

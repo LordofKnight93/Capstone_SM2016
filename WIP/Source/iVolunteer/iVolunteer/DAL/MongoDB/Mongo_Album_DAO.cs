@@ -10,7 +10,6 @@ using MongoDB.Bson.IO;
 using MongoDB.Driver.Builders;
 using iVolunteer.Models.MongoDB.CollectionClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
-using iVolunteer.Models.MongoDB.EmbeddedClass.StructureClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;

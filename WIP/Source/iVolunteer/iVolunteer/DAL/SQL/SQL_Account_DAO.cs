@@ -53,19 +53,21 @@ namespace iVolunteer.DAL.SQL
             }
 
         }
+        
         /// <summary>
-        /// get password of user, for change pass word check usage
+        /// check ifa string is correct password
         /// </summary>
         /// <param name="userID"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public string Get_Password(string userID)
+        public bool Is_Password_Match(string userID, string password)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    return result.Password;
+                    return result.Password == password;
                 }
             }
             catch
@@ -74,21 +76,25 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Set activation status of an account
+        /// deactivte an account
         /// </summary>
-        /// <param name="userID">userID of account want to set</param>
-        /// <param name="status">status, get in Constant</param>
-        /// <returns>true if success</returns>
-        public bool Set_Activation_Status(string userID, bool status)
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Deactive(string userID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    account.IsActivate = status;
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_BANNED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    } 
+                    return false;
                 }
             }
             catch
@@ -97,21 +103,53 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Set confirmation status of an account
+        /// activate an account
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Activate(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID
+                                                                            && acc.IsActivate == Status.IS_BANNED);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_ACTIVATE;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// confirm an account
         /// </summary>
         /// <param name="userID"> userID of account want to set</param>
         /// <param name="status">status, get in Constant</param>
         /// <returns>true if success</returns>
-        public bool Set_Confirmation_Status(string userID, bool status)
+        public bool Confirmed(string userID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    account.IsConfirm = status;
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID
+                                                                            && acc.IsConfirm == Status.IS_NOT_CONFIRMED);
+                    if (result != null)
+                    {
+                        result.IsConfirm = Status.IS_CONFIRMED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch
@@ -123,16 +161,16 @@ namespace iVolunteer.DAL.SQL
         /// Set password of an account
         /// </summary>
         /// <param name="userID">userID of account want to set</param>
-        /// <param name="password">new password, should be encrypted</param>
+        /// <param name="newPassword">new password, should be encrypted</param>
         /// <returns>true if success</returns>
-        public bool Set_Password(string userID, string password)
+        public bool Set_Password(string userID, string newPassword)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    account.Password = password;
+                    account.Password = newPassword;
                     dbEntities.SaveChanges();
                     return true;
                 }
@@ -143,67 +181,6 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
-        public DateTime? Get_DateOfChange(string userID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    return account.DateOfChange;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// Set display name of an account
-        /// </summary>
-        /// <param name="userID">userID of account want to set</param>
-        /// <param name="displayname">new display name</param>
-        /// <returns> true if success </returns>
-        public bool Set_DisplayName(string userID, string displayname)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    account.DisplayName = displayname;
-                    dbEntities.SaveChanges();
-                    return true;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// set date change display name to change display name time
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public bool Set_DateOfChange(string userID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.UserID == userID);
-                    account.DateOfChange = DateTime.Now.Date;
-                    dbEntities.SaveChanges();
-                    return true;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
         /// <summary>
         /// Check if a userID is activate
         /// </summary>
@@ -245,7 +222,7 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// check if an identifyID exist in system
+        /// check if an identifyID exist in system, only activate account
         /// </summary>
         /// <param name="identifyID"></param>
         /// <returns></returns>
@@ -255,7 +232,8 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.IndentifyID == identifyID);
+                    var account = dbEntities.SQL_Account.FirstOrDefault(acc => acc.IndentifyID == identifyID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
                     return account != null;
                 }
             }

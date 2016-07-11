@@ -10,7 +10,6 @@ using MongoDB.Bson.IO;
 using MongoDB.Driver.Builders;
 using iVolunteer.Models.MongoDB.CollectionClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
-using iVolunteer.Models.MongoDB.EmbeddedClass.StructureClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
@@ -39,16 +38,16 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// Get information of a user
+        /// get personal infofmation of an user
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public UserInformation Get_UserInformation(string userID)
+        public PersonalInformation Get_PersonalInformation(string userID)
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.UserInformation;
+                var result = collection.AsQueryable().FirstOrDefault(u => u.PersonalInformation.UserID == userID);
+                return result.PersonalInformation;
             }
             catch
             {
@@ -56,16 +55,15 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get account information
+        /// get account infofmation of an user
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
+        /// <param name="userID"></param>
         /// <returns></returns>
         public AccountInformation Get_AccountInformation(string userID)
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(us => us.AccountInformation.UserID == userID);
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
                 return result.AccountInformation;
             }
             catch
@@ -74,17 +72,34 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get all account information, admin use
+        /// get SDlink of a user
         /// </summary>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
+        /// <param name="userID"></param>
         /// <returns></returns>
-        public List<AccountInformation> Get_All_AccountInformation(int skip, int number)
+        public SDLink Get_SDLink(string userID)
         {
             try
             {
-                var result = collection.AsQueryable().Select(u => u.AccountInformation)
-                                                     .Skip(skip).Take(number).ToList();
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return new SDLink(result.AccountInformation);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get list accoutn information from list ID
+        /// </summary>
+        /// <param name="listID"></param>
+        /// <returns></returns>
+        public List<AccountInformation> Get_AccountsInformation(List<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(gr => gr.AccountInformation.UserID, listID);
+                var result = collection.Find(filter).ToList().Select(gr => gr.AccountInformation).ToList();
                 return result;
             }
             catch
@@ -93,16 +108,19 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get user's joined group
+        /// inscrease groupCount by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<SDLink> Get_JoinedGroups(string userID)
+        public bool Join_Group(string userID)
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.JoinedGroups;
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -110,86 +128,19 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// get user's friends
+        /// decrease groupCount by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<Member> Get_FriendList(string userID)
+        public bool Out_Group(string userID)
         {
             try
             {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.FriendList;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get user's activity history 
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public ActivityInformation Get_ActivityHistory(string userID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.ActivityHistory;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get user joined projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public List<SDLink> Get_JoinedProjects(string userID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.JoinedProjects;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get user's current projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public List<SDLink> Get_CurrentProjects(string userID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.CurrentProjects;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get a number of user's notification
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<Notification> Get_Notifications(string userID, int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.NotificationList.Skip(skip).Take(number).ToList();
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, -1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {
@@ -197,6 +148,179 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
+        /// <summary>
+        /// inscrease ProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Join_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// decrease ProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Out_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, -1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// inscrease FriendCount by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Add_Friend(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// decrease FriendCount by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Delete_Friend(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// confirmed account
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Confirmed(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsConfirmed, Status.IS_NOT_CONFIRMED);
+                var update = Builders<Mongo_User>.Update.Set(u => u.AccountInformation.IsConfirmed, Status.IS_CONFIRMED);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// udpate user personal information, only phone and address
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public bool Update_PersonalInformation(string userID, string newPhone, string newAddress)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.PersonalInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var update = Builders<Mongo_User>.Update.Set(u => u.PersonalInformation.Phone, newPhone)
+                                                        .Set(u => u.PersonalInformation.Address, newAddress)
+                                                        .Set(u => u.AccountInformation.Address, newAddress);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// search active and confirmed user
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="option">true to include deactive user, false to find active user only</param>
+        /// <returns></returns>
+        public List<AccountInformation> User_Search(string name, bool allStatus)
+        {
+            try
+            {
+                var preResult = collection.AsQueryable().Where(u => u.AccountInformation.DisplayName.ToLower().Contains(name.ToLower()));
+                if(allStatus == false)
+                {
+                    preResult = preResult.Where(u => u.AccountInformation.IsActivate == Status.IS_ACTIVATE);
+                }
+                var result = preResult.Select(u => u.AccountInformation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get users who is deactivated
+        /// </summary>
+        /// <returns></returns>
+        public List<SDLink> Get_Banned_Users()
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(gr => gr.AccountInformation.IsActivate, Status.IS_BANNED);
+                var result = collection.Find(filter).ToList();
+                List<SDLink> BannedUsers = new List<SDLink>();
+                foreach (var item in result)
+                {
+                    BannedUsers.Add(Get_SDLink(item.AccountInformation.UserID));
+                }
+                return BannedUsers;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// set activation statuc for an account in mongDB
         /// </summary>
@@ -218,602 +342,5 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
-        /// <summary>
-        /// set confirmation statuc for an account in mongDB
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="status"></param>
-        /// <returns>true if success</returns>
-        public bool Set_Comfirmation_Status(string userID, bool status)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Set(acc => acc.AccountInformation.IsConfirmed, status);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// set user display name
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="displayName"></param>
-        /// <returns></returns>
-        public bool Set_DisplayName(string userID, string displayName)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Set(acc => acc.AccountInformation.DisplayName, displayName);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// set user password
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool Set_Password(string userID, string password)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Set(acc => acc.AccountInformation.Password, password);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// Update user information 
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="userInfo"></param>
-        /// <returns></returns>
-        public bool Update_UserInformation(string userID, UserInformation userInfo)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Set(acc => acc.UserInformation, userInfo);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get userSD
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public SDLink Get_SDLink(string userID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return new SDLink(result.AccountInformation);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add joined group and increase group count by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="group"></param>
-        /// <returns></returns>
-        public bool Add_JoinedGroup(string userID, SDLink group)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.JoinedGroups, group)
-                                                        .Inc(u => u.AccountInformation.GroupCount, 1); ;
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary> 
-        /// delete joined group and decrease group count by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="groupID"></param>
-        /// <returns></returns>
-        public bool Delete_JoinedGroup(string userID, string groupID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var group_filter = Builders<SDLink>.Filter.Eq(g => g.ID, groupID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedGroups, group_filter)
-                                                 .Inc(u => u.AccountInformation.GroupCount, -1);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// add joined project and increase project count by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public bool Add_JoinedProject(string userID, SDLink project)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.JoinedProjects, project)
-                                                        .Inc(u => u.AccountInformation.ProjectCount, 1); ;
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete joined group and decrease project count by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_JoinedProject(string userID, string projectID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var project_filter = Builders<SDLink>.Filter.Eq(g => g.ID, projectID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.JoinedProjects, project_filter)
-                                                        .Inc(u => u.AccountInformation.ProjectCount, -1); ;
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// add new project to current projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public bool Add_CurrentProject(string userID, SDLink project)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.CurrentProjects, project);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete project from current projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_CurrentProject(string userID, string projectID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID );
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.CurrentProjects, project_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add proejct to joined projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public bool Add_JoinedProject_ActivityHistory(string userID, SDLink project)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.ActivityHistory.JoinedProjects, project);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete project from joined projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_JoinedProject_ActivityHistory(string userID, string projectID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.ActivityHistory.JoinedProjects, project_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add proejct to organize projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public bool Add_OrganizedProject_ActivityHistory(string userID, SDLink project)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.ActivityHistory.OrganizedProjects, project);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete project from organize projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_OrganizedProject_ActivityHistory(string userID, string projectID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.ActivityHistory.OrganizedProjects, project_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add proejct to sponsored projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="project"></param>
-        /// <returns></returns>
-        public bool Add_SponsoredProject_ActivityHistory(string userID, SDLink project)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.ActivityHistory.SponsoredProjects, project);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete project from sponsored projects
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_SponsoredProject_ActivityHistory(string userID, string projectID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var project_filter = Builders<SDLink>.Filter.Eq(p => p.ID, projectID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.ActivityHistory.SponsoredProjects , project_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add friend and increase friendcoutn by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="friend"></param>
-        /// <returns></returns>
-        public bool Add_Friend(string userID, SDLink user)
-        {
-            try
-            {
-                Member friend = new Member(user);
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.FriendList, friend)
-                                                        .Inc(u => u.AccountInformation.FriendCount, 1);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete a friend and decrease fienr count by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="friendID"></param>
-        /// <returns></returns>
-        public bool Delete_Friend(string userID, string friendID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var friend_filter = Builders<Member>.Filter.Eq(f => f.SDInfo.ID, friendID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.FriendList, friend_filter)
-                                                        .Inc(u => u.AccountInformation.FriendCount, 1); ;
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add new notification to user
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="notify"></param>
-        /// <returns></returns>
-        public bool Add_Notification(string userID, Notification notify)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList, notify);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// add a request to usser request list
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public bool Add_Request(string userID, RequestItem request)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.AddToSet(u => u.RequestList, request);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// delete a request
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public bool Delete_Request(string userID, string requestID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
-                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.RequestID, requestID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.RequestList, request_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// cancel a request
-        /// </summary>
-        /// <param name="userID">senderID</param>
-        /// <param name="request">receiverID</param>
-        /// <returns></returns>
-        public bool Cancel_Request(string userID, string otherID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, otherID);
-                var request_filter = Builders<RequestItem>.Filter.Eq(rq => rq.Actor.ID, userID);
-                var update = Builders<Mongo_User>.Update.PullFilter(u => u.RequestList, request_filter);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get a number of user request
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<RequestItem> Get_RequestList(string userID, int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
-                                                     .RequestList.Skip(skip).Take(number).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get a specific request of user
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="requestID"></param>
-        /// <returns></returns>
-        public RequestItem Get_Request(string userID, string requestID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
-                                                     .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// set a notification is seen
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="notifyID"></param>
-        /// <returns></returns>
-        public bool Set_Notification_IsSeen(string userID, string notifyID)
-        {
-            try
-            {
-                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
-                var update = Builders<Mongo_User>.Update.Set(u => u.NotificationList.ElementAt(-1).IsSeen, Status.IS_SEEN);
-                var result = collection.UpdateOne(user_filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// function search user for admin
-        /// </summary>
-        /// <param name="displayName"></param>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<AccountInformation> Search_Account(string displayName, int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable()
-                                       .Where(u => u.AccountInformation.DisplayName.Contains(displayName))
-                                       .Select(u => u.AccountInformation).Skip(skip).Take(number).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// search user with status and displayname
-        /// </summary>
-        /// <param name="displayName"></param>
-        /// <param name="status"></param>
-        /// <param name="skip"></param>
-        /// <param name="number"></param>
-        /// <returns></returns>
-        public List<AccountInformation> Search_Account(string displayName,bool status, int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable()
-                                       .Where(u => u.AccountInformation.DisplayName.Contains(displayName) && u.AccountInformation.IsActivate == status)
-                                       .Select(u => u.AccountInformation).Skip(skip).Take(number).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        public List<SDLink> Get_Banned_Users()
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(gr => gr.AccountInformation.IsActivate, Status.IS_BANNED);
-                var result = collection.Find(filter).ToList();
-                List<SDLink> BannedUsers = new List<SDLink>();
-                foreach (var item in result)
-                {
-                    BannedUsers.Add(Get_SDLink(item.AccountInformation.UserID));
-                }
-                return BannedUsers;
-            }
-            catch
-            {
-                throw;
-            }
-
-        }
     }
 }

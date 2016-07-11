@@ -43,16 +43,13 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ListClass
         public List<RequestItem> SponsorRequests { get; set; }
         [BsonIgnoreIfDefault]
         public List<RequestItem> SuggestUsers { get; set; }
-        [BsonIgnoreIfDefault]
         // guest sonponsor request
-        public List<Sponsor> GuestSponsorRequests { get; set; }
 
         public RequestList()
         {
             this.JoinRequests = new List<RequestItem>();
             this.SponsorRequests = new List<RequestItem>();
             this.SuggestUsers = new List<RequestItem>();
-            this.GuestSponsorRequests = new List<Sponsor>();
         }
     }
 }

@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="iVolunteerModelStoreContainer" CdmEntityContainer="iVolunteerEntities">
+    <EntitySetMapping Name="SQL_AcAc_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAc_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcAc_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FriendID" ColumnName="FriendID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SQL_AcAl_Relation">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAl_Relation">
         <MappingFragment StoreEntitySet="SQL_AcAl_Relation">
@@ -73,20 +83,30 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SQL_Friendship">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Friendship">
-        <MappingFragment StoreEntitySet="SQL_Friendship">
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="FriendID" ColumnName="FriendID" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="SQL_Group">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Group">
         <MappingFragment StoreEntitySet="SQL_Group">
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_GrPr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_GrPr_Relation">
+        <MappingFragment StoreEntitySet="SQL_GrPr_Relation">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_GuestPr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_GuestPr_Relation">
+        <MappingFragment StoreEntitySet="SQL_GuestPr_Relation">
+          <ScalarProperty Name="SponsorID" ColumnName="SponsorID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -122,6 +142,7 @@
           <ScalarProperty Name="DateLastActivity" ColumnName="DateLastActivity" />
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="IsPinned" ColumnName="IsPinned" />
           <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -130,17 +151,8 @@
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Project">
         <MappingFragment StoreEntitySet="SQL_Project">
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="InProgress" ColumnName="InProgress" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_AcAc_Relation">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAc_Relation">
-        <MappingFragment StoreEntitySet="SQL_AcAc_Relation">
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="Relation" ColumnName="Relation" />
-          <ScalarProperty Name="TargetUserID" ColumnName="TargetUserID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

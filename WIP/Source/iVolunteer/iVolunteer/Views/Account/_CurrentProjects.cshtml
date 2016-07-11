@@ -1,4 +1,4 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
 
 <div class="card-panel">
     <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
@@ -13,15 +13,17 @@
             <ul class="list-navi">
                 @foreach (var item in Model)
                 {
-                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
+                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ProjectID })">@item.ProjectName</a></li>
                 }
             </ul>
         </div>
     </div>
+
     <!-- Add New Project -->
-    <div class="row" style="text-align: right">
-        <button class="btn-addnew" style="margin: 10px 15px 0px 10px;" data-container="body" rel="tooltip" data-toggle="modal" title="Tạo dự án mới" data-placement="left" data-target="#createProjectForm">
-            <i class="material-icons">add</i>
-        </button>
+    <div class="row">
+        <div class="col-xs-12" style="margin-top: 20px">
+            <a style="font-weight: bold; color: #049f88; cursor: pointer" data-container="body" data-toggle="modal" data-target="#createProjectForm">TẠO DỰ ÁN MỚI ...</a>
+        </div>
     </div>
+
 </div>

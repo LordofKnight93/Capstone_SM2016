@@ -28,6 +28,9 @@ namespace iVolunteer.Common
         // status of request
         public const bool ACCEPTED = true;
         public const bool PENDING = false;
+        //project ongoing status
+        public const bool ONGOING = true;
+        public const bool ENDED = false;
     }
 
     public static class Default
@@ -43,41 +46,57 @@ namespace iVolunteer.Common
         public const bool IS_ADMIN = true;
         public const bool IS_USER = false;
     }
-    public static class Relation
+    public static class AcAcRelation
     {
-        //realation type
+        public const int FRIEND_RELATION = 1;
+        public const int REPORT_RELATION = 2;
+    }
+
+    public static class AcGrRelation
+    {
+        public const int LEADER_RELATION = 1;
+        public const int MEMBER_RELATION = 2;
+        public const int FOLLOW_RELATION = 3;
+        public const int REPORT_RELATION = 4;
+    }
+    public static class AcPrRelation
+    {
+        public const int ORGANIZE_RELATION = 0;
         public const int LEADER_RELATION = 1;
         public const int MEMBER_RELATION = 2;
         public const int SPONSOR_RELATION = 3;
         public const int FOLLOW_RELATION = 4;
-        public const int LIKE_RELATION = 5;
-        public const int REPORT_RELATION = 6;
+        public const int SUGGESTED_RELATION = 5;
+        public const int INVITED_RELATION = 6;
+        public const int REPORT_RELATION = 7;
     }
 
-    public static class PostType
+    public static class GrPrRelation
     {
-        //post type
-        public const int POST_NORMAL = 1;
-        public const int POST_IMAGE = 2;
-        public const int POST_ANNOUNCE = 3;
+        public const int ORGANIZE_RELATION = 1;
+        public const int MEMBER_RELATION = 2;
+        public const int SPONSOR_RELATION = 3;
     }
 
-    public class RequestType
+    public static class AcPoRelation
     {
-        public const int JOIN_REQUEST = 1;
-        public const int SPONSOR_REQUEST = 2;
-        public const int FRIEND_REQUEST = 3;
-        public const int SUGGEST_REQUEST = 4;
-        public const int INVITE_TO = 5;
+        public const int CREATOR_RELATION = 1;
+        public const int FOLLOW_RELATION = 2;
+        public const int LIKE_RELATION = 3;
     }
 
-    public static class RequestContent
+    public static class AcAlRelation
     {
-        public const string JOIN_REQUEST = " muốn tham gia.";
-        public const string SPONSOR_REQUEST = " muốn tài trợ, quyên góp cho sự kiện.";
-        public const string FRIEND_REQUEST = " gửi lời mời kết bạn.";
-        public const string SUGGEST_REQUEST = " đề xuất ";
-        public const string INVITE_TO = " mời bạn tham gia ";
+        public const int CREATOR_RELATION = 1;
+        public const int FOLLOW_RELATION = 2;
+        public const int LIKE_RELATION = 3;
+    }
+
+    public static class AcImRelation
+    {
+        public const int CREATOR_RELATION = 1;
+        public const int FOLLOW_RELATION = 2;
+        public const int LIKE_RELATION = 3;
     }
 
     public static class Error
@@ -92,6 +111,10 @@ namespace iVolunteer.Common
         public const string INVALID_INFORMATION = "Thông tin không hợp lệ, vui lòng nhập lại.";
         public const string ACCESS_DENIED = "Trang này không tồn tại hoặc bạn không có quyền truy cập.";
         public const string DISPLAYNAME_FAIL = "Không thể đổi tên quá nhiều lần trong vòng 90 ngày.";
+        public const string EMAIL_INVALID = " Email không hợp lệ ";
+        public const string PASSWORD_INVALID = "Mật khẩu phải có ít nhất 1 ký tự hoa, 1 ký thường, 1 ký tự số, không có ký tự đặc biệt và độ dài từ 8 đến 15 ký tự.";
+        public const string IDENTIFYID_INVALID = "Số chứng minh thư không hợp lệ";
+        public const string PHONE_INVALID = "Số điện thoại không hợp lệ";
     }
 
     public static class Handler

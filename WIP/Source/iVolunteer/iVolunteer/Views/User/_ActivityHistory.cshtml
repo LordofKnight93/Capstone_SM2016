@@ -1,62 +1,30 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ActivityInformation
+﻿<!--Leader-->
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row">
+        <div class="col-sm-12" style="margin-top: -20px">
+            <h4>Lịch sử hoạt động</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
 
-<!--Organized projects-->
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+    <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
-            <h4>Sự kiện đã tham gia tổ chức</h4>
-        </div>
-    </div>
-    <div class="divider-holizon"></div>
-    <!-- List Organized projects -->
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-            <ul class="list-navi">
-                @foreach (var item in Model.OrganizedProjects)
-                {
-                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
-                }
+            <ul class="nav sub-nav-tabs">
+                <li class="active" data-type="organize"><a data-toggle="tab" href="#organize">SỰ KIỆN TỔ CHỨC</a></li>
+                <li data-type="sponsor"><a data-toggle="tab" href="#sponsor">SỰ KIỆN TÀI TRỢ</a></li>
+                <li data-type="participate"><a data-toggle="tab" href="#participate">SỰ KIỆN THAM GIA</a></li>
             </ul>
         </div>
     </div>
-</div>
-<!--Sponsor Projects-->
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Sự kiện đã tài trợ, quyên góp</h4>
-        </div>
-    </div>
-    <div class="divider-holizon"></div>
-    <!-- List Sponsor Projects -->
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-            <ul class="list-navi">
-                @foreach (var item in Model.SponsoredProjects)
-                {
-                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
-                }
-            </ul>
-        </div>
-    </div>
-</div>
-<!--Joined Projects-->
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Sự kiện đã tham gia hoạt động</h4>
-        </div>
-    </div>
-    <div class="divider-holizon"></div>
-    <!-- List Joined Projects -->
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-            <ul class="list-navi">
-                @foreach (var item in Model.JoinedProjects)
-                {
-                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ID })">@item.DisplayName</a></li>
-                }
-            </ul>
-        </div>
+
+    <div class="tab-content" id="content-panel">
+        @{ Html.RenderAction("OrganizedProjects", "User", new { userID = ViewBag.UserID });
+        }
+
+        @{ Html.RenderAction("SponsoredProjects", "User", new { userID = ViewBag.UserID });
+        }
+        @{ 
+           Html.RenderAction("ParticipatedProjects", "User", new { userID = ViewBag.UserID });
+        }
     </div>
 </div>

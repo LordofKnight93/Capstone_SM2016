@@ -15,9 +15,12 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     {
         public string GroupID { get; set; }
         public string GroupName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateCreate { get; set; }
         public string GroupDescription { get; set; }
         public int MemberCount { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
         public bool IsActivate { get; set; }
 
         public GroupInformation()
@@ -28,6 +31,10 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.GroupDescription = "";
             this.MemberCount = 0;
             this.IsActivate = Status.IS_ACTIVATE;
+        }
+        public string Get_AvatarLink()
+        {
+            return "/Images/Group/Avatar/" + this.GroupID + ".jpg";
         }
     }
 }

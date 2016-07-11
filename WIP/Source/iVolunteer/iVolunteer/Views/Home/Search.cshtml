@@ -28,8 +28,8 @@
 }
 
 <div>
-    @{ Html.RenderAction("GroupSearch", "Group", new { name = Model.Name, page = 1 });
+    @{ Html.RenderAction("GroupSearch", "Group", new { name = Model.Name});
     }
-    @{ Html.RenderAction("UserSearch", "User", new { name = Model.Name, page = 1 });
+    @{ Html.RenderAction("UserSearch", "User", new { name = Model.Name});
     }
 </div>

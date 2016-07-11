@@ -20,6 +20,7 @@ namespace iVolunteer.Models.SQL
             this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
             this.SQL_Album = new HashSet<SQL_Album>();
             this.SQL_Post = new HashSet<SQL_Post>();
+            this.SQL_GrPr_Relation = new HashSet<SQL_GrPr_Relation>();
         }
     
         public string GroupID { get; set; }
@@ -31,5 +32,7 @@ namespace iVolunteer.Models.SQL
         public virtual ICollection<SQL_Album> SQL_Album { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Post> SQL_Post { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_GrPr_Relation> SQL_GrPr_Relation { get; set; }
     }
 }

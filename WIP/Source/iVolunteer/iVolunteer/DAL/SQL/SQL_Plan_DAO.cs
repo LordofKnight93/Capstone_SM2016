@@ -30,55 +30,5 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        /// <summary>
-        /// Delete a plan 
-        /// </summary>
-        /// <param name="planID"></param>
-        /// <returns>true if success</returns>
-        public bool Delete_Plan(string planID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var plan = dbEntities.SQL_Plan.FirstOrDefault(p => p.PlanID == planID);
-                    dbEntities.SQL_Plan.Remove(plan);
-                    dbEntities.SaveChanges();
-                    return true;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// Check if a user can view a plan
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="planID"></param>
-        /// <returns>true if accessable, false if not</returns>
-        public bool IsAccessable(string userID, string planID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    //get plan
-                    var result = from plan in dbEntities.SQL_Plan
-                                 join project in dbEntities.SQL_Project on plan.ProjectID equals project.ProjectID
-                                 join relation in dbEntities.SQL_AcPr_Relation on plan.ProjectID equals relation.ProjectID
-                                 where plan.PlanID == planID && project.IsActivate == Status.IS_ACTIVATE
-                                        && relation.UserID == userID && relation.Relation != Relation.FOLLOW_RELATION
-                                 select plan;
-                    if (result == null) return false;
-                    return true;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
     }
 }

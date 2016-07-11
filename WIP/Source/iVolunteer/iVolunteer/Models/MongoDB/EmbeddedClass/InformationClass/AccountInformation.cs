@@ -13,10 +13,8 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     public class AccountInformation
     {
         public string UserID { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
         public string DisplayName { get; set; }
-        public string IdentifyID { get; set; }
+        public string Address { get; set; }
         public int FriendCount { get; set; }
         public int GroupCount { get; set; }
         public int ProjectCount { get; set; }
@@ -27,10 +25,8 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public AccountInformation()
         {
             this.UserID = "";
-            this.Email = "";
-            this.Password = "";
             this.DisplayName = "";
-            this.IdentifyID = "";
+            this.Address = "";
             this.FriendCount = 0;
             this.GroupCount = 0;
             this.ProjectCount = 0;
@@ -41,16 +37,18 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 
         public AccountInformation(RegisterModel registerModel)
         {
-            this.Email = registerModel.Email;
-            this.Password = registerModel.Password;
             this.DisplayName = registerModel.RealName;
-            this.IdentifyID = registerModel.IdentifyID;
+            this.Address = registerModel.Address;
             this.FriendCount = 0;
             this.GroupCount = 0;
             this.ProjectCount = 0;
             this.IsAdmin = Role.IS_USER;
             this.IsActivate = Status.IS_ACTIVATE;
             this.IsConfirmed = Status.IS_NOT_CONFIRMED;
+        }
+        public string Get_AvatarLink()
+        {
+            return "/Images/User/Avatar/" + this.UserID + ".jpg";
         }
     }
 }

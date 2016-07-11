@@ -1,5 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="iVolunteerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="SQL_AcAc_Relation">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="FriendID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FriendID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Relation" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SQL_Account" Relationship="Self.FK_User_Friend_Account" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
+    <NavigationProperty Name="SQL_Account1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
+  </EntityType>
   <EntityType Name="SQL_AcAl_Relation">
     <Key>
       <PropertyRef Name="AlbumID" />
@@ -24,16 +37,14 @@
     <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
     <Property Name="IsActivate" Type="Boolean" Nullable="false" />
     <Property Name="IsConfirm" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SQL_AcAc_Relation" Relationship="Self.FK_User_Friend_Account" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
+    <NavigationProperty Name="SQL_AcAc_Relation1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
     <NavigationProperty Name="SQL_AcAl_Relation" Relationship="Self.FK_SQL_AcAl_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcAl_Relation" />
     <NavigationProperty Name="SQL_Message" Relationship="Self.FK_Message_Account" FromRole="SQL_Account" ToRole="SQL_Message" />
     <NavigationProperty Name="SQL_AcIm_Relation" Relationship="Self.FK_SQL_AcIm_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcIm_Relation" />
     <NavigationProperty Name="SQL_AcPo_Relation" Relationship="Self.FK_SQL_AcPo_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcPo_Relation" />
-    <NavigationProperty Name="SQL_Friendship" Relationship="Self.FK_User_Friend_Account" FromRole="SQL_Account" ToRole="SQL_Friendship" />
-    <NavigationProperty Name="SQL_Friendship1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Account" ToRole="SQL_Friendship" />
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
-    <NavigationProperty Name="SQL_AcAc_Relation" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
-    <NavigationProperty Name="SQL_AcAc_Relation1" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1" FromRole="SQL_Account" ToRole="SQL_AcAc_Relation" />
   </EntityType>
   <EntityType Name="SQL_AcGr_Relation">
     <Key>
@@ -98,17 +109,6 @@
     <NavigationProperty Name="SQL_Project" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="SQL_Album" ToRole="SQL_Project" />
     <NavigationProperty Name="SQL_Image" Relationship="Self.FK_SQL_Image_SQL_Album" FromRole="SQL_Album" ToRole="SQL_Image" />
   </EntityType>
-  <EntityType Name="SQL_Friendship">
-    <Key>
-      <PropertyRef Name="UserID" />
-      <PropertyRef Name="FriendID" />
-    </Key>
-    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="FriendID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Status" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="SQL_Account" Relationship="Self.FK_User_Friend_Account" FromRole="SQL_Friendship" ToRole="SQL_Account" />
-    <NavigationProperty Name="SQL_Account1" Relationship="Self.FK_User_Friend_Account1" FromRole="SQL_Friendship" ToRole="SQL_Account" />
-  </EntityType>
   <EntityType Name="SQL_Group">
     <Key>
       <PropertyRef Name="GroupID" />
@@ -118,6 +118,29 @@
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_GroupSD" FromRole="SQL_Group" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Album" />
     <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_GroupSD" FromRole="SQL_Group" ToRole="SQL_Post" />
+    <NavigationProperty Name="SQL_GrPr_Relation" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Group" FromRole="SQL_Group" ToRole="SQL_GrPr_Relation" />
+  </EntityType>
+  <EntityType Name="SQL_GrPr_Relation">
+    <Key>
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="GroupID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Relation" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SQL_Group" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Group" FromRole="SQL_GrPr_Relation" ToRole="SQL_Group" />
+    <NavigationProperty Name="SQL_Project" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Project" FromRole="SQL_GrPr_Relation" ToRole="SQL_Project" />
+  </EntityType>
+  <EntityType Name="SQL_GuestPr_Relation">
+    <Key>
+      <PropertyRef Name="SponsorID" />
+    </Key>
+    <Property Name="SponsorID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="SQL_Project" Relationship="Self.FK_SQL_GuestPr_Relation_SQL_Project" FromRole="SQL_GuestPr_Relation" ToRole="SQL_Project" />
   </EntityType>
   <EntityType Name="SQL_Image">
     <Key>
@@ -154,6 +177,7 @@
     <Property Name="DateLastActivity" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
     <Property Name="GroupID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="IsPinned" Type="Boolean" />
     <Property Name="IsPublic" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="SQL_AcPo_Relation" Relationship="Self.FK_SQL_AcPo_Relation_SQL_Post" FromRole="SQL_Post" ToRole="SQL_AcPo_Relation" />
     <NavigationProperty Name="SQL_Group" Relationship="Self.FK_PostSD_GroupSD" FromRole="SQL_Post" ToRole="SQL_Group" />
@@ -164,12 +188,39 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="InProgress" Type="Boolean" Nullable="false" />
     <Property Name="IsActivate" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_ProjectSD" FromRole="SQL_Project" ToRole="SQL_AcPr_Relation" />
     <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Album" />
+    <NavigationProperty Name="SQL_GrPr_Relation" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GrPr_Relation" />
+    <NavigationProperty Name="SQL_GuestPr_Relation" Relationship="Self.FK_SQL_GuestPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GuestPr_Relation" />
     <NavigationProperty Name="SQL_Plan" Relationship="Self.FK_Plan_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Plan" />
     <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Post" />
   </EntityType>
+  <Association Name="FK_User_Friend_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcAc_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Friend_Account1">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcAc_Relation">
+        <PropertyRef Name="FriendID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SQL_AcAl_Relation_SQL_Account">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
     <End Role="SQL_AcAl_Relation" Type="Self.SQL_AcAl_Relation" Multiplicity="*" />
@@ -227,30 +278,6 @@
       </Principal>
       <Dependent Role="SQL_AcPo_Relation">
         <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_User_Friend_Account">
-    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_Friendship" Type="Self.SQL_Friendship" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_Friendship">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_User_Friend_Account1">
-    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_Friendship" Type="Self.SQL_Friendship" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_Friendship">
-        <PropertyRef Name="FriendID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -374,6 +401,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Group">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GuestPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GuestPr_Relation" Type="Self.SQL_GuestPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GuestPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Plan_ProjectSD">
     <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
     <End Role="SQL_Plan" Type="Self.SQL_Plan" Multiplicity="*" />
@@ -399,6 +462,7 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="iVolunteerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="SQL_AcAc_Relation" EntityType="Self.SQL_AcAc_Relation" />
     <EntitySet Name="SQL_AcAl_Relation" EntityType="Self.SQL_AcAl_Relation" />
     <EntitySet Name="SQL_Account" EntityType="Self.SQL_Account" />
     <EntitySet Name="SQL_AcGr_Relation" EntityType="Self.SQL_AcGr_Relation" />
@@ -406,13 +470,22 @@
     <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" />
     <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" />
     <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" />
-    <EntitySet Name="SQL_Friendship" EntityType="Self.SQL_Friendship" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" />
+    <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" />
+    <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" />
     <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" />
     <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" />
     <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" />
     <EntitySet Name="SQL_Post" EntityType="Self.SQL_Post" />
     <EntitySet Name="SQL_Project" EntityType="Self.SQL_Project" />
+    <AssociationSet Name="FK_User_Friend_Account" Association="Self.FK_User_Friend_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Friend_Account1" Association="Self.FK_User_Friend_Account1">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+    </AssociationSet>
     <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Account" Association="Self.FK_SQL_AcAl_Relation_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
       <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
@@ -432,14 +505,6 @@
     <AssociationSet Name="FK_SQL_AcPo_Relation_SQL_Account" Association="Self.FK_SQL_AcPo_Relation_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
       <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_User_Friend_Account" Association="Self.FK_User_Friend_Account">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_Friendship" EntitySet="SQL_Friendship" />
-    </AssociationSet>
-    <AssociationSet Name="FK_User_Friend_Account1" Association="Self.FK_User_Friend_Account1">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_Friendship" EntitySet="SQL_Friendship" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -481,6 +546,18 @@
       <End Role="SQL_Group" EntitySet="SQL_Group" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Group" Association="Self.FK_SQL_GrPr_Relation_SQL_Group">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Project" Association="Self.FK_SQL_GrPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
+    </AssociationSet>
     <AssociationSet Name="FK_Plan_ProjectSD" Association="Self.FK_Plan_ProjectSD">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Plan" EntitySet="SQL_Plan" />
@@ -489,51 +566,5 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
-    <EntitySet Name="SQL_AcAc_Relation" EntityType="iVolunteerModel.SQL_AcAc_Relation" />
-    <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account" Association="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account1" Association="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
-    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="SQL_AcAc_Relation">
-    <Key>
-      <PropertyRef Name="UserID" />
-      <PropertyRef Name="TargetUserID" />
-      <PropertyRef Name="Relation" />
-    </Key>
-    <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <Property Name="TargetUserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <Property Name="Relation" Type="Int32" Nullable="false" />
-    <Property Name="Status" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
-    <NavigationProperty Name="SQL_Account1" Relationship="iVolunteerModel.FK_SQL_AcAc_Relation_SQL_Account1" FromRole="SQL_AcAc_Relation" ToRole="SQL_Account" />
-  </EntityType>
-  <Association Name="FK_SQL_AcAc_Relation_SQL_Account">
-    <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
-    <End Type="iVolunteerModel.SQL_AcAc_Relation" Role="SQL_AcAc_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_AcAc_Relation">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SQL_AcAc_Relation_SQL_Account1">
-    <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
-    <End Type="iVolunteerModel.SQL_AcAc_Relation" Role="SQL_AcAc_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_AcAc_Relation">
-        <PropertyRef Name="TargetUserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema>

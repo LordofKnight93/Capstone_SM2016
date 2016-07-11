@@ -3,11 +3,11 @@
   <EntityType Name="SQL_AcAc_Relation">
     <Key>
       <PropertyRef Name="UserID" />
-      <PropertyRef Name="TargetUserID" />
+      <PropertyRef Name="FriendID" />
       <PropertyRef Name="Relation" />
     </Key>
     <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="TargetUserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="FriendID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="Relation" Type="int" Nullable="false" />
     <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
@@ -85,21 +85,31 @@
     <Property Name="GroupID" Type="varchar" MaxLength="24" />
     <Property Name="IsPublic" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="SQL_Friendship">
-    <Key>
-      <PropertyRef Name="UserID" />
-      <PropertyRef Name="FriendID" />
-    </Key>
-    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="FriendID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="Status" Type="bit" Nullable="false" />
-  </EntityType>
   <EntityType Name="SQL_Group">
     <Key>
       <PropertyRef Name="GroupID" />
     </Key>
     <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="IsActivate" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_GrPr_Relation">
+    <Key>
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_GuestPr_Relation">
+    <Key>
+      <PropertyRef Name="SponsorID" />
+    </Key>
+    <Property Name="SponsorID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="SQL_Image">
     <Key>
@@ -132,6 +142,7 @@
     <Property Name="DateLastActivity" Type="datetime" Nullable="false" />
     <Property Name="ProjectID" Type="varchar" MaxLength="24" />
     <Property Name="GroupID" Type="varchar" MaxLength="24" />
+    <Property Name="IsPinned" Type="bit" />
     <Property Name="IsPublic" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="SQL_Project">
@@ -139,6 +150,7 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="InProgress" Type="bit" Nullable="false" />
     <Property Name="IsActivate" Type="bit" Nullable="false" />
   </EntityType>
   <Association Name="FK_AlbumSD_GroupSD">
@@ -210,30 +222,6 @@
       </Principal>
       <Dependent Role="SQL_Post">
         <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SQL_AcAc_Relation_SQL_Account">
-    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_AcAc_Relation">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SQL_AcAc_Relation_SQL_Account1">
-    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_AcAc_Relation">
-        <PropertyRef Name="TargetUserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -309,6 +297,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Group">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GuestPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GuestPr_Relation" Type="Self.SQL_GuestPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GuestPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SQL_Image_SQL_Album">
     <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="1" />
     <End Role="SQL_Image" Type="Self.SQL_Image" Multiplicity="*" />
@@ -323,24 +347,24 @@
   </Association>
   <Association Name="FK_User_Friend_Account">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_Friendship" Type="Self.SQL_Friendship" Multiplicity="*" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="SQL_Account">
         <PropertyRef Name="UserID" />
       </Principal>
-      <Dependent Role="SQL_Friendship">
+      <Dependent Role="SQL_AcAc_Relation">
         <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_User_Friend_Account1">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
-    <End Role="SQL_Friendship" Type="Self.SQL_Friendship" Multiplicity="*" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="SQL_Account">
         <PropertyRef Name="UserID" />
       </Principal>
-      <Dependent Role="SQL_Friendship">
+      <Dependent Role="SQL_AcAc_Relation">
         <PropertyRef Name="FriendID" />
       </Dependent>
     </ReferentialConstraint>
@@ -402,8 +426,9 @@
     <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="SQL_Friendship" EntityType="Self.SQL_Friendship" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" Schema="dbo" store:Type="Tables" />
@@ -433,14 +458,6 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
-    <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account" Association="Self.FK_SQL_AcAc_Relation_SQL_Account">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SQL_AcAc_Relation_SQL_Account1" Association="Self.FK_SQL_AcAc_Relation_SQL_Account1">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
-    </AssociationSet>
     <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Account" Association="Self.FK_SQL_AcAl_Relation_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
       <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
@@ -465,17 +482,29 @@
       <End Role="SQL_Post" EntitySet="SQL_Post" />
       <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
     </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Group" Association="Self.FK_SQL_GrPr_Relation_SQL_Group">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Project" Association="Self.FK_SQL_GrPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
+    </AssociationSet>
     <AssociationSet Name="FK_SQL_Image_SQL_Album" Association="Self.FK_SQL_Image_SQL_Album">
       <End Role="SQL_Album" EntitySet="SQL_Album" />
       <End Role="SQL_Image" EntitySet="SQL_Image" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Friend_Account" Association="Self.FK_User_Friend_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_Friendship" EntitySet="SQL_Friendship" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Friend_Account1" Association="Self.FK_User_Friend_Account1">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_Friendship" EntitySet="SQL_Friendship" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />

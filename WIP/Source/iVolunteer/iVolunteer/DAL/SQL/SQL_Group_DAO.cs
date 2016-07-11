@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using iVolunteer.Models.SQL;
+using iVolunteer.Common;
 
 namespace iVolunteer.DAL.SQL
 {
@@ -50,21 +51,25 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// set activation status to a group
+        /// deactivte an group
         /// </summary>
         /// <param name="groupID"></param>
-        /// <param name="status">get in Constant</param>
-        /// <returns>true if success</returns>
-        public bool Set_Activation_Status(string groupID, bool status)
+        /// <returns></returns>
+        public bool Deactive(string groupID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Group group = dbEntities.SQL_Group.FirstOrDefault(g => g.GroupID == groupID);
-                    group.IsActivate = status;
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Group.FirstOrDefault(acc => acc.GroupID == groupID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_BANNED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch
@@ -73,20 +78,25 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// delete a group
+        /// activate an group
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public bool Delete_Group(string groupID)
+        public bool Activate(string groupID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Group group = dbEntities.SQL_Group.FirstOrDefault(p => p.GroupID == groupID);
-                    dbEntities.SQL_Group.Remove(group);
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Group.FirstOrDefault(acc => acc.GroupID == groupID
+                                                                            && acc.IsActivate == Status.IS_BANNED);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_ACTIVATE;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch

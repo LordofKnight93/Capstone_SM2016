@@ -12,6 +12,5 @@ namespace iVolunteer.Models.ViewModel
         public string Location { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public TagsList TagsList { get; set; }
     }
 }

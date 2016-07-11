@@ -156,8 +156,17 @@
     <Content Include="fonts\material-icons.css" />
     <Content Include="fonts\MaterialIcons-Regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\1.jpg" />
+    <Content Include="Images\2.jpg" />
+    <Content Include="Images\3.jpg" />
+    <Content Include="Images\4.jpg" />
+    <Content Include="Images\5.jpg" />
     <Content Include="Images\avatar.svg" />
+    <Content Include="Images\duc-avata.jpg" />
+    <Content Include="Images\icons\identifyID.svg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\my-avata.jpg" />
+    <Content Include="Images\my-cover.jpg" />
     <Content Include="Images\quyvochai.jpg" />
     <Content Include="Images\thugom_cover.jpg" />
     <Content Include="Models\SQL\iVolunteerSQL.Context.tt">
@@ -213,6 +222,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -222,10 +232,9 @@
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_Friendship_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -252,26 +261,21 @@
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Sponsor.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ActivityInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\UserInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Member.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\TagsList.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Team.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\StructureClass\GroupStructure.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\StructureClass\ProjectStructure.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
     <Compile Include="Models\SQL\iVolunteerSQL.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -311,10 +315,13 @@
     <Compile Include="Models\SQL\SQL_Album.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SQL\SQL_Friendship.cs">
+    <Compile Include="Models\SQL\SQL_Group.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\SQL\SQL_Group.cs">
+    <Compile Include="Models\SQL\SQL_GrPr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_GuestPr_Relation.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Image.cs">
@@ -365,7 +372,7 @@
     <Content Include="Views\Account\_JoinedProjects.cshtml" />
     <Content Include="Views\User\UserHome.cshtml" />
     <Content Include="Views\Project\ProjectHome.cshtml" />
-    <Content Include="Views\User\_UserInformation.cshtml" />
+    <Content Include="Views\User\_PersonalInformation.cshtml" />
     <Content Include="Views\User\_JoinedGroups.cshtml" />
     <Content Include="Views\User\_CurrentProjects.cshtml" />
     <Content Include="Views\User\_ActivityHistory.cshtml" />
@@ -373,19 +380,57 @@
     <Content Include="Views\Group\_CurrentProjects.cshtml" />
     <Content Include="Views\Project\_ProjectInformation.cshtml" />
     <Content Include="Views\Group\_ActivityHistory.cshtml" />
-    <Content Include="Views\Group\_GroupResult.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Account\_ActionToGroup.cshtml" />
-    <Content Include="Views\User\_UserResult.cshtml" />
     <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
     <Content Include="Views\Group\_GroupStructure.cshtml" />
-    <Content Include="Views\Group\_RequestList.cshtml" />
     <Content Include="Views\User\_FriendList.cshtml" />
-    <Content Include="Views\Report\_PendingReportedGroups.cshtml" />
-    <Content Include="Views\Report\_PendingReportedProjects.cshtml" />
-    <Content Include="Views\Report\_PendingReportedUsers.cshtml" />
-    <Content Include="Views\Report\PendingReportList.cshtml" />
-    <Content Include="Views\Report\BannedObjects.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Shared\_NotificationPanel.cshtml" />
+    <Content Include="Views\Shared\_PopupNotification.cshtml" />
+    <Content Include="Views\Shared\_PopupFriend.cshtml" />
+    <Content Include="Views\Shared\_PopupMessage.cshtml" />
+    <Content Include="Views\Shared\_PostCreate.cshtml" />
+    <Content Include="Views\Shared\_PostWriteComment.cshtml" />
+    <Content Include="Views\Shared\_PostInteractionPanel.cshtml" />
+    <Content Include="Views\Shared\_PostContent.cshtml" />
+    <Content Include="Views\Shared\_PostOwner.cshtml" />
+    <Content Include="Views\Group\_GroupPublic.cshtml" />
+    <Content Include="Views\Group\_GroupDiscussion.cshtml" />
+    <Content Include="Views\Group\_GroupGallery.cshtml" />
+    <Content Include="Views\Project\_ProjectPublic.cshtml" />
+    <Content Include="Views\Project\_ProjectDiscussion.cshtml" />
+    <Content Include="Views\Project\_ProjectPlan.cshtml" />
+    <Content Include="Views\Project\_ProjectStructure.cshtml" />
+    <Content Include="Views\Project\_ProjectGallery.cshtml" />
+    <Content Include="Views\Project\_ProjectPlanThisdayTask.cshtml" />
+    <Content Include="Views\Project\_ProjectPlanTaskDetail.cshtml" />
+    <Content Include="Views\Project\SearchProject.cshtml" />
+    <Content Include="Views\Group\SearchGroup.cshtml" />
+    <Content Include="Views\User\SearchUser.cshtml" />
+    <Content Include="Views\Home\NotificationAll.cshtml" />
+    <Content Include="Views\Home\MessageAll.cshtml" />
+    <Content Include="Views\Home\FriendRequestAll.cshtml" />
+    <Content Include="Views\Group\_GroupLeaders.cshtml" />
+    <Content Include="Views\Group\_GroupMembers.cshtml" />
+    <Content Include="Views\Group\_GroupRequests.cshtml" />
+    <Content Include="Views\Account\_MutalFriends.cshtml" />
+    <Content Include="Views\User\_ParticipatedProjects.cshtml" />
+    <Content Include="Views\User\_SponsoredProjects.cshtml" />
+    <Content Include="Views\User\_OrganizedProjects.cshtml" />
+    <Content Include="Views\Group\_OrganizedProjects.cshtml" />
+    <Content Include="Views\Group\_ParticipatedProjects.cshtml" />
+    <Content Include="Views\Group\_SponsoredProjects.cshtml" />
+    <Content Include="Views\Account\_ActionToProject.cshtml" />
+    <Content Include="Views\User\View.cshtml" />
+    <Content Include="Views\Account\_FriendRequestList.cshtml" />
+    <Content Include="Views\User\_Friends.cshtml" />
+    <Content Include="Views\Admin\BannedObjects.cshtml" />
+    <Content Include="Views\Admin\PendingReportList.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedGroups.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedProjects.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedUsers.cshtml" />
+    <Content Include="Views\Admin\AdminHome.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -395,10 +440,13 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="BL\" />
+    <Folder Include="Views\Report\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

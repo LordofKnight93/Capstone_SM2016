@@ -16,16 +16,22 @@
         <div id="exTab1">
             <ul class="nav nav-tabs">
                 <li class="col-md-2">
-                    <a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>
+                    <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
+                    @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                 </li>
-                <li class="col-md-2">
-                    <a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>
-                </li>
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
+                {
+                    <li class="col-md-2">
+                        <!--a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
+                        @Ajax.ActionLink("Thảo luận", "GroupDiscussion", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                    </li>
+                }
                 <li class="col-md-2">
                     @Ajax.ActionLink("Thành viên", "GroupStructure", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
-                    <a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>
+                    <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
+                    @Ajax.ActionLink("Thư viện", "GroupGallery", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
                     @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
@@ -37,6 +43,7 @@
             <div id="panelContent" class="tab-content clearfix">
                 <!-- Public Tab -->
                 <div class="tab-pane active" id="group-tab">
+                    @{ Html.RenderAction("GroupPublic", "Group");}
                 </div>
             </div>
 

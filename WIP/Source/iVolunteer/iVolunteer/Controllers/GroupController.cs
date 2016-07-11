@@ -11,7 +11,6 @@ using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
-using iVolunteer.Models.MongoDB.EmbeddedClass.StructureClass;
 using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
@@ -36,30 +35,18 @@ namespace iVolunteer.Controllers
             //set missing information
             groupInfo.DateCreate = DateTime.Now;
             groupInfo.MemberCount = 1;
-            groupInfo.IsActivate = true;
+            groupInfo.IsActivate = Status.IS_ACTIVATE;
 
             //craete creator
-            SDLink creator = new SDLink();
-            creator.ID = Session["UserID"].ToString();
-            creator.DisplayName = Session["DisplayName"].ToString();
-            creator.Handler = Handler.USER;
+            string userID = Session["UserID"].ToString();
 
             //create mongo Group
-            Mongo_Group mongo_Group = new Mongo_Group(creator, groupInfo);
+            Mongo_Group mongo_Group = new Mongo_Group(groupInfo);
 
-            //craete group SDLink
-            SDLink group = new SDLink(mongo_Group.GroupInformation);
             //create sql Group
             SQL_Group sql_Group = new SQL_Group();
             sql_Group.GroupID = mongo_Group.GroupInformation.GroupID;
             sql_Group.IsActivate = true;
-
-            // create first relation
-            SQL_AcGr_Relation relation = new SQL_AcGr_Relation();
-            relation.UserID = creator.ID;
-            relation.GroupID = mongo_Group.GroupInformation.GroupID;
-            relation.Relation = Relation.LEADER_RELATION;
-            relation.Status = Status.ACCEPTED;
 
             //start transaction
 
@@ -75,9 +62,10 @@ namespace iVolunteer.Controllers
 
                     //write to DB
                     sql_Group_DAO.Add_Group(sql_Group);
-                    sql_User_Group_DAO.Add_Relation(relation);
+                    sql_User_Group_DAO.Add_Leader(userID, sql_Group.GroupID);
+
                     mongo_Group_DAO.Add_Group(mongo_Group);
-                    mongo_User_DAO.Add_JoinedGroup(creator.ID, group);
+                    mongo_User_DAO.Join_Group(userID);
 
                     // copy default avatar and cover
                     FileInfo avatar = new FileInfo(Server.MapPath(Default.DEFAULT_AVATAR));
@@ -95,7 +83,7 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            return RedirectToAction("GroupHome", "Group", new { groupID = group.ID });
+            return RedirectToAction("GroupHome", "Group", new { groupID = sql_Group.GroupID });
         }
 
         [HttpGet]
@@ -109,6 +97,18 @@ namespace iVolunteer.Controllers
                 {
                     Mongo_Group_DAO mongoDAO = new Mongo_Group_DAO();
                     result = mongoDAO.Get_SDLink(groupID);
+                }
+
+                if (Session["UserID"] != null)
+                {
+                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                    if (Session["UserID"].ToString() == "Admin")
+                        ViewBag.IsAdmin = true;
+                    else
+                    {
+                        string userID = Session["UserID"].ToString();
+                        ViewBag.IsJoined = relationDAO.Is_Joined(userID, groupID);
+                    }
                 }
             }
             catch
@@ -227,6 +227,449 @@ namespace iVolunteer.Controllers
             }
         }
 
+        public ActionResult GroupLeaders(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                var listID = relationDAO.Get_Leaders(groupID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_AccountsInformation(listID);
+
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, groupID);
+                }
+                ViewBag.GroupID = groupID;
+                return PartialView("_GroupLeaders", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult GroupMembers(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                var listID = relationDAO.Get_Members(groupID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_AccountsInformation(listID);
+
+                if(Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, groupID);
+                }
+                ViewBag.GroupID = groupID;
+                return PartialView("_GroupMembers", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult GroupRequests(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                var listID = relationDAO.Get_Requesters(groupID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_AccountsInformation(listID);
+
+                ViewBag.GroupID = groupID;
+
+                return PartialView("_GroupRequests", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult GroupPublic()
+        {
+            return PartialView("_GroupPublic");
+        }
+
+        public ActionResult GroupDiscussion()
+        {
+            return PartialView("_GroupDiscussion");
+        }
+
+        public ActionResult GroupGallery()
+        {
+            return PartialView("_GroupGallery");
+        }
+
+        public ActionResult GroupPlan()
+        {
+            return PartialView("_GroupPlan");
+        }
+
+        public ActionResult GroupStructure(string groupID)
+        {
+            try
+            {
+
+                if (Session["UserID"] != null)
+                {
+                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                    string userID = Session["UserID"].ToString();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, groupID);
+                }
+                ViewBag.GroupID = groupID;
+
+                return PartialView("_GroupStructure");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult SearchGroup(string name)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(name))
+                {
+                    ViewBag.Message = Error.INVALID_INFORMATION;
+                    return View("ErrorMessage");
+                }
+
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+
+                List<GroupInformation> result = new List<GroupInformation>();
+                if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                    result = groupDAO.Group_Search(name, true);
+                else result = groupDAO.Group_Search(name, false);
+
+                return View("SearchGroup", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+        }
+
+        public ActionResult AcceptRequest(string requestID, string groupID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, groupID))
+                {
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            relationDAO.Accept_Request(requestID, groupID);
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            userDAO.Join_Group(requestID);
+                            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                            groupDAO.Member_Join(groupID);
+
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return GroupRequests(groupID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult DeclineRequest(string requestID, string groupID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, groupID))
+                {
+                    relationDAO.Delelte_Request(requestID, groupID);
+
+                    return GroupRequests(groupID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult SetLeader(string memberID, string groupID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, groupID))
+                {
+                    relationDAO.Set_Leader(memberID, groupID);
+
+                    return GroupMembers(groupID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult SetMember(string leaderID, string groupID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, groupID))
+                {
+                    relationDAO.Set_Member(leaderID, groupID);
+
+                    return GroupLeaders(groupID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult ExpellMember(string memberID, string groupID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, groupID))
+                {
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            relationDAO.Delete_Member(memberID, groupID);
+
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            userDAO.Out_Group(memberID);
+                            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                            groupDAO.Member_Out(groupID);
+
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return GroupMembers(groupID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        [ChildActionOnly]
+        public ActionResult OrganizedProjects(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                // get joined group list
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                var listID = relationDAO.Get_Organized_Projects(groupID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
+
+                return PartialView("_OrganizedProjects", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        [ChildActionOnly]
+        public ActionResult SponsoredProjects(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                // get joined group list
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                var listID = relationDAO.Get_Sponsored_Projects(groupID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
+
+                return PartialView("_SponsoredProjects", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        [ChildActionOnly]
+        public ActionResult ParticipatedProjects(string groupID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                // get joined group list
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                var listID = relationDAO.Get_Participated_Projects(groupID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
+
+                return PartialView("_ParticipatedProjects", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
         public ActionResult ActivityHistory(string groupID)
         {
             // check if parameter valid
@@ -238,193 +681,13 @@ namespace iVolunteer.Controllers
 
             try
             {
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                var result = groupDAO.Get_ActivityHistory(groupID);
-                return PartialView("_ActivityHistory", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult CurrentProjects(string groupID)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-
-            try
-            {
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                var result = groupDAO.Get_CurrentProjects(groupID);
-                return PartialView("_CurrentProjects", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult GroupStructure(string groupID)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-            //get group structure
-            try
-            {
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                var result = groupDAO.Get_GroupStructure(groupID);
-
-                //get current user subrole
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.IsLeader = false;
-                    return PartialView("_GroupStructure", result);
-                }
-                else
-                {
-                    string userID = Session["UserID"].ToString();
-                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    if (relationDAO.Is_Leader(userID, groupID))
-                        ViewBag.IsLeader = true;
-                }
-
                 ViewBag.GroupID = groupID;
-                return PartialView("_GroupStructure", result);
+                return PartialView("_ActivityHistory");
             }
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult RequestList(string groupID)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-
-            try
-            {
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                var result = groupDAO.Get_RequestList(groupID);
-                ViewBag.GroupID = groupID;
-                return PartialView("_RequestList", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult DeniedRequest(string groupID, string requestID)
-        {
-            using (var transaction = new TransactionScope())
-            {
-                try
-                {
-                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    //get request
-                    var request = groupDAO.Get_Request(groupID, requestID);
-                    //delete relation
-                    relationDAO.Delete_Specific_Relation(request.Actor.ID, request.Destination.ID, Relation.MEMBER_RELATION);
-                    //delete request
-                    groupDAO.Delete_Request(groupID, requestID);
-                    transaction.Complete();
-                }
-                catch
-                {
-                    transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
-                }
-            }
-
-            ViewBag.Message = "Đã từ chối";
-            return View("ErrorMessage");
-        }
-
-        public ActionResult AcceptRequest(string groupID, string requestID)
-        {
-            try
-            {
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                //get request
-                var request = groupDAO.Get_Request(groupID, requestID);
-
-                using(var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
-
-                        //update relation
-                        relationDAO.Accept_Member(request.Actor.ID, request.Destination.ID);
-                        //delete follow relation
-                        relationDAO.Delete_Specific_Relation(request.Actor.ID, request.Destination.ID, Relation.FOLLOW_RELATION);
-                        //add user to group
-                        groupDAO.Add_JoinedUser(request.Destination.ID, request.Actor);
-                        //add grup to user joined groups
-                        userDAO.Add_JoinedGroup(request.Actor.ID, request.Destination);
-                        //delete request
-                        groupDAO.Delete_Request(groupID, requestID);
-
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-
-                ViewBag.Message = " Đã đồng ý";
-                return View("ErrorMessage");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
-            }
-        }
-
-        public ActionResult GroupSearch(string name, int page)
-        {
-            try
-            {
-                if (page <= 0) page = 1;
-
-                List<GroupInformation> result = new List<GroupInformation>();
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                if(Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = groupDAO.Search_Group_By_Name(name, 10 * (page - 1), 10);
-                else result = groupDAO.Search_Group_By_Name(name, Status.IS_ACTIVATE, 10 * (page - 1), 10);
-                ViewBag.CurentPage = page;
-
-                return PartialView("_GroupResult", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
             }
         }
     }

@@ -15,7 +15,7 @@ namespace iVolunteer.Models.SQL
     public partial class SQL_AcAc_Relation
     {
         public string UserID { get; set; }
-        public string TargetUserID { get; set; }
+        public string FriendID { get; set; }
         public int Relation { get; set; }
         public bool Status { get; set; }
     

@@ -11,7 +11,6 @@ using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
-using iVolunteer.Models.MongoDB.EmbeddedClass.StructureClass;
 using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
@@ -31,9 +30,9 @@ namespace iVolunteer.Controllers
             try
             {
                 SQL_Account_DAO sqlDAO = new SQL_Account_DAO();
-                sqlDAO.Set_Confirmation_Status(userID, Status.IS_CONFIRMED);
+                sqlDAO.Confirmed(userID);
                 Mongo_User_DAO mongoDAO = new Mongo_User_DAO();
-                mongoDAO.Set_Comfirmation_Status(userID, Status.IS_CONFIRMED);
+                mongoDAO.Confirmed(userID);
             }
             catch
             {
@@ -72,8 +71,14 @@ namespace iVolunteer.Controllers
             try
             {
                 string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_CurrentProjects(userID);
+
+                // get joined group list
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                var listID = relationDAO.Get_Current_Projects(userID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
+
                 return PartialView("_CurrentProjects", result);
             }
             catch
@@ -92,8 +97,14 @@ namespace iVolunteer.Controllers
             try
             {
                 string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_JoinedGroups(userID);
+
+                // get joined group list
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                var listID = relationDAO.Get_JoinedGroups(userID);
+                // get joined group Info
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                var result = groupDAO.Get_GroupsInformation(listID);
+
                 return PartialView("_JoinedGroups", result);
             }
             catch
@@ -112,256 +123,20 @@ namespace iVolunteer.Controllers
             try
             {
                 string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_JoinedProjects(userID);
+
+                // get joined group list
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                var listID = relationDAO.Get_Joined_Projects(userID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
+
                 return PartialView("_JoinedProjects", result);
             }
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult RequestList()
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_JoinedProjects(userID);
-                return PartialView("_JoinedProjects", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult DeniedRequest(string requestID)
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                //get request
-                var request = userDAO.Get_Request(userID, requestID);
-                //transaction
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        if (request.Type == RequestType.FRIEND_REQUEST)
-                        {
-                            SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
-                            //delete relation
-                            relationDAO.Delete_Specific_Relation(request.Actor.ID, userID);
-                        }
-
-                        if (request.Type == RequestType.INVITE_TO)
-                        {
-                            SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                            //delete relation
-                            relationDAO.Delete_Specific_Relation(userID, request.Destination.ID, Relation.MEMBER_RELATION);
-                        }
-                        //delete request
-                        userDAO.Delete_Request(userID, requestID);
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-
-                return RedirectToAction("RequestList", "Account");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
-            }
-        }
-
-        public ActionResult AcceptRequest(string requestID)
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                //get request
-                var request = userDAO.Get_Request(userID, requestID);
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        if (request.Type == RequestType.FRIEND_REQUEST)
-                        {
-                            SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
-                             //update relation
-                             relationDAO.Update_Relation(request.Actor.ID, userID, Status.ACCEPTED);
-                            //add new relation
-                            SQL_Friendship relation = new SQL_Friendship();
-                            relation.UserID = userID;
-                            relation.FriendID = request.Actor.ID;
-                            relation.Status = Status.ACCEPTED;
-
-                            relationDAO.Add_Relation(relation);
-
-                             //add friend to list
-                            userDAO.Add_Friend(request.Actor.ID, request.Destination);
-                            userDAO.Add_Friend(request.Destination.ID, request.Actor);
-                        }
-
-                        if (request.Type == RequestType.INVITE_TO)
-                        {
-                             SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-
-                             //update relation
-                             relationDAO.Update_Relation(userID, request.Destination.ID, Relation.MEMBER_RELATION, Status.ACCEPTED);
-                             //add to mongBD
-                             userDAO.Add_CurrentProject(userID, request.Destination);
-                             userDAO.Add_JoinedProject_ActivityHistory(userID, request.Destination);
-                        }
-
-                        //delete request
-                        userDAO.Delete_Request(userID, requestID);
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-
-                return RedirectToAction("RequestList", "Account");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
-            }
-        }
-
-        public ActionResult FriendRequest(string otherID)
-        {
-            try
-            {
-                if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
-                //create actor
-                SDLink actor = new SDLink();
-                actor.ID = Session["UserID"].ToString();
-                actor.DisplayName = Session["DisplayName"].ToString();
-                actor.Handler = Handler.USER;
-
-
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                //create destination
-                SDLink destination = userDAO.Get_SDLink(otherID);
-                //create request
-                RequestItem request = new RequestItem(actor, RequestType.FRIEND_REQUEST, destination);
-                //write to DB
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
-
-                        if(relationDAO.Is_Be_Requested(actor.ID, otherID))
-                        {
-                            // create sql relation
-                            SQL_Friendship relation1 = new SQL_Friendship();
-                            relation1.UserID = actor.ID;
-                            relation1.FriendID = otherID;
-                            relation1.Status = Status.ACCEPTED;
-
-                            SQL_Friendship relation2 = new SQL_Friendship();
-                            relation2.UserID = otherID;
-                            relation2.FriendID = actor.ID;
-                            relation2.Status = Status.ACCEPTED;
-
-                            relationDAO.Add_Relation(relation1);
-                            relationDAO.Add_Relation(relation2);
-
-                            userDAO.Add_Friend(actor.ID, destination);
-                            userDAO.Add_Friend(destination.ID, actor);
-                            //delete request
-                            userDAO.Cancel_Request(otherID, actor.ID);
-
-                            ViewBag.Message = " Kết bạn thành công.";
-                        }
-                        else
-                        {
-                            //create pending 1 way relation
-                            SQL_Friendship relation = new SQL_Friendship();
-                            relation.UserID = actor.ID;
-                            relation.FriendID = otherID;
-                            relation.Status = Status.PENDING;
-
-                            relationDAO.Add_Relation(relation);
-                            userDAO.Add_Request(otherID, request);
-                            ViewBag.Message = " Gửi lời mời kết bạn thành công.";
-                        }
-
-
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-
-                return PartialView("ErrorMessage");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
-            }
-        }
-
-        public ActionResult CancelFriendRequest(string otherID)
-        {
-            try
-            {
-                if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
-                string userID = Session["UserID"].ToString();
-
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
-                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
-
-                        relationDAO.Delete_Specific_Relation(userID, otherID);
-
-                        userDAO.Cancel_Request(userID, otherID);
-
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-                ViewBag.Message = "Hủy yêu cầu kết bạn thành công.";
-                return PartialView("ErrorMessage");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("ErrorMessage");
             }
         }
 
@@ -370,18 +145,12 @@ namespace iVolunteer.Controllers
             try
             {
                 if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
-                ///create relation
-                SQL_AcGr_Relation relation = new SQL_AcGr_Relation();
-                relation.UserID = Session["UserID"].ToString();
-                relation.GroupID = groupID;
-                relation.Relation = Relation.FOLLOW_RELATION;
-                relation.Status = Status.ACCEPTED;
+                string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                relationDAO.Add_Relation(relation);
+                relationDAO.Add_Follower(userID, groupID);
 
-                ViewBag.Message = " Bạn đã theo dõi hoạt động công khai của nhóm này. ";
-                return PartialView("ErrorMessage");
+                return ActionToGroup(groupID);
             }
             catch
             {
@@ -398,10 +167,9 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                relationDAO.Delete_Specific_Relation(userID, groupID, Relation.FOLLOW_RELATION);
+                relationDAO.Delete_Follower(userID, groupID);
 
-                ViewBag.Message = " Bạn đã ngừng theo dõi hoạt động công khai của nhóm này. ";
-                return PartialView("ErrorMessage");
+                return ActionToGroup(groupID);
             }
             catch
             {
@@ -415,26 +183,17 @@ namespace iVolunteer.Controllers
             try
             {
                 if (Session["UserID"] == null) return RedirectToAction("Login", "Home");
-                //create actor
-                SDLink actor = new SDLink();
-                actor.ID = Session["UserID"].ToString();
-                actor.DisplayName = Session["DisplayName"].ToString();
-                actor.Handler = Handler.USER;
+                string userID = Session["UserID"].ToString();
 
-                ///create relation
-                SQL_AcPr_Relation relation = new SQL_AcPr_Relation();
-                relation.UserID = Session["UserID"].ToString();
-                relation.ProjectID = projectID;
-                relation.Relation = Relation.FOLLOW_RELATION;
-                relation.Status = Status.ACCEPTED;
+                
                 using (var transaction = new TransactionScope())
                 {
                     try
                     {
                         SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                        relationDAO.Add_Relation(relation);
+                        relationDAO.Add_Follower(userID, projectID);
                         Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                        projectDAO.Add_Follower(projectID, actor);
+                        projectDAO.User_Follow(projectID);
 
                         transaction.Complete();
                     }
@@ -446,8 +205,7 @@ namespace iVolunteer.Controllers
                     }
                 }
 
-                ViewBag.Message = " Bạn đã theo dõi hoạt động công khai của sự kiện này. ";
-                return PartialView("ErrorMessage");
+                return ActionToProject(projectID);
             }
             catch
             {
@@ -468,10 +226,9 @@ namespace iVolunteer.Controllers
                     try
                     {
                         SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                        relationDAO.Delete_Specific_Relation(userID, projectID, Relation.FOLLOW_RELATION);
-
+                        relationDAO.Add_Follower(userID, projectID);
                         Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                        projectDAO.Delete_Follower(projectID, userID);
+                        projectDAO.User_Unfollow(projectID);
 
                         transaction.Complete();
                     }
@@ -483,8 +240,7 @@ namespace iVolunteer.Controllers
                     }
                 }
 
-                ViewBag.Message = " Bạn đã ngừng theo dõi hoạt động công khai của sự kiện này. ";
-                return PartialView("ErrorMessage");
+                return ActionToProject(projectID);
             }
             catch
             {
@@ -499,6 +255,7 @@ namespace iVolunteer.Controllers
         {
             try
             {
+                ViewBag.GroupID = groupID;
                 if (Session["UserID"] == null) 
                 {
 
@@ -507,25 +264,32 @@ namespace iVolunteer.Controllers
                 }
                 else ViewBag.IsUser = true;
 
+                if (Session["Role"].ToString() == "Admin")
+                {
+                    SQL_Group_DAO groupDAO = new SQL_Group_DAO();
+
+                    ViewBag.IsAdmin = true;
+                    ViewBag.IsActivate = groupDAO.IsActivate(groupID);
+                    return PartialView("_ActionToGroup");
+                }
+
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                if (relationDAO.Is_Member(userID, groupID) || relationDAO.Is_Leader(userID, groupID))
+                if (relationDAO.Is_Joined(userID, groupID) || relationDAO.Is_Leader(userID, groupID))
                     ViewBag.IsJoined = true;
 
                 if (relationDAO.Is_Requested(userID, groupID))
                     ViewBag.IsRequested = true;
 
-                if (relationDAO.Is_Following(userID, groupID))
+                if (relationDAO.Is_Follower(userID, groupID))
                     ViewBag.IsFollowing = true;
-                ViewBag.GroupID = groupID;
 
-                //Check if report has been sent
-                SQL_AcGr_Relation_DAO reportDAO = new SQL_AcGr_Relation_DAO();
-                if (reportDAO.IsSentReport(userID, groupID))
-                    ViewBag.IsSentReport = true;
+                if (relationDAO.Is_Reported(userID, groupID))
+                    ViewBag.IsReported = true;
 
                 return PartialView("_ActionToGroup");
+
             }
             catch
             {
@@ -534,63 +298,23 @@ namespace iVolunteer.Controllers
             }
         }
 
-        public ActionResult GroupJoinRequest(string groupID)
+        public ActionResult JoinGroupRequest(string groupID)
         {
             try
             {
                 if (Session["UserID"] == null)
                 {
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    ViewBag.Message = Error.ACCESS_DENIED;
                     return PartialView("ErrorMessage");
                 }
-                //create actor
-                SDLink actor = new SDLink();
-                actor.ID = Session["UserID"].ToString();
-                actor.DisplayName = Session["DisplayName"].ToString();
-                actor.Handler = Handler.USER;
 
+                string userID = Session["UserID"].ToString();
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
 
-                if(relationDAO.Is_Requested(actor.ID, groupID))
-                {
-                    ViewBag.Message = "Bạn đã gửi yêu cầu gia nhập nhóm này rồi.";
-                    return PartialView("ErrorMessage");
-                }
+                if(!relationDAO.Is_Requested(userID, groupID))
+                    relationDAO.Add_Request(userID, groupID);
 
-                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                //get group SDLink
-                SDLink group = groupDAO.Get_SDLink(groupID);
-
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        //create sql relation
-                        SQL_AcGr_Relation relation = new SQL_AcGr_Relation();
-                        relation.UserID = actor.ID;
-                        relation.GroupID = groupID;
-                        relation.Relation = Relation.MEMBER_RELATION;
-                        relation.Status = Status.PENDING;
-
-                        relationDAO.Add_Relation(relation);
-
-                        //create mông request
-                        RequestItem request = new RequestItem(actor, RequestType.JOIN_REQUEST, group);
-
-                        groupDAO.Add_Request(groupID, request);
-
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return PartialView("ErrorMessage");
-                    }
-                }
-
-                ViewBag.Message = "Gửi yêu cầu thành công.";
-                return PartialView("ErrorMessage");
+                return ActionToGroup(groupID);
             }
             catch
             {
@@ -599,46 +323,38 @@ namespace iVolunteer.Controllers
             }
         }
 
-        public ActionResult CancelGroupJoinRequest(string groupID)
+        public ActionResult CancelJoinGroupRequest(string groupID)
         {
-            if (Session["UserID"] == null)
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                relationDAO.Delelte_Request(userID, groupID);
+
+                return ActionToGroup(groupID);
+            }
+            catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
-
-            string userID = Session["UserID"].ToString();
-
-            using (var transaction = new TransactionScope())
-            {
-                try
-                {
-                    //delete sql relation
-                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    relationDAO.Delete_Specific_Relation(userID, groupID, Relation.MEMBER_RELATION);
-
-                    //delete mongo request
-                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                    groupDAO.Cancel_Request(userID, groupID);
-
-                    transaction.Complete();
-                }
-                catch
-                {
-                    transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return PartialView("ErrorMessage");
-                }
-            }
-
-            ViewBag.Message = "Hủy yêu cầu thành công.";
-            return PartialView("ErrorMessage");
         }
+
         [ChildActionOnly]
         public ActionResult ActionToOtherUser(string otherID)
         {
             try
             {
+                ViewBag.OtherID = otherID;
+
                 //check if is user is login
                 if (Session["UserID"] == null)
                 {
@@ -648,37 +364,424 @@ namespace iVolunteer.Controllers
                 }
                 else ViewBag.IsUser = true;
 
+                if (Session["Role"].ToString() == "Admin")
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+
+                    ViewBag.IsAdmin = true;
+                    ViewBag.IsActivate = accountDAO.IsActivate(otherID);
+                    return PartialView("_ActionToOtherUser");
+                }
+
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+
                 string userID = Session["UserID"].ToString();
                 //if same as currnet user
                 if (userID == otherID)
                 {
-
                     ViewBag.IsUser = false;
                     return PartialView("_ActionToOtherUser");
                 }
-                //Check if report has been sent
-                SQL_AcAc_Relation_DAO reportDAO = new SQL_AcAc_Relation_DAO();
-                if (reportDAO.IsSentReport(userID, otherID))
-                    ViewBag.IsSentReport = true;
 
-                SQL_Friendship_DAO relationDAO = new SQL_Friendship_DAO();
+                if (Session["Role"].ToString() == "Admin")
+                {
+                    ViewBag.IsAdmin = true;
+                    return PartialView("_ActionToOtherUser");
+                }
+
+
                 //check if is friend
                 if (relationDAO.Is_Friend(userID, otherID))
                 {
                     ViewBag.IsFriend = true;
-                    return PartialView("_ActionToOtherUser");
                 }
-                else ViewBag.IsFriend = false;
                 //check if user send request
                 if (relationDAO.Is_Requested(userID, otherID))
                 {
                     ViewBag.IsRequested = true;
-                    return PartialView("_ActionToOtherUser");
                 }
-                else ViewBag.IsRequested = false;
+                if (relationDAO.Is_Reported(userID, otherID))
+                    ViewBag.IsReported = true;
 
-                ViewBag.OtherID = otherID;
                 return PartialView("_ActionToOtherUser");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult MutalFriends(string otherID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    return null;
+                }
+
+                string userID = Session["UserID"].ToString();
+                if (userID == otherID) return null;
+
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                var listID =  relationDAO.Get_MutalFriend(userID, otherID);
+                
+                ViewBag.Message = " - " + listID.Count + " bạn chung ";
+                //Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                //var result = userDAO.Get_AccountsInformation(listID);
+
+                return PartialView("_MutalFriends");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult FriendRequest(string otherID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                //check if target send request or not
+                if (relationDAO.Is_Requested(otherID, userID))
+                    AcceptFriendRequest(otherID);
+                else
+                {
+                    ///check if curent user has sent request or not 
+                    if (!relationDAO.Is_Requested(userID, otherID))
+                        relationDAO.Add_Request(userID, otherID);
+                }
+
+                return ActionToOtherUser(otherID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult CancelFriendRequest(string otherID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                relationDAO.Delete_Request(userID, otherID);
+
+                return ActionToOtherUser(otherID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        //child acton return action with project
+        [ChildActionOnly]
+        public ActionResult ActionToProject(string projectID)
+        {
+            try
+            {
+                ViewBag.ProjectID = projectID;
+                if (Session["UserID"] == null)
+                {
+
+                    ViewBag.IsUser = false;
+                    return PartialView("_ActionToProject");
+                }
+                else ViewBag.IsUser = true;
+
+                if (Session["Role"].ToString() == "Admin")
+                {
+                    SQL_Project_DAO projectDAO = new SQL_Project_DAO();
+
+                    ViewBag.IsAdmin = true;
+                    ViewBag.IsActivate = projectDAO.IsActivate(projectID);
+                    return PartialView("_ActionToProject");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                if (relationDAO.Is_Joined(userID, projectID))
+                    ViewBag.IsJoined = true;
+
+                if (relationDAO.Is_Join_Requested(userID, projectID))
+                    ViewBag.IsJoinRequested = true;
+
+                if (relationDAO.Is_Sponsor(userID, projectID))
+                    ViewBag.IsSponsored = true;
+
+                if (relationDAO.Is_Sponsor_Requested(userID, projectID))
+                    ViewBag.IsSponsorRequested = true;
+
+                if (relationDAO.Is_Follower(userID, projectID))
+                    ViewBag.IsFollowing = true;
+
+                if (relationDAO.Is_Reported(userID, projectID))
+                    ViewBag.IsReported = true;
+
+                return PartialView("_ActionToProject");
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult JoinProjectRequest(string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (!relationDAO.Is_Join_Requested(userID, projectID))
+                    relationDAO.Add_Join_Request(userID, projectID);
+
+                return ActionToProject(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult CancelJoinProjectRequest(string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                relationDAO.Delete_Join_Request(userID, projectID);
+
+                return ActionToProject(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult SponsorProjectRequest(string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (!relationDAO.Is_Sponsor_Requested(userID, projectID))
+                    relationDAO.Add_Sponsor_Request(userID, projectID);
+
+                return ActionToProject(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult CancelSponsorProjectRequest(string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                relationDAO.Delete_Sponsor_Request(userID, projectID);
+
+                return ActionToProject(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult AcceptFriendRequest(string requestID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                        relationDAO.Accept_Request(userID, requestID);
+
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        userDAO.Add_Friend(userID);
+                        userDAO.Add_Friend(requestID);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+
+                }
+                return FriendRequestList();
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult DeclineFriendRequest(string requestID)
+        {
+
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                relationDAO.Delete_Request(requestID, userID);
+
+                return FriendRequestList();
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+        }
+
+        public ActionResult FriendRequestList()
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                var listID =  relationDAO.Get_Requests(userID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_AccountsInformation(listID);
+
+                return PartialView("_FriendRequestList", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult DeleteFriend(string friendID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                        relationDAO.Delete_Friend(friendID, userID);
+                        relationDAO.Delete_Friend(userID, friendID);
+
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        userDAO.Delete_Friend(userID);
+                        userDAO.Delete_Friend(friendID);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+
+                }
+                return FriendRequestList();
             }
             catch
             {

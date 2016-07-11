@@ -1,57 +1,46 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.StructureClass.GroupStructure
-
-<!--Leader-->
+﻿<!--Leader-->
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Trưởng nhóm</h4>
+    <div class="row">
+        <div class="col-sm-12" style="margin-top: -20px">
+            <h4>Thành Viên</h4>
+            <div class="divider-holizon"></div>
         </div>
     </div>
-    <div class="divider-holizon"></div>
-    <!-- List Leaders -->
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-            <ul class="list-navi">
-                @foreach (var item in Model.Leaders)
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active" data-type="leader" data-toggle = "tab" >
+                    @Ajax.ActionLink("TRƯỞNG NHÓM", "GroupLeaders", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="member" data-toggle = "tab">
+                    @Ajax.ActionLink("THÀNH VIÊN", "GroupMembers","Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                @if (ViewBag.IsLeader == true)
                 {
-                    <li><a href="@Url.Action("UserHome", "User", new { userID = item.SDInfo.ID })">@item.SDInfo.DisplayName</a></li>
-                    Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.SDInfo.ID });
-                    if (ViewBag.IsLeader == true)
-                    {
-                        @Html.ActionLink(" Làm thành viên ", "SetMember", "Group", new { groupID = ViewBag.GroupID, leaderID = item.SDInfo.ID }, null);
-                    }
+                <li data-type="request"data-toggle="tab">
+                    @Ajax.ActionLink("YÊU CẦU GIA NHẬP", "GroupRequests", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
                 }
             </ul>
         </div>
     </div>
-</div>
-<!--Members-->
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Thành viên</h4>
+
+    <div class="tab-content" id="content-panel">
+        <div id="content-panel" class="tab-pane fade in active">
+            @{ Html.RenderAction("GroupLeaders", "Group", new { groupID = ViewBag.GroupID });
+            }
+            </div>
+            @*<div id="member-panel" class="tab-pane fade in">
+                @{ Html.RenderAction("GroupMembers", "Group", new { groupID = ViewBag.GroupID });
+                }
+            </div>
             @if (ViewBag.IsLeader == true)
             {
-                @Ajax.ActionLink(" Yêu cầu gia nhập ", "RequestList", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace });
-            }
-        </div>
-    </div>
-    <div class="divider-holizon"></div>
-    <!-- List Members -->
-    <div class="row">
-        <div class="col-sm-12 col-xs-12">
-            <ul class="list-navi">
-                @foreach (var item in Model.JoinedUsers)
-                {
-                    <li><a href="@Url.Action("UserHome","User",new { userID = item.SDInfo.ID })">@item.SDInfo.DisplayName</a></li>
-                    Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.SDInfo.ID });
-                    if (ViewBag.IsLeader == true)
-                    {
-                        @Html.ActionLink(" Làm nhóm trưởng ","SetLeader","Group", new {groupID = ViewBag.GroupID, memberID = item.SDInfo.ID }, null);
-                        @Html.ActionLink(" Trục xuất ", "SetLeader", "Group", new { groupID = ViewBag.GroupID, memberID = item.SDInfo.ID }, null);
+                <div id="request-panel" class="tab-pane fade in">
+                    @{ Html.RenderAction("GroupRequests", "Group", new { groupID = ViewBag.GroupID });
                     }
-                }
-            </ul>
+                </div>
+            }*@
         </div>
-    </div>
 </div>

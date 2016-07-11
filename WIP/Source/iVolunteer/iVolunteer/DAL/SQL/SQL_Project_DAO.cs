@@ -10,7 +10,7 @@ namespace iVolunteer.DAL.SQL
     public class SQL_Project_DAO
     {
         /// <summary>
-        /// Add new project to SQL DB
+        /// Add project to SQL DB
         /// </summary>
         /// <param name="project">SQL_Project instance</param>
         /// <returns>true if success</returns>
@@ -31,17 +31,17 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Check if a project is activate
+        /// Check if a project is activate or not
         /// </summary>
-        /// <param name="projectID">projectIDt want to check</param>
-        /// <returns>activation status of account to compare with Constant</returns>
+        /// <param name="projectID"></param>
+        /// <returns>return value compare with Constant</returns>
         public bool IsActivate(string projectID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(g => g.ProjectID == projectID);
                     return project.IsActivate;
                 }
             }
@@ -51,21 +51,25 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Set activation status of project
+        /// deactivte an project
         /// </summary>
         /// <param name="projectID"></param>
-        /// <param name="status">get in Constant</param>
         /// <returns></returns>
-        public bool Set_Activation_Status(string projectID, bool status)
+        public bool Deactive(string projectID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
-                    project.IsActivate = status;
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_BANNED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch
@@ -74,20 +78,100 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// Delete a project
+        /// activate an project
         /// </summary>
         /// <param name="projectID"></param>
-        /// <returns>true if success</returns>
-        public bool Delete_Project(string projectID)
+        /// <returns></returns>
+        public bool Activate(string projectID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(p => p.ProjectID == projectID);
-                    dbEntities.SQL_Project.Remove(project);
-                    dbEntities.SaveChanges();
-                    return true;
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
+                                                                            && acc.IsActivate == Status.IS_BANNED);
+                    if (result != null)
+                    {
+                        result.IsActivate = Status.IS_ACTIVATE;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if project is ongoing or not
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Is_Ongoing(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(g => g.ProjectID == projectID);
+                    return project.InProgress;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// close an active project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Close(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    if (result != null)
+                    {
+                        result.InProgress = Status.ENDED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// reopen an active project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Reopen(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
+                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    if (result != null)
+                    {
+                        result.InProgress = Status.ONGOING;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
             }
             catch

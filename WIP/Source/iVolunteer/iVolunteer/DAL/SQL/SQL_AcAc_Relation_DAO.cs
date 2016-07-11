@@ -10,20 +10,26 @@ namespace iVolunteer.DAL.SQL
     public class SQL_AcAc_Relation_DAO
     {
         /// <summary>
-        /// Add Report that made bt User to other User
+        /// add friend relation
         /// </summary>
-        /// <param name="report"></param>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
         /// <returns></returns>
-        public bool Add_Report(SQL_AcAc_Relation report)
+        public bool Add_Friend(string userID, string otherID)
         {
             try
             {
-                using (iVolunteerEntities dbEntitiies = new iVolunteerEntities())
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    dbEntitiies.SQL_AcAc_Relation.Add(report);
-                    dbEntitiies.SaveChanges();
-                    return true;
+                    SQL_AcAc_Relation relation = new SQL_AcAc_Relation();
+                    relation.UserID = userID;
+                    relation.FriendID = otherID;
+                    relation.Relation = AcAcRelation.FRIEND_RELATION;
+                    relation.Status = Status.ACCEPTED;
 
+                    dbEntities.SQL_AcAc_Relation.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
                 }
             }
             catch
@@ -31,20 +37,27 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        /// <summary>
-        /// User check if Report has been sent
+        /// <report>
+        /// add friend relation
         /// </summary>
         /// <param name="userID"></param>
-        /// <param name="groupID"></param>
+        /// <param name="otherID"></param>
         /// <returns></returns>
-        public bool IsSentReport(string userID, string targetUserID)
+        public bool Add_Report(string userID, string otherID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.TargetUserID == targetUserID && rl.Relation == Relation.REPORT_RELATION);
-                    return result != null;
+                    SQL_AcAc_Relation relation = new SQL_AcAc_Relation();
+                    relation.UserID = userID;
+                    relation.FriendID = otherID;
+                    relation.Relation = AcAcRelation.REPORT_RELATION;
+                    relation.Status = Status.ACCEPTED;
+
+                    dbEntities.SQL_AcAc_Relation.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
                 }
             }
             catch
@@ -58,13 +71,13 @@ namespace iVolunteer.DAL.SQL
         /// <param name="userID"></param>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public bool DeleteSentReport(string userID, string targetUserID)
+        public bool Delete_Report(string userID, string otherUserID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.TargetUserID == targetUserID && rl.Relation == Relation.REPORT_RELATION);
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.FriendID == otherUserID && rl.Relation == AcAcRelation.REPORT_RELATION);
                     dbEntities.SQL_AcAc_Relation.Remove(result);
                     dbEntities.SaveChanges();
                     return true;
@@ -80,16 +93,285 @@ namespace iVolunteer.DAL.SQL
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public bool DeleteReportRelation(string userID)
+        public bool Delete_Reports(string userID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.RemoveRange(dbEntities.SQL_AcAc_Relation.Where(rl => rl.TargetUserID == userID
-                                                                                                            && rl.Relation == Relation.REPORT_RELATION));
+                    var result = dbEntities.SQL_AcAc_Relation.RemoveRange(dbEntities.SQL_AcAc_Relation.Where(rl => rl.FriendID == userID
+                                                                                                            && rl.Relation == AcAcRelation.REPORT_RELATION));
                     dbEntities.SaveChanges();
                     return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add friend request
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool Add_Request(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_AcAc_Relation relation = new SQL_AcAc_Relation();
+                    relation.UserID = userID;
+                    relation.FriendID = otherID;
+                    relation.Relation = AcAcRelation.FRIEND_RELATION;
+                    relation.Status = Status.PENDING;
+
+                    dbEntities.SQL_AcAc_Relation.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// accepnt a request
+        /// </summary>
+        /// <param name="userID">recceiver </param>
+        /// <param name="otherID">sender</param>
+        /// <returns></returns>
+        public bool Accept_Request(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == otherID
+                                                                   && rl.FriendID == userID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.PENDING);
+                    if (result != null)
+                    {
+                        result.Status = Status.ACCEPTED;
+                        dbEntities.SaveChanges();
+                        Add_Friend(userID, otherID);
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete a request
+        /// </summary>
+        /// <param name="userID">sender</param>
+        /// <param name="otherID">receiver</param>
+        /// <returns></returns>
+        public bool Delete_Request(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.FriendID == otherID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.PENDING);
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcAc_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete a friend relation
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
+        public bool Delete_Friend(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.FriendID == otherID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.ACCEPTED);
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcAc_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// check if request is send or not 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
+        public bool Is_Requested(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.FriendID == otherID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.PENDING);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if report is send or not 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
+        public bool Is_Reported(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.FriendID == otherID
+                                                                   && rl.Relation == AcAcRelation.REPORT_RELATION
+                                                                   && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// check if report is friend or not 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
+        public bool Is_Friend(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.FriendID == otherID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get active friend of user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<string> Get_Friends(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.UserID == userID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE)
+                                                             .Select(rl => rl.FriendID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get active request
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<string> Get_Requests(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.FriendID == userID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.PENDING
+                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE)
+                                                             .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get active mutal friend
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
+        public List<string> Get_MutalFriend(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.UserID == userID
+                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Account1.SQL_AcAc_Relation1.FirstOrDefault(rl2 => rl2.FriendID == otherID 
+                                                                                                                            && rl2.Status == Status.ACCEPTED) != null)
+                                                             .Select(rl => rl.FriendID).ToList();
+                    return result;
                 }
             }
             catch

@@ -25,6 +25,7 @@ namespace iVolunteer.Models.SQL
         public System.DateTime DateLastActivity { get; set; }
         public string ProjectID { get; set; }
         public string GroupID { get; set; }
+        public Nullable<bool> IsPinned { get; set; }
         public bool IsPublic { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

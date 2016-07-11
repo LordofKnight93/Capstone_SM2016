@@ -1,76 +1,81 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Thông tin về sự kiện</h4>
+
+    <!-- Tổng quan -->
+    <div class="row">
+        <div class="col-md-12" style="margin-top: -20px">
+            <h4 style="color: #049f88">Tổng Quan</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
     </div>
-    <dl class="dl-horizontal">
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ProjectName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DateStart)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateStart)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DateEnd)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DateEnd)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ProjectDescription)
-        </dt>
-
-        <dd>
+    <div class="row">
+        <div class="col-md-12">
             @Html.DisplayFor(model => model.ProjectDescription)
-        </dd>
+        </div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-
-        <dd>
+    <!-- Địa điểm -->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Địa Điểm</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             @Html.DisplayFor(model => model.Location)
-        </dd>
+        </div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.MemberCount)
-        </dt>
+    <!-- Thời Gian -->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Thời Gian</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p><strong>Thời gian bắt đầu: </strong>@Html.DisplayFor(model => model.DateStart)</p>
+            <p><strong>Thời gian kết thúc: </strong>@Html.DisplayFor(model => model.DateEnd)</p>
+        </div>
+    </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.MemberCount)
-        </dd>
+    <!-- Thông tin liên quan -->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Thông tin liên quan</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FollowerCount)
-        </dt>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
 
-        <dd>
-            @Html.DisplayFor(model => model.FollowerCount)
-        </dd>
+        </div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsRecruit)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsRecruit)
-        </dd>
-    </dl>
+    <!-- Liên hệ-->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Liên hệ</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-post">
+                <li>
+                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
+                    <span>@Html.DisplayFor(model => model.Email)</span>
+                </li>
+                <li>
+                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
+                    <span>@Html.DisplayFor(model => model.Phone)</span>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 
