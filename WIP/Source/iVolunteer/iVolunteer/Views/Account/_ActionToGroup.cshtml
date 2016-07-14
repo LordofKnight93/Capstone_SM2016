@@ -36,7 +36,7 @@
             }
             else
             {
-                @Ajax.ActionLink("Rời nhóm", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Rời nhóm", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn rời nhóm này ? " }, new { @type = "button", @class = "btn btn-default" })
             }
 
             if (ViewBag.IsReported == true)

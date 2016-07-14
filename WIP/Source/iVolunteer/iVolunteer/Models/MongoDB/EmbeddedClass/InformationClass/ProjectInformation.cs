@@ -23,13 +23,15 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public DateTime DateStart { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateEnd { get; set; }
-        public string ProjectDescription { get; set; }
+        [MaxLength(150, ErrorMessage = "Độ dài không quá 150 ký tự")]
+        public string ProjectShortDescription { get; set; }
+        public string ProjectFullDescription { get; set; }
         public string Location { get; set; }
         public int MemberCount { get; set; }
         public int FollowerCount { get; set; }
         [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng!")]
         public string Email { get; set;}
-        [RegularExpression(@"^[0-9]*$")]
+        [RegularExpression(@"^[0-9]*$", ErrorMessage ="Chỉ chấp nhận ký tự số")]
         public string Phone { get; set; }
         public bool InProgress { get; set; }
         public bool IsRecruit { get; set; }
@@ -43,7 +45,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.DateCreate = new DateTime();
             this.DateStart = new DateTime();
             this.DateEnd = new DateTime();
-            this.ProjectDescription = "";
+            this.ProjectShortDescription = "";
             this.Location = "";
             this.MemberCount = 0;
             this.FollowerCount = 0;

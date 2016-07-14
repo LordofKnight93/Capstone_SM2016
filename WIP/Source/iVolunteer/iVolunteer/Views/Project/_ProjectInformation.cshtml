@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @Html.DisplayFor(model => model.ProjectDescription)
+            @Html.DisplayFor(model => model.ProjectShortDescription)
         </div>
     </div>
 
@@ -45,9 +45,9 @@
     <!-- Thông tin liên quan -->
     <div class="row">
         <div class="col-md-12">
-            <h4 style="color: #049f88">Thông tin liên quan</h4>
+            <h4 style="color: #049f88">Thông tin chi tiết</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
-
+            @Html.DisplayFor(model => model.ProjectFullDescription)
         </div>
     </div>
     <div class="row">

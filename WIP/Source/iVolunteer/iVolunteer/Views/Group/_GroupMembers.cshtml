@@ -73,12 +73,12 @@
                                     </div>
                                     <div class="row" style="margin-top: -7px; text-align: center">
                                         <label class="member-department">
-                                                @Ajax.ActionLink("Thăng chức", "SetLeader", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink("Thăng chức", "SetLeader", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" })
                                         </label>
                                     </div>
                                     <div class="row" style="margin-top: -7px; text-align: center">
                                         <label class="member-department">
-                                            @Ajax.ActionLink("Trục xuất", "ExpellMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                            @Ajax.ActionLink("Trục xuất", "ExpellMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })
                                         </label>
                                     </div>
                                 </div>

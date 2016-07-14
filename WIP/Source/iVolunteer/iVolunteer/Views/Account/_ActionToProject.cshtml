@@ -36,24 +36,24 @@
         }
         else
         {
-            @Ajax.ActionLink("Rời sự kiện", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            @Ajax.ActionLink("Rời sự kiện", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia sự kiện này nữa ? " }, new { @type = "button", @class = "btn btn-default" })
         }
 
         if (ViewBag.IsSPonsored != true)
         {
             if (ViewBag.IsSponsorRequested == true)
             {
-                @Ajax.ActionLink("Hủy yêu cầu quyên góp", "CancelSponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Hủy yêu cầu ủng hộ", "CancelSponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
             }
             else
             {
-                @Ajax.ActionLink("Quyên góp ", "SponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Ủng hộ", "SponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
             }
         }
         else
         {
             <button type="button" class="btn btn-default" aria-label="Left Align">
-                Đã quyên góp
+                Đã ủng hộ
             </button>
         }
 
@@ -70,7 +70,12 @@
 }
 else
 {
-    @Ajax.ActionLink("Quyên góp ", "CreateGuest", "Home", null, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+    <button class="btn btn-default" data-container="body" data-toggle="modal" data-target="#createSponsorForm">
+        Tài trợ, quyên góp
+    </button>
+
+    Html.RenderAction("CreateSponsor", "Project", new { projectID = ViewBag.ProjectID });
+
 }
 
 

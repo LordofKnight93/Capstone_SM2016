@@ -1,7 +1,7 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
 
 @Html.AntiForgeryToken()
-<div id="createProjectForm" class="modal fade" role="dialog">
+@*<div id="createProjectForm" class="modal fade" role="dialog">*@
     <div class="modal-dialog modal-lg modal-md">
         <div class="modal-content">
             <div class="modal-body">
@@ -65,8 +65,8 @@
                                             <label for="projectDescription">Mô tả: </label>
                                         </div>
                                         <div class="col-xs-5 text-input">
-                                            @Html.TextAreaFor(model => model.ProjectDescription, new { @id = "projectDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
-                                            @Html.ValidationMessageFor(model => model.ProjectDescription, "", new { @class = "text-danger" })
+                                            @Html.TextAreaFor(model => model.ProjectShortDescription, new { @id = "projectDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.ProjectShortDescription, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
 
@@ -105,7 +105,9 @@
                                             @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-
+                                    <div>
+                                        @ViewBag.Message
+                                    </div>
                                     <!-- Button -->
                                     <div class="row" style="margin-top: 60px">
                                         <div class="col-xs-2 col-xs-offset-7 text-input">
@@ -123,4 +125,4 @@
             </div>
         </div>
     </div>
-</div>
+@*</div>*@

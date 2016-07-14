@@ -253,8 +253,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.MEMBER_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -285,8 +284,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.FOLLOW_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -316,8 +314,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.ORGANIZE_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -348,8 +345,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.LEADER_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -380,8 +376,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.SPONSOR_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -412,8 +407,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.REPORT_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.ACCEPTED);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -443,6 +437,7 @@ namespace iVolunteer.DAL.SQL
                     Delete_Leader(leaderID, projectID);
                     Add_Member(leaderID, projectID);
 
+                    transaction.Complete();
                     return true;
                 }
                 catch
@@ -468,6 +463,7 @@ namespace iVolunteer.DAL.SQL
                     Delete_Member(memberID, projectID);
                     Add_Leader(memberID, projectID);
 
+                    transaction.Complete();
                     return true;
                 }
                 catch
@@ -693,12 +689,12 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// accept user to project
+        /// accept user to join project
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Accept_Request(string userID, string projectID)
+        public bool Accept_Join_Request(string userID, string projectID)
         {
             try
             {
@@ -707,8 +703,38 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.MEMBER_RELATION
-                                                                   && rl.Status == Status.PENDING
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.PENDING);
+                    if (result != null)
+                    {
+                        result.Status = Status.ACCEPTED;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// accept user to sponsor project
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Accept_Sponsor_Request(string userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.ProjectID == projectID
+                                                                   && rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                   && rl.Status == Status.PENDING);
                     if (result != null)
                     {
                         result.Status = Status.ACCEPTED;
@@ -738,8 +764,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.MEMBER_RELATION
-                                                                   && rl.Status == Status.PENDING
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.PENDING);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -770,8 +795,7 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.SPONSOR_RELATION
-                                                                   && rl.Status == Status.PENDING
-                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE);
+                                                                   && rl.Status == Status.PENDING);
                     if (result != null)
                     {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
@@ -862,7 +886,7 @@ namespace iVolunteer.DAL.SQL
         /// get project active join request
         /// </summary>
         /// <param name="projectID"></param>
-        public List<string> Get_Join_Request(string projectID)
+        public List<string> Get_Join_Requests(string projectID)
         {
             try
             {
@@ -886,7 +910,7 @@ namespace iVolunteer.DAL.SQL
         /// get project active sponsor request
         /// </summary>
         /// <param name="projectID"></param>
-        public List<string> Get_Sponsor_Request(string projectID)
+        public List<string> Get_Sponsor_Requests(string projectID)
         {
             try
             {
@@ -933,7 +957,7 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// get user joined active project
         /// </summary>
-        /// <param name="projectID"></param>
+        /// <param name="userID"></param>
         public List<string> Get_Joined_Projects(string userID)
         {
             try
@@ -958,7 +982,7 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// get user participate active project
         /// </summary>
-        /// <param name="projectID"></param>
+        /// <param name="userID"></param>
         public List<string> Get_Participated_Projects(string userID)
         {
             try
@@ -983,7 +1007,7 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// get user sponsored active project
         /// </summary>
-        /// <param name="projectID"></param>
+        /// <param name="userID"></param>
         public List<string> Get_Sponsored_Projects(string userID)
         {
             try
@@ -1008,7 +1032,7 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// get user organized active project
         /// </summary>
-        /// <param name="projectID"></param>
+        /// <param name="userID"></param>
         public List<string> Get_Organized_Projects(string userID)
         {
             try
@@ -1033,7 +1057,7 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// get user current active project
         /// </summary>
-        /// <param name="projectID"></param>
+        /// <param name="userID"></param>
         public List<string> Get_Current_Projects(string userID)
         {
             try
@@ -1072,5 +1096,23 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
+        public bool Is_More_Than_One_Leader(string projectID)
+        {
+
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                   && rl.Relation == AcGrRelation.LEADER_RELATION
+                                                                   && rl.Status == Status.ACCEPTED).Count();
+                    return result > 1;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

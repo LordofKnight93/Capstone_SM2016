@@ -24,26 +24,26 @@
             <ul class="nav nav-tabs">
                 <li class="col-md-2">
                     <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
-                    @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.Sponsored == true)
                 {
                     <li class="col-md-2">
                         <!--<a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
-                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                     </li>
                     <li class="col-md-2">
                         <!--<a id="plantab" href="#plan" data-toggle="tab">KẾ HOẠCH</a>-->
-                        @Ajax.ActionLink("Kế hoạch", "ProjectPlan", "Project", new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                        @Ajax.ActionLink("Kế hoạch", "ProjectPlan", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                     </li>
                 }
                 <li class="col-md-2">
                     <!--<a id="budgettab" href="#member" data-toggle="tab">THÀNH VIÊN</a>-->
-                    @Ajax.ActionLink("Thành viên", "ProjectStructure", "Project", new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Thành viên", "ProjectStructure", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
                     <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
-                    @Ajax.ActionLink("Thư viện", "ProjectGallery", "Project", new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Thư viện", "ProjectGallery", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
                     @Ajax.ActionLink("Thông tin", "ProjectInformation", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
@@ -59,8 +59,6 @@
       
         </div>
     </div>
-
-
 </div>
 
 

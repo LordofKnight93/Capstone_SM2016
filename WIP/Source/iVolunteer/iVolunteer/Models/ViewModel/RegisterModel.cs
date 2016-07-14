@@ -26,7 +26,7 @@ namespace iVolunteer.Models.ViewModel
         [Required(ErrorMessage = "Vui lòng nhập xác nhận mật khẩu!")]
         [PasswordPropertyText(true)]
         [DisplayName("Xác nhận mật khẩu")]
-        [Compare("Password")]
+        [Compare("Password", ErrorMessage = "Mật khẩu xác nhận và mật khẩu không giống nhau!")]
         public string ConfirmPassword { get; set; }
 
         //Họ và Tên
@@ -58,7 +58,7 @@ namespace iVolunteer.Models.ViewModel
 
         //Số điện thoại
         [DisplayName("Điện thoại")]
-        [RegularExpression(@"^[0-9]*$")]
+        [RegularExpression(@"^[0-9]*$",ErrorMessage ="Chỉ chấp nhận ký tự số!")]
         public string Phone { get; set; }
     }
 }

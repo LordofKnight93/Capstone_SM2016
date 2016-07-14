@@ -33,7 +33,7 @@
                     @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search" }))
                     {
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0">
+                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0" maxlength="100">
                             <select name="option" class="form-control" style="width: 25%; border-left:0">
                                 <option value="User">Bạn Bè</option>
                                 <option value="Project">Dự Án</option>

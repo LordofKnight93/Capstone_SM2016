@@ -235,6 +235,7 @@
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_GrPr_Relation_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -261,7 +262,6 @@
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Sponsor.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
@@ -271,8 +271,8 @@
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Member.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
@@ -401,7 +401,7 @@
     <Content Include="Views\Project\_ProjectPublic.cshtml" />
     <Content Include="Views\Project\_ProjectDiscussion.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
-    <Content Include="Views\Project\_ProjectStructure.cshtml" />
+    <Content Include="Views\Project\_ProjectStructuresss.cshtml" />
     <Content Include="Views\Project\_ProjectGallery.cshtml" />
     <Content Include="Views\Project\_ProjectPlanThisdayTask.cshtml" />
     <Content Include="Views\Project\_ProjectPlanTaskDetail.cshtml" />
@@ -431,6 +431,20 @@
     <Content Include="Views\Admin\_PendingReportedProjects.cshtml" />
     <Content Include="Views\Admin\_PendingReportedUsers.cshtml" />
     <Content Include="Views\Admin\AdminHome.cshtml" />
+    <Content Include="Views\Project\_ProjectLeaders.cshtml" />
+    <Content Include="Views\Project\_ProjectMembers.cshtml" />
+    <Content Include="Views\Project\_ProjectStructure.cshtml" />
+    <Content Include="Views\Project\_ProjectRequests.cshtml" />
+    <Content Include="Views\Project\_UserJoinRequests.cshtml" />
+    <Content Include="Views\Project\_CreateSponsor.cshtml" />
+    <Content Include="Views\Project\_UserSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_GroupJoinRequests.cshtml" />
+    <Content Include="Views\Project\_GroupSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_ProjectOrganizers.cshtml" />
+    <Content Include="Views\Project\_ProjectSponsors.cshtml" />
+    <Content Include="Views\Project\_JoinedGroups.cshtml" />
+    <Content Include="Views\Project\_SponsoredGroups.cshtml" />
+    <Content Include="Views\Project\_OrganizedGroups.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

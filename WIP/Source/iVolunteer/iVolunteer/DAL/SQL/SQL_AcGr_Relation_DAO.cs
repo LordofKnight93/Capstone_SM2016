@@ -557,7 +557,7 @@ namespace iVolunteer.DAL.SQL
         /// get user joined active group
         /// </summary>
         /// <param name="groupID"></param>
-        public List<string> Get_JoinedGroups(string userID)
+        public List<string> Get_Joined_Groups(string userID)
         {
             try
             {

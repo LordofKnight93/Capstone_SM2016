@@ -30,7 +30,7 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult CreateGroup(GroupInformation groupInfo)
         {
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) return View("_CreateGroup");
 
             //set missing information
             groupInfo.DateCreate = DateTime.Now;
@@ -126,6 +126,7 @@ namespace iVolunteer.Controllers
         }
 
         [ChildActionOnly]
+        [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string groupID)
         {
             try
@@ -555,12 +556,13 @@ namespace iVolunteer.Controllers
                     {
                         try
                         {
-                            relationDAO.Delete_Member(memberID, groupID);
-
-                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                            userDAO.Out_Group(memberID);
-                            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                            groupDAO.Member_Out(groupID);
+                            if (relationDAO.Delete_Member(memberID, groupID))
+                            {
+                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                userDAO.Out_Group(memberID);
+                                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                                groupDAO.Member_Out(groupID);
+                            }
 
                             transaction.Complete();
                         }

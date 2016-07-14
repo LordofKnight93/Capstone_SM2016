@@ -40,17 +40,17 @@ namespace iVolunteer.DAL.SQL
         /// <report>
         /// add friend relation
         /// </summary>
-        /// <param name="userID"></param>
+        /// <param name="senderID"></param>
         /// <param name="otherID"></param>
         /// <returns></returns>
-        public bool Add_Report(string userID, string otherID)
+        public bool Add_Report(string senderID, string otherID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     SQL_AcAc_Relation relation = new SQL_AcAc_Relation();
-                    relation.UserID = userID;
+                    relation.UserID = senderID;
                     relation.FriendID = otherID;
                     relation.Relation = AcAcRelation.REPORT_RELATION;
                     relation.Status = Status.ACCEPTED;
@@ -68,16 +68,16 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// User delete sent Report
         /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="groupID"></param>
+        /// <param name="senderID"></param>
+        /// <param name="otherID"></param>
         /// <returns></returns>
-        public bool Delete_Report(string userID, string otherUserID)
+        public bool Delete_Report(string senderID, string otherID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID && rl.FriendID == otherUserID && rl.Relation == AcAcRelation.REPORT_RELATION);
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == senderID && rl.FriendID == otherID && rl.Relation == AcAcRelation.REPORT_RELATION);
                     dbEntities.SQL_AcAc_Relation.Remove(result);
                     dbEntities.SaveChanges();
                     return true;
@@ -114,16 +114,16 @@ namespace iVolunteer.DAL.SQL
         /// add friend request
         /// </summary>
         /// <param name="userID"></param>
-        /// <param name="groupID"></param>
+        /// <param name="otherID"></param>
         /// <returns></returns>
-        public bool Add_Request(string userID, string otherID)
+        public bool Add_Request(string senderID, string otherID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     SQL_AcAc_Relation relation = new SQL_AcAc_Relation();
-                    relation.UserID = userID;
+                    relation.UserID = senderID;
                     relation.FriendID = otherID;
                     relation.Relation = AcAcRelation.FRIEND_RELATION;
                     relation.Status = Status.PENDING;
@@ -143,23 +143,23 @@ namespace iVolunteer.DAL.SQL
         /// accepnt a request
         /// </summary>
         /// <param name="userID">recceiver </param>
-        /// <param name="otherID">sender</param>
+        /// <param name="senderID">sender</param>
         /// <returns></returns>
-        public bool Accept_Request(string userID, string otherID)
+        public bool Accept_Request(string receiverID, string senderID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == otherID
-                                                                   && rl.FriendID == userID
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == senderID
+                                                                   && rl.FriendID == receiverID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
                                                                    && rl.Status == Status.PENDING);
                     if (result != null)
                     {
                         result.Status = Status.ACCEPTED;
                         dbEntities.SaveChanges();
-                        Add_Friend(userID, otherID);
+                        Add_Friend(receiverID, senderID);
                         return true;
                     }
                     return false;
@@ -173,17 +173,17 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// delete a request
         /// </summary>
-        /// <param name="userID">sender</param>
-        /// <param name="otherID">receiver</param>
+        /// <param name="senderID">sender</param>
+        /// <param name="receiverID">receiver</param>
         /// <returns></returns>
-        public bool Delete_Request(string userID, string otherID)
+        public bool Delete_Request(string senderID, string receiverID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
-                                                                   && rl.FriendID == otherID
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == senderID
+                                                                   && rl.FriendID == receiverID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
                                                                    && rl.Status == Status.PENDING);
                     if (result != null)
@@ -233,17 +233,17 @@ namespace iVolunteer.DAL.SQL
         /// <summary>
         /// check if request is send or not 
         /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="otherID"></param>
+        /// <param name="senderID"></param>
+        /// <param name="receiverID"></param>
         /// <returns></returns>
-        public bool Is_Requested(string userID, string otherID)
+        public bool Is_Requested(string senderID, string receiverID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == userID
-                                                                   && rl.FriendID == otherID
+                    var result = dbEntities.SQL_AcAc_Relation.FirstOrDefault(rl => rl.UserID == senderID
+                                                                   && rl.FriendID == receiverID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
                                                                    && rl.Status == Status.PENDING);
                     return result != null;

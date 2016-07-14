@@ -10,7 +10,7 @@
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
             <ul class="nav sub-nav-tabs">
-                <li class="active" data-type="leader" data-toggle = "tab" >
+                <li class="active" data-type="admin" data-toggle = "tab" >
                     @Ajax.ActionLink("TRƯỞNG NHÓM", "GroupLeaders", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
                 </li>
                 <li data-type="member" data-toggle = "tab">
@@ -31,16 +31,5 @@
             @{ Html.RenderAction("GroupLeaders", "Group", new { groupID = ViewBag.GroupID });
             }
             </div>
-            @*<div id="member-panel" class="tab-pane fade in">
-                @{ Html.RenderAction("GroupMembers", "Group", new { groupID = ViewBag.GroupID });
-                }
-            </div>
-            @if (ViewBag.IsLeader == true)
-            {
-                <div id="request-panel" class="tab-pane fade in">
-                    @{ Html.RenderAction("GroupRequests", "Group", new { groupID = ViewBag.GroupID });
-                    }
-                </div>
-            }*@
         </div>
 </div>

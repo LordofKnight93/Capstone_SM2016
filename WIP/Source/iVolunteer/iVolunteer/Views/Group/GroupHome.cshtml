@@ -17,13 +17,13 @@
             <ul class="nav nav-tabs">
                 <li class="col-md-2">
                     <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
-                    @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
                 {
                     <li class="col-md-2">
                         <!--a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
-                        @Ajax.ActionLink("Thảo luận", "GroupDiscussion", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                        @Ajax.ActionLink("Thảo luận", "GroupDiscussion", "Group", new { groupID = Model.ID },new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                     </li>
                 }
                 <li class="col-md-2">
@@ -31,7 +31,7 @@
                 </li>
                 <li class="col-md-2">
                     <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
-                    @Ajax.ActionLink("Thư viện", "GroupGallery", "Group", new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Thư viện", "GroupGallery", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })
                 </li>
                 <li class="col-md-2">
                     @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace })

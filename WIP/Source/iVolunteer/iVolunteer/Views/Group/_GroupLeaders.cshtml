@@ -55,7 +55,7 @@
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                   @Ajax.ActionLink("Giáng chức", "SetMember", "Group", new { leaderID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                                   @Ajax.ActionLink("Giáng chức", "SetMember", "Group", new { leaderID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn giáng chức người này làm thành viên ?" })
                                             </label>
                                         </div>
                                     </div>

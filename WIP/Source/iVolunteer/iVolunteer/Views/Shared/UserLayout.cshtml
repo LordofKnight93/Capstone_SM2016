@@ -46,7 +46,7 @@
                     @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search"}))
                     {
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0">
+                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0" maxlength="100">
                             <select name="option" class="form-control" style="width: 25%; border-left:0">
                                 <option value="User">Bạn Bè</option>
                                 <option value="Project">Dự Án</option>
@@ -113,47 +113,49 @@
 
 
     <!------------Create New Project Fade Modal-------------->
-    @{ Html.RenderPartial("~/Views/Project/_CreateProject.cshtml", new ViewDataDictionary());  }
-    <!------------Create New Group Fade Modal-------------->
-    @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
+    <div id="createProjectForm" class="modal fade" role="dialog">
+        @{ Html.RenderPartial("~/Views/Project/_CreateProject.cshtml", new ViewDataDictionary());  }
+        </div>
+        <!------------Create New Group Fade Modal-------------->
+        @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
 
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    @section scripts {
-        <script type="text/javascript">
-        var frmnewprovider = $("#formValidation");
-        $(document).ready(function () {
-            frmnewprovider.submit(function (e) {
-                e.preventDefault();
-                frmnewprovider.validate();
-                if (frmnewprovider.valid()) {
-                    $.ajax({
-                        url: "/Home/Login",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({
-                            Email: frmnewprovider.find('#Email').val(),
-                            Password: frmnewprovider.find('#Password').val(),
-                        }),
-                        success: function (result) {
-                            //if record was added to db, then...
-                            window.location.replace('/Home/Newfeed'); //we can redirect
-                            //or simply close our modal.
-                            //$('#mdlnewprovider').modal('hide');
-                        },
-                        error: function (result) {
-                            alert('error');
+        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+        @section scripts {
+            <script type="text/javascript">
+                var frmnewprovider = $("#formValidation");
+                $(document).ready(function () {
+                    frmnewprovider.submit(function (e) {
+                        e.preventDefault();
+                        frmnewprovider.validate();
+                        if (frmnewprovider.valid()) {
+                            $.ajax({
+                                url: "/Home/Login",
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                data: JSON.stringify({
+                                    Email: frmnewprovider.find('#Email').val(),
+                                    Password: frmnewprovider.find('#Password').val(),
+                                }),
+                                success: function (result) {
+                                    //if record was added to db, then...
+                                    window.location.replace('/Home/Newfeed'); //we can redirect
+                                    //or simply close our modal.
+                                    //$('#mdlnewprovider').modal('hide');
+                                },
+                                error: function (result) {
+                                    alert('error');
+                                }
+                            });
                         }
                     });
-                }
-            });
-        });
-        </script>
-    }
-    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-    <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/scripts/phucvt_custom.js"></script>
-    <script src="~/scripts/jquery.validate.js"></script>
+                });
+            </script>
+        }
+        @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
+        <script src="~/scripts/phucvt_custom.js"></script>
+        <script src="~/scripts/jquery.validate.js"></script>
 </body>
 </html>

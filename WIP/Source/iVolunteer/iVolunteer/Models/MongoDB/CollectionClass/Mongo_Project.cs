@@ -18,6 +18,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public ProjectInformation ProjectInformation { get; set; }
         [BsonIgnoreIfDefault]
         public RequestList RequestList { get; set; }
+        public List<Sponsor> GuestSponsor { get; set; }
         [BsonIgnoreIfDefault]
         public Agenda Agenda { get; set; }
 
@@ -26,6 +27,8 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this._id = new ObjectId();
             this.ProjectInformation = new ProjectInformation();
             this.RequestList = new RequestList();
+            this.GuestSponsor = new List<Sponsor>();
+            this.Agenda = new Agenda();
         }
 
         public Mongo_Project(ProjectInformation projectInfo)
@@ -34,6 +37,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.ProjectInformation = projectInfo;
             this.ProjectInformation.ProjectID = this._id.ToString();
             this.RequestList = new RequestList();
+            this.GuestSponsor = new List<Sponsor>();
             this.Agenda = new Agenda();
         }
     }

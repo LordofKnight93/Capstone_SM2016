@@ -69,7 +69,7 @@
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = item.UserID}, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = item.UserID}, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " })
                                             </label>
                                         </div>
                                     </div>

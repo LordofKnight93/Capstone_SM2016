@@ -242,9 +242,9 @@ namespace iVolunteer.Controllers
 
         public ActionResult Search(string name, string option)
         {
-            if (String.IsNullOrEmpty(name))
+            if (String.IsNullOrEmpty(name) || name.Length > 100)
             {
-                ViewBag.Message = Error.INVALID_INFORMATION;
+                ViewBag.Message = "Độ dài chuỗi nhập vào từ 0 đến 100 ký tự";
                 return View("ErrorMessage");
             }
             

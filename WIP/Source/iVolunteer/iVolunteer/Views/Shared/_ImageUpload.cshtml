@@ -1,6 +1,6 @@
 ﻿@{  string actionName = ViewBag.Action;
     string controller = ViewBag.Controller;
-    ViewBag.Title = "Tải ảnh lên";
+    ViewBag.Title = "Upload Image";
     }
 @using(Html.BeginForm(actionName, controller, new { id = ViewBag.ID }, FormMethod.Post, new { enctype = "multipart/form-data"}))
 {
@@ -8,3 +8,4 @@
     <input type="file" name="Image" id="file" style="width: 100%;" />
     <input type="submit" value="Upload" class="submit" />
 }
+@ViewBag.Message

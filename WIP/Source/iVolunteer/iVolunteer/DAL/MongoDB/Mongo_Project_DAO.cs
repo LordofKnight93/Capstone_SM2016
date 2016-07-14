@@ -142,7 +142,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
-                var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.ProjectDescription, newInfo.ProjectDescription)
+                var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.ProjectShortDescription, newInfo.ProjectShortDescription)
                                                          .Set(pr => pr.ProjectInformation.Email, newInfo.Email)
                                                          .Set(pr => pr.ProjectInformation.Phone, newInfo.Phone)
                                                          .Set(pr => pr.ProjectInformation.DateStart, newInfo.DateStart)
@@ -303,6 +303,107 @@ namespace iVolunteer.DAL.MongoDB
                 var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.IsActivate, status);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add guest sponsor request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="guest"></param>
+        /// <returns></returns>
+        public bool Add_GuestSponsor(string projectID, Sponsor guest)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.AddToSet(pr => pr.GuestSponsor, guest);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get guest sponsor request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<Sponsor> Get_GuestSponsor_Requests(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(pr => pr.ProjectInformation.ProjectID == projectID)
+                                                     .GuestSponsor.Where(g => g.Status == Status.PENDING).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get guest sponsors
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<Sponsor> Get_GuestSponsors(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(pr => pr.ProjectInformation.ProjectID == projectID)
+                                                     .GuestSponsor.Where(g => g.Status == Status.ACCEPTED).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// add guest sponsor
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="guest"></param>
+        /// <returns></returns>
+        public bool Delete_GuestSponsor(string projectID, string guestID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var guest_filter = Builders<Sponsor>.Filter.Eq(g => g.SponsorID, guestID);
+                var update = Builders<Mongo_Project>.Update.PullFilter(pr => pr.GuestSponsor, guest_filter);
+                var result = collection.UpdateOne(project_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// add guest sponsor request
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="guest"></param>
+        /// <returns></returns>
+        public bool Accept_GuestSponsor(string projectID, string guestID)
+        {
+            try
+            {
+                var project_filter = Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.ProjectID == projectID && pr.GuestSponsor.Any(gs => gs.SponsorID == guestID));
+                var update = Builders<Mongo_Project>.Update.Set(pr => pr.GuestSponsor.ElementAt(-1).Status, Status.ACCEPTED);
+                var result = collection.UpdateOne(project_filter, update);
+
+                return false;
             }
             catch
             {

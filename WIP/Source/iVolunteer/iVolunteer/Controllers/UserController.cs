@@ -44,6 +44,7 @@ namespace iVolunteer.Controllers
         }
 
         [ChildActionOnly]
+        [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string userID)
         {
             SDLink result = null;
@@ -159,7 +160,7 @@ namespace iVolunteer.Controllers
             {
                 // get joined group list
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                var listID = relationDAO.Get_JoinedGroups(userID);
+                var listID = relationDAO.Get_Joined_Groups(userID);
                 // get joined group Info
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupsInformation(listID);

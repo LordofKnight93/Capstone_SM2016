@@ -100,7 +100,7 @@ namespace iVolunteer.Controllers
 
                 // get joined group list
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                var listID = relationDAO.Get_JoinedGroups(userID);
+                var listID = relationDAO.Get_Joined_Groups(userID);
                 // get joined group Info
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupsInformation(listID);
@@ -782,6 +782,136 @@ namespace iVolunteer.Controllers
 
                 }
                 return FriendRequestList();
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult GroupResign(string groupID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                        if (relationDAO.Is_Leader(userID, groupID))
+                        {
+                            if (relationDAO.Is_More_Than_One_Leader(groupID))
+                            {
+                                if (relationDAO.Delete_Leader(userID, groupID))
+                                {
+                                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                    userDAO.Out_Group(userID);
+                                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                                    groupDAO.Member_Out(groupID);
+                                }
+                            }
+                            else
+                            {
+                                transaction.Dispose();
+                                ViewBag.Message = "Nhóm trưởng không thể rời nhóm chỉ có 1 nhóm trưởng.";
+                                return PartialView("ErrorMessage");
+                            }
+                        }
+                        else
+                        {
+                            if (relationDAO.Delete_Member(userID, groupID))
+                            {
+                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                userDAO.Out_Group(userID);
+                                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                                groupDAO.Member_Out(groupID);
+                            }
+                        }
+                        
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+                }
+                return ActionToGroup(groupID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult ProjectResign(string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                        if (relationDAO.Is_Leader(userID, projectID))
+                        {
+                            if (relationDAO.Is_More_Than_One_Leader(projectID))
+                            {
+                                if (relationDAO.Delete_Leader(userID, projectID))
+                                {
+                                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                    userDAO.Out_Project(userID);
+                                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                                    projectDAO.Member_Out(projectID);
+                                }
+                            }
+                            else
+                            {
+                                transaction.Dispose();
+                                ViewBag.Message = "Nhóm trưởng không thể rời nhóm chỉ có 1 nhóm trưởng.";
+                                return PartialView("ErrorMessage");
+                            }
+                        }
+                        else
+                        {
+                            if (relationDAO.Delete_Member(userID, projectID))
+                            {
+                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                userDAO.Out_Group(userID);
+                                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                                projectDAO.Member_Out(projectID);
+                            }
+                        }
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return View("ErrorMessage");
+                    }
+                }
+                return ActionToGroup(projectID);
             }
             catch
             {
