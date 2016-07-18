@@ -365,3 +365,16 @@ D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\bin\System.Web.Mvc.xml
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Security.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Newtonsoft.Json.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Owin.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.xml
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Security.xml
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Newtonsoft.Json.xml
