@@ -671,8 +671,12 @@ namespace iVolunteer.Controllers
                         relationDAO.Accept_Request(userID, requestID);
 
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                        userDAO.Add_Friend(userID);
-                        userDAO.Add_Friend(requestID);
+                        SDLink first = userDAO.Get_SDLink(userID);
+                        SDLink second = userDAO.Get_SDLink(requestID);
+                        //userDAO.Add_Friend(userID);
+                        //userDAO.Add_Friend(requestID);
+                        userDAO.Add_Friend_To_List(userID, second);
+                        userDAO.Add_Friend_To_List(requestID, first);
 
                         transaction.Complete();
                     }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="SQL_AcAc_Relation">
           <Key>
             <PropertyRef Name="UserID" />
@@ -115,6 +115,13 @@
           <Property Name="SponsorID" Type="varchar" MaxLength="24" Nullable="false" />
           <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
           <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SQL_HubConnection">
+          <Key>
+            <PropertyRef Name="ConnectionID" />
+          </Key>
+          <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="ConnectionID" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="SQL_Image">
           <Key>
@@ -338,6 +345,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SQL_HubConnection_SQL_Account">
+          <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+          <End Role="SQL_HubConnection" Type="Self.SQL_HubConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_HubConnection">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SQL_Image_SQL_Album">
           <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="1" />
           <End Role="SQL_Image" Type="Self.SQL_Image" Multiplicity="*" />
@@ -434,6 +453,7 @@
           <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" Schema="dbo" store:Type="Tables" />
@@ -499,6 +519,10 @@
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
           </AssociationSet>
+          <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="Self.FK_SQL_HubConnection_SQL_Account">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
+          </AssociationSet>
           <AssociationSet Name="FK_SQL_Image_SQL_Album" Association="Self.FK_SQL_Image_SQL_Album">
             <End Role="SQL_Album" EntitySet="SQL_Album" />
             <End Role="SQL_Image" EntitySet="SQL_Image" />
@@ -528,8 +552,7 @@
             <End Role="SQL_AcPr_Relation" EntitySet="SQL_AcPr_Relation" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="iVolunteerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -578,6 +601,7 @@
           <NavigationProperty Name="SQL_AcPo_Relation" Relationship="Self.FK_SQL_AcPo_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcPo_Relation" />
           <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
           <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
+          <NavigationProperty Name="SQL_HubConnection" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_Account" ToRole="SQL_HubConnection" />
         </EntityType>
         <EntityType Name="SQL_AcGr_Relation">
           <Key>
@@ -1099,7 +1123,32 @@
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_Post" EntitySet="SQL_Post" />
           </AssociationSet>
+          <EntitySet Name="SQL_HubConnection" EntityType="iVolunteerModel.SQL_HubConnection" />
+          <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="iVolunteerModel.FK_SQL_HubConnection_SQL_Account">
+            <End Role="SQL_Account" EntitySet="SQL_Account" />
+            <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="SQL_HubConnection">
+          <Key>
+            <PropertyRef Name="ConnectionID" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="ConnectionID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_HubConnection" ToRole="SQL_Account" />
+        </EntityType>
+        <Association Name="FK_SQL_HubConnection_SQL_Account">
+          <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
+          <End Type="iVolunteerModel.SQL_HubConnection" Role="SQL_HubConnection" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Account">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="SQL_HubConnection">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1258,6 +1307,14 @@
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="InProgress" ColumnName="InProgress" />
                 <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SQL_HubConnection">
+            <EntityTypeMapping TypeName="iVolunteerModel.SQL_HubConnection">
+              <MappingFragment StoreEntitySet="SQL_HubConnection">
+                <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

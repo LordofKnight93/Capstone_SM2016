@@ -108,7 +108,7 @@
     <div class="container background-container">
 
          @RenderBody()
-
+        <button class="fixedChatButton" onclick="location.href='@Url.Action("ChatRoom", "Home")'"><p>Chatroom</p></button>
     </div>
 
 
@@ -157,5 +157,6 @@
         <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
         <script src="~/scripts/phucvt_custom.js"></script>
         <script src="~/scripts/jquery.validate.js"></script>
+        @RenderSection("scripts", required: false)
 </body>
 </html>

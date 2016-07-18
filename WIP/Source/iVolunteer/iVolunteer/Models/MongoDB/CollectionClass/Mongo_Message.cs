@@ -16,16 +16,19 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
     public class Mongo_Message
     {
         public ObjectId _id { get; set; }
+        public string MessageID { get; set; }
         public DateTime DateLastActivity { get; set; }
         public List<MessageItem> ItemList { get; set; }
         public List<SDLink> Senders { get; set; }
         public Mongo_Message()
         {
-            this._id = new ObjectId();
+            this._id = ObjectId.GenerateNewId();
+            this.MessageID = this._id.ToString();
             this.DateLastActivity = new DateTime();
             this.ItemList = new List<MessageItem>();
             this.Senders = new List<SDLink>();
         }
+
     }
 
     public class MessageItem

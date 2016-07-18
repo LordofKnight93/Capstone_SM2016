@@ -266,6 +266,7 @@
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_GrPr_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_HubConnection_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -284,6 +285,7 @@
     <Compile Include="DAL\SQL\SQL_Project_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
+    <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
@@ -352,6 +354,9 @@
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_GuestPr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_HubConnection.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Image.cs">
@@ -476,6 +481,7 @@
     <Content Include="Views\Project\_JoinedGroups.cshtml" />
     <Content Include="Views\Project\_SponsoredGroups.cshtml" />
     <Content Include="Views\Project\_OrganizedGroups.cshtml" />
+    <Content Include="Views\Shared\_ChatRoom.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

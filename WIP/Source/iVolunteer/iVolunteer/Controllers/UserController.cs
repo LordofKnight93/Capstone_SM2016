@@ -14,6 +14,7 @@ using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace iVolunteer.Controllers
@@ -385,6 +386,148 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return View("ErrorMessage");
+            }
+        }
+        public ActionResult displayFriendDemo()
+        {
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                List<SDLink> friendList = userDAO.Get_FriendList(Session["UserID"].ToString());
+
+                return View("_ChatRoom", friendList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult GetRecentMessages(string friendID)
+        {
+            if (Session["UserID"] == null) { return null; }
+            string userID = Session["UserID"].ToString();
+            //get SDLink user and friend
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            SDLink userSDLink = userDAO.Get_SDLink(userID);
+            SDLink friendSDLink = userDAO.Get_SDLink(friendID);
+
+            try
+            {
+                SQL_Message_DAO messageDAO = new SQL_Message_DAO();
+                //Get messageID of the two persons
+                string messageID = messageDAO.Get_MessageID(userID, friendID);
+                Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
+
+                //check if the two have talk before
+                // if NO then create new messageID
+                if (messageID == null)
+                {
+                    // Add messageID to mongo
+                    Mongo_Message message = new Mongo_Message();
+                    message.Senders.Add(userSDLink);
+                    message.Senders.Add(friendSDLink);
+
+                    mgMessageDAO.Add_Message(message);
+
+                    //Add messageID to SQL
+                    SQL_Message sqlmessage1 = new SQL_Message();
+                    sqlmessage1.MessageID = message._id.ToString();
+                    sqlmessage1.UserID = userID;
+                    SQL_Message sqlmessage2 = new SQL_Message();
+                    sqlmessage2.MessageID = message._id.ToString();
+                    sqlmessage2.UserID = friendID;
+
+                    messageDAO.Add_Message(sqlmessage1);
+                    messageDAO.Add_Message(sqlmessage2);
+
+                    var result1 = new { messages = "", messageID = message._id.ToString() };
+                    return Json(result1);
+                }
+                List<MessageItem> messages = mgMessageDAO.Get_Recent_Messages(messageID);
+                //Format time before Display 
+                List<string> times = new List<string>();
+                foreach (var item in messages)
+                {
+                    times.Add(Format_Time(item.DateSend));
+                }
+                var result = new { Messages = messages, MessageID = messageID, DisplayTimes = times };
+                return Json(result);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult CreateMessage(string messageID, string content)
+        {
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
+                DateTime time = mgMessageDAO.Add_Message_Item(messageID, userID, content);
+
+                //FormatTime before showing;
+                var displayTime = Format_Time(time);
+
+                return Json(time.ToShortTimeString());
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public string Format_Time(DateTime time)
+        {
+            DateTime lcTime = time.ToLocalTime();
+            DateTime now = DateTime.Now;
+            string displayTime = "";
+            if (now.Year == lcTime.Year)
+            {
+                if (now.Month == lcTime.Month)
+                {
+                    if ((now.Day - lcTime.Day) == 1)
+                    {
+                        displayTime = "Yesterday " + lcTime.ToShortTimeString();
+                    }
+                    else if (now.Day == lcTime.Day)
+                    {
+                        displayTime = lcTime.ToShortTimeString();
+                    }
+                    else displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
+                }
+                else displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
+            }
+            else displayTime = lcTime.ToLongDateString() + " " + lcTime.ToShortTimeString();
+
+            return displayTime;
+        }
+        /// <summary>
+        /// Search User in ChatBox !!!NEDD FOR CHAT SECTION
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public string SearchUserForChat(string name)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(name))
+                {
+                    ViewBag.Message = Error.INVALID_INFORMATION;
+                    return null;
+                }
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+
+                List<AccountInformation> result = new List<AccountInformation>();
+                if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                    result = userDAO.User_Search(name, true);
+                else result = userDAO.User_Search(name, false);
+
+                return JsonConvert.SerializeObject(result);
+            }
+            catch
+            {
+                throw;
             }
         }
 

@@ -111,6 +111,13 @@
     <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="SQL_HubConnection">
+    <Key>
+      <PropertyRef Name="ConnectionID" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ConnectionID" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
   <EntityType Name="SQL_Image">
     <Key>
       <PropertyRef Name="ImageID" />
@@ -333,6 +340,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SQL_HubConnection_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_HubConnection" Type="Self.SQL_HubConnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_HubConnection">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SQL_Image_SQL_Album">
     <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="1" />
     <End Role="SQL_Image" Type="Self.SQL_Image" Multiplicity="*" />
@@ -429,6 +448,7 @@
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" Schema="dbo" store:Type="Tables" />
@@ -493,6 +513,10 @@
     <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="Self.FK_SQL_HubConnection_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
     </AssociationSet>
     <AssociationSet Name="FK_SQL_Image_SQL_Album" Association="Self.FK_SQL_Image_SQL_Album">
       <End Role="SQL_Album" EntitySet="SQL_Album" />

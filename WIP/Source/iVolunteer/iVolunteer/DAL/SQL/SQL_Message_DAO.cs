@@ -73,5 +73,21 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        public string Get_MessageID(string userID, string otherID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+
+                    var query = (from a in dbEntities.SQL_Message join b in dbEntities.SQL_Message on a.MessageID equals b.MessageID where a.UserID == userID && b.UserID == otherID select a.MessageID).FirstOrDefault();
+                    return query;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

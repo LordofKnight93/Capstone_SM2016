@@ -45,6 +45,7 @@
     <NavigationProperty Name="SQL_AcPo_Relation" Relationship="Self.FK_SQL_AcPo_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcPo_Relation" />
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
+    <NavigationProperty Name="SQL_HubConnection" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_Account" ToRole="SQL_HubConnection" />
   </EntityType>
   <EntityType Name="SQL_AcGr_Relation">
     <Key>
@@ -566,5 +567,30 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
+    <EntitySet Name="SQL_HubConnection" EntityType="iVolunteerModel.SQL_HubConnection" />
+    <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="iVolunteerModel.FK_SQL_HubConnection_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="SQL_HubConnection">
+    <Key>
+      <PropertyRef Name="ConnectionID" />
+    </Key>
+    <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+    <Property Name="ConnectionID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_HubConnection" ToRole="SQL_Account" />
+  </EntityType>
+  <Association Name="FK_SQL_HubConnection_SQL_Account">
+    <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
+    <End Type="iVolunteerModel.SQL_HubConnection" Role="SQL_HubConnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_HubConnection">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

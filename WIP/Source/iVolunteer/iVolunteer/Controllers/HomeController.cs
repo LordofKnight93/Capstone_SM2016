@@ -34,6 +34,12 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+        public ActionResult ChatRoom()
+
+        {
+            if (Session["UserID"] != null) return View("_ChatRoom");
+            return View();
+        }
 
         public ActionResult NotificationAll()
         {

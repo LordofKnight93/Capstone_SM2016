@@ -19,12 +19,15 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public PersonalInformation PersonalInformation { get; set; }
         public AccountInformation AccountInformation { get; set; }
         [BsonIgnoreIfDefault]
+        public List<SDLink> FriendList { get; set; }
+        [BsonIgnoreIfDefault]
         public List<Notification> NotificationList { get; set; }
         public Mongo_User()
         {
             this._id = new ObjectId();
             this.PersonalInformation = new PersonalInformation();
             this.AccountInformation = new AccountInformation();
+            this.FriendList = new List<SDLink>();
             this.NotificationList = new List<Notification>();
         }
 
@@ -33,6 +36,7 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this._id = ObjectId.GenerateNewId();
             this.PersonalInformation = new PersonalInformation(registerModel);
             this.PersonalInformation.UserID = this._id.ToString();
+            this.FriendList = new List<SDLink>();
             this.AccountInformation = new AccountInformation(registerModel);
             this.AccountInformation.UserID = this._id.ToString();
             this.NotificationList = new List<Notification>();

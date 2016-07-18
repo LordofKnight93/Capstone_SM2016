@@ -156,5 +156,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_HubConnection">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_HubConnection">
+        <MappingFragment StoreEntitySet="SQL_HubConnection">
+          <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

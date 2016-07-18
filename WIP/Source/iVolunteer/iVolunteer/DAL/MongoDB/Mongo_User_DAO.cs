@@ -341,6 +341,38 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// Get friend list ***NEED FOR CHAT FUNCTION
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<SDLink> Get_FriendList(string userID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return result.FriendList;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Add_Friend_To_List(string userID, SDLink user)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.FriendList, user)
+                                                        .Inc(u => u.AccountInformation.FriendCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
     }
 }
