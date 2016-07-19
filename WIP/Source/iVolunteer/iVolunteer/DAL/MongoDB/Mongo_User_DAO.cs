@@ -216,14 +216,15 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public bool Delete_Friend(string userID)
+        public bool Delete_Friend(string userID, string friendID)
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
-                var result = collection.UpdateOne(filter, update);
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var friend_filter = Builders<SDLink>.Filter.Eq(s => s.ID, friendID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.FriendList, friend_filter)
+                                                        .Inc(u => u.AccountInformation.FriendCount, 1); ;
+                var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
             catch
@@ -432,6 +433,7 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
 
     }
 }
