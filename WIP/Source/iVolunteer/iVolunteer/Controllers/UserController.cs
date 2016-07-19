@@ -485,21 +485,14 @@ namespace iVolunteer.Controllers
             {
                 if (now.Month == lcTime.Month)
                 {
-                    if ((now.Day - lcTime.Day) == 1)
-                    {
-                        displayTime = "Yesterday " + lcTime.ToShortTimeString();
-                    }
-                    else if (now.Day == lcTime.Day)
-                    {
-                        displayTime = lcTime.ToShortTimeString();
-                    }
-                    else displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
-                }
-                else displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
-            }
-            else displayTime = lcTime.ToLongDateString() + " " + lcTime.ToShortTimeString();
+                    if ((now.Day - lcTime.Day) == 1) return displayTime = "Yesterday " + lcTime.ToShortTimeString();
+                    if (now.Day == lcTime.Day) return displayTime = lcTime.ToShortTimeString();
 
-            return displayTime;
+                    return displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
+                }
+                return displayTime = lcTime.Day + "/" + lcTime.Month + " " + lcTime.ToShortTimeString();
+            }
+            return displayTime = lcTime.ToLongDateString() + " " + lcTime.ToShortTimeString();
         }
         /// <summary>
         /// Search User in ChatBox !!!NEDD FOR CHAT SECTION
@@ -524,6 +517,41 @@ namespace iVolunteer.Controllers
                 else result = userDAO.User_Search(name, false);
 
                 return JsonConvert.SerializeObject(result);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult LoadFriendRequestNotif()
+        {
+            try {
+                string userID = Session["UserID"].ToString();
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                var listID = relation.Get_Requests(userID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var listRequest = userDAO.Get_AccountsInformation(listID);
+
+                return Json(listRequest);
+            }
+            catch
+            {
+                throw;
+            }
+            
+        }
+        public JsonResult LoadNotification()
+        {
+            try
+            {
+                if (Session["UserID"] == null) return null;
+
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifList = userDAO.Get_Notifications(userID, 0, 5);
+
+                return Json(notifList);
             }
             catch
             {

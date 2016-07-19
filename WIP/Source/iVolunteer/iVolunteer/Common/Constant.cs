@@ -132,4 +132,13 @@ namespace iVolunteer.Common
         public const bool MALE = true;
         public const bool FEMALE = false;
     }
+    public static class Notif
+    {
+        public const int FRIEND_REQUEST = 1;
+        public const int FRIEND_ACCEPT = 2;
+
+        public const int NEW_MESSAGE = 3;
+
+
+    }
 }

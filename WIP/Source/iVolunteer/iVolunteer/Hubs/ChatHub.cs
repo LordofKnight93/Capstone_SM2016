@@ -43,20 +43,28 @@ namespace iVolunteer.Hubs
         /// <returns></returns>
         public override Task OnDisconnected(bool stopCalled)
         {
-            string connectionID = Context.ConnectionId;
-            try
+            if (stopCalled)
             {
-                SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
-                // Who has disconnected???
-                string userID = connDAO.Get_UserID(connectionID);
-                connDAO.Delete_Connection(connectionID);
+                string connectionID = Context.ConnectionId;
+                try
+                {
+                    SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
+                    // Who has disconnected???
+                    string userID = connDAO.Get_UserID(connectionID);
+                    connDAO.Delete_Connection(connectionID);
 
-                Clients.Others.userHasDisconnected(userID);
+                    Clients.Others.userHasDisconnected(userID);
+                }
+                catch
+                {
+                    throw;
+                }
             }
-            catch
+            else
             {
-                throw;
+                Console.WriteLine(String.Format("Client {0} timed out .", Context.ConnectionId));
             }
+
             return base.OnDisconnected(stopCalled);
         }
         public void SendMessage(string userID, string friendID, string content, string displayTime)
