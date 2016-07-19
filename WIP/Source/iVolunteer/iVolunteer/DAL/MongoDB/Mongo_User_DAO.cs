@@ -373,6 +373,85 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// add new notification to user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        public bool Add_Notification(string userID, Notification notify)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList, notify);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// set a notification is seen
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public bool Set_Notification_IsSeen(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
+                var update = Builders<Mongo_User>.Update.Set(u => u.NotificationList.ElementAt(-1).IsSeen, Status.IS_SEEN);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a number of user's notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_Notifications(string userID, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return result.NotificationList.Skip(skip).Take(number).ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a specific request of user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
+        public RequestItem Get_Request(string userID, string requestID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
+                                                     .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
     }
 }

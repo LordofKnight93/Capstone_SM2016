@@ -40,5 +40,15 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
             this.Destination = destination;
             this.IsSeen = Status.IS_NOT_SEEN;
         }
+        //For New Message
+        public Notification(SDLink actor, int type)
+        {
+            this.NotifyID = ObjectId.GenerateNewId().ToString();
+            this.DateNotice = DateTime.Now;
+            this.Actors = new List<SDLink>();
+            this.Actors.Add(actor);
+            this.Type = type;
+            this.IsSeen = Status.IS_NOT_SEEN;
+        }
     }
 }
