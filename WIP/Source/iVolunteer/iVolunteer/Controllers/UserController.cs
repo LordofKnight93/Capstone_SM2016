@@ -501,6 +501,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public string SearchUserForChat(string name)
         {
+            if (Session["UserID"] == null) return null;
             try
             {
                 if (String.IsNullOrEmpty(name))
@@ -525,6 +526,8 @@ namespace iVolunteer.Controllers
         }
         public JsonResult LoadFriendRequestNotif()
         {
+            if (Session["UserID"] == null) return null;
+
             try {
                 string userID = Session["UserID"].ToString();
                 SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();

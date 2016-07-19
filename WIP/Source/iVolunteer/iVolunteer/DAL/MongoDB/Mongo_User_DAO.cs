@@ -438,19 +438,19 @@ namespace iVolunteer.DAL.MongoDB
         /// <param name="userID"></param>
         /// <param name="requestID"></param>
         /// <returns></returns>
-        public RequestItem Get_Request(string userID, string requestID)
-        {
-            try
-            {
-                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
-                                                     .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
+        //public RequestItem Get_Request(string userID, string requestID)
+        //{
+        //    try
+        //    {
+        //        var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID)
+        //                                             .RequestList.FirstOrDefault(rq => rq.RequestID == requestID);
+        //        return result;
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
 
 
     }

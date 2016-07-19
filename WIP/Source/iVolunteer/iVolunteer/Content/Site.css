@@ -1661,6 +1661,9 @@ noti li a:hover {
 .noti_Container {
     position: relative;
 }
+.noti_Container .notifications .friendRequestItem:hover{
+    background-color: #f5f5f5;
+}
 
 
 /* A CIRCLE LIKE BUTTON IN THE TOP MENU. */

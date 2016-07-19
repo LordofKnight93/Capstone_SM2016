@@ -145,10 +145,8 @@
             }).fail(function () {
                 alert("Could not Connect!");
             });
-
             // Search Friend section
             $("#friendSearch" + '@Session["UserID"].ToString()').autocomplete({
-                
                 source: function (request, response) {
                     $.ajax({
                         url: "/User/SearchUserForChat",
@@ -176,7 +174,6 @@
                 minLength: 1
             });
         });
-
         // Create conversation when click at Friend name
         var conversation = (function () {
             var createConversation = function (selector) {

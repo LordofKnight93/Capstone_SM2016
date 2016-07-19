@@ -929,5 +929,45 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public JsonResult AcceptFriendRequestInNotif(string requestID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+                    
+                }
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                        relationDAO.Accept_Request(userID, requestID);
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        SDLink first = userDAO.Get_SDLink(userID);
+                        SDLink second = userDAO.Get_SDLink(requestID);
+                        userDAO.Add_Friend_To_List(userID, second);
+                        userDAO.Add_Friend_To_List(requestID, first);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return Json(false);
+                    }
+                }
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
     }
 }

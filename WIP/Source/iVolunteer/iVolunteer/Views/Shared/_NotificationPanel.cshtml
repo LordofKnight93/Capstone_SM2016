@@ -24,10 +24,10 @@
         </div>
     </li>
     <li class="noti_Container">
-        <div class="noti_Counter" id="@("friendRequest" + @Session["UserID"].ToString())"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
+        <p class="noti_Counter" id="@("friendRequest" + @Session["UserID"].ToString())"></p>   <!--SHOW NOTIFICATIONS COUNT.-->
         <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
         <div class="noti_Button" id="friend_Button">
-            <span id="friend_icon" class="glyphicon glyphicon-user glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Bạn bè"></span>
+            <span id="@("friendNotifButton" + Session["UserID"].ToString())" class="glyphicon glyphicon-user glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Bạn bè"></span>
         </div>
 
         <!--THE NOTIFICAIONS DROPDOWN BOX.-->
@@ -37,8 +37,8 @@
                     <div class="col-xs-12">
                         <h3>Bạn bè</h3>
                         <div class="divider-holizon"></div>
-                        <div class="partial-view-container" id="noti-scroll-panel">
-                            @Html.Partial("_PopupFriend")
+                        <div id="@("friendNotifList" + Session["UserID"].ToString())" class="partial-view-container">
+                            @*@Html.Partial("_PopupFriend")*@
                         </div>
                     </div>
                 </div>
