@@ -777,9 +777,10 @@ namespace iVolunteer.Controllers
                         relationDAO.Delete_Friend(friendID, userID);
                         relationDAO.Delete_Friend(userID, friendID);
 
+                        //Delete Friend in FriendList
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                        userDAO.Delete_Friend(userID);
-                        userDAO.Delete_Friend(friendID);
+                        userDAO.Delete_Friend(userID, friendID);
+                        userDAO.Delete_Friend(friendID, userID);
 
                         transaction.Complete();
                     }
