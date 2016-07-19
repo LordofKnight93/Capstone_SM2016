@@ -15,6 +15,8 @@ using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
 
 namespace iVolunteer.Controllers
 {
@@ -461,6 +463,10 @@ namespace iVolunteer.Controllers
                     ///check if curent user has sent request or not 
                     if (!relationDAO.Is_Requested(userID, otherID))
                         relationDAO.Add_Request(userID, otherID);
+
+                    // Send notification
+                    var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                    hubContext.Clients.All.getFriendRequests(otherID);
                 }
 
                 return ActionToOtherUser(otherID);
