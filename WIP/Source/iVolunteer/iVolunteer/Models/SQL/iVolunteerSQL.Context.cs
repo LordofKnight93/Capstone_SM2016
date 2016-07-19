@@ -42,5 +42,6 @@ namespace iVolunteer.Models.SQL
         public virtual DbSet<SQL_Post> SQL_Post { get; set; }
         public virtual DbSet<SQL_Project> SQL_Project { get; set; }
         public virtual DbSet<SQL_HubConnection> SQL_HubConnection { get; set; }
+        public virtual DbSet<SQL_Budget> SQL_Budget { get; set; }
     }
 }

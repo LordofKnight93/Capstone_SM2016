@@ -164,5 +164,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Budget">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Budget">
+        <MappingFragment StoreEntitySet="SQL_Budget">
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

@@ -5,6 +5,8 @@ using System.Web;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 
 namespace iVolunteer.Models.MongoDB.CollectionClass
 {
@@ -15,31 +17,20 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
     public class Mongo_Plan
     {
         public ObjectId _id { get; set; }
-        public SDLink Project { get; set; }
-        public string PlanName { get; set; }
-        [BsonIgnoreIfDefault]
-        public List<PlanItem> ItemList { get; set; }
+        public PlanPhaseInformation PlanPhaseInformation { get; set; }
+        public List<MainTask> MainTask { get; set; }
+
         public Mongo_Plan()
         {
             this._id = new ObjectId();
-            this.Project = new SDLink();
-            this.PlanName = "";
-            this.ItemList = new List<PlanItem>();
+            this.PlanPhaseInformation = new PlanPhaseInformation();
+            this.MainTask = new List<MainTask>();
         }
-    }
-
-    public class PlanItem
-    {
-        public string ItemID { get; set; }
-        public DateTime WorkDate { get; set; }
-        public string Content { get; set; }
-        public List<SDLink> PIC { get; set; }
-        public PlanItem()
+        public Mongo_Plan(PlanPhaseInformation info)
         {
-            this.ItemID = "";
-            this.WorkDate = new DateTime();
-            this.Content = "";
-            this.PIC = new List<SDLink>();
+            this._id = ObjectId.GenerateNewId();
+            this.PlanPhaseInformation = info;
+            this.MainTask = new List<MainTask>();
         }
     }
 }

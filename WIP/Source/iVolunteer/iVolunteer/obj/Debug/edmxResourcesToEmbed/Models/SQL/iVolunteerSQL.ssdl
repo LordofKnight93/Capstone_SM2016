@@ -85,6 +85,13 @@
     <Property Name="GroupID" Type="varchar" MaxLength="24" />
     <Property Name="IsPublic" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="SQL_Budget">
+    <Key>
+      <PropertyRef Name="BudgetID" />
+    </Key>
+    <Property Name="BudgetID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
   <EntityType Name="SQL_Group">
     <Key>
       <PropertyRef Name="GroupID" />
@@ -180,6 +187,18 @@
         <PropertyRef Name="ProjectID" />
       </Principal>
       <Dependent Role="SQL_Album">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Budget_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Budget">
         <PropertyRef Name="ProjectID" />
       </Dependent>
     </ReferentialConstraint>
@@ -445,6 +464,7 @@
     <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Budget" EntityType="Self.SQL_Budget" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
@@ -461,6 +481,10 @@
     <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Album" EntitySet="SQL_Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Budget_ProjectSD" Association="Self.FK_Budget_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
     </AssociationSet>
     <AssociationSet Name="FK_Message_Account" Association="Self.FK_Message_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />

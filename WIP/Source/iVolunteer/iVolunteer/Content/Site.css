@@ -550,14 +550,18 @@ button:focus {
     padding-right: 0;
 }
 
-@media (min-width: 768px) .navbar-form .input-group>.form-control {
-    width: 100%;
+@media (min-width: 768px) {
+    .navbar-form .input-group > .form-control {
+        width: 100%;
+    }
 }
 
-@media (min-width: 768px) .navbar-form .input-group .form-control,
-.navbar-form .input-group .input-group-addon,
-.navbar-form .input-group .input-group-btn {
-    width: 100%;
+@media (min-width: 768px) {
+    .navbar-form .input-group .form-control,
+    .navbar-form .input-group .input-group-addon,
+    .navbar-form .input-group .input-group-btn {
+        width: 100%;
+    }
 }
 
 
@@ -565,7 +569,7 @@ button:focus {
 
 .card-panel,
 .card {
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);*/
 }
 
 .card-panel {
@@ -671,7 +675,7 @@ button:focus {
 .card .card-image .card-ava img {
     height: 100px;
     width: 100px;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);*/
 }
 
 .card .card-content {
@@ -782,9 +786,28 @@ button:focus {
 }
 
 .member-manager-table td {
-    padding: 10px 0;
+    padding: 10px 5px;
     font-weight: bold;
     color: #000;
+    position: relative;
+    border-bottom: 1px solid #ccc;
+}
+
+.showbutton {
+    background-color: #ccc;
+    position: absolute;
+    height: 100%;
+    width: 50px;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    margin-right: -50px;
+}
+
+.member-manager-table td:hover .showbutton{
+    opacity : 1;
+    transform: translateX(-50px);
+    transition: all 0.25s;
 }
 
 .table-user-info td {
@@ -1173,7 +1196,7 @@ button:focus {
     margin: 0 auto;
     width: 100%;
     white-space: nowrap;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);*/
 }
 
 .tabs .tab {
@@ -1235,7 +1258,7 @@ button:focus {
     margin: 0 auto;
     width: 100%;
     white-space: nowrap;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);*/
 }
 
 .nav-tabs li {
@@ -1609,9 +1632,9 @@ body.modal-open .background-container {
 /* Container */
 
 .sub-container {
-    border: 1px solid #8c9296;
-    border-radius: 5px;
+    /*border: 1px solid #8c9296;*/
     padding: 15px;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .donator-container {
@@ -2414,3 +2437,74 @@ body .ui-autocomplete .ui-menu-item:hover {
     border-radius: 0px;
     background-color: rgba(155, 195, 159, 0.90);
     box-shadow: none;
+    }*/
+
+
+/******************************************************************  Popover  ************************************************************************/
+.popover {
+    max-width: none;
+}
+
+/*********************************************************************  Calendar **********************************************************************/
+.calendar-container{
+    width: 100%;
+    display: flex;
+}
+
+.calendar-date .calendar-month{
+    float: left;
+}
+
+.calendar-date{
+    width: 40%;
+    height: 165px;
+    background-color: #049f88;
+    color: #fff;
+}
+
+.calendar-date>p{
+    font-family: Roboto Condensed !important;
+    margin: 0;
+    color: #fff;
+    text-align: center;
+}
+
+.calendar-date-day{
+    font-size: 16px;
+    padding-top: 20px;
+}
+
+.calendar-date-month-year{
+    font-size: 14px;
+}
+
+.calendar-date-date{
+    font-size: 64px;
+}
+
+.calendar-month{
+    width: 60%;
+    border: 1px solid #ccc;
+    padding: 5px;
+    height: 165px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.calendar-month>div{
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+#calendar-month-year{
+    margin: 5px;
+}
+
+#calendar-month-dates>table>tr>td{
+    padding: 0 3.5px;
+}
+
+/***********************************************************  Panel  *******************************************************************/
+.panel-group{
+        box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.16), 1px 1px 5px 0 rgba(0, 0, 0, 0.12);
+}

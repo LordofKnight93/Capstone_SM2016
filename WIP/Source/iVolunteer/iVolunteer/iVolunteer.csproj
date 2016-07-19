@@ -253,26 +253,31 @@
     <Compile Include="Common\Constant.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlanController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Budget_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Plan_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Budget_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_GrPr_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_HubConnection_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Plan_DAO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="DAL\MongoDB\Mongo_Group_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Message_DAO.cs" />
-    <Compile Include="DAL\MongoDB\Mongo_Plan_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Post_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Project_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_User_DAO.cs" />
@@ -280,13 +285,13 @@
     <Compile Include="DAL\SQL\SQL_Album_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Group_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Message_DAO.cs" />
-    <Compile Include="DAL\SQL\SQL_Plan_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Post_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Project_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
@@ -296,15 +301,20 @@
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\BudgetRecordInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PlanPhaseInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\MainTask.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\SubTask.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
@@ -345,6 +355,9 @@
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Album.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Budget.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SQL\SQL_Group.cs">
@@ -436,7 +449,6 @@
     <Content Include="Views\Group\_GroupGallery.cshtml" />
     <Content Include="Views\Project\_ProjectPublic.cshtml" />
     <Content Include="Views\Project\_ProjectDiscussion.cshtml" />
-    <Content Include="Views\Project\_ProjectPlan.cshtml" />
     <Content Include="Views\Project\_ProjectStructuresss.cshtml" />
     <Content Include="Views\Project\_ProjectGallery.cshtml" />
     <Content Include="Views\Project\_ProjectPlanThisdayTask.cshtml" />
@@ -482,6 +494,22 @@
     <Content Include="Views\Project\_SponsoredGroups.cshtml" />
     <Content Include="Views\Project\_OrganizedGroups.cshtml" />
     <Content Include="Views\Shared\_ChatRoom.cshtml" />
+    <Content Include="Views\Budget\_BudgetError.cshtml" />
+    <Content Include="Views\Budget\_EditEachFieldBudgetItem.cshtml" />
+    <Content Include="Views\Budget\_Budget.cshtml" />
+    <Content Include="Views\Budget\_BudgetAddItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetAddRecord.cshtml" />
+    <Content Include="Views\Budget\_BudgetEditItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetEditRecord.cshtml" />
+    <Content Include="Views\Budget\_BudgetItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetRecord.cshtml" />
+    <Content Include="Views\Plan\_AddMainTask.cshtml" />
+    <Content Include="Views\Plan\_AddPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_EditPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_MainTask.cshtml" />
+    <Content Include="Views\Plan\_Plan.cshtml" />
+    <Content Include="Views\Plan\_PlanPhase.cshtml" />
+    <Content Include="Views\Project\_ProjectPlan.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

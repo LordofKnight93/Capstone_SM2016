@@ -637,9 +637,34 @@ namespace iVolunteer.Controllers
             return PartialView("_ProjectGallery");
         }
 
-        public ActionResult ProjectPlan()
+        public ActionResult ProjectPlan(string projectID)
         {
-            return PartialView("_ProjectPlan");
+            // check if parameter valid
+            if (String.IsNullOrEmpty(projectID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                var result = projectDAO.Get_ProjectInformation(projectID);
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                    ViewBag.UserRole = relationDAO.Get_UserRole(projectID, userID);
+                }
+
+                ViewBag.ProjectID = projectID;
+                return PartialView("_ProjectPlan");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
         }
 
         public ActionResult ProjectStructure(string projectID)

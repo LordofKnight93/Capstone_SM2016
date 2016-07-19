@@ -11,9 +11,19 @@
         <div class="col-sm-12">
             <ul class="nav sub-nav-tabs">
                 <li class="active" data-type="donator">
-                    <a data-toggle="tab" href="#tabplan">KẾ HOẠCH</a>
+                    <!--<a data-toggle="tab" href="#tabplan">KẾ HOẠCH</a>-->
+                    @Ajax.ActionLink("KẾ HOẠCH TRIỂN KHAI", "DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
                 </li>
-                <li data-type="admin"><a data-toggle="tab" href="#tabbudget">DỰ TRÙ KINH PHÍ</a></li>
+                <li data-type="admin">
+                    <a data-toggle="tab" href="">NGÂN QUỸ DỰ ÁN</a>
+                </li>
+                <li data-type="admin">
+                    <!--<a data-toggle="tab" href="#tabbudget">DỰ TRÙ KINH PHÍ</a>-->
+                   @Ajax.ActionLink("DỰ TRÙ KINH PHÍ", "BudgetAllView", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="admin">
+                    <a data-toggle="tab" href="">KINH PHÍ THỰC TẾ</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -22,250 +32,8 @@
     <div class="tab-content">
 
         <!-- Plan -->
-        <div id="tabplan" class="tab-pane fade in active">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="sub-container" id="plancontain">
-                        <div class="row">
-
-                            <!-- On this day task -->
-                            @Html.Partial("_ProjectPlanThisdayTask")
-
-                            <!-- Project All Plan -->
-                            <div class="col-sm-7">
-
-                                <!-- Phase 1 -->
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="sub-container" style="margin-bottom: 10px;">
-
-                                            <!-- Header -->
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <label>TUYỂN THÀNH VIÊN</label>
-                                                </div>
-
-                                                <div class="col-xs-12" style="margin-top: -7px">
-                                                    <label style="font-size: 14px; color: #049f88;">16/06/2016 - 25/06/2016</label>
-                                                </div>
-
-                                                <div class="col-sm-12" style="margin-top: -5px">
-                                                    <div class="divider-holizon"></div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Detail -->
-                                            <div class="row">
-
-                                                <ol class="main-list-task">
-
-                                                    <!-- Main Task 1 -->
-                                                    <li data-container="plancontain" data-toggle="modal" data-target="#taskdetail">
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <lable>Lên nội dung và phương thức tuyển thành viên cho dự án</lable>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <ul class="main-list-task-infor">
-                                                                    <li>
-                                                                        <object type="image/svg+xml" data="~/images/icons/assign-group.svg" width="18" height="18"></object>
-                                                                        <span class="assign">Ban Nội Dung</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <object type="image/svg+xml" data="~/images/icons/tick-box.svg" width="16" height="16"></object>
-                                                                        <span class="task-count">0/3</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-
-                                                    <!-- Main Task 2 -->
-                                                    <li id="testplan">
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <lable>Truyền thông cho dự án</lable>
-                                                            </div>
-                                                            <div class="col-sm-12">
-                                                                <ul class="main-list-task-infor">
-                                                                    <li>
-                                                                        <object type="image/svg+xml" data="~/images/icons/assign-group.svg" width="18" height="18"></object>
-                                                                        <span class="assign">Ban Truyền Thông</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <object type="image/svg+xml" data="~/images/icons/tick-box.svg" width="16" height="16"></object>
-                                                                        <span class="task-count">1/3</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-
-                                                    <li>
-                                                        <div class="row">
-                                                            <div class="col-sm-12">
-                                                                <label style="font-weight: bold; color: #049f88;">THÊM CÔNG VIỆC ...</label>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-
-                                                </ol>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Add Phase -->
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="sub-container">
-                                            <label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Budget -->
-        <div id="tabbudget" class="tab-pane fade in">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="sub-container">
-
-                        <!-- Tổng hợp -->
-                        <div class="row" style="margin-bottom: 20px">
-                            <div class="col-sm-12" style="text-align: right">
-                                <label>TỔNG KINH PHÍ DỰ KIẾN</label>
-                            </div>
-                            <div class="col-sm-12" style="text-align: right">
-                                <label style="color: #049f88; font-weight: bold; font-size: 30px">750.000<span>VND</span></label>
-                            </div>
-                        </div>
-
-                        <!-- Đầu mục 1 -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="sub-container" style="margin-bottom: 10px">
-
-                                    <!-- Đầu mục -->
-                                    <div class="row">
-                                        <div class="col-md-12" style="margin-top: -15px; margin-bottom: 5px">
-                                            <div class="row">
-                                                <div class="col-sm-8">
-                                                    <h4 style="color: #049f88">Công tác tiền trạm, chuẩn bị cho chiến dịch</h4>
-                                                </div>
-                                                <div class="col-sm-4" style="text-align: right">
-                                                    <h4 style="color: #049f88; font-weight: bold">750.000 <span>VND</span></h4>
-                                                </div>
-                                            </div>
-                                            <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Chi tiêt -->
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <table class="member-manager-table" id="headman1">
-                                                <tbody>
-                                                    <tr>
-                                                        <th>STT</th>
-                                                        <th>NỘI DUNG</th>
-                                                        <th>ĐƠN GIÁ</th>
-                                                        <th>SỐ LƯỢNG</th>
-                                                        <th>ĐƠN VỊ</th>
-                                                        <th>THÀNH TIỀN</th>
-                                                        <th>HÀNH ĐỘNG</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>Đi lại</td>
-                                                        <td>50.000</td>
-                                                        <td>6</td>
-                                                        <td>Xe</td>
-                                                        <td>300.000</td>
-                                                        <td><a>SỬA</a> | <a>XÓA</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Băng rôn</td>
-                                                        <td>100.000</td>
-                                                        <td>2</td>
-                                                        <td>Cái</td>
-                                                        <td>200.000</td>
-                                                        <td><a>SỬA</a> | <a>XÓA</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Công tác giấy tờ</td>
-                                                        <td>10.000</td>
-                                                        <td>10</td>
-                                                        <td>Cái</td>
-                                                        <td>100.000</td>
-                                                        <td><a>SỬA</a> | <a>XÓA</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>4</td>
-                                                        <td>Liên lạc</td>
-                                                        <td>50.000</td>
-                                                        <td>3</td>
-                                                        <td>Sim</td>
-                                                        <td>150.000</td>
-                                                        <td><a>SỬA</a> | <a>XÓA</a></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <a id="add-budget-item-button" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  NỘI DUNG ...</a>
-                                            <div class="row" id="add-budget-item" style="display: none">
-                                                <div class="col-sm-12">
-                                                    <form role="form">
-                                                        <div class="row">
-                                                            <div class="col-sm-3" style="padding-right: 0">
-                                                                <input id="budget-content" class="form-control" placeholder="Nội dung ...">
-                                                            </div>
-                                                            <div class="col-sm-3" style="padding-right: 0">
-                                                                <input id="budget-unit-price" class="form-control" placeholder="Đơn giá ..." type="number">
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding-right: 0">
-                                                                <input id="budget-quatity" class="form-control" placeholder="Số lượng ..." type="number">
-                                                            </div>
-                                                            <div class="col-sm-3" style="padding-right: 0">
-                                                                <input id="budget-unit" class="form-control" placeholder="Đơn vị ...">
-                                                            </div>
-                                                            <div class="col-sm-1">
-                                                                <a id="save-budget-item" class="btn btn-image">
-                                                                    <i class="material-icons">save</i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Thêm đầu mục -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="sub-container">
-                                    <a id="add-budget-item-button" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  ĐẦU MỤC ...</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div id="tabplanbudget" class="tab-pane fade in active">
+            @{ Html.RenderAction("DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole });}
         </div>
 
     </div>

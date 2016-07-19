@@ -90,6 +90,13 @@
           <Property Name="GroupID" Type="varchar" MaxLength="24" />
           <Property Name="IsPublic" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="SQL_Budget">
+          <Key>
+            <PropertyRef Name="BudgetID" />
+          </Key>
+          <Property Name="BudgetID" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+        </EntityType>
         <EntityType Name="SQL_Group">
           <Key>
             <PropertyRef Name="GroupID" />
@@ -185,6 +192,18 @@
               <PropertyRef Name="ProjectID" />
             </Principal>
             <Dependent Role="SQL_Album">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Budget_ProjectSD">
+          <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+          <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="SQL_Budget">
               <PropertyRef Name="ProjectID" />
             </Dependent>
           </ReferentialConstraint>
@@ -450,6 +469,7 @@
           <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SQL_Budget" EntityType="Self.SQL_Budget" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
@@ -466,6 +486,10 @@
           <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
             <End Role="SQL_Project" EntitySet="SQL_Project" />
             <End Role="SQL_Album" EntitySet="SQL_Album" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Budget_ProjectSD" Association="Self.FK_Budget_ProjectSD">
+            <End Role="SQL_Project" EntitySet="SQL_Project" />
+            <End Role="SQL_Budget" EntitySet="SQL_Budget" />
           </AssociationSet>
           <AssociationSet Name="FK_Message_Account" Association="Self.FK_Message_Account">
             <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -753,6 +777,7 @@
           <NavigationProperty Name="SQL_GuestPr_Relation" Relationship="Self.FK_SQL_GuestPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GuestPr_Relation" />
           <NavigationProperty Name="SQL_Plan" Relationship="Self.FK_Plan_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Plan" />
           <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Post" />
+          <NavigationProperty Name="SQL_Budget" Relationship="iVolunteerModel.FK_Budget_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Budget" />
         </EntityType>
         <Association Name="FK_User_Friend_Account">
           <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
@@ -1128,6 +1153,11 @@
             <End Role="SQL_Account" EntitySet="SQL_Account" />
             <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
           </AssociationSet>
+          <EntitySet Name="SQL_Budget" EntityType="iVolunteerModel.SQL_Budget" />
+          <AssociationSet Name="FK_Budget_ProjectSD" Association="iVolunteerModel.FK_Budget_ProjectSD">
+            <End Role="SQL_Project" EntitySet="SQL_Project" />
+            <End Role="SQL_Budget" EntitySet="SQL_Budget" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="SQL_HubConnection">
           <Key>
@@ -1146,6 +1176,26 @@
             </Principal>
             <Dependent Role="SQL_HubConnection">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SQL_Budget">
+          <Key>
+            <PropertyRef Name="BudgetID" />
+          </Key>
+          <Property Name="BudgetID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SQL_Project" Relationship="iVolunteerModel.FK_Budget_ProjectSD" FromRole="SQL_Budget" ToRole="SQL_Project" />
+        </EntityType>
+        <Association Name="FK_Budget_ProjectSD">
+          <End Type="iVolunteerModel.SQL_Project" Role="SQL_Project" Multiplicity="1" />
+          <End Type="iVolunteerModel.SQL_Budget" Role="SQL_Budget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SQL_Project">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="SQL_Budget">
+              <PropertyRef Name="ProjectID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1315,6 +1365,14 @@
               <MappingFragment StoreEntitySet="SQL_HubConnection">
                 <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SQL_Budget">
+            <EntityTypeMapping TypeName="iVolunteerModel.SQL_Budget">
+              <MappingFragment StoreEntitySet="SQL_Budget">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

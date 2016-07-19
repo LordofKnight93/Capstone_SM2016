@@ -45,6 +45,8 @@
         <AssociationConnector Association="iVolunteerModel.FK_PostSD_ProjectSD" ManuallyRouted="false" />
         <EntityTypeShape EntityType="iVolunteerModel.SQL_HubConnection" Width="1.5" PointX="3" PointY="28.375" />
         <AssociationConnector Association="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Budget" Width="1.5" PointX="3" PointY="31.25" />
+        <AssociationConnector Association="iVolunteerModel.FK_Budget_ProjectSD" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

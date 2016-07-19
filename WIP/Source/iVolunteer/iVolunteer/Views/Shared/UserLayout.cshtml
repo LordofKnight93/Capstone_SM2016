@@ -152,6 +152,9 @@
                 });
             </script>
         }
+		<script type="text/javascript">
+			$('.modal-dialog').parent().on('show.bs.modal', function (e) { $(e.relatedTarget.attributes['data-target'].value).appendTo('body'); })
+		</script>
         @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
         <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
         <script src="~/scripts/jquery.validate.unobtrusive.js"></script>

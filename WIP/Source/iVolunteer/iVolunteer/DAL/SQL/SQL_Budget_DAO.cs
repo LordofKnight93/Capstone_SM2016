@@ -7,23 +7,23 @@ using iVolunteer.Common;
 
 namespace iVolunteer.DAL.SQL
 {
-    public class SQL_Plan_DAO
+    public class SQL_Budget_DAO
     {
         /// <summary>
-        /// Add new plan to SQL DB
+        /// Add new Budget to SQL DB
         /// </summary>
-        /// <param name="plan">SQL_Plan instantce</param>
+        /// <param name="Budget">SQL_Budget instantce</param>
         /// <returns>true if succeess</returns>
-        public bool Add_Plan(SQL_Plan plan)
+        public bool Add_Budget(SQL_Budget budget)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    dbEntities.SQL_Plan.Add(plan);
+                    dbEntities.SQL_Budget.Add(budget);
                     dbEntities.SaveChanges();
                     return true;
-                } 
+                }
             }
             catch
             {
@@ -31,14 +31,16 @@ namespace iVolunteer.DAL.SQL
             }
         }
 
-        public string Get_ProjectID(string planPhaseID)
+        public bool Delete_BudgetRecord(string budgetID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Plan planPhase = dbEntities.SQL_Plan.FirstOrDefault(pl => pl.PlanID == planPhaseID);
-                    return planPhase.ProjectID;
+                    SQL_Budget budgetRecord = dbEntities.SQL_Budget.FirstOrDefault(bg => bg.BudgetID == budgetID);
+                    dbEntities.SQL_Budget.Remove(budgetRecord);
+                    dbEntities.SaveChanges();
+                    return true;
                 }
             }
             catch
@@ -47,18 +49,14 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-
-        //Delete Plan Phase
-        public bool Delete_PlanPhase(string planPhaseID)
+        public string Get_ProjectID(string budgetID)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    SQL_Plan planPhase = dbEntities.SQL_Plan.FirstOrDefault(pl => pl.PlanID == planPhaseID);
-                    dbEntities.SQL_Plan.Remove(planPhase);
-                    dbEntities.SaveChanges();
-                    return true;
+                    SQL_Budget budgetRecord = dbEntities.SQL_Budget.FirstOrDefault(bg => bg.BudgetID == budgetID);
+                    return budgetRecord.ProjectID;
                 }
             }
             catch

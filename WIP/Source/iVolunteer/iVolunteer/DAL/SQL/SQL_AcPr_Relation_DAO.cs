@@ -1114,5 +1114,22 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
+        public int Get_UserRole(string projectID, string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.ProjectID == projectID);
+                    return result.Relation;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
