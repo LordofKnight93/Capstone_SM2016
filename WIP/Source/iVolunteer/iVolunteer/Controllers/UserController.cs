@@ -508,6 +508,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public string SearchUserForChat(string name)
         {
+            if (Session["UserID"] == null) return null;
             try
             {
                 if (String.IsNullOrEmpty(name))
@@ -524,6 +525,44 @@ namespace iVolunteer.Controllers
                 else result = userDAO.User_Search(name, false);
 
                 return JsonConvert.SerializeObject(result);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult LoadFriendRequestNotif()
+        {
+            if (Session["UserID"] == null) return null;
+
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                var listID = relation.Get_Requests(userID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var listRequest = userDAO.Get_AccountsInformation(listID);
+
+                return Json(listRequest);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+        public JsonResult LoadNotification()
+        {
+            try
+            {
+                if (Session["UserID"] == null) return null;
+
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifList = userDAO.Get_Notifications(userID, 0, 5);
+
+                return Json(notifList);
             }
             catch
             {

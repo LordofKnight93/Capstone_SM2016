@@ -161,5 +161,131 @@
         <script src="~/scripts/phucvt_custom.js"></script>
         <script src="~/scripts/jquery.validate.js"></script>
         @RenderSection("scripts", required: false)
+    <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(document).ready(function () {
+            if (typeof (notifHub) === "undefined") {
+                notifHub = $.connection.notificationHub;
+            }
+            //alert("gethere!!");
+            notifHub.client.getFriendRequests = function (userID) {
+                $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
+            }
+            // Click on Friend Notification Button
+            $("#friendNotifButton" + '@Session["UserID"].ToString()').click(function (evt) {
+                //display List of request
+                var data = {
+                    userID: '@Session["UserID"].ToString()',
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoadFriendRequestNotif",
+                    data: data,
+                    success: function (data, textstatus) {
+                        for (var index = 0; index < data.length; index++) {
+                            var request = data[index];
+                            // Get Request List
+                            //alert(request["DisplayName"]);
+                            var tem ="<div class='row'>";
+                            tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                            tem += "    <div class='row'>";
+                            tem += "        <div class='col-xs-2'>";
+                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["UserID"] + ".jpg' width='40' height='40' border='1'></object>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-8'>";
+                            tem += "            <div class='row'>";
+                            tem += "                <a href='' class='noti-friend-name'>"+ request["DisplayName"] +"</a>";
+                            tem += "            </div>";
+                            tem += "            <div class='row'>";
+                            tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Đã gửi lời kết bạn</label>";
+                            tem += "            </div>";
+                            tem += "        </div><div id='requestHandleArea"+ request["UserID"] +"'>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                            tem += "        </div></div>";
+                            tem += "    </div>";
+                            tem += "</div>";
+                            tem += "</div>";
+
+                            // APPEND recieved item to LIST
+                            $("#friendNotifList" + '@Session["UserID"].ToString()').append(tem);
+
+
+                            //Event when click on ACCEPT friend button
+                            $("#acceptFriend" + request["UserID"]).click(function (evt) {
+                                acceptFriendRequest(request["UserID"]);
+                                evt.preventDefault();
+                            });
+
+                            //Event when click on DENY friend button
+                            $("#denyFriend" + request["UserID"]).click(function (evt) {
+                                denyFriendRequest(request["UserID"]);
+                                evt.preventDefault();
+                            });
+
+                        }
+                        $('#friend').fadeToggle('fast', 'linear', function () {
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+                // Clear COUNT number
+                $("#friendRequest" + '@Session["UserID"].ToString()').empty();
+
+                //evt.preventDefault();
+            });
+            $.connection.hub.start().done(function () {
+
+            }).fail(function () {
+                alert("Could not connect to Notification Hub");
+            });
+        });
+
+        function acceptFriendRequest(otherID) {
+            var data = {
+                requestID: otherID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Account/AcceptFriendRequestInNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        alert("Added friend");
+                        $('#requestHandleArea' + otherID).empty();
+                        $('#friendRequestStatus' + otherID).text('Kết bạn thành công');
+                    }
+                    else {
+
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("error in accept friend!");
+                }
+            });
+        }
+        function denyFriendRequest(otherID) {
+
+        }
+
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#friend').length) {
+                if ($('#friend').is(":visible")) {
+                    $('#friend').hide();
+                    $('#friendNotifList' + '@Session["UserID"].ToString()').empty();
+                }
+            }
+        })
+
+
+    </script>
+
+        
 </body>
 </html>
