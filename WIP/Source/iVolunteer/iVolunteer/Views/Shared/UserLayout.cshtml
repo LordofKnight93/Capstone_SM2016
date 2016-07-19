@@ -11,7 +11,7 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    @{ 
+    @{
         string userID = Session["UserID"].ToString();
         string displayName = Session["DisplayName"].ToString();
         string role = Session["Role"].ToString();
@@ -38,12 +38,12 @@
                 else
                 {
                             <!-- Navbar left -->
-                    { Html.RenderPartial("_NotificationPanel", new ViewDataDictionary());  }
-                        }
+                    { Html.RenderPartial("_NotificationPanel"); }
+                }
 
                 <!-- Search bar -->
                 <div class="col-sm-5 col-md-5">
-                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search"}))
+                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search" }))
                     {
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0" maxlength="100">
@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     }
-                    
+
                 </div>
 
                 <!-- Navbar Right -->
@@ -98,7 +98,7 @@
                             <li><a href="report.html">Báo cáo sự cố</a></li>
                         </ul>
                     </li>
-                </ul>  
+                </ul>
 
             </div><!--/.nav-collapse -->
         </div>
@@ -107,7 +107,7 @@
     <!-------------Body Container------------>
     <div class="container background-container">
 
-         @RenderBody()
+        @RenderBody()
         <button class="fixedChatButton" onclick="location.href='@Url.Action("ChatRoom", "Home")'"><p>Chatroom</p></button>
     </div>
 
@@ -115,48 +115,42 @@
     <!------------Create New Project Fade Modal-------------->
     <div id="createProjectForm" class="modal fade" role="dialog">
         @{ Html.RenderPartial("~/Views/Project/_CreateProject.cshtml", new ViewDataDictionary());  }
-        </div>
-        <!------------Create New Group Fade Modal-------------->
-        @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
+    </div>
+    <!------------Create New Group Fade Modal-------------->
+    @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
 
-        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        @section scripts {
-            <script type="text/javascript">
-                var frmnewprovider = $("#formValidation");
-                $(document).ready(function () {
-                    frmnewprovider.submit(function (e) {
-                        e.preventDefault();
-                        frmnewprovider.validate();
-                        if (frmnewprovider.valid()) {
-                            $.ajax({
-                                url: "/Home/Login",
-                                type: "POST",
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify({
-                                    Email: frmnewprovider.find('#Email').val(),
-                                    Password: frmnewprovider.find('#Password').val(),
-                                }),
-                                success: function (result) {
-                                    //if record was added to db, then...
-                                    window.location.replace('/Home/Newfeed'); //we can redirect
-                                    //or simply close our modal.
-                                    //$('#mdlnewprovider').modal('hide');
-                                },
-                                error: function (result) {
-                                    alert('error');
-                                }
-                            });
-                        }
-                    });
-                });
-            </script>
-        }
-        @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-        <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
-        <script src="~/scripts/phucvt_custom.js"></script>
-        <script src="~/scripts/jquery.validate.js"></script>
-        @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/scripts/phucvt_custom.js"></script>
+    <script src="~/scripts/jquery.validate.js"></script>
+    @RenderSection("scripts", required: false)
+
+    <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+
+    @* Script for notifi *@
+    <script>
+        $(document).ready(function () {
+            if (typeof (notifHub) === "undefined") {
+                notifHub = $.connection.notificationHub;
+            }
+
+            notifHub.client.getFriendRequests = function (userID) {
+                $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
+            }
+
+            $.connection.hub.start().done(function () {
+
+            }).fail(function () {
+                alert("Could not connect to Notification Hub");
+            });
+
+        });
+    </script>
 </body>
 </html>
