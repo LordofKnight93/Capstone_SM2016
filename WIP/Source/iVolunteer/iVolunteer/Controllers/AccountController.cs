@@ -316,6 +316,14 @@ namespace iVolunteer.Controllers
                 if(!relationDAO.Is_Requested(userID, groupID))
                     relationDAO.Add_Request(userID, groupID);
 
+                /**SEND join group NOTIFICATION to Group Leader(s)**/
+                //Get group leader(s)ID 
+                List<string> leadersID = relationDAO.Get_Leaders(groupID);
+
+                //Connect to NotificationHub
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+
                 return ActionToGroup(groupID);
             }
             catch
