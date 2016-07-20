@@ -970,5 +970,20 @@ namespace iVolunteer.Controllers
                 return Json(false);
             }
         }
+        public JsonResult GetNumberOfFriendRequest()
+        {
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                int count = relation.Count_Request(userID);
+
+                return Json(count);
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

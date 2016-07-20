@@ -173,6 +173,20 @@
             notifHub.client.getFriendRequests = function (userID) {
                 $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
             }
+            //Load Friend Request Type when user Access page
+            $.ajax({
+                type: "POST",
+                url: "/Account/GetNumberOfFriendRequest",
+                success: function (data, textstatus) {
+                    if(data!=0)$("#friendRequest" + '@Session["UserID"]').text(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Error in get Friend Request Count");
+                }
+                
+                
+            });
+
             // Click on Friend Notification Button
             $("#friendNotifButton" + '@Session["UserID"].ToString()').click(function (evt) {
                 //display List of request
@@ -194,7 +208,7 @@
                             tem += "        <div class='col-xs-2'>";
                             tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["UserID"] + ".jpg' width='40' height='40' border='1'></object>";
                             tem += "        </div>";
-                            tem += "        <div class='col-xs-8'>";
+                            tem += "        <div class='col-xs-7'>";
                             tem += "            <div class='row'>";
                             tem += "                <a href='' class='noti-friend-name'>"+ request["DisplayName"] +"</a>";
                             tem += "            </div>";
@@ -203,10 +217,10 @@
                             tem += "            </div>";
                             tem += "        </div><div id='requestHandleArea"+ request["UserID"] +"'>";
                             tem += "        <div class='col-xs-1' style='padding: 0'>";
-                            tem += "            <button id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
-                            tem += "        </div>";
+                            tem += "            <button role='" + request["UserID"] + "' id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                            tem += "        </div><div class='col-xs-1'></div>";
                             tem += "        <div class='col-xs-1' style='padding: 0'>";
-                            tem += "            <button id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                            tem += "            <button role='" + request["UserID"] + "' id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
                             tem += "        </div></div>";
                             tem += "    </div>";
                             tem += "</div>";
@@ -218,13 +232,13 @@
 
                             //Event when click on ACCEPT friend button
                             $("#acceptFriend" + request["UserID"]).click(function (evt) {
-                                acceptFriendRequest(request["UserID"]);
+                                acceptFriendRequest(this);
                                 evt.preventDefault();
                             });
 
                             //Event when click on DENY friend button
                             $("#denyFriend" + request["UserID"]).click(function (evt) {
-                                denyFriendRequest(request["UserID"]);
+                                denyFriendRequest(this);
                                 evt.preventDefault();
                             });
 
@@ -247,10 +261,15 @@
             });
         });
 
-        function acceptFriendRequest(otherID) {
+        function acceptFriendRequest(selector) {
+            alert("into method: " + otherID);
+            var otherID = $(selector).attr('role');
+
             var data = {
                 requestID: otherID
             }
+            alert(otherID);
+
             $.ajax({
                 type: "POST",
                 url: "/Account/AcceptFriendRequestInNotif",

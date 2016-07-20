@@ -223,7 +223,7 @@ namespace iVolunteer.DAL.MongoDB
                 var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
                 var friend_filter = Builders<SDLink>.Filter.Eq(s => s.ID, friendID);
                 var update = Builders<Mongo_User>.Update.PullFilter(u => u.FriendList, friend_filter)
-                                                        .Inc(u => u.AccountInformation.FriendCount, 1); ;
+                                                        .Inc(u => u.AccountInformation.FriendCount, -1); ;
                 var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
