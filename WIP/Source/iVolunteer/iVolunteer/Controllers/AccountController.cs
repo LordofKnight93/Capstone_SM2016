@@ -320,6 +320,20 @@ namespace iVolunteer.Controllers
                 //Get group leader(s)ID 
                 List<string> leadersID = relationDAO.Get_Leaders(groupID);
 
+                //Get SDLink 
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = userDAO.Get_SDLink(userID);
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                SDLink destination = groupDAO.Get_SDLink(groupID); 
+                //Add Notification item 
+                //Create Notifcation Item
+                Notification notif = new Notification(actor, Notify.JOIN_GROUP_REQUEST, actor, destination);
+                
+                foreach(var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                
                 //Connect to NotificationHub
                 var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                 hubContext.Clients.All.getJoinGroupRequests(leadersID);

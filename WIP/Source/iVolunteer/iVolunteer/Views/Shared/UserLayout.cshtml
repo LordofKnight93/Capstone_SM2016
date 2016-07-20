@@ -169,11 +169,20 @@
             if (typeof (notifHub) === "undefined") {
                 notifHub = $.connection.notificationHub;
             }
-            //alert("gethere!!");
+            //GET FRIEND request count
             notifHub.client.getFriendRequests = function (userID) {
                 $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
             }
-            //Load Friend Request Type when user Access page
+            //GET JOIN group request count
+            notifHub.client.getJoinGroupRequests = function (leadersID) {
+                //alert("Got JG Request!!!");
+                for (var index = 0; index < leadersID.length; index++) {
+                    var leaderID = leadersID[index];
+                        $("#notification" + leaderID).html(function (i, val) { return +val + 1 });
+                }
+            }
+
+            //Load Friend Request Count when user Access page//
             $.ajax({
                 type: "POST",
                 url: "/Account/GetNumberOfFriendRequest",
@@ -183,9 +192,77 @@
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Error in get Friend Request Count");
                 }
-                
-                
+
+
             });
+            // Click on Noification Button
+            $("#notificationButton" + '@Session["UserID"].ToString()').click(function (evt) {
+                //display List of request
+                var data = {
+                    userID: '@Session["UserID"].ToString()',
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoadNotification",
+                    data: data,
+                    success: function (data, textstatus) {
+                        for (var index = 0; index < data.length; index++) {
+                            var request = data[index];
+                            // Get Request List
+                            //alert(request["DisplayName"]);
+                            var tem = "<div class='row'>";
+                            tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                            tem += "    <div class='row'>";
+                            tem += "        <div class='col-xs-2'>";
+                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border='1'></object>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-7'>";
+                            tem += "            <div class='row'>";
+                            tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                            tem += "            </div>";
+                            tem += "            <div class='row'>";
+                            tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
+                            tem += "            </div><a href=''>" + request["Destination"]["DisplayName"] + "<a><div class='row'></div>";
+                            tem += "        </div><div id='requestHandleArea" + request["UserID"] + "'>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button role='" + request["UserID"] + "' id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button role='" + request["UserID"] + "' id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                            tem += "        </div></div><div class='col-xs-1'></div>";
+                            tem += "    </div>";
+                            tem += "</div>";
+                            tem += "</div>";
+
+                            // APPEND recieved item to LIST
+                            $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+
+                            //Event when click on ACCEPT friend button
+                            $("#acceptJoinGroupRequest" + request["UserID"]).click(function (evt) {
+                                acceptFriendRequest(this);
+                                evt.preventDefault();
+                            });
+
+                            //Event when click on DENY friend button
+                            $("#denyJoinGroupRequest" + request["UserID"]).click(function (evt) {
+                                denyFriendRequest(this);
+                                evt.preventDefault();
+                            });
+
+                        }
+                        $('#notification').fadeToggle('fast', 'linear', function () {
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+                // Clear COUNT number
+                $("#notification" + '@Session["UserID"].ToString()').empty();
+
+                //evt.preventDefault();
+            });
+
 
             // Click on Friend Notification Button
             $("#friendNotifButton" + '@Session["UserID"].ToString()').click(function (evt) {
@@ -269,7 +346,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Account/AcceptFriendRequestInNotif", 
+                url: "/Account/AcceptFriendRequestInNotif",
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
@@ -311,12 +388,18 @@
             });
         }
 
-
+        // DELETE friend request click when click outside
         $(document).click(function (event) {
             if (!$(event.target).closest('#friend').length) {
                 if ($('#friend').is(":visible")) {
                     $('#friend').hide();
                     $('#friendNotifList' + '@Session["UserID"].ToString()').empty();
+                }
+            }
+            if (!$(event.target).closest('#notification').length) {
+                if ($('#notification').is(":visible")) {
+                    $('#notification').hide();
+                    $('#notificationList' + '@Session["UserID"].ToString()').empty();
                 }
             }
         })
