@@ -208,48 +208,49 @@
                     success: function (data, textstatus) {
                         for (var index = 0; index < data.length; index++) {
                             var request = data[index];
-                            // Get Request List
-                            //alert(request["DisplayName"]);
-                            var tem = "<div class='row'>";
-                            tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
-                            tem += "    <div class='row'>";
-                            tem += "        <div class='col-xs-2'>";
-                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border='1'></object>";
-                            tem += "        </div>";
-                            tem += "        <div class='col-xs-7'>";
-                            tem += "            <div class='row'>";
-                            tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
-                            tem += "            </div>";
-                            tem += "            <div class='row'>";
-                            tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
-                            tem += "            </div><a href=''>" + request["Destination"]["DisplayName"] + "<a><div class='row'></div>";
-                            tem += "        </div><div id='requestHandleArea" + request["UserID"] + "'>";
-                            tem += "        <div class='col-xs-1' style='padding: 0'>";
-                            tem += "            <button role='" + request["UserID"] + "' id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
-                            tem += "        </div>";
-                            tem += "        <div class='col-xs-1' style='padding: 0'>";
-                            tem += "            <button role='" + request["UserID"] + "' id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
-                            tem += "        </div></div><div class='col-xs-1'></div>";
-                            tem += "    </div>";
-                            tem += "</div>";
-                            tem += "</div>";
+                            if (request["IsSeen"] != true) {
+                                // Get Request List
+                                //alert(request["DisplayName"]);
+                                var tem = "<div class='row'>";
+                                tem += "<div role='" + request["NotifyID"] + "' id='joinGroupRequestItem" + request["Actors"][0]["ID"] + "' class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border='1'></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-7'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label id='joinGroupRequestStatus" + request["Actors"][0]["ID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
+                                tem += "            </div><a href=''>" + request["Destination"]["DisplayName"] + "<a><div class='row'></div>";
+                                tem += "        </div><div id='requestHandleArea" + request["Actors"][0]["ID"] + "'>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                                tem += "        </div></div><div class='col-xs-1'></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
 
-                            // APPEND recieved item to LIST
-                            $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
 
 
-                            //Event when click on ACCEPT friend button
-                            $("#acceptJoinGroupRequest" + request["UserID"]).click(function (evt) {
-                                acceptFriendRequest(this);
-                                evt.preventDefault();
-                            });
+                                //Event when click on ACCEPT friend button
+                                $("#acceptJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                    acceptJoinGroupRequest(this);
+                                    evt.preventDefault();
+                                });
 
-                            //Event when click on DENY friend button
-                            $("#denyJoinGroupRequest" + request["UserID"]).click(function (evt) {
-                                denyFriendRequest(this);
-                                evt.preventDefault();
-                            });
-
+                                //Event when click on DENY friend button
+                                $("#denyJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                    denyJoinGroupRequest(this);
+                                    evt.preventDefault();
+                                });
+                            }
                         }
                         $('#notification').fadeToggle('fast', 'linear', function () {
                         });
@@ -338,6 +339,37 @@
             });
         });
 
+        function acceptJoinGroupRequest(selector) {
+
+            var requestID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: requestID,
+                groupID: $(selector).parent().attr('role'),
+                notifyID: $('#joinGroupRequestItem'+ requestID).attr('role')
+            }
+            alert("jumped to methods");
+            $.ajax({
+                type: "POST",
+                url: "/Group/AcceptRequestOnNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + requestID).empty();
+                        $('#joinGroupRequestStatus' + requestID).text('Kết nạp vào nhóm thành công');
+                    }
+                    else {
+                        alert("Error in accept join Group Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in accept join group REquest!");
+                }
+            });
+        }
+        function denyJoinGroupRequest(selector) {
+
+        }
         function acceptFriendRequest(selector) {
             var otherID = $(selector).attr('role');
             var data = {
