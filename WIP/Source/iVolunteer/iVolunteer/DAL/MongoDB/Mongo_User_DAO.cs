@@ -433,6 +433,27 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// Delete Notificaiton
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public bool Delete_Notification(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var notify_filter = Builders<Notification>.Filter.Eq(nt => nt.NotifyID, notifyID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.NotificationList, notify_filter);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
 
     }

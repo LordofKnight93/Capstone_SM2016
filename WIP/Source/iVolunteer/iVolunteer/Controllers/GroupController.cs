@@ -717,15 +717,18 @@ namespace iVolunteer.Controllers
                 }
             }
             return Json(true);
-        }       
-        public JsonResult DenyRequestOnNotif(string userID, string requestID, string groupID)
+        }
+        public JsonResult DenyRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
         {
             if (userID == null) return Json(false);
             try
             {
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    relationDAO.Delelte_Request(requestID, groupID);
-                    return Json(true);
+                relationDAO.Delelte_Request(requestID, groupID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Delete_Notification(userID, notifyID);
+
+                return Json(true);
             }
             catch
             {

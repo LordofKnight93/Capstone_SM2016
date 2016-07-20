@@ -228,7 +228,7 @@
                                 tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
                                 tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
                                 tem += "        </div>";
-                                tem += "        <div class='col-xs-1' style='padding: 0'>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
                                 tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
                                 tem += "        </div></div><div class='col-xs-1'></div>";
                                 tem += "    </div>";
@@ -348,7 +348,6 @@
                 groupID: $(selector).parent().attr('role'),
                 notifyID: $('#joinGroupRequestItem'+ requestID).attr('role')
             }
-            alert("jumped to methods");
             $.ajax({
                 type: "POST",
                 url: "/Group/AcceptRequestOnNotif",
@@ -368,7 +367,30 @@
             });
         }
         function denyJoinGroupRequest(selector) {
-
+            var requestID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: requestID,
+                groupID: $(selector).parent().attr('role'),
+                notifyID: $('#joinGroupRequestItem' + requestID).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Group/DenyRequestOnNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + requestID).empty();
+                        $('#joinGroupRequestStatus' + requestID).text('Từ đã từ chối kết nạp vào nhóm');
+                    }
+                    else {
+                        alert("Error in accept join Group Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in accept join group REquest!");
+                }
+            });
         }
         function acceptFriendRequest(selector) {
             var otherID = $(selector).attr('role');
