@@ -970,6 +970,31 @@ namespace iVolunteer.Controllers
                 return Json(false);
             }
         }
+        public JsonResult DeclineFriendRequestInNotif(string requestID)
+        {
+
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                relationDAO.Delete_Request(requestID, userID);
+
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
         public JsonResult GetNumberOfFriendRequest()
         {
             string userID = Session["UserID"].ToString();

@@ -262,17 +262,14 @@
         });
 
         function acceptFriendRequest(selector) {
-            alert("into method: " + otherID);
             var otherID = $(selector).attr('role');
-
             var data = {
                 requestID: otherID
             }
-            alert(otherID);
 
             $.ajax({
                 type: "POST",
-                url: "/Account/AcceptFriendRequestInNotif",
+                url: "/Account/AcceptFriendRequestInNotif", 
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
@@ -281,7 +278,7 @@
                         $('#friendRequestStatus' + otherID).text('Kết bạn thành công');
                     }
                     else {
-
+                        alert("Error in deny friend Request");
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -289,8 +286,29 @@
                 }
             });
         }
-        function denyFriendRequest(otherID) {
+        function denyFriendRequest(selector) {
+            var otherID = $(selector).attr('role');
+            var data = {
+                requestID: otherID
+            }
 
+            $.ajax({
+                type: "POST",
+                url: "/Account/DeclineFriendRequestInNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + otherID).empty();
+                        $('#friendRequestStatus' + otherID).text('Đã từ chối kết bạn');
+                    }
+                    else {
+                        alert("Error in deny friend Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("error in accept friend!");
+                }
+            });
         }
 
 
