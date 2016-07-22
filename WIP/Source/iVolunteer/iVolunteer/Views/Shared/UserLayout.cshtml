@@ -161,5 +161,306 @@
         <script src="~/scripts/phucvt_custom.js"></script>
         <script src="~/scripts/jquery.validate.js"></script>
         @RenderSection("scripts", required: false)
+
+    <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(document).ready(function () {
+            if (typeof (notifHub) === "undefined") {
+                notifHub = $.connection.notificationHub;
+            }
+            //GET FRIEND request count
+            notifHub.client.getFriendRequests = function (userID) {
+                $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
+            }
+            //GET JOIN group request count
+            notifHub.client.getJoinGroupRequests = function (leadersID) {
+                //alert("Got JG Request!!!");
+                for (var index = 0; index < leadersID.length; index++) {
+                    var leaderID = leadersID[index];
+                        $("#notification" + leaderID).html(function (i, val) { return +val + 1 });
+                }
+            }
+
+            //Load Friend Request Count when user Access page//
+            $.ajax({
+                type: "POST",
+                url: "/Account/GetNumberOfFriendRequest",
+                success: function (data, textstatus) {
+                    if(data!=0)$("#friendRequest" + '@Session["UserID"]').text(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Error in get Friend Request Count");
+                }
+
+
+            });
+            // Click on Noification Button
+            $("#notificationButton" + '@Session["UserID"].ToString()').click(function (evt) {
+                //display List of request
+                var data = {
+                    userID: '@Session["UserID"].ToString()',
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoadNotification",
+                    data: data,
+                    success: function (data, textstatus) {
+                        for (var index = 0; index < data.length; index++) {
+                            var request = data[index];
+                            if (request["IsSeen"] != true) {
+                                // Get Request List
+                                //alert(request["DisplayName"]);
+                                var tem = "<div class='row'>";
+                                tem += "<div role='" + request["NotifyID"] + "' id='joinGroupRequestItem" + request["Actors"][0]["ID"] + "' class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border='1'></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-7'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label id='joinGroupRequestStatus" + request["Actors"][0]["ID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
+                                tem += "            </div><a href=''>" + request["Destination"]["DisplayName"] + "<a><div class='row'></div>";
+                                tem += "        </div><div id='requestHandleArea" + request["Actors"][0]["ID"] + "'>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                                tem += "        </div>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                                tem += "        </div></div><div class='col-xs-1'></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+
+                                //Event when click on ACCEPT friend button
+                                $("#acceptJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                    acceptJoinGroupRequest(this);
+                                    evt.preventDefault();
+                                });
+
+                                //Event when click on DENY friend button
+                                $("#denyJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                    denyJoinGroupRequest(this);
+                                    evt.preventDefault();
+                                });
+                            }
+                        }
+                        $('#notification').fadeToggle('fast', 'linear', function () {
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+                // Clear COUNT number
+                $("#notification" + '@Session["UserID"].ToString()').empty();
+
+                //evt.preventDefault();
+            });
+
+
+            // Click on Friend Notification Button
+            $("#friendNotifButton" + '@Session["UserID"].ToString()').click(function (evt) {
+                //display List of request
+                var data = {
+                    userID: '@Session["UserID"].ToString()',
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoadFriendRequestNotif",
+                    data: data,
+                    success: function (data, textstatus) {
+                        for (var index = 0; index < data.length; index++) {
+                            var request = data[index];
+                            // Get Request List
+                            //alert(request["DisplayName"]);
+                            var tem ="<div class='row'>";
+                            tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                            tem += "    <div class='row'>";
+                            tem += "        <div class='col-xs-2'>";
+                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["UserID"] + ".jpg' width='40' height='40' border='1'></object>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-7'>";
+                            tem += "            <div class='row'>";
+                            tem += "                <a href='' class='noti-friend-name'>"+ request["DisplayName"] +"</a>";
+                            tem += "            </div>";
+                            tem += "            <div class='row'>";
+                            tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Đã gửi lời kết bạn</label>";
+                            tem += "            </div>";
+                            tem += "        </div><div id='requestHandleArea"+ request["UserID"] +"'>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button role='" + request["UserID"] + "' id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                            tem += "        </div><div class='col-xs-1'></div>";
+                            tem += "        <div class='col-xs-1' style='padding: 0'>";
+                            tem += "            <button role='" + request["UserID"] + "' id='denyFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                            tem += "        </div></div>";
+                            tem += "    </div>";
+                            tem += "</div>";
+                            tem += "</div>";
+
+                            // APPEND recieved item to LIST
+                            $("#friendNotifList" + '@Session["UserID"].ToString()').append(tem);
+
+
+                            //Event when click on ACCEPT friend button
+                            $("#acceptFriend" + request["UserID"]).click(function (evt) {
+                                acceptFriendRequest(this);
+                                evt.preventDefault();
+                            });
+
+                            //Event when click on DENY friend button
+                            $("#denyFriend" + request["UserID"]).click(function (evt) {
+                                denyFriendRequest(this);
+                                evt.preventDefault();
+                            });
+
+                        }
+                        $('#friend').fadeToggle('fast', 'linear', function () {
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+                // Clear COUNT number
+                $("#friendRequest" + '@Session["UserID"].ToString()').empty();
+
+                //evt.preventDefault();
+            });
+            $.connection.hub.start().done(function () {
+
+            }).fail(function () {
+                alert("Could not connect to Notification Hub");
+            });
+        });
+
+        function acceptJoinGroupRequest(selector) {
+
+            var requestID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: requestID,
+                groupID: $(selector).parent().attr('role'),
+                notifyID: $('#joinGroupRequestItem'+ requestID).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Group/AcceptRequestOnNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + requestID).empty();
+                        $('#joinGroupRequestStatus' + requestID).text('Kết nạp vào nhóm thành công');
+                    }
+                    else {
+                        alert("Error in accept join Group Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in accept join group REquest!");
+                }
+            });
+        }
+        function denyJoinGroupRequest(selector) {
+            var requestID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: requestID,
+                groupID: $(selector).parent().attr('role'),
+                notifyID: $('#joinGroupRequestItem' + requestID).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Group/DenyRequestOnNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + requestID).empty();
+                        $('#joinGroupRequestStatus' + requestID).text('Từ đã từ chối kết nạp vào nhóm');
+                    }
+                    else {
+                        alert("Error in accept join Group Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in accept join group REquest!");
+                }
+            });
+        }
+        function acceptFriendRequest(selector) {
+            var otherID = $(selector).attr('role');
+            var data = {
+                requestID: otherID
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/AcceptFriendRequestInNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        alert("Added friend");
+                        $('#requestHandleArea' + otherID).empty();
+                        $('#friendRequestStatus' + otherID).text('Kết bạn thành công');
+                    }
+                    else {
+                        alert("Error in deny friend Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("error in accept friend!");
+                }
+            });
+        }
+        function denyFriendRequest(selector) {
+            var otherID = $(selector).attr('role');
+            var data = {
+                requestID: otherID
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Account/DeclineFriendRequestInNotif",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + otherID).empty();
+                        $('#friendRequestStatus' + otherID).text('Đã từ chối kết bạn');
+                    }
+                    else {
+                        alert("Error in deny friend Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("error in accept friend!");
+                }
+            });
+        }
+
+        // DELETE friend request click when click outside
+        $(document).click(function (event) {
+            if (!$(event.target).closest('#friend').length) {
+                if ($('#friend').is(":visible")) {
+                    $('#friend').hide();
+                    $('#friendNotifList' + '@Session["UserID"].ToString()').empty();
+                }
+            }
+            if (!$(event.target).closest('#notification').length) {
+                if ($('#notification').is(":visible")) {
+                    $('#notification').hide();
+                    $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                }
+            }
+        })
+
+
+    </script>
+
+        
 </body>
 </html>

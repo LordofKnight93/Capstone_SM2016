@@ -216,14 +216,15 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public bool Delete_Friend(string userID)
+        public bool Delete_Friend(string userID, string friendID)
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
-                var result = collection.UpdateOne(filter, update);
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var friend_filter = Builders<SDLink>.Filter.Eq(s => s.ID, friendID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.FriendList, friend_filter)
+                                                        .Inc(u => u.AccountInformation.FriendCount, -1); ;
+                var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
             catch
@@ -373,6 +374,87 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// add new notification to user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        public bool Add_Notification(string userID, Notification notify)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList, notify);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// set a notification is seen
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public bool Set_Notification_IsSeen(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
+                var update = Builders<Mongo_User>.Update.Set(u => u.NotificationList.ElementAt(-1).IsSeen, Status.IS_SEEN);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a number of user's notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_Notifications(string userID, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return result.NotificationList.Skip(skip).Take(number).ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Delete Notificaiton
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public bool Delete_Notification(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var notify_filter = Builders<Notification>.Filter.Eq(nt => nt.NotifyID, notifyID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.NotificationList, notify_filter);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
     }
 }

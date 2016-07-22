@@ -15,6 +15,8 @@ using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
 
 namespace iVolunteer.Controllers
 {
@@ -314,6 +316,28 @@ namespace iVolunteer.Controllers
                 if(!relationDAO.Is_Requested(userID, groupID))
                     relationDAO.Add_Request(userID, groupID);
 
+                /**SEND join group NOTIFICATION to Group Leader(s)**/
+                //Get group leader(s)ID 
+                List<string> leadersID = relationDAO.Get_Leaders(groupID);
+
+                //Get SDLink 
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = userDAO.Get_SDLink(userID);
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                SDLink destination = groupDAO.Get_SDLink(groupID); 
+                //Add Notification item 
+                //Create Notifcation Item
+                Notification notif = new Notification(actor, Notify.JOIN_GROUP_REQUEST, actor, destination);
+                
+                foreach(var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                
+                //Connect to NotificationHub
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+
                 return ActionToGroup(groupID);
             }
             catch
@@ -461,6 +485,10 @@ namespace iVolunteer.Controllers
                     ///check if curent user has sent request or not 
                     if (!relationDAO.Is_Requested(userID, otherID))
                         relationDAO.Add_Request(userID, otherID);
+
+                    // Send notification
+                    var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                    hubContext.Clients.All.getFriendRequests(otherID);
                 }
 
                 return ActionToOtherUser(otherID);
@@ -771,9 +799,10 @@ namespace iVolunteer.Controllers
                         relationDAO.Delete_Friend(friendID, userID);
                         relationDAO.Delete_Friend(userID, friendID);
 
+                        //Delete Friend in FriendList
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                        userDAO.Delete_Friend(userID);
-                        userDAO.Delete_Friend(friendID);
+                        userDAO.Delete_Friend(userID, friendID);
+                        userDAO.Delete_Friend(friendID, userID);
 
                         transaction.Complete();
                     }
@@ -921,6 +950,86 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public JsonResult AcceptFriendRequestInNotif(string requestID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+
+                }
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                        relationDAO.Accept_Request(userID, requestID);
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        SDLink first = userDAO.Get_SDLink(userID);
+                        SDLink second = userDAO.Get_SDLink(requestID);
+                        userDAO.Add_Friend_To_List(userID, second);
+                        userDAO.Add_Friend_To_List(requestID, first);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return Json(false);
+                    }
+                }
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
+        public JsonResult DeclineFriendRequestInNotif(string requestID)
+        {
+
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                relationDAO.Delete_Request(requestID, userID);
+
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
+        public JsonResult GetNumberOfFriendRequest()
+        {
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                int count = relation.Count_Request(userID);
+
+                return Json(count);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

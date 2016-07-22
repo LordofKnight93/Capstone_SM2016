@@ -290,6 +290,7 @@
     <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />

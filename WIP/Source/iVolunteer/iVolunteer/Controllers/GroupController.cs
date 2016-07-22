@@ -692,5 +692,49 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public JsonResult AcceptRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
+        {
+            SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    relationDAO.Accept_Request(requestID, groupID);
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    userDAO.Join_Group(requestID);
+                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                    groupDAO.Member_Join(groupID);
+
+                    //Set is seen
+                    userDAO.Set_Notification_IsSeen(userID, notifyID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    return Json(false);
+                }
+            }
+            return Json(true);
+        }
+        public JsonResult DenyRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
+        {
+            if (userID == null) return Json(false);
+            try
+            {
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                relationDAO.Delelte_Request(requestID, groupID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Delete_Notification(userID, notifyID);
+
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+
     }
 }

@@ -15,7 +15,7 @@
         {
             if (ViewBag.IsFriend == true)
             {
-                @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace , Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace , Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default" })
             }
             else
             {

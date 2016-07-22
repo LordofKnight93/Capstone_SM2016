@@ -132,4 +132,9 @@ namespace iVolunteer.Common
         public const bool MALE = true;
         public const bool FEMALE = false;
     }
+    public static class Notify
+    {
+        public const int JOIN_GROUP_REQUEST = 1;
+        public const int JOIN_PROJECT_REQUEST = 2;
+    }
 }
