@@ -115,16 +115,16 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// increase member count by 1
+        /// increase member count by number
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public bool Member_Join(string groupID)
+        public bool Members_Join(string groupID, int number)
         {
             try
             {
                 var filter = Builders<Mongo_Group>.Filter.Eq(gr => gr.GroupInformation.GroupID, groupID);
-                var update = Builders<Mongo_Group>.Update.Inc(gr => gr.GroupInformation.MemberCount, 1);
+                var update = Builders<Mongo_Group>.Update.Inc(gr => gr.GroupInformation.MemberCount, number);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -152,23 +152,39 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-
         /// <summary>
-        /// search active and confirmed group
+        /// search active group, for user úage
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="option">true to include deactive group, false to find active group only</param>
         /// <returns></returns>
-        public List<GroupInformation> Group_Search(string name, bool allStatus)
+        public List<GroupInformation> Active_Group_Search(string name, int skip, int number)
         {
             try
             {
-                var preResult = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.ToLower().Contains(name.ToLower()));
-                if (allStatus == false)
-                {
-                    preResult = preResult.Where(gr => gr.GroupInformation.IsActivate == Status.IS_ACTIVATE);
-                }
-                var result = preResult.Select(gr => gr.GroupInformation).ToList();
+                var result = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.ToLower().Contains(name.ToLower())
+                                                               && gr.GroupInformation.IsActivate == Status.IS_ACTIVATE)
+                                                     .Skip(skip).Take(number)
+                                                     .Select(gr => gr.GroupInformation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// search all group, for admin usage
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<GroupInformation> Group_Search(string name, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(gr => gr.GroupInformation.GroupName.ToLower().Contains(name.ToLower()))
+                                                     .Skip(skip).Take(number)
+                                                     .Select(gr => gr.GroupInformation).ToList();
                 return result;
             }
             catch

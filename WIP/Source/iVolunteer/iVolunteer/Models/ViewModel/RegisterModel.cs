@@ -48,7 +48,7 @@ namespace iVolunteer.Models.ViewModel
         //Số CMT
         [Required(ErrorMessage = "Vui lòng nhập số chứng minh thư!")]
         [DisplayName("Số chứng minh thư")]
-        [RegularExpression(@"^[0-9]*$")]
+        [RegularExpression(@"^[0-9]*$",ErrorMessage ="Chỉ chấp nhận số và độ dài 9 hoặc 12 ký tự!")]
         [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
         public string IdentifyID { get; set; }
 

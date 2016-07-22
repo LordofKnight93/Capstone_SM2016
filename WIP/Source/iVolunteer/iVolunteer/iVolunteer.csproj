@@ -434,7 +434,6 @@
     <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
     <Content Include="Views\Group\_GroupStructure.cshtml" />
     <Content Include="Views\User\_FriendList.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_NotificationPanel.cshtml" />
     <Content Include="Views\Shared\_PopupNotification.cshtml" />
     <Content Include="Views\Shared\_PopupFriend.cshtml" />
@@ -482,14 +481,12 @@
     <Content Include="Views\Project\_ProjectLeaders.cshtml" />
     <Content Include="Views\Project\_ProjectMembers.cshtml" />
     <Content Include="Views\Project\_ProjectStructure.cshtml" />
-    <Content Include="Views\Project\_ProjectRequests.cshtml" />
     <Content Include="Views\Project\_UserJoinRequests.cshtml" />
     <Content Include="Views\Project\_CreateSponsor.cshtml" />
     <Content Include="Views\Project\_UserSponsorRequests.cshtml" />
     <Content Include="Views\Project\_GroupJoinRequests.cshtml" />
     <Content Include="Views\Project\_GroupSponsorRequests.cshtml" />
-    <Content Include="Views\Project\_ProjectOrganizers.cshtml" />
-    <Content Include="Views\Project\_ProjectSponsors.cshtml" />
+    <Content Include="Views\Project\_SponsoredUsers.cshtml" />
     <Content Include="Views\Project\_JoinedGroups.cshtml" />
     <Content Include="Views\Project\_SponsoredGroups.cshtml" />
     <Content Include="Views\Project\_OrganizedGroups.cshtml" />
@@ -510,6 +507,14 @@
     <Content Include="Views\Plan\_Plan.cshtml" />
     <Content Include="Views\Plan\_PlanPhase.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
+    <Content Include="Views\Account\_FriendNotInGroup.cshtml" />
+    <Content Include="Views\Group\_UpdateGroupInformation.cshtml" />
+    <Content Include="Views\Account\_FriendNotInProject.cshtml" />
+    <Content Include="Views\Project\_OrganizedUsers.cshtml" />
+    <Content Include="Views\Project\_SponsoredGuests.cshtml" />
+    <Content Include="Views\Project\_GuestSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_SuggestedUsers.cshtml" />
+    <Content Include="Views\Account\_InvitedProjects.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

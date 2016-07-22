@@ -2,9 +2,9 @@
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;" id="current">
     <!-- List Project -->
-                @foreach (var item in Model)
-                {
-                    <div class="divider-holizon"></div>
+    @foreach (var item in Model)
+    {
+        <div class="divider-holizon"></div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
@@ -37,22 +37,17 @@
                                                 <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
                                             </tr>
                                         </table>
-                                        
+
                                     </div>
-                                    @if (ViewBag.IsMyHome == true)
-                                    {
-                                        <div class="row" style="margin-top: 10px" id="@item.ProjectID">
-                                            @{Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });
-                                            }
-                                        </div>
-                                                }
+                                    @Ajax.ActionLink("Đồng ý", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                    @Ajax.ActionLink("Từ chối", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
-                   
+
                     <div class="divider-holizon"></div>
-                }
+                                                }
 
 </div>

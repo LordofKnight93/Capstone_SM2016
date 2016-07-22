@@ -11,7 +11,6 @@
                         <h4>@Model.Count() nhóm muốn tham gia</h4>
                     </div>
                     <div class="col-sm-2" style="text-align: right">
-                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
                     </div>
 
                     <!-- Search bar -->
@@ -56,6 +55,11 @@
                                     </div>
                                     <!-- Interaction Button -->
                                     <div class="row" style="margin-top: 10px">
+                                        <div class="row" style="margin-top: -7px; text-align: center">
+                                            <label class="member-department">
+                                                @Ajax.ActionLink(" Thành viên ", "JoinedGroupMembers", "Project", new { groupID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                                            </label>
+                                        </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
                                                 @Ajax.ActionLink(" Đồng ý ", "AcceptGroupJoinRequest", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })

@@ -13,7 +13,6 @@
                     <h4>@Model.Count() người muốn tham gia</h4>
                 </div>
                 <div class="col-sm-2" style="text-align: right">
-                    <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
                 </div>
 
                 <!-- Search bar -->
@@ -70,12 +69,12 @@
                                     </div>
                                     <div class="row" style="margin-top: -7px; text-align: center">
                                         <label class="member-department">
-                                            @Ajax.ActionLink(" Đồng ý ", "AcceptUserJoinRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                            @Ajax.ActionLink(" Đồng ý ", "AcceptUserJoinRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                                         </label>
                                     </div>
                                     <div class="row" style="margin-top: -7px; text-align: center">
                                         <label class="member-department">
-                                            @Ajax.ActionLink(" Từ chối ", "DeclineUserJoinRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                            @Ajax.ActionLink(" Từ chối ", "DeclineUserJoinRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
                                         </label>
                                     </div>
                                 </div>

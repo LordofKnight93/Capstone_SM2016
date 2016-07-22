@@ -302,7 +302,6 @@ F:\iVolunteer\Source\new 2\iVolunteer\iVolunteer\bin\System.Web.Mvc.xml
 F:\iVolunteer\Source\new 2\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 F:\iVolunteer\Source\new 2\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 F:\iVolunteer\Source\new 2\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb
-F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\bin\ApplicationInsights.config
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\bin\roslyn\csc.exe
 D:\Capstone\Git_15_6\20160711_1\iVolunteer\iVolunteer\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -453,3 +452,17 @@ F:\iVolunteer\Source\19-07\iVolunteer\iVolunteer\bin\System.Web.Mvc.xml
 F:\iVolunteer\Source\19-07\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 F:\iVolunteer\Source\19-07\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 F:\iVolunteer\Source\19-07\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.Core.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Host.SystemWeb.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Security.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Newtonsoft.Json.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Owin.dll
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.Core.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Host.SystemWeb.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Microsoft.Owin.Security.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\Newtonsoft.Json.xml
+F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache

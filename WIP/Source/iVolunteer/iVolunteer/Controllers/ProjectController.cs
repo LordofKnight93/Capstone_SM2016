@@ -26,16 +26,21 @@ namespace iVolunteer.Controllers
         {
             return PartialView("_CreateProject");
         }
-
         [HttpPost]
         public ActionResult CreateProject(ProjectInformation projectInfo)
         {
-            if (!ModelState.IsValid) return View("_CreateProject");
+            if (!ModelState.IsValid) return PartialView("_CreateProject", projectInfo);
 
-            if(projectInfo.DateStart > projectInfo.DateEnd)
+            if (projectInfo.DateStart > projectInfo.DateEnd)
             {
-                ViewBag.Message = "Ngày bắt đầu không thể muộn hơn ngày kết thúc! ";
-                return View("_CreateProject",projectInfo); 
+                ViewBag.Message = " Ngày bắt đầu không thể muộn hơn ngày kết thúc! ";
+                return PartialView("_CreateProject",projectInfo); 
+            }
+
+            if (projectInfo.DateStart < DateTime.Now)
+            {
+                ViewBag.Message = "Ngày bắt đầu không thể sớm hơn hôm nay! ";
+                return PartialView("_CreateProject", projectInfo);
             }
 
             //set missing information for project
@@ -90,9 +95,8 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            return RedirectToAction("ProjectHome", "Project", new { projectID = sql_Project.ProjectID });
+            return JavaScript("window.location = '" + Url.Action("ProjectHome", "Project", new { projectID = sql_Project.ProjectID }) + "'");
         }
-
         [HttpGet]
         public ActionResult ProjectHome(string projectID)
         {
@@ -131,7 +135,6 @@ namespace iVolunteer.Controllers
             }
             else return View("ProjectHome", result);
         }
-
         [ChildActionOnly]
         [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string projectID)
@@ -163,7 +166,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         [HttpGet]
         public ActionResult ChangeAvatar(string id)
         {
@@ -174,7 +176,6 @@ namespace iVolunteer.Controllers
             ViewBag.ID = id;
             return View("_ImageUpload");
         }
-
         [HttpPost]
         public ActionResult UploadAvatar(string id)
         {
@@ -188,7 +189,6 @@ namespace iVolunteer.Controllers
             }
             else return View("_ImageUpload");
         }
-
         [HttpGet]
         public ActionResult ChangeCover(string id)
         {
@@ -199,7 +199,6 @@ namespace iVolunteer.Controllers
             ViewBag.ID = id;
             return View("_ImageUpload");
         }
-
         [HttpPost]
         public ActionResult UploadCover(string id)
         {
@@ -213,7 +212,6 @@ namespace iVolunteer.Controllers
             }
             else return View("_ImageUpload");
         }
-
         public ActionResult ProjectInformation(string projectID)
         {
             // check if parameter valid
@@ -242,7 +240,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult ProjectOrganizers(string projectID)
+        public ActionResult OrganizedUsers(string projectID)
         {
             // check if parameter valid
             if (String.IsNullOrEmpty(projectID))
@@ -265,7 +263,7 @@ namespace iVolunteer.Controllers
                     ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
                 }
                 ViewBag.ProjectID = projectID;
-                return PartialView("_ProjectOrganizers", result);
+                return PartialView("_OrganizedUsers", result);
             }
             catch
             {
@@ -304,7 +302,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult ProjectSponsors(string projectID)
+        public ActionResult SponsoredUsers(string projectID)
         {
             // check if parameter valid
             if (String.IsNullOrEmpty(projectID))
@@ -327,7 +325,7 @@ namespace iVolunteer.Controllers
                     ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
                 }
                 ViewBag.ProjectID = projectID;
-                return PartialView("_ProjectSponsors", result);
+                return PartialView("_SponsoredUsers", result);
             }
             catch
             {
@@ -365,7 +363,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult JoinedGroups(string projectID)
         {
             // check if parameter valid
@@ -398,7 +395,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult SponsoredGroups(string projectID)
         {
             // check if parameter valid
@@ -431,7 +427,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult OrganizedGroups(string projectID)
         {
             // check if parameter valid
@@ -464,7 +459,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult GroupJoinRequests(string projectID)
         {
             // check if parameter valid
@@ -497,7 +491,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult GroupSponsorRequests(string projectID)
         {
             // check if parameter valid
@@ -530,7 +523,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult UserJoinRequests(string projectID)
         {
             // check if parameter valid
@@ -563,7 +555,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult UserSponsorRequests(string projectID)
         {
             // check if parameter valid
@@ -595,11 +586,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
-        public ActionResult SearchProject(string name)
+        public ActionResult SearchProject(string name, int page)
         {
             try
             {
+                if (page <= 0) page = 1;
                 if (String.IsNullOrEmpty(name))
                 {
                     ViewBag.Message = Error.INVALID_INFORMATION;
@@ -610,8 +601,11 @@ namespace iVolunteer.Controllers
 
                 List<ProjectInformation> result = new List<ProjectInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = projectDAO.Project_Search(name, true);
-                else result = projectDAO.Project_Search(name, false);
+                    result = projectDAO.Project_Search(name, 10*(page - 1),10);
+                else result = projectDAO.Active_Project_Search(name, 10 * (page - 1), 10);
+
+                ViewBag.Name = name;
+                ViewBag.Option = "Project";
 
                 return View("SearchProject", result);
             }
@@ -621,7 +615,6 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
         public ActionResult ProjectPublic()
         {
             return PartialView("_ProjectPublic");
@@ -669,23 +662,25 @@ namespace iVolunteer.Controllers
 
         public ActionResult ProjectStructure(string projectID)
         {
-            try
-            {
-                if (Session["UserID"] != null)
-                {
-                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                    string userID = Session["UserID"].ToString();
-                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
-                }
-                ViewBag.ProjectID = projectID;
+            ViewBag.ProjectID = projectID;
+            return PartialView("_ProjectStructuresss");
+            //try
+            //{
+            //    if (Session["UserID"] != null)
+            //    {
+            //        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+            //        string userID = Session["UserID"].ToString();
+            //        ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+            //    }
+            //    ViewBag.ProjectID = projectID;
 
-                return PartialView("_ProjectStructure");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
+            //    return PartialView("_ProjectStructure");
+            //}
+            //catch
+            //{
+            //    ViewBag.Message = Error.UNEXPECT_ERROR;
+            //    return PartialView("ErrorMessage");
+            //}
         }
         public ActionResult SetLeader(string memberID, string projectID)
         {
@@ -719,7 +714,6 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
         public ActionResult SetMember(string leaderID, string projectID)
         {
             try
@@ -752,8 +746,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
-        public ActionResult ExpellMember(string memberID, string projectID)
+        public ActionResult ExpelMember(string memberID, string projectID)
         {
             try
             {
@@ -777,7 +770,7 @@ namespace iVolunteer.Controllers
                                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
                                 userDAO.Out_Group(memberID);
                                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                                projectDAO.Member_Out(projectID);
+                                projectDAO.Members_Out(projectID, 1);
                             }
 
                             transaction.Complete();
@@ -829,7 +822,7 @@ namespace iVolunteer.Controllers
                             userDAO.Join_Project(requestID);
 
                             Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                            projectDAO.Member_Join(projectID);
+                            projectDAO.Members_Join(projectID,1);
 
                             transaction.Complete();
                         }
@@ -856,7 +849,55 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public ActionResult AcceptUserSponsorRequest(string requestID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
 
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            relationDAO.Accept_Sponsor_Request(requestID, projectID);
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            userDAO.Update_ProjectCount(requestID, relationDAO.Get_ProjectCount(userID));
+
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return UserSponsorRequests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
         public ActionResult DeclineUserJoinRequest(string requestID, string projectID)
         {
             try
@@ -875,6 +916,85 @@ namespace iVolunteer.Controllers
                     relationDAO.Delete_Join_Request(requestID, projectID);
 
                     return UserJoinRequests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult DeclineUserSponsorRequest(string requestID, string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    relationDAO.Delete_Sponsor_Request(requestID, projectID);
+
+                    return UserSponsorRequests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult DismissSponsoredUser(string sponsorID, string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            relationDAO.Delete_Sponsor(sponsorID, projectID);
+                            //update mongo accoutn information projectcount
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            userDAO.Update_ProjectCount(sponsorID, relationDAO.Get_ProjectCount(userID));
+
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return SponsoredUsers(projectID);
                 }
                 else
                 {
@@ -936,5 +1056,282 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+        public ActionResult SponsoredGuests(string projectID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(projectID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                if (Session["UserID"] != null)
+                {
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                    string userID = Session["UserID"].ToString();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                var result = projectDAO.Get_GuestSponsors(projectID);
+
+                ViewBag.ProjectID = projectID;
+                return PartialView("_SponsoredGuests", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult GuestSponsorRequests(string projectID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(projectID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                if (Session["UserID"] != null)
+                {
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                    string userID = Session["UserID"].ToString();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                var result = projectDAO.Get_GuestSponsor_Requests(projectID);
+
+                ViewBag.ProjectID = projectID;
+                return PartialView("_GuestSponsorRequests", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult DismissSponsoredGuest(string sponsorID, string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                    projectDAO.Delete_GuestSponsor(projectID, sponsorID);
+
+                    return SponsoredGuests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult AcceptGuestSponsorRequest(string sponsorID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                    projectDAO.Accept_GuestSponsor(projectID, sponsorID);
+
+                    return GuestSponsorRequests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult DeclineGuestSponsorRequest(string sponsorID, string projectID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                    projectDAO.Delete_GuestSponsor(projectID, sponsorID);
+
+                    return GuestSponsorRequests(projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// get user that is suggested
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public ActionResult SuggestedUsers(string projectID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(projectID)|| Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relationlDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationlDAO.Is_Leader(userID, projectID))
+                {
+                    var listID = relationlDAO.Get_Suggest_Users(projectID);
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    var result = userDAO.Get_AccountsInformation(listID);
+
+                    ViewBag.ProjectID = projectID;
+                    return PartialView("_SuggestedUsers", result);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult InviteUsers(string[] friendID, string projectID)
+        {
+            try
+            {
+                if (friendID == null) return RedirectToAction("FriendNotInProject","Account", new { projectID = projectID });
+
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                relationDAO.Invite_Users(friendID, projectID);
+
+                ViewBag.Message = "Đã mời thành công, hãy chờ hồi âm.";
+                return PartialView("ErrorMessage");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult InviteUser(string suggestID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                relationDAO.Delete_Suggest_User(suggestID, projectID);
+                relationDAO.Invite_User(suggestID, projectID);
+
+                return SuggestedUsers(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult DeclineSuggestedUser(string suggestID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                relationDAO.Delete_Suggest_User(suggestID, projectID);
+
+                return SuggestedUsers(projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
     }
 }

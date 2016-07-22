@@ -931,7 +931,7 @@ namespace iVolunteer.DAL.SQL
         }
 
         /// <summary>
-        /// get project active leaders
+        /// get project  leaders
         /// </summary>
         /// <param name="projectID"></param>
         public List<string> Get_Leaders(string projectID)
@@ -955,7 +955,7 @@ namespace iVolunteer.DAL.SQL
         }
 
         /// <summary>
-        /// get user joined active project
+        /// get user joined active sponsored, organized, joined project
         /// </summary>
         /// <param name="userID"></param>
         public List<string> Get_Joined_Projects(string userID)
@@ -965,7 +965,10 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
-                                                                   && (rl.Relation != AcPrRelation.FOLLOW_RELATION && rl.Relation != AcPrRelation.REPORT_RELATION)
+                                                                   && (rl.Relation == AcPrRelation.ORGANIZE_RELATION
+                                                                        || rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                        || rl.Relation == AcPrRelation.LEADER_RELATION
+                                                                        || rl.Relation == AcPrRelation.MEMBER_RELATION)
                                                                    && rl.Status == Status.ACCEPTED
                                                                    && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
                                                                    && rl.SQL_Project.InProgress == Status.ENDED)
@@ -1065,7 +1068,10 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
-                                                                   && rl.Relation != AcPrRelation.FOLLOW_RELATION
+                                                                   && (rl.Relation == AcPrRelation.ORGANIZE_RELATION
+                                                                        || rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                        || rl.Relation == AcPrRelation.LEADER_RELATION
+                                                                        || rl.Relation == AcPrRelation.MEMBER_RELATION)
                                                                    && rl.Status == Status.ACCEPTED
                                                                    && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
                                                                    && rl.SQL_Project.InProgress == Status.ONGOING)
@@ -1124,6 +1130,369 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID);
                     return result.Relation;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get all joined group members
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_JoinedGroup_Members(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                       && (rl.Relation == AcPrRelation.LEADER_RELATION || rl.Relation == AcPrRelation.MEMBER_RELATION)
+                                                                       && rl.Status == Status.ACCEPTED
+                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
+                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
+                                                                                                                     && rl2.Status == Status.ACCEPTED) != null)
+                                                            .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get all sponsored group members
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_SponsoredGroup_Members(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                       && rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                       && rl.Status == Status.ACCEPTED
+                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
+                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
+                                                                                                                     && rl2.Status == Status.ACCEPTED) != null)
+                                                            .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get all organized group members
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_OrganizedGroup_Members(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                       && rl.Relation == AcPrRelation.ORGANIZE_RELATION
+                                                                       && rl.Status == Status.ACCEPTED
+                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
+                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
+                                                                                                                     && rl2.Status == Status.ACCEPTED) != null)
+                                                            .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get all members of group that request to join project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_Join_Requested_Group_Members(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                       && rl.Relation == AcPrRelation.MEMBER_RELATION
+                                                                       && rl.Status == Status.PENDING
+                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
+                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
+                                                                                                                     && rl2.Status == Status.ACCEPTED) != null)
+                                                            .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// get all members of group that request to sponser project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_Sponsor_Requested_Group_Members(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                       && rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                       && rl.Status == Status.PENDING
+                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
+                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
+                                                                                                                     && rl2.Status == Status.ACCEPTED) != null)
+                                                            .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// add invite relations
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Invite_Users(string[] userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    foreach (var item in userID)
+                    {
+                        SQL_AcPr_Relation relation = new SQL_AcPr_Relation();
+                        relation.UserID = item;
+                        relation.ProjectID = projectID;
+                        relation.Relation = AcPrRelation.INVITED_RELATION;
+                        relation.Status = Status.PENDING;
+
+                        dbEntities.SQL_AcPr_Relation.Add(relation);
+                    }
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// add invite relation
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Invite_User(string userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_AcPr_Relation relation = new SQL_AcPr_Relation();
+                    relation.UserID = userID;
+                    relation.ProjectID = projectID;
+                    relation.Relation = AcPrRelation.INVITED_RELATION;
+                    relation.Status = Status.PENDING;
+
+                    dbEntities.SQL_AcPr_Relation.Add(relation);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// add suggest relations
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Suggest_Users(string[] userID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    foreach (var item in userID)
+                    {
+                        SQL_AcPr_Relation relation = new SQL_AcPr_Relation();
+                        relation.UserID = item;
+                        relation.ProjectID = projectID;
+                        relation.Relation = AcPrRelation.SUGGESTED_RELATION;
+                        relation.Status = Status.PENDING;
+
+                        dbEntities.SQL_AcPr_Relation.Add(relation);
+                    }
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete an invite relation
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_Invite_User(string userID, string projectID)
+        {
+
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.ProjectID == projectID
+                                                                   && rl.Relation == AcPrRelation.INVITED_RELATION);
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcPr_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// delete a suggest relation
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Delete_Suggest_User(string userID, string projectID)
+        {
+
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.ProjectID == projectID
+                                                                   && rl.Relation == AcPrRelation.SUGGESTED_RELATION);
+                    if (result != null)
+                    {
+                        dbEntities.SQL_AcPr_Relation.Remove(result);
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get active user that is suggested to project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_Suggest_Users(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                   && rl.Relation == AcPrRelation.SUGGESTED_RELATION
+                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE)
+                                                             .Select(rl => rl.UserID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a invited projects
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_Invited_Projects(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
+                                                                   && rl.Relation == AcPrRelation.INVITED_RELATION
+                                                                   && rl.SQL_Account.IsActivate == Status.IS_ACTIVATE)
+                                                             .Select(rl => rl.ProjectID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get number of project user had organized, join, sponsor,
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int Get_ProjectCount(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
+                                                                   && (rl.Relation == AcPrRelation.ORGANIZE_RELATION 
+                                                                        || rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                        || rl.Relation == AcPrRelation.LEADER_RELATION
+                                                                        || rl.Relation == AcPrRelation.MEMBER_RELATION)
+                                                                   && rl.Status == Status.ACCEPTED)
+                                                             .Select(rl => rl.ProjectID).Distinct().ToList().Count;
+                    return result;
                 }
             }
             catch

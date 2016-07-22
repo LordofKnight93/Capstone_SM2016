@@ -157,4 +157,26 @@
     </div>
 
 </div>
-@{ Html.RenderAction("CurrentProjects", "User", new { userID = Model.UserID });}
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active"  data-toggle="tab">
+                    @Ajax.ActionLink("SỰ KIỆN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                </li>
+                @if (ViewBag.IsMyHome == true)
+                {
+                    <li data-toggle="tab">
+                        @Ajax.ActionLink("LỜI MỜI THAM GIA", "InvitedProjects", "Account", null, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="sub-content-panel">
+            @{ Html.RenderAction("CurrentProjects", "User", new { userID = Model.UserID });}
+    </div>
+</div>
+

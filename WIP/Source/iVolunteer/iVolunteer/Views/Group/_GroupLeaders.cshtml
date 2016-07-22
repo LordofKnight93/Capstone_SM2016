@@ -28,21 +28,40 @@
                                         <img src="@item.Get_AvatarLink()" height="70" width="70">
                                     </div>
 
-                                    <div class="col-xs-5">
-                                        <div class="row">
-                                            <label class="member-name">
-                                                <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
-                                            </label>
+                                    @if (item.IsActivate)
+                                    {
+                                        <div class="col-xs-5">
+                                            <div class="row">
+                                                <label class="member-name">
+                                                    <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px">
+                                                <label class="member-sumerise">
+                                                    @Html.DisplayFor(modelItem => item.Address)
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px">
+                                                <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
+                                            </div>
                                         </div>
-                                        <div class="row" style="margin-top: -7px">
-                                            <label class="member-sumerise">
-                                                @Html.DisplayFor(modelItem => item.Address)
-                                            </label>
-                                        </div>
-                                        <div class="row" style="margin-top: -7px">
-                                            <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
-                                        </div>
-                                    </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-xs-5">
+                                                            <div class="row">
+                                                                <label class="member-name">
+                                                                    @Html.DisplayFor(modelItem => item.DisplayName)
+                                                                </label>
+                                                            </div>
+                                                            <div class="row" style="margin-top: -7px">
+                                                                <label class="member-sumerise">
+                                                                </label>
+                                                            </div>
+                                                            <div class="row" style="margin-top: -7px">
+                                                            </div>
+                                                        </div>
+                                                    }
 @if (ViewBag.IsLeader == true && Session["UserID"].ToString() != item.UserID)
 {
                                     <div class="divider-vertical-member"></div>
