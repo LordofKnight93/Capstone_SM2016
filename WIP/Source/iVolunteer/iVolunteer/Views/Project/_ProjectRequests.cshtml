@@ -1,31 +1,41 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
 
-@{ 
-    string action = "";
-    string controller = "";
-    if(ViewBag.IsLeader == true)
-    {
-        action = "InviteUsers";
-        controller = "Project";
-    }
-    else
-    {
-        action = "SuggestFriends";
-        controller = "Account";
-    }
-}
 <!-- Member -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="sub-container">
-            @using (Ajax.BeginForm(action, controller, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
-            {
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sub-container">
 
-            <!-- Content -->
+                <!-- Header -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>@Model.Count() yêu cầu</h4>
+                    </div>
+                    <div class="col-sm-2" style="text-align: right">
+                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
+                    </div>
+
+                    <!-- Search bar -->
+                    <div class="col-sm-4">
+                        <form role="search">
+                            <div class="input-group txt-search">
+                                <input type="search" class="form-control" placeholder="Tìm kiếm" name="q" style="color: #000; border-color: #049f88;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="glyphicon glyphicon-search" style="color: #049f88"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="divider-holizon"></div>
+                    </div>
+                </div>
+
+                <!-- Content -->
                 <div class="row">
                     @foreach (var item in Model)
-                {
+                    {
                     <!-- Member -->
                         <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
                             <div class="member-container">
@@ -33,6 +43,7 @@
                                     <div class="col-xs-3">
                                         <img src="@item.Get_AvatarLink()" height="70" width="70">
                                     </div>
+
                                     <div class="col-xs-5">
                                         <div class="row">
                                             <label class="member-name">
@@ -48,47 +59,31 @@
                                             <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
                                         </div>
                                     </div>
+
                                     <div class="divider-vertical-member"></div>
 
                                     <div class="col-xs-4">
                                         <div class="row" style="text-align: center">
                                             <label class="member-position" style="font-size: 14px">
-
                                             </label>
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                <input type="checkbox" name="friendID" value="@item.UserID" id="@item.UserID" />
+                                               @Ajax.ActionLink(" Đồng ý ", "AcceptRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
+                                            </label>
+                                        </div>
+                                        <div class="row" style="margin-top: -7px; text-align: center">
+                                            <label class="member-department">
+                                                @Ajax.ActionLink(" Từ chối ", "DeclineRequest", "Project", new { requestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
-                                                }
+                    }
                 </div>
-            <!-- Footer -->
-                                                <div class="row">
-                                                    <!-- Search bar -->
-                                                    <div class="col-sm-12">
-                                                        <div class="divider-holizon"></div>
-                                                    </div>
-
-                                                    <div class="col-sm-4">
-                                                        <form role="search">
-                                                            <div class="input-group txt-search">
-                                                                <input type="search" class="form-control" placeholder="Tìm kiếm" name="q" style="color: #000; border-color: #049f88;">
-                                                                <div class="input-group-btn">
-                                                                    <button class="btn btn-default" type="button" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="glyphicon glyphicon-search" style="color: #049f88"></i></button>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <input type="hidden" name="projectID" value="@ViewBag.ProjectID" />
-                                                    <button type="submit" class="btn btn-register">HOÀN THÀNH</button>
-                                                </div>
-                                                }
+            </div>
         </div>
     </div>
-</div>
-

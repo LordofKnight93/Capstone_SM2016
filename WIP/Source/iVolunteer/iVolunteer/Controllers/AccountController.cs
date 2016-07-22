@@ -72,12 +72,12 @@ namespace iVolunteer.Controllers
             {
                 string userID = Session["UserID"].ToString();
 
-                // get joined project list
+                // get joined group list
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 var listID = relationDAO.Get_Current_Projects(userID);
-                // get joined project Info
-                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.Get_ProjectsInformation(listID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
 
                 return PartialView("_CurrentProjects", result);
             }
@@ -124,12 +124,12 @@ namespace iVolunteer.Controllers
             {
                 string userID = Session["UserID"].ToString();
 
-                // get joined project list
+                // get joined group list
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 var listID = relationDAO.Get_Joined_Projects(userID);
-                // get joined project Info
-                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.Get_ProjectsInformation(listID);
+                // get joined group Info
+                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+                var result = groupDAO.Get_ProjectsInformation(listID);
 
                 return PartialView("_JoinedProjects", result);
             }
@@ -226,7 +226,7 @@ namespace iVolunteer.Controllers
                     try
                     {
                         SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                        relationDAO.Delete_Follower(userID, projectID);
+                        relationDAO.Add_Follower(userID, projectID);
                         Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                         projectDAO.User_Unfollow(projectID);
 
@@ -880,13 +880,13 @@ namespace iVolunteer.Controllers
                         {
                             if (relationDAO.Is_More_Than_One_Leader(projectID))
                             {
-                                relationDAO.Delete_Leader(userID, projectID);
-                                relationDAO.Delete_Organizer(userID, projectID);
-                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                                userDAO.Out_Project(userID);
-                                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                                projectDAO.Members_Out(projectID, 1);
-                                
+                                if (relationDAO.Delete_Leader(userID, projectID))
+                                {
+                                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                    userDAO.Out_Project(userID);
+                                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                                    projectDAO.Member_Out(projectID);
+                                }
                             }
                             else
                             {
@@ -897,12 +897,13 @@ namespace iVolunteer.Controllers
                         }
                         else
                         {
-                            relationDAO.Delete_Member(userID, projectID);
-                            relationDAO.Delete_Organizer(userID, projectID);
-                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                            userDAO.Out_Group(userID);
-                            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                            projectDAO.Members_Out(projectID, 1);
+                            if (relationDAO.Delete_Member(userID, projectID))
+                            {
+                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                                userDAO.Out_Group(userID);
+                                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                                projectDAO.Member_Out(projectID);
+                            }
                         }
 
                         transaction.Complete();
@@ -915,179 +916,6 @@ namespace iVolunteer.Controllers
                     }
                 }
                 return ActionToGroup(projectID);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-        /// <summary>
-        /// get friend not in a group
-        /// </summary>
-        /// <param name="groupID"></param>
-        /// <returns></returns>
-        public ActionResult FriendNotInGroup(string groupID)
-        {
-            try
-            {
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return PartialView("ErrorMessage");
-                }
-
-                string userID = Session["UserID"].ToString();
-
-                SQL_AcAc_Relation_DAO acAcDAO = new SQL_AcAc_Relation_DAO();
-                var listID = acAcDAO.Get_Friend_Not_In_Group(userID, groupID);
-
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_AccountsInformation(listID);
-
-                ViewBag.GroupID = groupID;
-                return PartialView("_FriendNotInGroup", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        /// <summary>
-        /// get friend not in a project
-        /// </summary>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public ActionResult FriendNotInProject(string projectID)
-        {
-            try
-            {
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return PartialView("ErrorMessage");
-                }
-
-                string userID = Session["UserID"].ToString();
-
-                SQL_AcAc_Relation_DAO acAcDAO = new SQL_AcAc_Relation_DAO();
-                var listID = acAcDAO.Get_Friend_Not_In_Project(userID, projectID);
-
-                SQL_AcPr_Relation_DAO acPrDAO = new SQL_AcPr_Relation_DAO();
-                ViewBag.IsLeader = acPrDAO.Is_Leader(userID, projectID);
-
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var result = userDAO.Get_AccountsInformation(listID);
-
-                ViewBag.ProjectID = projectID;
-                return PartialView("_FriendNotInProject", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult SuggestFriends(string[] friendID, string projectID)
-        {
-            try
-            {
-                if (friendID == null) return FriendNotInProject(projectID);
-
-                //check permission
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return View("ErrorMessage");
-                }
-                string userID = Session["UserID"].ToString();
-
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                relationDAO.Suggest_Users(friendID, projectID);
-
-                ViewBag.Message = "Đễ auast thành công, cám ơn bạn.";
-                return PartialView("ErrorMessage");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult InvitedProjects()
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-
-                // get joined project list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                var listID = relationDAO.Get_Invited_Projects(userID);
-                // get joined project Info
-                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.Get_ProjectsInformation(listID);
-
-                return PartialView("_InvitedProjects", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult AcceptInvitation(string projectID)
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-
-                using (var transaction = new TransactionScope())
-                {
-                    try
-                    {
-                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                        relationDAO.Delete_Invite_User(userID, projectID);
-                        relationDAO.Add_Member(userID, projectID);
-
-                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                        userDAO.Join_Project(userID);
-
-                        Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                        projectDAO.Members_Join(projectID, 1);
-
-                        transaction.Complete();
-                    }
-                    catch
-                    {
-                        transaction.Dispose();
-                        ViewBag.Message = Error.UNEXPECT_ERROR;
-                        return View("ErrorMessage");
-                    }
-                }
-                return InvitedProjects();
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-
-        public ActionResult DeclineInvitation(string projectID)
-        {
-            try
-            {
-                string userID = Session["UserID"].ToString();
-
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                var listID = relationDAO.Delete_Invite_User(userID, projectID);
-
-                return InvitedProjects();
             }
             catch
             {

@@ -13,9 +13,7 @@
                     <div class="col-sm-2" style="text-align: right">
 @if (ViewBag.IsLeader == true)
 {
-                    <button class="btn btn-image" data-toggle="modal" data-target="#popup" title="Thêm thành viên" style="border-color: #049f88">
-                        <i class="material-icons">@Ajax.ActionLink("person_add", "FriendNotInGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                    </button>
+                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
 }
                     </div>
 
@@ -48,8 +46,6 @@
                                     <img src="@item.Get_AvatarLink()" height="70" width="70">
                                 </div>
 
-                               @if (item.IsActivate)
-                               {
                                 <div class="col-xs-5">
                                     <div class="row">
                                         <label class="member-name">
@@ -65,23 +61,6 @@
                                         <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
                                     </div>
                                 </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="col-xs-5">
-                                                    <div class="row">
-                                                        <label class="member-name">
-                                                            @Html.DisplayFor(modelItem => item.DisplayName)
-                                                        </label>
-                                                    </div>
-                                                    <div class="row" style="margin-top: -7px">
-                                                        <label class="member-sumerise">
-                                                        </label>
-                                                    </div>
-                                                    <div class="row" style="margin-top: -7px">
-                                                    </div>
-                                                </div>
-                                            }
 @if (ViewBag.IsLeader == true)
 {
                                 <div class="divider-vertical-member"></div>
@@ -99,7 +78,7 @@
                                     </div>
                                     <div class="row" style="margin-top: -7px; text-align: center">
                                         <label class="member-department">
-                                            @Ajax.ActionLink("Trục xuất", "ExpelMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })
+                                            @Ajax.ActionLink("Trục xuất", "ExpellMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })
                                         </label>
                                     </div>
                                 </div>

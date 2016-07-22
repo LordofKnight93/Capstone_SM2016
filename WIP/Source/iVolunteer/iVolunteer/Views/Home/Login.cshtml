@@ -1,0 +1,96 @@
+﻿@model iVolunteer.Models.ViewModel.LoginModel
+
+@Html.AntiForgeryToken()
+<div id="loginForm" class="row background-container">
+    <div class="col-md-9 col-md-offset-15">
+        <div class="card-panel">
+            
+                <div class="row">
+
+                    <!-- Register -->
+                    <div class="col-sm-6 col-xs-6">
+                        <div class="row">
+                            <h3 style="text-align: center; font-weight: bold; color: #049f88;">Tôi là người dùng mới</h3>
+                        </div>
+                        <div class="row" style="line-height: 250px; text-align: center">
+                            <div class="col-xs-12 login-register-label">
+                                <label>Đăng kí ngay</label>
+                                <a href="@Url.Action("Register", "Home")"><i class="material-icons md-mygreen md-48">play_arrow</i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider-vertical-login"></div>
+
+                    <!-- Login -->
+                    <div class="col-sm-5 col-xs-5">
+                        <div class="row">
+                            <h3 style="text-align: center; font-weight: bold; color: #049f88">Đăng nhập</h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "formValidation", @class = "login-form" }))
+                                {
+                                <div class="row">
+                                    <div class="col-xs-4 login-label">
+                                        @Html.LabelFor(model => model.Email, htmlAttributes: new { })
+                                    </div>
+                                    <div class="col-xs-8 text-input">
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nhập Email", @id = "email", @name = "txtEmail" } })
+                                        @*<input type="text" name="txtEmail" class="form-control" id="email" placeholder="Nhập Email ...">*@
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4 login-label">
+                                        @Html.LabelFor(model => model.Password, htmlAttributes: new { })
+                                        @*<label for="password">Mật khẩu:</label>*@
+                                    </div>
+                                    <div class="col-xs-8 text-input">
+                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", @placeholder = "Nhập mật khẩu", @id = "password", @name = "txtPass" })
+                                        @*<input type="text" name="txtPass" class="form-control" id="password" placeholder="Nhập mật khẩu ...">*@
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-8 col-xs-offset-4">
+                                        <div>
+                                            @Html.CheckBoxFor(model => model.IsRemember, new { @id = "cbxGhinho" })
+                                            <label for="cbxGhinho" style="padding: 0">
+                                                Ghi nhớ đăng nhập
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-8 col-xs-offset-4 text-input">
+                                        <button class="btn btn-login" type="submit" id="login">ĐĂNG NHẬP</button>
+                                    </div>
+                                </div>
+
+                                // Error Message
+                                <div class="row">
+                                    <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                        <label style="color:red;">@ViewBag.Message</label>
+                                    </div>
+                                </div>
+                                    <!--</form> -->
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-11 col-xs-offset-1" style="margin-top: 20px">
+                                <a href="@Url.Action("ForgotPassword", "Account")">Quên mật khẩu?</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            
+        </div>
+
+    </div>
+</div>
+

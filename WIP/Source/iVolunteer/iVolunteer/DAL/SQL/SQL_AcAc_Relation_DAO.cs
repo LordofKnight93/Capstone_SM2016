@@ -305,7 +305,7 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// get friend of user
+        /// get active friend of user
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -317,7 +317,8 @@ namespace iVolunteer.DAL.SQL
                 {
                     var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.UserID == userID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
-                                                                   && rl.Status == Status.ACCEPTED)
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.FriendID).ToList();
                     return result;
                 }
@@ -369,64 +370,6 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE
                                                                    && rl.SQL_Account1.SQL_AcAc_Relation1.FirstOrDefault(rl2 => rl2.FriendID == otherID 
                                                                                                                             && rl2.Status == Status.ACCEPTED) != null)
-                                                             .Select(rl => rl.FriendID).ToList();
-                    return result;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// get active friend that not in or send join request to a group 
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="groupID"></param>
-        /// <returns></returns>
-        public List<string> Get_Friend_Not_In_Group(string userID, string groupID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.UserID == userID
-                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE
-                                                                   && rl.SQL_Account1.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID 
-                                                                                                                           && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)) == null)
-                                                             .Select(rl => rl.FriendID).ToList();
-                    return result;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// get active friend that not in or send join request a project
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public List<string> Get_Friend_Not_In_Project(string userID, string projectID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_AcAc_Relation.Where(rl => rl.UserID == userID
-                                                                   && rl.Relation == AcAcRelation.FRIEND_RELATION
-                                                                   && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Account1.IsActivate == Status.IS_ACTIVATE
-                                                                   && rl.SQL_Account1.SQL_AcPr_Relation.FirstOrDefault(rl2 => rl2.ProjectID == projectID
-                                                                                                                           && (rl2.Relation == AcPrRelation.LEADER_RELATION 
-                                                                                                                              || rl2.Relation == AcPrRelation.MEMBER_RELATION
-                                                                                                                              || rl2.Relation == AcPrRelation.SUGGESTED_RELATION
-                                                                                                                              || rl2.Relation == AcPrRelation.INVITED_RELATION)) == null)
                                                              .Select(rl => rl.FriendID).ToList();
                     return result;
                 }

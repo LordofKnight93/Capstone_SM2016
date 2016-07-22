@@ -1,9 +1,9 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Sponsor
 
 @Html.AntiForgeryToken()
-@*<div id="createSponsorForm" class="modal fade" role="dialog">
+<div id="createSponsorForm" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg modal-md">
-        <div class="modal-content">*@
+        <div class="modal-content">
             <div class="modal-body">
                 <div class="row">
 
@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-sm-10 col-sm-offset-1">
                                 <!--form role="form" class="login-form"> -->
-                                @using (Ajax.BeginForm("CreateSponsor", "Project", null , new AjaxOptions {InsertionMode = InsertionMode.Replace, UpdateTargetId = "popup-content", HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                @using (Html.BeginForm("CreateSponsor", "Project", FormMethod.Post, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
                                 {
                                     <input type="hidden" name="projectID" value="@ViewBag.ProjectID"/>
                                     <!-- Sponsor Name -->
@@ -66,18 +66,14 @@
                                             <label for="projectDescription">Số điện thoại : </label>
                                         </div>
                                         <div class="col-xs-5 text-input">
-                                            @Html.EditorFor(model => model.SponsorPhone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Số điện thoại ..." } })
+                                            @Html.TextAreaFor(model => model.SponsorPhone, new { @id = "phone", @class = "form-control", @placeholder = "Điện thoại ...", @style = "resize: vertical; margin-bottom: 4px" })
                                             @Html.ValidationMessageFor(model => model.SponsorPhone, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
-                                    // Error Message
-                                    <div class="row">
-                                        <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
-                                            <label style="color:red;">@ViewBag.Message</label>
-                                        </div>
-                                    </div>
+
                                     <!-- Button -->
                                     <div class="row" style="margin-top: 60px">
+                                        <div>@ViewBag.Message</div>
                                         <div class="col-xs-2 col-xs-offset-7 text-input">
                                             <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
                                         </div>
@@ -91,6 +87,6 @@
                     </div>
                 </div>
             </div>
-        @*</div>
+        </div>
     </div>
-</div>*@
+</div>

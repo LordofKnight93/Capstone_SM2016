@@ -1,6 +1,13 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;" id="current">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Sự kiện đang tham gia</h4>
+        </div>
+    </div>
+    
+    
     <!-- List Project -->
                 @foreach (var item in Model)
                 {
@@ -37,17 +44,15 @@
                                                 <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
                                             </tr>
                                         </table>
-                                        
                                     </div>
-                                    @if (ViewBag.IsMyHome == true)
-                                    {
-                                        <div class="row" style="margin-top: 10px" id="@item.ProjectID">
-                                            @{Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });
-                                            }
-                                        </div>
-                                                }
                                 </div>
-                               
+                                @if (ViewBag.IsMyHome == true)
+                                {
+                                    <div class="row" style="margin-top: 10px" id="@item.ProjectID">
+                                        @{Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });
+                                        }
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

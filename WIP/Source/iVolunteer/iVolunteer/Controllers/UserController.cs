@@ -230,6 +230,7 @@ namespace iVolunteer.Controllers
             }
         }
 
+        [ChildActionOnly]
         public ActionResult CurrentProjects(string userID)
         {
             // check if parameter valid
@@ -362,11 +363,10 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult SearchUser(string name, int page)
+        public ActionResult SearchUser(string name)
         {
             try
             {
-                if (page <= 0) page = 1;
                 if (String.IsNullOrEmpty(name))
                 {
                     ViewBag.Message = Error.INVALID_INFORMATION;
@@ -377,11 +377,8 @@ namespace iVolunteer.Controllers
 
                 List<AccountInformation> result = new List<AccountInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = userDAO.User_Search(name, 10 * (page - 1), 10);
-                else result = userDAO.Active_User_Search(name, 10 * (page - 1), 10);
-
-                ViewBag.Name = name;
-                ViewBag.Option = "User";
+                    result = userDAO.User_Search(name, true);
+                else result = userDAO.User_Search(name, false);
 
                 return View("SearchUser", result);
             }
@@ -523,8 +520,8 @@ namespace iVolunteer.Controllers
 
                 List<AccountInformation> result = new List<AccountInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = userDAO.User_Search(name, 0, 10);
-                else result = userDAO.Active_User_Search(name, 0, 10);
+                    result = userDAO.User_Search(name, true);
+                else result = userDAO.User_Search(name, false);
 
                 return JsonConvert.SerializeObject(result);
             }

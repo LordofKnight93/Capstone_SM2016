@@ -1,4 +1,4 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Sponsor>
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
 
 <!-- Member -->
 <div class="row">
@@ -8,12 +8,12 @@
             <!-- Header -->
             <div class="row">
                 <div class="col-sm-6">
-                    <h4>@Model.Count() người ủng hộ</h4>
+                    <h4>@Model.Count() người đại diện tổ chức</h4>
                 </div>
                 <div class="col-sm-2" style="text-align: right">
                     @if (ViewBag.IsLeader == true)
                     {
-                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Thêm nhà hảo tâm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
+                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Thêm người đồng tổ chức" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
                     }
                 </div>
 
@@ -42,26 +42,23 @@
                     <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
                         <div class="member-container">
                             <div class="row">
-                                <div class="col-xs-5" style="margin-left: 20px">
+                                <div class="col-xs-3">
+                                    <img src="@item.Get_AvatarLink()" height="70" width="70">
+                                </div>
+
+                                <div class="col-xs-5">
                                     <div class="row">
                                         <label class="member-name">
-                                           @Html.DisplayFor(modelItem => item.SponsorName)
+                                            <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
                                         </label>
                                     </div>
                                     <div class="row" style="margin-top: -7px">
                                         <label class="member-sumerise">
-                                            @Html.DisplayFor(modelItem => item.SponsorAddress)
+                                            @Html.DisplayFor(modelItem => item.Address)
                                         </label>
                                     </div>
                                     <div class="row" style="margin-top: -7px">
-                                        <label class="member-sumerise">
-                                            @Html.DisplayFor(modelItem => item.SponsorEmail)
-                                        </label>
-                                    </div>
-                                    <div class="row" style="margin-top: -7px">
-                                        <label class="member-sumerise">
-                                            @Html.DisplayFor(modelItem => item.SponsorPhone)
-                                        </label>
+                                        <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
                                     </div>
                                 </div>
                                 @if (ViewBag.IsLeader == true)
@@ -71,11 +68,12 @@
                                     <div class="col-xs-4">
                                         <div class="row" style="text-align: center">
                                             <label class="member-position" style="font-size: 14px">
+
                                             </label>
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink("Xóa", "DismissSponsoredGuest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink("Xóa", "ExpellOrganizer", "Project", new { organizerID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                     </div>

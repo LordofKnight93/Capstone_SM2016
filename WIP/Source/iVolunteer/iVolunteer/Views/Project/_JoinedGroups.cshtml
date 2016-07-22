@@ -1,4 +1,5 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+﻿
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
 
 <div id="joinedGroup" class="tab-pane fade in ">
     <div class="row">
@@ -43,7 +44,7 @@
                                     <div class="row" style="margin-top: 10px">
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink(" Xóa ", "ExpellJoinedGroup", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink(" Xóa ", "ExpellJoinedGroup", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                     </div>

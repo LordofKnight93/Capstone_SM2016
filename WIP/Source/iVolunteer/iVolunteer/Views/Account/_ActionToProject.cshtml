@@ -70,7 +70,12 @@
 }
 else
 {
-    @Ajax.ActionLink("Tài trợ, quyên góp", "CreateSponsor", "Project", new { projectID = ViewBag.ProjectID}, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default", @data_toggle = "modal", @data_target = "#popup" })
+    <button class="btn btn-default" data-container="body" data-toggle="modal" data-target="#createSponsorForm">
+        Tài trợ, quyên góp
+    </button>
+
+    Html.RenderAction("CreateSponsor", "Project", new { projectID = ViewBag.ProjectID });
+
 }
 
 

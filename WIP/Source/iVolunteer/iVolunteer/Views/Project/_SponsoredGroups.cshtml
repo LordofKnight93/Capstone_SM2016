@@ -12,25 +12,6 @@
                         <h4>@Model.Count() nhóm đã ủng hộ</h4>
                     </div>
 
-                    <div class="col-sm-2" style="text-align: right">
-                        @if (ViewBag.IsLeader == true)
-                        {
-                            <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Thêm nhóm hảo tâm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
-                        }
-                    </div>
-
-                    <!-- Search bar -->
-                    <div class="col-sm-4">
-                        <form role="search">
-                            <div class="input-group txt-search">
-                                <input type="search" class="form-control" placeholder="Tìm kiếm" name="q" style="color: #000; border-color: #049f88;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="glyphicon glyphicon-search" style="color: #049f88"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
                     <div class="col-sm-12">
                         <div class="divider-holizon"></div>
                     </div>
@@ -63,10 +44,7 @@
                                     <div class="row" style="margin-top: 10px">
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink(" Xóa ", "DismissSponsoredGroup", "Project", new { groupID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
-                                            </label>
-                                            <label class="member-department">
-                                                @Ajax.ActionLink(" Thành viên ", "SponsoredGroupMembers", "Project", new { groupID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink(" Xóa ", "ExpellSponsoredGroup", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                     </div>

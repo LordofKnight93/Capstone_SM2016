@@ -20,15 +20,17 @@ namespace iVolunteer.Controllers
 {
     public class GroupController : Controller
     {
+
         [HttpGet]
         public ActionResult CreateGroup()
         {
             return PartialView("_CreateGroup");
         }
+
         [HttpPost]
         public ActionResult CreateGroup(GroupInformation groupInfo)
         {
-            if (!ModelState.IsValid) return PartialView("_CreateGroup", groupInfo);
+            if (!ModelState.IsValid) return View("_CreateGroup");
 
             //set missing information
             groupInfo.DateCreate = DateTime.Now;
@@ -81,8 +83,9 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            return JavaScript("window.location = '" + Url.Action("GroupHome", "Group", new { groupID = sql_Group.GroupID }) + "'");
+            return RedirectToAction("GroupHome", "Group", new { groupID = sql_Group.GroupID });
         }
+
         [HttpGet]
         public ActionResult GroupHome(string groupID)
         {
@@ -121,6 +124,7 @@ namespace iVolunteer.Controllers
             }
             else return View("GroupHome", result);
         }
+
         [ChildActionOnly]
         [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string groupID)
@@ -151,6 +155,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         [HttpGet]
         public ActionResult ChangeAvatar(string id)
         {
@@ -161,6 +166,7 @@ namespace iVolunteer.Controllers
             ViewBag.ID = id;
             return View("_ImageUpload");
         }
+
         [HttpPost]
         public ActionResult UploadAvatar(string id)
         {
@@ -174,6 +180,7 @@ namespace iVolunteer.Controllers
             }
             else return View("_ImageUpload");
         }
+
         [HttpGet]
         public ActionResult ChangeCover(string id)
         {
@@ -184,6 +191,7 @@ namespace iVolunteer.Controllers
             ViewBag.ID = id;
             return View("_ImageUpload");
         }
+
         [HttpPost]
         public ActionResult UploadCover(string id)
         {
@@ -197,6 +205,7 @@ namespace iVolunteer.Controllers
             }
             else return View("_ImageUpload");
         }
+
         public ActionResult GroupInformation(string groupID)
         {
             // check if parameter valid
@@ -208,15 +217,6 @@ namespace iVolunteer.Controllers
 
             try
             {
-                if (Session["UserID"] == null)
-                    ViewBag.IsLeader = false;
-                else
-                {
-                    string userID = Session["UserID"].ToString();
-                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, groupID);
-                }
-
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupInformation(groupID);
                 return PartialView("_GroupInformation", result);
@@ -227,6 +227,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult GroupLeaders(string groupID)
         {
             // check if parameter valid
@@ -288,6 +289,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult GroupRequests(string groupID)
         {
             // check if parameter valid
@@ -315,22 +317,27 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult GroupPublic()
         {
             return PartialView("_GroupPublic");
         }
+
         public ActionResult GroupDiscussion()
         {
             return PartialView("_GroupDiscussion");
         }
+
         public ActionResult GroupGallery()
         {
             return PartialView("_GroupGallery");
         }
+
         public ActionResult GroupPlan()
         {
             return PartialView("_GroupPlan");
         }
+
         public ActionResult GroupStructure(string groupID)
         {
             try
@@ -352,11 +359,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult SearchGroup(string name, int page)
+
+        public ActionResult SearchGroup(string name)
         {
             try
             {
-                if (page <= 0) page = 1;
                 if (String.IsNullOrEmpty(name))
                 {
                     ViewBag.Message = Error.INVALID_INFORMATION;
@@ -367,11 +374,8 @@ namespace iVolunteer.Controllers
 
                 List<GroupInformation> result = new List<GroupInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = groupDAO.Group_Search(name, 10*(page - 1), 10);
-                else result = groupDAO.Active_Group_Search(name, 10 * (page - 1), 10);
-
-                ViewBag.Name = name;
-                ViewBag.Option = "Group";
+                    result = groupDAO.Group_Search(name, true);
+                else result = groupDAO.Group_Search(name, false);
 
                 return View("SearchGroup", result);
             }
@@ -381,6 +385,7 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+
         public ActionResult AcceptRequest(string requestID, string groupID)
         {
             try
@@ -405,7 +410,7 @@ namespace iVolunteer.Controllers
                             Mongo_User_DAO userDAO = new Mongo_User_DAO();
                             userDAO.Join_Group(requestID);
                             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                            groupDAO.Members_Join(groupID, 1);
+                            groupDAO.Member_Join(groupID);
 
                             transaction.Complete();
                         }
@@ -432,6 +437,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult DeclineRequest(string requestID, string groupID)
         {
             try
@@ -464,6 +470,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult SetLeader(string memberID, string groupID)
         {
             try
@@ -496,6 +503,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult SetMember(string leaderID, string groupID)
         {
             try
@@ -528,7 +536,8 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult ExpelMember(string memberID, string groupID)
+
+        public ActionResult ExpellMember(string memberID, string groupID)
         {
             try
             {
@@ -580,6 +589,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         [ChildActionOnly]
         public ActionResult OrganizedProjects(string groupID)
         {
@@ -661,6 +671,7 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+
         public ActionResult ActivityHistory(string groupID)
         {
             // check if parameter valid
@@ -674,149 +685,6 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.GroupID = groupID;
                 return PartialView("_ActivityHistory");
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-        [ChildActionOnly]
-        public ActionResult CurrentProjects(string groupID)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-
-            try
-            {
-                // get joined group list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                var listID = relationDAO.Get_Current_Projects(groupID);
-                // get joined group Info
-                Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
-                var result = groupDAO.Get_ProjectsInformation(listID);
-
-                return PartialView("_CurrentProjects", result);
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-        public ActionResult AddMembers(string[] friendID, string groupID)
-        {
-            try
-            {
-                if(friendID == null) return GroupMembers(groupID);
-
-                //check permission
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return View("ErrorMessage");
-                }
-                string userID = Session["UserID"].ToString();
-
-                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-
-                if (relationDAO.Is_Leader(userID, groupID))
-                {
-                    using (var transaction = new TransactionScope())
-                    {
-                        try
-                        {
-                            relationDAO.Add_Members(friendID, groupID);
-                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                            userDAO.Batch_Join_Group(friendID);
-                            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                            groupDAO.Members_Join(groupID, friendID.Count());
-
-                            transaction.Complete();
-                        }
-                        catch
-                        {
-                            transaction.Dispose();
-                            ViewBag.Message = Error.UNEXPECT_ERROR;
-                            return PartialView("ErrorMessage");
-                        }
-                    }
-                    // return group member to content-panel
-                    return GroupMembers(groupID);
-                }
-                else
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return View("ErrorMessage");
-                }
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-        [HttpGet]
-        public ActionResult UpdateGroupInformation(string groupID)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID) || Session["UserID"] == null)
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-
-            try
-            {
-                string userID = Session["UserID"].ToString();
-                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                if (relationDAO.Is_Leader(userID, groupID))
-                {
-                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                    var result = groupDAO.Get_GroupInformation(groupID);
-                    return PartialView("_UpdateGroupInformation", result);
-                }
-                else
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return PartialView("ErrorMessage");
-                }
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return PartialView("ErrorMessage");
-            }
-        }
-        [HttpPost]
-        public ActionResult UpdateGroupInformation(string groupID, GroupInformation newInfo)
-        {
-            // check if parameter valid
-            if (String.IsNullOrEmpty(groupID) || Session["UserID"] == null)
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-
-            try
-            {
-                string userID = Session["UserID"].ToString();
-                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                if (relationDAO.Is_Leader(userID, groupID))
-                {
-                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
-                    var result = groupDAO.Update_GroupInformation(groupID, newInfo);
-                    return GroupInformation(groupID);
-                }
-                else
-                {
-                    ViewBag.Message = Error.ACCESS_DENIED;
-                    return PartialView("ErrorMessage");
-                }
             }
             catch
             {

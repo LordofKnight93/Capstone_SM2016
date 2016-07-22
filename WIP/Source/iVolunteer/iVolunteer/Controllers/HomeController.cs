@@ -25,7 +25,7 @@ namespace iVolunteer.Controllers
             try
             {
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.FrontPage_Project(0, 10);
+                var result = projectDAO.FrontPage_Project();
                 return View("FrontPage", result);
             }
             catch
@@ -70,8 +70,6 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Register(RegisterModel registerModel)
         {
-            if(!ModelState.IsValid) return View("Register", registerModel);
-
             // if user already login then redirect ro new feed
             if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
 
@@ -205,28 +203,28 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("_Login", loginModel);
+                return View("Login", loginModel);
             }
 
             if (account == null)
             {
                 ViewBag.Message = Error.ACCOUNT_NOT_EXIST;
-                return PartialView("_Login", loginModel);
+                return View("Login", loginModel);
             }
             if (!account.IsActivate)
             {
                 ViewBag.Message = Error.ACCOUNT_BANNED;
-                return PartialView("_Login", loginModel);
+                return View("Login", loginModel);
             }
             if (!account.IsConfirm)
             {
                 ViewBag.Message = Error.EMAIL_NOT_CONFIRM;
-                return PartialView("_Login", loginModel);
+                return View("Login", loginModel);
             }
             if (account.Password != loginModel.Password)
             {
                 ViewBag.Message = Error.WRONG_PASSWORD;
-                return PartialView("_Login", loginModel);
+                return View("Login", loginModel);
             }
             // code save cookie wil be added here later
 
@@ -235,12 +233,11 @@ namespace iVolunteer.Controllers
             Session["DisplayName"] = account.DisplayName;
             Session["Role"] = account.IsAdmin ? "Admin" : "User";
 
-            return JavaScript("location.reload(true)");
-            ////redirect
-            //if (account.IsAdmin)
-            //    return RedirectToAction("Manage", "Admin");
-            //else
-            //    return RedirectToAction("Newfeed","Home");
+            //redirect
+            if (account.IsAdmin)
+                return RedirectToAction("Manage", "Admin");
+            else
+                return RedirectToAction("Newfeed","Home");
         }
 
         public ActionResult LogOut()
@@ -251,20 +248,20 @@ namespace iVolunteer.Controllers
 
         public ActionResult Search(string name, string option)
         {
-            if (String.IsNullOrEmpty(name.Trim()) || name.Trim().Length > 100)
+            if (String.IsNullOrEmpty(name) || name.Length > 100)
             {
-                ViewBag.Message = "Độ dài chuỗi nhập vào từ 1 đến 100 ký tự";
+                ViewBag.Message = "Độ dài chuỗi nhập vào từ 0 đến 100 ký tự";
                 return View("ErrorMessage");
             }
             
             switch (option)
             {
                 case "User":
-                    return RedirectToAction("SearchUser", "User", new { name = name, page = 1 });
+                    return RedirectToAction("SearchUser", "User", new { name = name });
                 case "Group":
-                    return RedirectToAction("SearchGroup", "Group", new { name = name, page = 1 });
+                    return RedirectToAction("SearchGroup", "Group", new { name = name });
                 case "Project":
-                    return RedirectToAction("SearchProject", "Project", new { name = name, page = 1 });
+                    return RedirectToAction("SearchProject", "Project", new { name = name });
                 default:
                     ViewBag.Message = Error.WRONG_PASSWORD;
                     return View("ErrorMessage");

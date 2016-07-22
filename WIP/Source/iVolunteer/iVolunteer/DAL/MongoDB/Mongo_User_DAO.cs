@@ -116,7 +116,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -135,7 +136,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, -1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -155,7 +157,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -175,7 +178,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, -1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -195,7 +199,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -215,7 +220,8 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
+                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -271,38 +277,21 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// search active user, for user usage
+        /// search active and confirmed user
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="option">true to include deactive user, false to find active user only</param>
         /// <returns></returns>
-        public List<AccountInformation> Active_User_Search(string name, int skip, int number)
+        public List<AccountInformation> User_Search(string name, bool allStatus)
         {
             try
             {
-                var result = collection.AsQueryable().Where(ac => ac.AccountInformation.DisplayName.ToLower().Contains(name.ToLower())
-                                                               && ac.AccountInformation.IsActivate == Status.IS_ACTIVATE)
-                                                     .Skip(skip).Take(number)
-                                                     .Select(ac => ac.AccountInformation).ToList();
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// search all user, for admin usage
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public List<AccountInformation> User_Search(string name, int skip, int number)
-        {
-            try
-            {
-                var result = collection.AsQueryable().Where(ac => ac.AccountInformation.DisplayName.ToLower().Contains(name.ToLower()))
-                                                     .Skip(skip).Take(number)
-                                                     .Select(ac => ac.AccountInformation).ToList();
+                var preResult = collection.AsQueryable().Where(u => u.AccountInformation.DisplayName.ToLower().Contains(name.ToLower()));
+                if(allStatus == false)
+                {
+                    preResult = preResult.Where(u => u.AccountInformation.IsActivate == Status.IS_ACTIVATE);
+                }
+                var result = preResult.Select(u => u.AccountInformation).ToList();
                 return result;
             }
             catch
@@ -384,99 +373,6 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-        /// <summary>
-        /// increase each user groupcount by 1
-        /// </summary>
-        /// <param name="listID"></param>
-        /// <returns></returns>
-        public bool Batch_Join_Group(IEnumerable<string> listID)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, 1);
-                var result = collection.UpdateMany(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
 
-        /// <summary>
-        /// decrease each user groupCount by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public bool Batch_Out_Group(IEnumerable<string> listID)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, -1);
-                var result = collection.UpdateMany(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// inscrease each user ProjectCOunt by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public bool Batch_Join_Project(IEnumerable<string> listID)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, 1);
-                var result = collection.UpdateMany(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// decrease each user ProjectCOunt by 1
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public bool Batch_Out_Project(IEnumerable<string> listID)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, -1);
-                var result = collection.UpdateMany(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public bool Update_ProjectCount(string userID, int newCount)
-        {
-            try
-            {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, newCount);
-                var result = collection.UpdateOne(filter, update);
-                return result.IsAcknowledged;
-            }
-            catch
-            {
-                throw;
-            }
-        }
     }
 }

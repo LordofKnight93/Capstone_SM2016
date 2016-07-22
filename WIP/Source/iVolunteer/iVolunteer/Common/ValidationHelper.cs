@@ -37,7 +37,7 @@ namespace iVolunteer.Common
         {
             if (String.IsNullOrEmpty(identifyID)) return false;
             else
-                return NUMBERONLY_PATTERN.IsMatch(identifyID) && (identifyID.Length == 9 || identifyID.Length == 12);
+                return NUMBERONLY_PATTERN.IsMatch(identifyID) && identifyID.Length == 9;
         }
         /// <summary>
         /// check valid phone, only contain number
