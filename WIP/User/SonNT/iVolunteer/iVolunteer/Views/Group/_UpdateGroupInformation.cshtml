@@ -1,0 +1,54 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+<!-- Tổng quan -->
+@using (Ajax.BeginForm("UpdateGroupInformation","Group", null,new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, null))
+{
+<div class="row">
+    <input type="hidden" name="groupID" value="@Model.GroupID"/>
+    <div class="col-md-12" style="margin-top: -20px">
+        <h4 style="color: #049f88">Tổng quan</h4>
+        <button id="savename" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">save</i></button>
+        <div class="divider-holizon" style="margin-top: -8px"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p>@Html.EditorFor(model => model.GroupDescription, new { htmlAttributes = new { @class = "form-control" } })</p>
+    </div>
+</div>
+
+<!-- Thời gian -->
+<div class="row">
+    <div class="col-md-12">
+        <h4 style="color: #049f88">Thời gian</h4>
+        <div class="divider-holizon" style="margin-top: -8px"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p><strong>Ngày thành lập: </strong>@Html.DisplayFor(model => model.DateCreate)</p>
+    </div>
+</div>
+
+<!-- Liên hệ-->
+<div class="row">
+    <div class="col-md-12">
+        <h4 style="color: #049f88">Liên hệ</h4>
+        <div class="divider-holizon" style="margin-top: -8px"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ul class="list-post">
+            <li>
+                <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
+                <span>@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })</span>
+            </li>
+            <li>
+                <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
+                <span>@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })</span>
+            </li>
+        </ul>
+    </div>
+</div>   
+}

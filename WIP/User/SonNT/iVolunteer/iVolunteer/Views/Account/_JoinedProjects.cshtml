@@ -1,0 +1,21 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+
+<div class="card-panel">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Sự kiện đã tham gia</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    <!-- List Project -->
+    <div class="row">
+        <div class="col-sm-12 col-xs-12">
+            <ul class="list-navi">
+                @foreach (var item in Model)
+                {
+                    <li><a href="@Url.Action("ProjectHome","Project",new { projectID = item.ProjectID })">@item.ProjectName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

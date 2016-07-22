@@ -1,0 +1,53 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;" id="current">
+    <!-- List Project -->
+    @foreach (var item in Model)
+    {
+        <div class="divider-holizon"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="row">
+                                        <a href="@Url.Action("ProjectHome","Project",new { projectID = item.ProjectID})" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                                    </div>
+                                    <div class="row">
+                                        <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
+                                    </div>
+                                    <div class="row">
+                                        <table style="font-size: 14px;" width="60%">
+                                            <tr>
+                                                <td style="color: #049f88;">ĐỊA ĐIỂM</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #049f88;">LĨNH VỰC</td>
+                                                <td>Môi trường, Con người</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #049f88;">THỜI GIAN</td>
+                                                <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #049f88;">LIÊN HỆ</td>
+                                                <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                    @Ajax.ActionLink("Đồng ý", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                    @Ajax.ActionLink("Từ chối", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider-holizon"></div>
+                                                }
+
+</div>

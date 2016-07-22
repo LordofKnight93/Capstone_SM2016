@@ -1,0 +1,34 @@
+﻿@model Tuple<List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Report>, List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>>
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Danh sách nhóm vi phạm</h4>
+        </div>
+    </div>
+    <table class="table">
+        @foreach (var group in Model.Item2)
+        {
+            <tr>
+                <th>Nhóm vi phạm</th>
+                <td><a>@group.DisplayName</a></td>
+                <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeactivateGroup","Admin", new { groupID = group.ID })'" />
+                <input type="button" class ="btn btn-default" value="Bỏ qua" onclick="location.href ='@Url.Action("IgnoreGroupReport","Admin", new { groupID = group.ID })'" /></td>
+            </tr>
+            <tr>
+                <td>Người báo cáo</td>
+                <td>Nội dung báo cáo</td>
+            </tr>
+            foreach (var item in Model.Item1)
+            {
+                if (item.Destination.ID == group.ID)
+                {
+                    <tr>
+                        <td><a>@item.Actor.DisplayName</a></td>
+                        <td><a>@item.Type</a></td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+</div>
+

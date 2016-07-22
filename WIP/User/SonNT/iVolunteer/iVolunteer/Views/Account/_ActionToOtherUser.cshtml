@@ -1,0 +1,41 @@
+﻿    @if (ViewBag.IsUser == true)
+    {
+        if (ViewBag.IsAdmin == true)
+        {
+            if (ViewBag.IsActivate == true)
+            {
+                @Ajax.ActionLink("Khóa", "DeactivateAccount", "Admin", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class="btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Kích hoạt", "ActivateAccount", "Admin", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+        else
+        {
+            if (ViewBag.IsFriend == true)
+            {
+                @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace , Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                if (ViewBag.IsRequested == true)
+                {
+                    @Ajax.ActionLink("Hủy yêu cầu", "CancelFriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                }
+                else
+                {
+                    @Ajax.ActionLink("Kết bạn", "FriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                }
+            }
+
+            if (ViewBag.IsReported == true)
+            {
+                @Ajax.ActionLink("Hủy báo cáo", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+    }

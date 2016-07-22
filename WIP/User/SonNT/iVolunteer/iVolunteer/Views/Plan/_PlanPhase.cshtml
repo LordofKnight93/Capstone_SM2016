@@ -1,0 +1,116 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PlanPhaseInformation>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        string idupdate = "planPhaseMainTask" + item.PlanPhaseID;
+        string idupdatelistmaintask = "maintastlist" + item.PlanPhaseID;
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="sub-container" style="margin-bottom: 10px;">
+                    <!-- Header -->
+                    <div class="row">
+                        <div class="col-xs-12">
+                            
+                            <div class="row">
+                                <!-- Info -->
+                                <div class="col-sm-8">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <label>@Html.DisplayFor(modelItem => item.Name)</label>
+                                        </div>
+                                        <div class="col-xs-12">
+                                            <label style="font-size: 14px; color: #049f88;">@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (ViewBag.UserRole == "1")
+                                {
+                                    <!-- Button -->
+                                    <div class="col-sm-4" style="text-align: right">
+                                        @Ajax.ActionLink("edit", "EditPlanPhase", "Plan", new { planPhaseID = @item.PlanPhaseID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                        @Ajax.ActionLink("delete", "DeletePlanPhase", "Plan", new { planPhaseID = @item.PlanPhaseID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "updatePlanPhaseBox", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-sm-12" style="margin-top: -5px">
+                            <div class="divider-holizon"></div>
+                        </div>
+                    </div>
+                    <!-- Detail -->
+                    <div class="row">
+                        <div class="col-sm-12" id="@idupdate">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                                    <div class="divider-holizon"></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12" id="@idupdatelistmaintask">
+                                        @{ Html.RenderAction("DetailMainTask", "Plan", new { planPhaseID = @item.PlanPhaseID, userRole = ViewBag.UserRole });}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+}
+
+    @*<div>
+            <h4>PlanPhaseInformation</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.PlanPhaseID)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.PlanPhaseID)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.StartTime)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.StartTime)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.EndTime)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.EndTime)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    *@

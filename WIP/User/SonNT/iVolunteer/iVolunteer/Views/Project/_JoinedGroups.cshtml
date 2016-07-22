@@ -1,0 +1,59 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+
+<div id="joinedGroup" class="tab-pane fade in ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sub-container">
+
+                <!-- Header -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>@Model.Count() nhóm đã tham gia</h4>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="divider-holizon"></div>
+                    </div>
+                </div>
+                <!-- List Groups -->
+                @foreach (var item in Model)
+            {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <a href="@Url.Action("GroupHome","Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
+                                    </div>
+                                    <div class="row">
+                                        <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
+                                    </div>
+                                    <div class="row">
+                                        <table style="font-size: 14px;" width="60%">
+                                            <tr>
+                                                <td style="color: #049f88;">THÀNH VIÊN</td>
+                                                <td>@Html.DisplayFor(modelItem => item.MemberCount)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- Interaction Button -->
+                                    <div class="row" style="margin-top: 10px">
+                                        <div class="row" style="margin-top: -7px; text-align: center">
+                                            <label class="member-department">
+                                                @Ajax.ActionLink(" Xóa ", "ExpellJoinedGroup", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider-holizon"></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
