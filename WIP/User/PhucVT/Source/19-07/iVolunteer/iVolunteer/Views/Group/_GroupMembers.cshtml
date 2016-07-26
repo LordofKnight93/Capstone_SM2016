@@ -1,0 +1,93 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
+
+<!-- Member -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sub-container">
+
+                <!-- Header -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>@Model.Count() thành viên</h4>
+                    </div>
+                    <div class="col-sm-2" style="text-align: right">
+@if (ViewBag.IsLeader == true)
+{
+                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
+}
+                    </div>
+
+                    <!-- Search bar -->
+                    <div class="col-sm-4">
+                        <form role="search">
+                            <div class="input-group txt-search">
+                                <input type="search" class="form-control" placeholder="Tìm kiếm" name="q" style="color: #000; border-color: #049f88;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" type="submit" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="glyphicon glyphicon-search" style="color: #049f88"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="divider-holizon"></div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                    <!-- Member -->
+                    <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                        <div class="member-container">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <img src="@item.Get_AvatarLink()" height="70" width="70">
+                                </div>
+
+                                <div class="col-xs-5">
+                                    <div class="row">
+                                        <label class="member-name">
+                                            <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                        </label>
+                                    </div>
+                                    <div class="row" style="margin-top: -7px">
+                                        <label class="member-sumerise">
+                                            @Html.DisplayFor(modelItem => item.Address)
+                                        </label>
+                                    </div>
+                                    <div class="row" style="margin-top: -7px">
+                                        <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
+                                    </div>
+                                </div>
+@if (ViewBag.IsLeader == true)
+{
+                                <div class="divider-vertical-member"></div>
+
+                                <div class="col-xs-4">
+                                    <div class="row" style="text-align: center">
+                                        <label class="member-position" style="font-size: 14px">
+
+                                        </label>
+                                    </div>
+                                    <div class="row" style="margin-top: -7px; text-align: center">
+                                        <label class="member-department">
+                                                @Ajax.ActionLink("Thăng chức", "SetLeader", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" })
+                                        </label>
+                                    </div>
+                                    <div class="row" style="margin-top: -7px; text-align: center">
+                                        <label class="member-department">
+                                            @Ajax.ActionLink("Trục xuất", "ExpellMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })
+                                        </label>
+                                    </div>
+                                </div>
+}
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>

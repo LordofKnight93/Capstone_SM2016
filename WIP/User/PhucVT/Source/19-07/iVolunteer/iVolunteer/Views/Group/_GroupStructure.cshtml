@@ -1,0 +1,35 @@
+﻿<!--Leader-->
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row">
+        <div class="col-sm-12" style="margin-top: -20px">
+            <h4>Thành Viên</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active" data-type="admin" data-toggle = "tab" >
+                    @Ajax.ActionLink("TRƯỞNG NHÓM", "GroupLeaders", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="member" data-toggle = "tab">
+                    @Ajax.ActionLink("THÀNH VIÊN", "GroupMembers","Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                @if (ViewBag.IsLeader == true)
+                {
+                <li data-type="request"data-toggle="tab">
+                    @Ajax.ActionLink("YÊU CẦU GIA NHẬP", "GroupRequests", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="content-panel">
+        <div id="content-panel" class="tab-pane fade in active">
+            @{ Html.RenderAction("GroupLeaders", "Group", new { groupID = ViewBag.GroupID });
+            }
+            </div>
+        </div>
+</div>

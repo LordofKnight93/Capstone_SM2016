@@ -1,0 +1,72 @@
+﻿
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+<div class="row">
+    <div class="col-sm-12">
+
+        <!-- Tổng hợp -->
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col-md-12">
+                <div class="sub-container">
+                    <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Số tiền còn trong ngân quỹ:</label>
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", ViewBag.ReceivedMoney)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Tổng kinh phí dự kiến:</label>
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", ViewBag.TotalEstimated)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Số tiền còn lại sau dự kiến:</label>
+                                </div>
+                                <div class="col-md-6" style="text-align: right;">
+                                    <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", ViewBag.ReceivedMoney - ViewBag.TotalEstimated)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="budgetRecordDetails">
+            @*@{ Html.RenderPartial("_ProjectBudgetRecord");  }*@
+            @{ Html.RenderAction("DetailBudgetRecord", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole });}
+        </div>
+
+        @if (ViewBag.UserRole == "1")
+        {
+                    <!-- Thêm đầu mục -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="sub-container">
+                        <!--<h4 id="btnAddBudgetRecord" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  ĐẦU MỤC ...</h4>-->
+                        @Ajax.ActionLink("THÊM  ĐẦU MỤC ...", "AddBudgetRecordForm", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "addBudgetRecordForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                        <div id="addBudgetRecordForm">
+                            @*@{ Html.RenderPartial("_ProjectBudgetAddRecord");  }*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

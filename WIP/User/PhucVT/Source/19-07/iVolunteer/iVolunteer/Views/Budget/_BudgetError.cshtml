@@ -1,0 +1,7 @@
+﻿<div class="row">
+    <div class="col-sm-12">
+        <h4>@ViewBag.Message</h4>
+        @{ Html.RenderAction("DetailBudgetRecord", "Budget", new { projectID = ViewBag.ProjectID });}
+
+    </div>
+</div>

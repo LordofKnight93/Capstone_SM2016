@@ -1,0 +1,43 @@
+﻿<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+
+    <div class="row">
+        <div class="col-md-12" style="margin-top: -15px; margin-bottom: 5px">
+            <h4 style="color: #049f88">Kế hoạch</h4>
+            <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active" data-type="donator">
+                    <!--<a data-toggle="tab" href="#tabplan">KẾ HOẠCH</a>-->
+                    @Ajax.ActionLink("KẾ HOẠCH TRIỂN KHAI", "DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="admin">
+                    <!--<a data-toggle="tab" href="">NGÂN QUỸ DỰ ÁN</a>-->
+                    @Ajax.ActionLink("NGÂN QUỸ DỰ ÁN", "DetailFund", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="admin">
+                    <!--<a data-toggle="tab" href="#tabbudget">DỰ TRÙ KINH PHÍ</a>-->
+                   @Ajax.ActionLink("DỰ TRÙ KINH PHÍ", "BudgetAllView", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+                <li data-type="admin">
+                    <!--<a data-toggle="tab" href="">KINH PHÍ THỰC TẾ</a>-->
+                    @Ajax.ActionLink("KINH PHÍ THỰC TẾ", "DetailFinance", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- Plan -->
+        <div id="tabplanbudget" class="tab-pane fade in active">
+            @{ Html.RenderAction("DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole });}
+        </div>
+
+    </div>
+
+</div>
