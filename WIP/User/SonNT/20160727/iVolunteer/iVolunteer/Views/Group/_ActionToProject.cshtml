@@ -1,0 +1,33 @@
+﻿@if (ViewBag.IsJoined != true)
+        {
+            if (ViewBag.IsJoinRequested == true)
+            {
+                @Ajax.ActionLink("Hủy yêu cầu tham gia", "CancelGroupJoinRequest", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn muốn hủy yêu cầu tham gia sự kiện này ? " }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Đại diện nhóm tham gia ", "MemberNotInProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+        else
+        {
+                @Ajax.ActionLink("Rời sự kiện", "ProjectResign", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia sự kiện này nữa ? " }, new { @type = "button", @class = "btn btn-default" })
+        }
+
+@if (ViewBag.IsSponsored != true)
+        {
+            if (ViewBag.IsSponsorRequested == true)
+            {
+                @Ajax.ActionLink("Hủy yêu cầu ủng hộ", "CancelGroupSponsorRequest", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn muốn hủy yêu cầu ủng hộ sự kiện này ? " }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Đại diện nhóm ủng hộ", "MemberNotSponsorProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+        else
+        {
+                <button type="button" class="btn btn-default" aria-label="Left Align">
+                    Đã ủng hộ
+                </button>
+        }

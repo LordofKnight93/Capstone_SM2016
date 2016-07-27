@@ -1,0 +1,68 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+
+<div id="participate" class="tab-pane fade in ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sub-container">
+
+                <!-- Header -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>@Model.Count() hoạt động</h4>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="row">
+                                            <a href="@Url.Action("ProjectHome","Project",new { projectID = item.ProjectID})" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                                        </div>
+                                        <div class="row">
+                                            <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
+                                        </div>
+                                        <div class="row">
+                                            <table style="font-size: 14px;" width="90%">
+                                                <tr>
+                                                    <td style="color: #049f88;" width="15%">THAM GIA</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.MemberCount) người</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color: #049f88;" width="15%">ĐỊA ĐIỂM</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color: #049f88;" width="15%">LĨNH VỰC</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.TagsString)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color: #049f88;" width="15%">THỜI GIAN</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="color: #049f88;" width="15%">LIÊN HỆ</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
