@@ -67,7 +67,8 @@
         }
         else
         {
-            @Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.ProjectID, targetType = 2 }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            <button class="btn btn-default" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.ProjectID, targetType = 2})">Báo cáo vi phạm</button>
+            @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.ProjectID, targetType = 2 }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
         }
     }
 }

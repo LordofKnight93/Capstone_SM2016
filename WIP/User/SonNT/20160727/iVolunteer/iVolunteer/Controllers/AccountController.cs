@@ -15,6 +15,9 @@ using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
+using System.Net.Mail;
 
 namespace iVolunteer.Controllers
 {
@@ -312,7 +315,11 @@ namespace iVolunteer.Controllers
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
 
                 if(!relationDAO.Is_Requested(userID, groupID))
+                {
                     relationDAO.Add_Request(userID, groupID);
+                    //SEND join group NOTIFICATION to Group Leader(s)
+                    SendJoinGroupNotify(userID, groupID);
+                }
 
                 return ActionToGroup(groupID);
             }
@@ -322,7 +329,37 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public bool SendJoinGroupNotify(string userID, string groupID)
+        {
+            try
+            {
+                //Get group leader(s)ID 
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                List<string> leadersID = relationDAO.Get_Leaders(groupID);
 
+                //Get SDLink 
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = userDAO.Get_SDLink(userID);
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                SDLink destination = groupDAO.Get_SDLink(groupID);
+                //Add Notification item 
+                //Create Notifcation Item
+                Notification notif = new Notification(actor, Notify.JOIN_GROUP_REQUEST, actor, destination);
+
+                foreach (var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                //Connect to NotificationHub
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public ActionResult CancelJoinGroupRequest(string groupID)
         {
             try
@@ -455,12 +492,20 @@ namespace iVolunteer.Controllers
                 SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                 //check if target send request or not
                 if (relationDAO.Is_Requested(otherID, userID))
+                {
                     AcceptFriendRequest(otherID);
+                    //Send Friend Request Accepted Notification 
+                    SendFriendRequestAccepted(userID, otherID);
+                }
                 else
                 {
                     ///check if curent user has sent request or not 
                     if (!relationDAO.Is_Requested(userID, otherID))
+                    {
                         relationDAO.Add_Request(userID, otherID);
+                        // Send notification
+                        SendFriendRequestNotify(userID, otherID);
+                    }
                 }
 
                 return ActionToOtherUser(otherID);
@@ -471,7 +516,37 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public bool SendFriendRequestNotify(string userID, string otherID)
+        {
 
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            hubContext.Clients.All.getFriendRequests(otherID);
+            return true;
+        }
+        public bool SendFriendRequestAccepted(string userID, string requestID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            try
+            {
+                //Send Friend REquest accepted to requested User
+                //Create Notify for request user
+                SDLink actor = userDAO.Get_SDLink(userID);
+                SDLink target = userDAO.Get_SDLink(requestID);
+                Notification notify = new Notification(actor, Notify.FRIEND_REQUEST_ACCEPTED, target);
+                userDAO.Add_Notification(requestID, notify);
+
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getFriendRequestAccepted(requestID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
         public ActionResult CancelFriendRequest(string otherID)
         {
             try
@@ -573,7 +648,11 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
 
                 if (!relationDAO.Is_Join_Requested(userID, projectID))
+                {
                     relationDAO.Add_Join_Request(userID, projectID);
+                    //SEND join group NOTIFICATION to Project Leader(s)
+                    SendJoinProjectNotify(userID, projectID);
+                }
 
                 return ActionToProject(projectID);
             }
@@ -583,7 +662,39 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        public bool SendJoinProjectNotify(string userID, string projectID)
+        {
+            try
+            {
+                //Get project leader(s)ID 
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                List<string> leadersID = relationDAO.Get_Leaders(projectID);
 
+                //Get SDLink 
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = userDAO.Get_SDLink(userID);
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+
+                //Create Notifcation Item
+                Notification notif = new Notification(actor, Notify.JOIN_PROJECT_REQUEST, actor, destination);
+
+                foreach (var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+
+                //Connect to NotificationHub
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinProjectRequests(leadersID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public ActionResult CancelJoinProjectRequest(string projectID)
         {
             try
@@ -779,9 +890,10 @@ namespace iVolunteer.Controllers
                         relationDAO.Delete_Friend(friendID, userID);
                         relationDAO.Delete_Friend(userID, friendID);
 
+                        //Delete Friend in FriendList
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                        userDAO.Delete_Friend(userID);
-                        userDAO.Delete_Friend(friendID);
+                        userDAO.Delete_Friend(userID, friendID);
+                        userDAO.Delete_Friend(friendID, userID);
 
                         transaction.Complete();
                     }
@@ -929,6 +1041,134 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
+        }
+        public JsonResult AcceptFriendRequestInNotif(string requestID)
+        {
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+
+                }
+                string userID = Session["UserID"].ToString();
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                        relationDAO.Accept_Request(userID, requestID);
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        SDLink first = userDAO.Get_SDLink(userID);
+                        SDLink second = userDAO.Get_SDLink(requestID);
+                        userDAO.Add_Friend_To_List(userID, second);
+                        userDAO.Add_Friend_To_List(requestID, first);
+
+                        //Send Friend Request Accepted NOTIFICATION
+                        SendFriendRequestAccepted(userID, requestID);
+
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        ViewBag.Message = Error.UNEXPECT_ERROR;
+                        return Json(false);
+                    }
+                }
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
+        public JsonResult DeclineFriendRequestInNotif(string requestID)
+        {
+
+            try
+            {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return Json(false);
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //delete sql relation
+                SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
+                relationDAO.Delete_Request(requestID, userID);
+
+                return Json(true);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
+        public JsonResult GetNumberOfFriendRequest()
+        {
+            if (Session["UserID"] == null) return Json(0);
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                int count = 0;
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                count += relation.Count_Request(userID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                count += userDAO.Count_FriendAccepted(userID);
+
+                return Json(count);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ActionResult sendActivationEmail(string displayName, string email, string userID)
+        {
+
+            MailMessage message = new MailMessage();
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            message.From = new MailAddress("ivolunteer.noreply@gmail.com");
+            message.To.Add(email);
+            message.Subject = "Verify your email used on ivolunteer.com.vn";
+            message.Body = string.Format("Hi {0}, <br /> Thank you for your registration, please click <a href = \"{1}\" title = \"Activate your account\">here</a> to complete your registration!", displayName, Url.Action("Confirm", "Account", new { userID = userID }, Request.Url.Scheme));
+
+            message.IsBodyHtml = true;
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = true;
+            client.Credentials = new System.Net.NetworkCredential("ivolunteer.noreply@gmail.com", "iv0lunt##r");
+            client.Send(message);
+            ViewBag.Message = "Gửi Email xác nhận tài khoản thành công. Mời bạn truy cập Email và làm theo hướng dẫn";
+            return View("ErrorMessage");
+
+        }
+
+        public void sendForgotPasswordEmail(string userID, string userName, string email)
+        {
+
+            MailMessage message = new MailMessage();
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            message.From = new MailAddress("account-security-noreply@ivolunteervn.com");
+            message.To.Add(email);
+            message.Subject = "Reset your password on iVolunteerVN.com";
+            message.Body = string.Format("Hi {0}, <br /> We received a request to reset the password for your account. <br /> You can click  <a href = \"{1}\" title = \"Activate your account\">here</a> to reset your password", userName, Url.Action("ForgotPassword", "Account", new { userId = userID }, Request.Url.Scheme));
+
+            message.IsBodyHtml = true;
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = true;
+            client.Credentials = new System.Net.NetworkCredential("account-security-noreply@ivolunteervn.com", "Passw0rd@123");
+            client.Send(message);
+
         }
         /// <summary>
         /// get friend not in a group

@@ -1,9 +1,7 @@
 ﻿@Html.Partial("_PostCreate")
-
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    @Html.Partial("_PostOwner")
-    @Html.Partial("_PostContent")
-    @Html.Partial("_PostInteractionPanel")
-    @Html.Partial("_Comment")
-    @Html.Partial("_PostWriteComment")
+<div id="postList">
+    @{Html.RenderAction("GetPostList", "Project", new { projectID = ViewBag.ProjectID });}
+</div>
+<div class="panel-footer" style="text-align: center">
+    <a role="discussion" id="@("loadMore" + ViewBag.ProjectID)" href="" onclick="@("loadMorePost(event,'" + ViewBag.ProjectID +"', this.getAttribute('role'))")">Load more</a>
 </div>

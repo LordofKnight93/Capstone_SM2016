@@ -367,6 +367,7 @@ namespace iVolunteer.Controllers
             ViewBag.Name = name;
             return View("SearchUser");
         }
+
         public ActionResult NextResultPage(string name, int page)
         {
             try
@@ -448,7 +449,7 @@ namespace iVolunteer.Controllers
                     messageDAO.Add_Message(sqlmessage1);
                     messageDAO.Add_Message(sqlmessage2);
 
-                    var result1 = new { messages = "", messageID = message._id.ToString() };
+                    var result1 = new { messages = "", MessageID = message._id.ToString() };
                     return Json(result1);
                 }
                 List<MessageItem> messages = mgMessageDAO.Get_Recent_Messages(messageID);
@@ -536,6 +537,121 @@ namespace iVolunteer.Controllers
             catch
             {
                 throw;
+            }
+        }
+        /// <summary>
+        /// Load all Friend request notificaton
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult LoadFriendRequestNotif()
+        {
+            if (Session["UserID"] == null) return null;
+
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcAc_Relation_DAO relation = new SQL_AcAc_Relation_DAO();
+                var listID = relation.Get_Requests(userID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var listRequest = userDAO.Get_AccountsInformation(listID);
+
+                return Json(listRequest);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+        /// <summary>
+        /// Load all Friend request accepted Notification
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult LoadFriendRequestAccepted()
+        {
+            try
+            {
+                if (Session["UserID"] == null) return null;
+
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifList = userDAO.Get_FriendAcceptedNotification(userID, 0, 5);
+                if (notifList == null) return Json(false);
+                return Json(notifList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Load all Unseen Notification
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult LoadNotification()
+        {
+            try
+            {
+                if (Session["UserID"] == null) return null;
+
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifList = userDAO.Get_UnSeen_Notifications(userID, 0, 5);
+                if (notifList == null) return Json(false);
+                return Json(notifList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Count unseen notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public JsonResult GetNotificationsCount(string userID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            return Json(userDAO.Count_Notifications(userID));
+        }
+        /// <summary>
+        /// Announce that user has seen this notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public JsonResult SeenJoinRequestAccepted(string userID, string notifyID)
+        {
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+        /// <summary>
+        /// Annouce that user has seen this friend request accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public JsonResult SeenFriendRequestAccepted(string userID, string notifyID)
+        {
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
             }
         }
 

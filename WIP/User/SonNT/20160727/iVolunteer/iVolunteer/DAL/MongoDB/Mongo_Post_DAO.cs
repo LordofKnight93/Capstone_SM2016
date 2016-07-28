@@ -268,6 +268,29 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// Get Post in Public section of Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_Public_Post_By_ProjectID(string projectID, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, projectID)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.PROJECT)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PUBLIC);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// Get private post of a group
@@ -291,6 +314,35 @@ namespace iVolunteer.DAL.MongoDB
             {
                 throw;
             }
+        }
+        /// <summary>
+        /// Get Post in Discussion Section of Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_Private_Post_By_ProjectID(string projectID, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, projectID)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.PROJECT)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PRIVATE);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
+                var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Is_User_Liked(string userID, string postID)
+        {
+            var filter = Builders<Mongo_Post>.Filter.Where(p => p.PostInfomation.PostID == postID && p.LikerList.Any(u => u.ID == userID));
+            var result = collection.Find(filter).ToList().Count;
+            return result != 0;
         }
     }
 }

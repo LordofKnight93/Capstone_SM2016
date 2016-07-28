@@ -16,6 +16,8 @@ using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using MongoDB.Bson;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
 
 namespace iVolunteer.Controllers
 {
@@ -673,13 +675,24 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-        public ActionResult ProjectPublic()
+        public ActionResult ProjectPublic(string projectID)
         {
+            string userID = Session["UserID"].ToString();
+
+            //Leader will be able to Post in Public Section(in next View returned)
+            SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+            if (relation.Is_Leader(userID, projectID)) ViewBag.Role = "Leader";
+            else ViewBag.Role = "Member";
+
+            ViewBag.ProjectID = projectID;
+            ViewBag.InSection = "Public";
             return PartialView("_ProjectPublic");
         }
 
-        public ActionResult ProjectDiscussion()
+        public ActionResult ProjectDiscussion(string projectID)
         {
+            ViewBag.InSection = "Discussion";
+            ViewBag.ProjectID = projectID;
             return PartialView("_ProjectDiscussion");
         }
 
@@ -753,7 +766,8 @@ namespace iVolunteer.Controllers
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
                     relationDAO.Set_Leader(memberID, projectID);
-
+                    // Send Promotion Notify
+                    SendPromotionNotify(userID, memberID, projectID);
                     return null;
                 }
                 else
@@ -767,6 +781,37 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// Send notification to promoted member
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="memberID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool SendPromotionNotify(string userID, string memberID, string projectID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
+            try
+            {
+                //Send Friend REquest accepted to requested User
+                //Create Notify for request user
+                SDLink leader = userDAO.Get_SDLink(userID);
+                SDLink target = userDAO.Get_SDLink(memberID);
+                SDLink destination = groupDAO.Get_SDLink(projectID);
+                Notification notify = new Notification(leader, Notify.LEADER_PROMOTE_IN_PROJECT, target, destination);
+                userDAO.Add_Notification(memberID, notify);
+
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupAccepted(memberID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
             }
         }
         public ActionResult SetMember(string leaderID, string projectID)
@@ -2142,6 +2187,301 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public JsonResult AcceptRequestOnNotify(string userID, string requestID, string projectID, string notifyID)
+        {
+            SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    relationDAO.Accept_Join_Request(requestID, projectID);
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    userDAO.Join_Project(requestID);
+                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                    projectDAO.Members_Join(projectID, 1);
+
+                    //Send Join Project request Accepted to requested User
+                    SendJoinProjectRequestAccepted(userID, requestID, projectID, notifyID);
+
+                    transaction.Complete();
+                    return Json(true);
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    return Json(false);
+                }
+            }
+
+        }
+        public bool SendJoinProjectRequestAccepted(string userID, string requestID, string projectID, string notifyID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+            try
+            {
+                //Set is seen
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+
+                //Send join_project_accepted notify to requested User
+                //Create Notify for request user
+                SDLink actor = userDAO.Get_SDLink(userID);
+                SDLink target = userDAO.Get_SDLink(requestID);
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+                Notification notify = new Notification(actor, Notify.JOIN_PROJECT_ACCEPTED, target, destination);
+                userDAO.Add_Notification(requestID, notify);
+
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinProjectAccepted(requestID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+        public JsonResult DenyRequestOnNotify(string userID, string requestID, string projectID, string notifyID)
+        {
+            try
+            {
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, projectID))
+                {
+                    relationDAO.Delete_Join_Request(requestID, projectID);
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    userDAO.Delete_Notification(userID, notifyID);
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return Json(false);
+            }
+        }
+        public PartialViewResult AddPost(PostInformation postInfor, string projectID, string inSection)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = "Error";
+                return PartialView("ErrorMessage");
+            }
+            //Create creator
+            string userID = Session["UserID"].ToString();
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            SDLink creator = userDAO.Get_SDLink(userID);
+            //create destination 
+            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+            SDLink project = projectDAO.Get_SDLink(projectID);
+
+            postInfor.DateCreate = DateTime.Now;
+            postInfor.DateLastActivity = DateTime.Now;
+            //cretate mongo Post
+            Mongo_Post mongo_Post = new Mongo_Post(postInfor);
+            mongo_Post.PostInfomation.Creator = creator;
+            mongo_Post.PostInfomation.Destination = project;
+
+            //Create sql Pos
+            SQL_Post sql_Post = new SQL_Post();
+            sql_Post.PostID = mongo_Post._id.ToString();
+            sql_Post.DateCreate = DateTime.Now.ToLocalTime();
+            sql_Post.DateLastActivity = DateTime.Now.ToLocalTime();
+            sql_Post.ProjectID = projectID;
+            sql_Post.IsPinned = false;
+            if (inSection == "Discussion")
+            {
+                sql_Post.IsPublic = false;
+                mongo_Post.PostInfomation.IsPublic = false;
+            }
+            else
+            {
+                sql_Post.IsPublic = true;
+                mongo_Post.PostInfomation.IsPublic = true;
+            }
+
+            Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+            SQL_Post_DAO sql_Post_DAO = new SQL_Post_DAO();
+            SQL_AcPo_Relation_DAO relation = new SQL_AcPo_Relation_DAO();
+            //start transaction
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    sql_Post_DAO.Add_Post(sql_Post);
+                    relation.Add(userID, sql_Post.PostID);
+                    postDAO.Add_Post(mongo_Post);
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return PartialView("ErrorMessage");
+                }
+            }
+            ViewBag.ProjectID = projectID;
+            if (inSection == "Discussion") return GetPostList(projectID);
+            return GetPostList_InPublic(projectID);
+        }
+        public PartialViewResult GetPostList(string projectID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Private_Post_By_ProjectID(projectID, 0, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult GetPostList_InPublic(string projectID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Public_Post_By_ProjectID(projectID, 0, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult ShowAddCommentArea(string postID, string projectID)
+        {
+            ViewBag.PostID = postID;
+            return PartialView("_PostWriteComment");
+        }
+        public ActionResult AddComment(Comment comment, string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Message = "Nhap sai";
+                return View("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+
+            //Add more mongo Comment information
+            comment.DateCreate = DateTime.Now.ToLocalTime();
+            comment.Creator = creator;
+
+            try
+            {
+                mongo_Post_DAO.Set_DateLastActivity(postID, comment.DateCreate);
+                mongo_Post_DAO.Add_Comment(postID, comment);
+                return GetCommentList(postID);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult GetCommentList(string postID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Comment> commentList = postDAO.Get_Comments(postID, 0, 5);
+
+                return PartialView("_CommentList", commentList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult LikePost(string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return Json(false);
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+            //If User has liked this Post 
+            if (mongo_Post_DAO.Is_User_Liked(userID, postID)) return DislikePost(postID);
+            try
+            {
+                mongo_Post_DAO.Set_DateLastActivity(postID, DateTime.Now.ToLocalTime());
+                mongo_Post_DAO.Add_LikerList(postID, creator);
+
+                ViewBag.postID = postID;
+                return Json(new { status = true, dislike = false });
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult DislikePost(string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return Json(false);
+            }
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            try
+            {
+                //write to DB
+                mongo_Post_DAO.Set_DateLastActivity(postID, DateTime.Now.ToLocalTime());
+                mongo_Post_DAO.Delete_LikerList(postID, Session["UserID"].ToString());
+
+                ViewBag.postID = postID;
+                return Json(new { status = true, dislike = true });
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult LoadMorePost(string projectID, int times)
+        {
+            try
+            {
+                int skipNo = times * 5;
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Private_Post_By_ProjectID(projectID, skipNo, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult LoadMorePostInPublic(string projectID, int times)
+        {
+            try
+            {
+                int skipNo = times * 5;
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Public_Post_By_ProjectID(projectID, skipNo, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

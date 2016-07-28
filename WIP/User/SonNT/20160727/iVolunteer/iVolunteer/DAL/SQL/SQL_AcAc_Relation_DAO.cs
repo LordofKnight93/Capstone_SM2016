@@ -436,5 +436,26 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Count number of friend Request to display in Notification
+        /// </summary>
+        /// <param name="senderID"></param>
+        /// <param name="receiverID"></param>
+        /// <returns></returns>
+        public int Count_Request(string receiverID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    int count = dbEntities.SQL_AcAc_Relation.Count(rl => rl.FriendID == receiverID && rl.Status == Status.PENDING);
+                    return count;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

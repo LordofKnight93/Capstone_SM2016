@@ -287,13 +287,34 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public bool Delete_Friend(string userID)
+        //public bool Delete_Friend(string userID)
+        //{
+        //    try
+        //    {
+        //        var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+        //        var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
+        //        var result = collection.UpdateOne(filter, update);
+        //        return result.IsAcknowledged;
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+        // <summary>
+        /// decrease FriendCount by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Delete_Friend(string userID, string friendID)
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
-                var result = collection.UpdateOne(filter, update);
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var friend_filter = Builders<SDLink>.Filter.Eq(s => s.ID, friendID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.FriendList, friend_filter)
+                                                        .Inc(u => u.AccountInformation.FriendCount, -1); ;
+                var result = collection.UpdateOne(user_filter, update);
                 return result.IsAcknowledged;
             }
             catch
@@ -460,6 +481,222 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// add new notification to user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notify"></param>
+        /// <returns></returns>
+        public bool Add_Notification(string userID, Notification notify)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList, notify);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// set a notification is seen
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public bool Set_Notification_IsSeen(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
+                var update = Builders<Mongo_User>.Update.Set(u => u.NotificationList.ElementAt(-1).IsSeen, Status.IS_SEEN);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get a number of user's notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_Notifications(string userID, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                return result.NotificationList.Skip(skip).Take(number).ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Delete Notificaiton
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public bool Delete_Notification(string userID, string notifyID)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Eq(acc => acc.AccountInformation.UserID, userID);
+                var notify_filter = Builders<Notification>.Filter.Eq(nt => nt.NotifyID, notifyID);
+                var update = Builders<Mongo_User>.Update.PullFilter(u => u.NotificationList, notify_filter);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Count number of Notification for UserID
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int Count_Notifications(string userID)
+        {
+            try
+            {
+                var num = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type != Notify.FRIEND_REQUEST_ACCEPTED).Count();
+                //var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                //int count = result.NotificationList.Count(nt => nt.IsSeen == false);
+                return num;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Count number of Friend Accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int Count_FriendAccepted(string userID)
+        {
+            try
+            {
+                var num = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type == Notify.FRIEND_REQUEST_ACCEPTED).Count();
+                //var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                //int count = result.NotificationList.Count(nt => nt.IsSeen == false);
+                return num;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get friend accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_FriendAcceptedNotification(string userID, int skip, int number)
+        {
+            try
+            {
+                var result1 = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type == Notify.FRIEND_REQUEST_ACCEPTED);
+                return result1.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get all unseen notificaiton of user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_UnSeen_Notifications(string userID, int skip, int number)
+        {
+            try
+            {
+                var result1 = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type != Notify.FRIEND_REQUEST_ACCEPTED);
+                return result1.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public bool Is_Post_Has_Unseen_Notify(string userID, string postID)
+        {
+            try
+            {
+                var count = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == postID && item.IsSeen == false).Count();
+                return count != 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get all notification of post that have unseen comment
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public string Get_PostCmted_Unseen_NotifyID(string userID, string postID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == postID && item.IsSeen == false);
+                var notifyID = result.ElementAt(0).NotifyID;
+                return notifyID;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Add actor to list commentor of a post
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        public bool Add_Actor_To_PostCmted_Notify(string userID, string notifyID, SDLink actor)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList.ElementAt(-1).Actors, actor);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// increase each user groupcount by 1
         /// </summary>

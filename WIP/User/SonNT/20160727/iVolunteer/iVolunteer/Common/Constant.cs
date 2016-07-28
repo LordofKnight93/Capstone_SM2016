@@ -132,4 +132,28 @@ namespace iVolunteer.Common
         public const bool MALE = true;
         public const bool FEMALE = false;
     }
+    public static class Notify
+    {
+        public const int JOIN_GROUP_REQUEST = 1;
+        public const int JOIN_PROJECT_REQUEST = 2;
+
+        public const int JOIN_GROUP_ACCEPTED = 3;
+        public const int JOIN_PROJECT_ACCEPTED = 4;
+
+        public const int FRIEND_REQUEST_ACCEPTED = 5;
+
+        public const int TASK_ASSIGN = 6;
+        public const int TASK_DONE = 7;
+        public const int TASK_MODIFY = 8;
+
+        public const int POST_CREATED_IN_GROUP = 9;
+        public const int POST_CMTED_IN_GROUP = 10;
+
+        public const int POST_CREATED_IN_PROJECT = 11;
+        public const int POST_CMTED_IN_PROJECT = 12;
+
+        public const int LEADER_PROMOTE_IN_PROJECT = 13;
+        public const int LEADER_PROMOTE_IN_GROUP = 14;
+
+    }
 }

@@ -24,13 +24,13 @@
             <ul class="nav nav-tabs">
                 <li class="col-md-2">
                     <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
-                    @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @onclick = "resetTimes()" })
                 </li>
                 @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
                 {
                     <li class="col-md-2">
                         <!--<a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
-                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @onclick = "resetTimes()" })
                     </li>
                     <li class="col-md-2">
                         <!--<a id="plantab" href="#plan" data-toggle="tab">KẾ HOẠCH</a>-->
@@ -52,7 +52,7 @@
             <div id="panelContent" class="tab-content clearfix">
                 <!-- Public Tab -->
                 <div class="tab-pane active" id="project-tab">
-                    @{ Html.RenderAction("ProjectPublic", "Project");}
+                    @{ Html.RenderAction("ProjectDiscussion", "Project");}
                 </div>
 
             </div>
@@ -62,7 +62,122 @@
 </div>
 
 
-@**@
+@section scripts {
+    <script type="text/javascript">
+        var times = 1;
+        function resetTimes() {
+            times = 1;
+        }
+        function loadMorePost(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePost", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in  Post");
+                }
+            });
+            event.preventDefault();
+        }
+        function loadMorePostInPublic(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostInPublic", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
+            event.preventDefault();
+        }
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "discussion") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "public") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+            }
+        });
+    function InteractPost(postID, action) {
+            var data = {
+                postID : postID
+            }
+            if (action == "likePost") {
+                $.ajax({
+                    url: '@Url.Action("LikePost","Project")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == false) {
+                            $('#likeCount' + postID).html(function (i, val) { return +val + 1 });
+                            $("#" + postID).attr("role", "dislikePost");
+                        }
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Like Post");
+                    }
+                });
+            }
+
+            else {
+                $.ajax({
+                    url: '@Url.Action("DislikePost","Project")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Dislike Post");
+                    }
+                });
+
+            }
+        }
+    </script>
+}
+
+
+
+
+
 
 
 

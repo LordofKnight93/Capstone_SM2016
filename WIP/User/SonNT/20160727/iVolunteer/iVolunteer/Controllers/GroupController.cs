@@ -15,6 +15,8 @@ using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
 
 namespace iVolunteer.Controllers
 {
@@ -315,12 +317,23 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public ActionResult GroupPublic()
+        public ActionResult GroupPublic(string groupID)
         {
+            string userID = Session["UserID"].ToString();
+
+            //Leader will be able to Post in Public Section(in next View returned)
+            SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+            if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
+            else ViewBag.Role = "Member";
+
+            ViewBag.GroupID = groupID;
+            ViewBag.InSection = "Public";
             return PartialView("_GroupPublic");
         }
-        public ActionResult GroupDiscussion()
+        public ActionResult GroupDiscussion(string groupID)
         {
+            ViewBag.InSection = "Discussion";
+            ViewBag.GroupID = groupID;
             return PartialView("_GroupDiscussion");
         }
         public ActionResult GroupGallery()
@@ -485,7 +498,8 @@ namespace iVolunteer.Controllers
                 if (relationDAO.Is_Leader(userID, groupID))
                 {
                     relationDAO.Set_Leader(memberID, groupID);
-
+                    // Send promote Leader notification 
+                    SendPromotionNotify(userID, memberID, groupID);
                     return null;
                 }
                 else
@@ -499,6 +513,37 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// Send notification to promoted member
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="memberID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool SendPromotionNotify(string userID, string memberID, string groupID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            try
+            {
+                //Send Friend REquest accepted to requested User
+                //Create Notify for request user
+                SDLink leader = userDAO.Get_SDLink(userID);
+                SDLink target = userDAO.Get_SDLink(memberID);
+                SDLink destination = groupDAO.Get_SDLink(groupID);
+                Notification notify = new Notification(leader, Notify.LEADER_PROMOTE_IN_GROUP, target, destination);
+                userDAO.Add_Notification(memberID, notify);
+
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupAccepted(memberID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
             }
         }
         public ActionResult SetMember(string leaderID, string groupID)
@@ -684,6 +729,266 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public JsonResult AcceptRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
+        {
+            SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    relationDAO.Accept_Request(requestID, groupID);
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    userDAO.Join_Group(requestID);
+                    Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                    groupDAO.Members_Join(groupID, 1);
+
+                    //Send notification to requested User
+                    SendJoinGroupRequestAccepted(userID, requestID, groupID, notifyID);
+
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    return Json(false);
+                }
+            }
+            return Json(true);
+        }
+        public JsonResult DenyRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
+        {
+            if (userID == null) return Json(false);
+            try
+            {
+                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                relationDAO.Delelte_Request(requestID, groupID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Delete_Notification(userID, notifyID);
+
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+        public bool SendJoinGroupRequestAccepted(string userID, string requestID, string groupID, string notifyID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            try
+            {
+
+                //Set is seen
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+
+                //Send join_group_accepted notify to requested User
+                //Create Notify for request user
+                SDLink actor = userDAO.Get_SDLink(userID);
+                SDLink target = userDAO.Get_SDLink(requestID);
+                SDLink destination = groupDAO.Get_SDLink(groupID);
+                Notification notify = new Notification(actor, Notify.JOIN_GROUP_ACCEPTED, target, destination);
+                userDAO.Add_Notification(requestID, notify);
+
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupAccepted(requestID);
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+        public PartialViewResult AddPost(PostInformation postInfor, string groupID, string inSection)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = "Error";
+                return PartialView("ErrorMessage");
+            }
+            //Create creator
+            string userID = Session["UserID"].ToString();
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            SDLink creator = userDAO.Get_SDLink(userID);
+            //create destination 
+            Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+            SDLink group = groupDAO.Get_SDLink(groupID);
+
+            postInfor.DateCreate = DateTime.Now;
+            postInfor.DateLastActivity = DateTime.Now;
+            //cretate mongo Post
+            Mongo_Post mongo_Post = new Mongo_Post(postInfor);
+            mongo_Post.PostInfomation.Creator = creator;
+            mongo_Post.PostInfomation.Destination = group;
+
+            //Create sql Pos
+            SQL_Post sql_Post = new SQL_Post();
+            sql_Post.PostID = mongo_Post._id.ToString();
+            sql_Post.DateCreate = DateTime.Now.ToLocalTime();
+            sql_Post.DateLastActivity = DateTime.Now.ToLocalTime();
+            sql_Post.GroupID = groupID;
+            sql_Post.IsPinned = false;
+            if (inSection == "Discussion")
+            {
+                sql_Post.IsPublic = false;
+                mongo_Post.PostInfomation.IsPublic = false;
+            }
+            else
+            {
+                sql_Post.IsPublic = true;
+                mongo_Post.PostInfomation.IsPublic = true;
+            }
+
+            Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+            SQL_Post_DAO sql_Post_DAO = new SQL_Post_DAO();
+            SQL_AcPo_Relation_DAO relation = new SQL_AcPo_Relation_DAO();
+            //start transaction
+            using (var transaction = new TransactionScope())
+            {
+                try
+                {
+                    sql_Post_DAO.Add_Post(sql_Post);
+                    relation.Add(userID, sql_Post.PostID);
+                    postDAO.Add_Post(mongo_Post);
+                    transaction.Complete();
+                }
+                catch
+                {
+                    transaction.Dispose();
+                    ViewBag.Message = Error.UNEXPECT_ERROR;
+                    return PartialView("ErrorMessage");
+                }
+            }
+            ViewBag.GroupID = groupID;
+            if (inSection == "Discussion") return GetPostList(groupID);
+            return GetPostList_InPublic(groupID);
+        }
+        public PartialViewResult GetPostList(string groupID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Private_Post_By_GroupID(groupID, 0, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult GetPostList_InPublic(string groupID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Public_Post_By_GroupID(groupID, 0, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult ShowAddCommentArea(string postID, string groupID)
+        {
+            ViewBag.PostID = postID;
+            return PartialView("_PostWriteComment");
+        }
+        public ActionResult AddComment(Comment comment, string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Message = "Nhap sai";
+                return View("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+
+            //Add more mongo Comment information
+            comment.DateCreate = DateTime.Now.ToLocalTime();
+            comment.Creator = creator;
+
+            try
+            {
+                mongo_Post_DAO.Set_DateLastActivity(postID, comment.DateCreate);
+                mongo_Post_DAO.Add_Comment(postID, comment);
+                return GetCommentList(postID);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult GetCommentList(string postID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Comment> commentList = postDAO.Get_Comments(postID, 0, 5);
+
+                return PartialView("_CommentList", commentList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult LikePost(string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return Json(false);
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+            //If User has liked this Post 
+            if (mongo_Post_DAO.Is_User_Liked(userID, postID)) return DislikePost(postID);
+            try
+            {
+                mongo_Post_DAO.Set_DateLastActivity(postID, DateTime.Now.ToLocalTime());
+                mongo_Post_DAO.Add_LikerList(postID, creator);
+
+                ViewBag.postID = postID;
+                return Json(new { status = true, dislike = false });
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public JsonResult DislikePost(string postID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return Json(false);
+            }
+            Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
+            try
+            {
+                //write to DB
+                mongo_Post_DAO.Set_DateLastActivity(postID, DateTime.Now.ToLocalTime());
+                mongo_Post_DAO.Delete_LikerList(postID, Session["UserID"].ToString());
+
+                ViewBag.postID = postID;
+                return Json(new { status = true, dislike = true });
+            }
+            catch
+            {
+                throw;
             }
         }
         [ChildActionOnly]
@@ -1069,6 +1374,34 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public PartialViewResult LoadMorePost(string groupID, int times)
+        {
+            try
+            {
+                int skipNo = times * 5;
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Private_Post_By_GroupID(groupID, skipNo, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult LoadMorePostInPublic(string groupID, int times)
+        {
+            try
+            {
+                int skipNo = times * 5;
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> postList = postDAO.Get_Public_Post_By_GroupID(groupID, skipNo, 5);
+                return PartialView("_PostList", postList);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

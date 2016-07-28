@@ -1,4 +1,128 @@
-﻿@{ Html.RenderAction("DisplayPendingReportedGroup", "Admin"); }
-@{ Html.RenderAction("DisplayPendingReportedUser", "Admin"); }
-@{ Html.RenderAction("DisplayPendingReportedProject", "Admin"); }
-
+﻿<div class="report-container">
+    <ul class="nav nav-tabsReport">
+        <li role="presentation"><a href="#groupReport" role="tab" data-toggle="tab" aria-controls="groupReport">Nhóm vi phạm</a></li>
+        <li role="presentation"><a href="#projectReport" role="tab" data-toggle="tab" aria-controls="projectReport">Dự án vi phạm</a></li>
+        <li role="presentation" class="active"><a href="#userReport" role="tab" data-toggle="tab" aria-controls="userReport">Thành viên vi phạm</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" id="groupReport" class="tab-pane fade">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    @{ Html.RenderAction("DisplayPendingReportedGroup", "Admin"); }
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" id="projectReport" class="tab-pane fade">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    @{ Html.RenderAction("DisplayPendingReportedProject", "Admin"); }
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" id="userReport" class="tab-pane fade in active">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    @{ Html.RenderAction("DisplayPendingReportedUser", "Admin"); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $('button').click(function (event) {
+            var url = this.getAttribute('href');
+            // Deactivate Group
+            if (this.id == "deactivateGroup") {
+                var groupID = this.getAttribute('role')
+                var data = {
+                    groupID: groupID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + groupID).remove();
+                    }
+                });
+            }
+            // Ignore Group
+            if (this.id == "ignoreGroup") {
+                var groupID = this.getAttribute('role')
+                var data = {
+                    groupID: groupID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + groupID).remove();
+                    }
+                });
+            }
+            // Deactivate Project
+            if (this.id == "deactivateProject") {
+                var projectID = this.getAttribute('role')
+                var data = {
+                    projectID: projectID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + projectID).remove();
+                    }
+                });
+            }
+            // Ignore Project
+            if (this.id == "ignoreProject") {
+                var projectID = this.getAttribute('role')
+                var data = {
+                    projectID: projectID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + projectID).remove();
+                    }
+                });
+            }
+            // Deactivate User
+            if (this.id == "deactivateUser") {
+                var userID = this.getAttribute('role')
+                var data = {
+                    userID: userID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + userID).remove();
+                    }
+                });
+            }
+            // Ignore User
+            if (this.id == "ignoreUser") {
+                var userID = this.getAttribute('role')
+                var data = {
+                    userID: userID
+                };
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        $('#' + userID).remove();
+                    }
+                });
+            }
+            event.preventDefault();
+    });
+    </script>
+}
