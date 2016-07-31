@@ -1,0 +1,23 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
+
+@foreach (var item in Model)
+{
+        <!-- Comment -->
+    <div class="commentItem">
+        <div class="row">
+            <div class="col-md-1 col-sm-1">
+                <object type="image/jpg" data="@("/Images/User/Avatar/" + item.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></object>
+            </div>
+            <div class="col-md-9 col-sm-9">
+                <div class="row">
+                    <a href="@Url.Action("Information",item.Creator.Handler, item.Creator.ID)" class="user-name">@item.Creator.DisplayName</a>
+                </div>
+                <div class="row">
+                    <span style="font-size: 0.8em; color: #b4b4b4"> @item.DateCreate.ToLocalTime()</span>
+                </div>
+            </div>
+        </div>
+        <p>@item.Content</p>
+        <div class="commentHorizontal"></div>
+    </div>
+}

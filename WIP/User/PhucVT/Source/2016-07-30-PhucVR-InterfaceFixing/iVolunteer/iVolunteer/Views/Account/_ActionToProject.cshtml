@@ -1,0 +1,92 @@
+﻿@using iVolunteer.Common
+    @if (ViewBag.IsUser == true)
+    {
+        if (ViewBag.IsAdmin == true)
+        {
+            if (ViewBag.IsActivate == true)
+            {
+                @Ajax.ActionLink("Khóa", "DeactivateProject", "Admin", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Kích hoạt", "ActivateProject", "Admin", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+        else
+        {
+            if (ViewBag.Ongoing == true)
+            {
+                if (ViewBag.IsJoined != true)
+                {
+                    if (ViewBag.IsJoinRequested == true)
+                    {
+                        //Hủy yêu cầu tham gia
+                        @Ajax.RawActionLink("<span class='glyphicon glyphicon-log-in my-green' aria-hidden='true'></span><span class='action-to-target-text'>  Hủy yêu cầu tham gia</span>", "CancelJoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+                    else
+                    {
+                        // Tham gia
+                        @Ajax.RawActionLink("<span class='glyphicon glyphicon-log-in' aria-hidden='true'></span><span class='action-to-target-text'>  Tham gia</span>", "JoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+
+                    if (ViewBag.IsFollowing == true)
+                    {
+                        //Hủy theo dõi
+                        @Ajax.RawActionLink("<i class='material-icons md-mygreen'>star</i><span class='action-to-target-text'>  Hủy theo dõi</span>", "UnfollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+                    else
+                    {
+                        //Theo dõi
+                        @Ajax.RawActionLink("<i class='material-icons'>star_border</i><span class='action-to-target-text'>  Theo dõi</span>", "FollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+                }
+                else
+                {
+                    //Roi su kien
+                    @Ajax.RawActionLink("<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span><span class='action-to-target-text'>  Rời sự kiện</span>", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia sự kiện này nữa ? " }, new { @class = "btn btn-default action-to-target-link", @type = "button", @id="project-resign"})
+                }
+
+                if (ViewBag.IsSponsored != true)
+                {
+                    if (ViewBag.IsSponsorRequested == true)
+                    {
+                        //Hủy yêu cầu ủng hộ
+                        @Ajax.RawActionLink("<i class='material-icons'>money_off</i><span class='action-to-target-text'>  Hủy yêu cầu ủng hộ</span>", "CancelSponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+                    else
+                    {   //Ủng hộ
+                        @Ajax.RawActionLink("<i class='material-icons'>attach_money</i><span class='action-to-target-text'>  Ủng hộ</span>", "SponsorProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    }
+                }
+                else
+                {
+                    <button type="button" class="btn btn-default action-to-target-link" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                        <span class="action-to-target-text">Đã ủng hộ</span>
+                    </button>
+                }
+                //Đại diện nhóm
+                @Ajax.RawActionLink("<i class='material-icons'>group_add</i><span class='action-to-target-text'>  Đại diện nhóm</span>", "LeadGroups", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link", @data_toggle = "modal", @data_target = "#popup" })
+            }
+
+            if (ViewBag.IsReported == true)
+            {
+                //Hủy báo cáo
+                @Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.ProjectID, targetType = 2 }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            }
+            else
+            {
+                <button class="btn btn-default action-to-target-link" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.ProjectID, targetType = 2})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
+                @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.ProjectID, targetType = 2 }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
+            }
+        }
+    }
+    else
+    {
+        if (ViewBag.Ongoing == true)
+        {
+            //Tài trợ, quyên góp
+            @Ajax.RawActionLink("<i class='material-icons'>attach_money</i><span class='action-to-target-text'>  Tài trợ, quyên góp</span>", "CreateSponsor", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link", @data_toggle = "modal", @data_target = "#popup" })
+        }
+    }
+

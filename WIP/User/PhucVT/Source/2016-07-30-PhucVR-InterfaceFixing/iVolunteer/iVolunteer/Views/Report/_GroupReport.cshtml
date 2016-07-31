@@ -1,0 +1,48 @@
+﻿
+@model iVolunteer.Models.ViewModel.ReportModel
+
+
+<form action="@Url.Action("ReportTarget", "Report", new { targetID = ViewBag.targetID, targetType = 1 })" id="submitReport" enctype="multipart/form-data" class="please" method="post">
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="btn-group-vertical pull-left">
+                    <div class="radio">
+                        @Html.RadioButtonFor(model => model.Reason, "Nhóm giả mạo", new { @id = "rs1" })
+                        <label for="rs1" style="padding-left: 0">
+                            Nhóm giả mạo
+                        </label>
+                    </div>
+                    <div class="radio">
+                        @Html.RadioButtonFor(model => model.Reason, "Đăng bài có nội dung xấu", new { @id = "rs2" })
+                        <label for="rs2" style="padding-left: 0">
+                            Đăng bài có nội dung xấu
+                        </label>
+                    </div>
+                    <div class="radio">
+                        @Html.RadioButtonFor(model => model.Reason, "Hoạt động phạm pháp", new { @id = "rs3" })
+                        <label for="rs3" style="padding-left: 0">
+                            Hoạt động phạm pháp
+                        </label>
+                    </div>
+                    <div class="radio">
+                        @Html.RadioButtonFor(model => model.Reason, "Lý do khác", new { @id = "rs4" })
+                        <label for="rs4" style="padding-left: 0">
+                            Lý do khác
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+                <label for="detailReason">Thông tin bổ sung</label>
+                @Html.TextAreaFor(model => model.Detail, new { @id = "detailReason", @class = "form-control", @rows = "3", @placeholder = "Lý do chi tiết...", @style = "resize: vertical; margin-bottom: 4px" })
+            </div>
+        </div>
+    </div>
+    <!-- Button -->
+    <div class="pull-right">
+        <input class="btn btn-success" type="submit" value="Báo cáo">
+    </div>
+</form>

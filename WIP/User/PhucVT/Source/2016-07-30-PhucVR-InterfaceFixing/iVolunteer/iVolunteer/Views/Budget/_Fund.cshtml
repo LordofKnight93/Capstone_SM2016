@@ -1,0 +1,62 @@
+﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Fund
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
+<div>
+    <div class="row" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div class="sub-container">
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Tổng số tiền sẽ nhận được:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", Model.TotalMoney)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Số tiền đã nhận được:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", Model.ReceivedMoney)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Số tiền chưa được nhận:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", Model.PendingMoney)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="teamFoundDonatorDetails">
+                @*@{ Html.RenderAction("DetailInsideDonator", "Budget", new { fundID = Model._id.ToString(), userRole = ViewBag.UserRole });}*@
+                @{ Html.RenderAction("DetailOutsideDonator", "Budget", new { fundID = Model._id.ToString(), isLeader = ViewBag.IsLeader });}
+                @{ Html.RenderAction("DetailTeamFoundDonator", "Budget", new { fundID = Model._id.ToString(), isLeader = ViewBag.IsLeader });}
+            </div>
+        </div>
+    </div>
+
+</div>

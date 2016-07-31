@@ -1,0 +1,23 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.BudgetRecordInformation
+
+@using (Ajax.BeginForm("EditBudgetRecord", "Budget", new { budgetID = ViewBag.BudgetID, isLeader = ViewBag.IsLeader }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetRecordDetails" }, new { @id = "formValidation", @class = "register-form"}))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

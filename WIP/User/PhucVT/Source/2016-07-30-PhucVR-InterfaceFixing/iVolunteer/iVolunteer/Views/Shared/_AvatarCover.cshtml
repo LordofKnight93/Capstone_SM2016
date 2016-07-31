@@ -1,0 +1,60 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+@using iVolunteer.Common;
+
+<div class="card">
+    <div class="card-image">
+        @if (ViewBag.CanChange == "true")
+        {
+            <div class="div-change-cover">
+                @Ajax.ActionLink("Thay đổi ảnh bìa", "ChangeCover", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "change-cover" })
+            </div>
+            <img class="cover-img" src=@Model.Get_CoverLink() height="250px" style="object-fit: cover;">
+            <div class="col-md-3 card-ava">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="div-avatar">
+                            <div class="div-change-avatar">
+                                @Ajax.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "change-avatar" })
+                            </div>
+                            <img class="avatar-img" src=@Model.Get_AvatarLink()>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="text-align: center">
+                    <h4 style="text-shadow: 2px 2px 6px #69656E;">@Model.DisplayName</h4>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <img src=@Model.Get_CoverLink() height="250px" style="object-fit: cover;">
+            <div class="col-md-3 card-ava">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <img src=@Model.Get_AvatarLink()>
+                    </div>
+                </div>
+                <div class="row" style="text-align: center">
+                    <h4 style="text-shadow: 2px 2px 6px #69656E;">@Model.DisplayName</h4>
+                </div>
+            </div>
+        }
+        <div class="action-to-target" id="@Model.ID">
+            @*<div class="row" style="text-align: center" >*@
+            @switch (Model.Handler)
+            {
+                case Handler.USER:
+                    Html.RenderAction("ActionToOtherUser", "Account", new { otherID = Model.ID });
+                    break;
+                case Handler.PROJECT:
+                    Html.RenderAction("ActionToProject", "Account", new { otherID = Model.ID });
+                    break;
+                case Handler.GROUP:
+                    Html.RenderAction("ActionToGroup", "Account", new { otherID = Model.ID });
+                    break;
+            }
+            @*</div>*@
+        </div>
+    </div>
+</div>

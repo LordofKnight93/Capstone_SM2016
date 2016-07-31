@@ -1,0 +1,43 @@
+﻿@{  string actionName = ViewBag.Action;
+    string controller = ViewBag.Controller;
+    ViewBag.Title = "Upload Image";
+}
+<div class="modal-body">
+    <div class="row">
+
+        <!-- Login -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="row" style="margin: -10px 0 -5px 0;">
+                    <div class="col-sm-12">
+                        <h4>Tải ảnh lên</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="divider-holizon"></div>
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    @using (Html.BeginForm(actionName, controller, new { id = ViewBag.ID }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <input type="file" name="Image" id="file" style="width: 100%;" />
+                        // Error Message
+                        <div class="row">
+                            <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                <label style="color:red;">@ViewBag.Message</label>
+                            </div>
+                        </div>
+        <!-- Button -->
+                        <div class="row" style="margin-top: 60px">
+                            <div class="col-xs-2 col-xs-offset-7 text-input">
+                                <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                            </div>
+                            <div class="col-xs-2 text-input">
+                                <button type="submit" class="btn btn-register" data-target="#popup" data-toggle="modal">TẢI LÊN</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

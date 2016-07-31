@@ -1,0 +1,48 @@
+﻿@using iVolunteer.Common    
+@if (ViewBag.IsUser == true)
+    {
+        if (ViewBag.IsAdmin == true)
+        {
+            if (ViewBag.IsActivate == true)
+            {
+                @Ajax.ActionLink("Khóa", "DeactivateAccount", "Admin", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class="btn btn-default" })
+            }
+            else
+            {
+                @Ajax.ActionLink("Kích hoạt", "ActivateAccount", "Admin", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+        }
+        else
+        {
+            if (ViewBag.IsFriend == true)
+            {
+                //Hủy kết bạn
+                @Ajax.RawActionLink("<i class='material-icons md-mygreen'>done</i><span class='action-to-target-text'>  Hủy kết bạn</span>", "DeleteFriend", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace , Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            }
+            else
+            {
+                if (ViewBag.IsRequested == true)
+                {
+                    //Hủy yêu cầu
+                    @Ajax.RawActionLink("<i class='material-icons md-mygreen'>person_add</i><span class='action-to-target-text'>  Hủy yêu cầu kết bạn</span>", "CancelFriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                }
+                else
+                {
+                    //Kết bạn
+                    @Ajax.RawActionLink("<i class='material-icons'>person_add</i><span class='action-to-target-text'>  Kết bạn</span>", "FriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                }
+            }
+
+            if (ViewBag.IsReported == true)
+            {
+                //Hủy báo cáo
+                @Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            }
+            else
+            {
+                //Báo cáo
+                <button class="btn btn-default action-to-target-link" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
+                @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
+            }
+        }
+    }

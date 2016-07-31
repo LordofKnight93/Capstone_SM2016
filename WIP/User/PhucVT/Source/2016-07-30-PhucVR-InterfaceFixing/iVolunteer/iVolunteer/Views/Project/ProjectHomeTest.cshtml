@@ -1,0 +1,332 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+    }
+    <div class="col-md-9" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Project", new { projectID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+@if (ViewBag.IsJoined == false && ViewBag.IsSponsored == true)
+{
+    <h5>Bạn đã quyên góp, tài trợ cho sự kiện này.</h5>
+}
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false || ViewBag.IsAdmin == false || ViewBag.IsSponsored == false)
+                {
+                    <li class="col-md-2 active">
+                        <a id="publictab" href="#projectPublicTab" data-toggle="tab">CÔNG KHAI</a>
+                        @*@Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @onclick = "resetTimes()" })*@
+                    </li>
+                }
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                {
+                    <li class="col-md-2">
+                        <a id="publictab" href="#projectPublicTab" data-toggle="tab">CÔNG KHAI</a>
+                        @*@Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @onclick = "resetTimes()" })*@
+                    </li>
+                    <li class="col-md-2 active">
+                        <a id="privatetab" href="#projectDiscussionTab" data-toggle="tab">THẢO LUẬN</a>
+                        @*@Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @onclick = "resetTimes()" })*@
+                    </li>
+                    <li class="col-md-2">
+                        <a id="plantab" href="#projectPlanTab" data-toggle="tab">KẾ HOẠCH</a>
+                        @*@Ajax.ActionLink("Kế hoạch", "ProjectPlan", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })*@
+                    </li>
+                }
+                <li class="col-md-2">
+                    <a id="membertab" href="#projectMemberTab" data-toggle="tab">THÀNH VIÊN</a>
+                    @*@Ajax.ActionLink("Thành viên", "ProjectStructure", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })*@
+                </li>
+                <li class="col-md-2">
+                    <a id="gallerytab" href="#projectGalleryTab" data-toggle="tab">THƯ VIỆN</a>
+                    @*@Ajax.ActionLink("Thư viện", "ProjectGallery", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })*@
+                </li>
+                <li class="col-md-2">
+                    <a id="informationtab" href="#projectInformationTab" data-toggle="tab">THÔNG TIN</a>
+                    @*@Ajax.ActionLink("Thông tin", "ProjectInformation", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })*@
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                @*<div class="tab-pane active" id="project-tab">
+                    @{ Html.RenderAction("ProjectPublic", "Project");}
+                </div>*@
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false || ViewBag.IsAdmin == false || ViewBag.IsSponsored == false)
+                {
+                    <div class="tab-pane fade in active" id="projectPublicTab">
+                        @{ Html.RenderAction("ProjectPublic", "Project");}
+                    </div>
+                }
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                {
+                    <div class="tab-pane fade in" id="projectPublicTab">
+
+                    </div>
+                    <div class="tab-pane fade in active" id="projectDiscussionTab">
+                        @{ Html.RenderAction("ProjectDiscussion", "Project");}
+                    </div>
+                    <div class="tab-pane fade in" id="projectPlanTab">
+
+                    </div>
+                }
+                <div class="tab-pane fade in" id="projectMemberTab">
+
+                </div> 
+                <div class="tab-pane fade in" id="projectGalleryTab">
+
+                </div>
+                <div class="tab-pane fade in" id="projectInformationTab">
+
+                </div>
+            </div>
+      
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        var times = 1;
+        function resetTimes() {
+            times = 1;
+        }
+        function loadMorePost(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePost", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in  Post");
+                }
+            });
+            event.preventDefault();
+        }
+        function loadMorePostInPublic(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostInPublic", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
+            event.preventDefault();
+        }
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "discussion") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "public") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+            }
+        });
+        function InteractPost(postID, action) {
+            var data = {
+                postID: postID
+            }
+            if (action == "likePost") {
+                $.ajax({
+                    url: '@Url.Action("LikePost","Project")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == false) {
+                            $('#likeCount' + postID).html(function (i, val) { return +val + 1 });
+                            $("#" + postID).attr("role", "dislikePost");
+                        }
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Like Post");
+                    }
+                });
+            }
+
+            else {
+                $.ajax({
+                    url: '@Url.Action("DislikePost","Project")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Dislike Post");
+                    }
+                });
+
+            }
+        };
+
+        $(document).ready(function () {
+            $('#publictab').click(function () {
+                resetTimes();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectPublic", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").html(response);
+                        $("#projectDiscussionTab").empty();
+                        $("#projectPlanTab").empty();
+                        $("#projectMemberTab").empty();
+                        $("#projectGalleryTab").empty();
+                        $("#projectInformationTab").empty();
+                    }
+                });
+            });
+
+            $('#privatetab').click(function () {
+                resetTimes();
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectDiscussion", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").empty();
+                        $("#projectDiscussionTab").html(response);
+                        $("#projectPlanTab").empty();
+                        $("#projectMemberTab").empty();
+                        $("#projectGalleryTab").empty();
+                        $("#projectInformationTab").empty();
+                    }
+                });
+            });
+
+            $('#plantab').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectPlan", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    beforeSend: function(){
+                        $("#projectPlanTab").html('<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>');
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").empty();
+                        $("#projectDiscussionTab").empty();
+                        $("#projectPlanTab").html(response);
+                        $("#projectMemberTab").empty();
+                        $("#projectGalleryTab").empty();
+                        $("#projectInformationTab").empty();
+                    }
+                });
+            });
+
+            $('#membertab').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectStructure", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").empty();
+                        $("#projectDiscussionTab").empty();
+                        $("#projectPlanTab").empty();
+                        $("#projectMemberTab").html(response);
+                        $("#projectGalleryTab").empty();
+                        $("#projectInformationTab").empty();
+                    }
+                });
+            });
+
+            $('#gallerytab').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectGallery", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").empty();
+                        $("#projectDiscussionTab").empty();
+                        $("#projectPlanTab").empty();
+                        $("#projectMemberTab").empty();
+                        $("#projectGalleryTab").html(response);
+                        $("#projectInformationTab").empty();
+                    }
+                });
+            });
+
+            $('#informationtab').click(function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ProjectInformation", "Project")",
+                    data: {
+                        projectID: "@Model.ID"
+                    },
+                    success: function (response) {
+                        $("#projectPublicTab").empty();
+                        $("#projectDiscussionTab").empty();
+                        $("#projectPlanTab").empty();
+                        $("#projectMemberTab").empty();
+                        $("#projectGalleryTab").empty();
+                        $("#projectInformationTab").html(response);
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+

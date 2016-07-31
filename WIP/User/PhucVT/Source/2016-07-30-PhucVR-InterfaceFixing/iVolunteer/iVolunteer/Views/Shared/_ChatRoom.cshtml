@@ -1,0 +1,310 @@
+﻿<div class="row">
+    <div class="col-md-3">
+        @{Html.RenderAction("NavigationPanel", "Account");}
+    </div>
+    <div class="col-md-9">
+        <div class="wrapper">
+            <div class="chatContainter">
+                <div class="left">
+                    @*<div class="top">Bạn bè</div>*@
+                    <ul class="nav nav-tabsChat">
+                        <li class="active"><a href="#friendListTab" role="tab" data-toggle="tab" aria-controls="friendListTab">Bạn bè</a></li>
+                        <li><a href="#currentChatTab" role="tab" data-toggle="tab" aria-controls="currentChatTab">Hội thoại gần đây</a></li>
+                    </ul>
+                    @* Friend Search *@
+                    <div class="top">
+                        <span class="material-icons" style="font-size: 1.2em; opacity: 0.6;">search</span>
+                        <input  id="@("friendSearch" + Session["UserID"].ToString())" class="chatFriendSearch" type="text" placeholder="Tìm kiếm"/>
+                    </div>
+
+                    @* Friend LIst *@
+                    <div class="tab-contentChat">
+                        <div role="tabpanel" id="friendListTab" class="tab-paneChat fade in active">
+                            <div class="nano has-scrollbar" style="height:530px;">
+                                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                                    <ul class="people" id="friendList" style="padding-left: 0px;"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* Current chat *@
+                        <div role="tabpanel" id="currentChatTab" class="tab-paneChat fade">
+                            <div class="nano has-scrollbar" style="height:100px;">
+                                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                                    <ul class="people" id="currentChat" style="padding-left: 0px;"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--CHAT BOX-->
+                <div id="chatArea" class="right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--FRIEND LIST-->
+
+
+@section scripts {
+    <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    @*New Script for FriendSEarch*@
+    @*<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>*@
+@*<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />*@
+    <script>
+        $(document).ready(function () {
+            if (typeof (myHub) === "undefined") {
+                myHub = $.connection.chatHub;
+            }
+            // GET Friend list
+            myHub.client.receiveFriendList = function (jsonFriendList, jsonStatusList) {
+                var friendList = JSON.parse(jsonFriendList);
+                var statusList = JSON.parse(jsonStatusList);
+                for (var index = 0; index < friendList.length; index++) {
+                    var friend = friendList[index];
+
+                    var friendItem = "<li role='" + friend["ID"] + "' id='friendChatLink" + friend["ID"] + "' class='person'>";
+                    //Online status
+                    if (statusList[index] == true) {
+                        friendItem += "<p id='status" + friend["ID"] + "' class='onlineStatus'></p>";
+                    }
+                    else {
+                        friendItem += "<p id='status" + friend["ID"] + "' class=''></p>";
+                    }
+                    friendItem += "  <img src='https://cdn3.iconfinder.com/data/icons/black-easy/512/538474-user_512x512.png' alt=''></img>";
+                    friendItem += "  <span class='name'>" + friend["DisplayName"] + "</span>";
+                    friendItem += "<span class='preview'><span><span id='mssCount" + friend["ID"] + "' class='previewInside'></span>";
+                    friendItem += " </li>";
+
+                    $("#friendList").append(friendItem);
+                    $("#friendChatLink" + friend["ID"]).click(function (evt) {
+                        if ($(this).hasClass('.active')) {
+                            return false;
+                        } else {
+                            $('.left .person').removeClass('active');
+                            $(this).addClass('active');
+                        }
+                        conversation.createConversation(this);
+                        evt.preventDefault();
+                    });
+                }
+            }
+            // Get Message
+            myHub.client.getMessage = function (friendID, userID, content, displayTime) {
+                try {
+                    if (userID == '@Session["UserID"].ToString()') {
+                        //$("#friendChatLink" + friendID).trigger("click");
+                        // Process new comming message
+                        if($('#chatArea').children().first().attr("id") != ("chatBoxContent" + friendID)) {
+                            $('#mssCount' + friendID).html(function (i, val) { return +val + 1 });
+                        }
+
+                        ////////////////////// CHAT LINE STYLE///////////////////////
+                        var chatLine = " <li class='mar-btm'>";
+                        chatLine += " <div class='media-body pad-hor'>";
+                        chatLine += "<div class='speech'>";
+                        chatLine += "<p>" + content + "</p>";
+                        chatLine += "<p class='speech-time'";
+                        chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + displayTime;
+                        chatLine += "</p>";
+                        chatLine += "</div>";
+                        chatLine += "</div> </li>";
+                        /////////////////////////////////////////////////////////////
+                        $("#scroll" + friendID).animate({ scrollTop: $("#chatLine" + friendID).height() }, 600);
+                        $("#chatLine" + friendID).append(chatLine);
+                    }
+                }
+                catch (e) {
+                    console.log(e.message);
+                }
+            }
+            //Get Online Status
+            myHub.client.userHasConnected = function (friendID) {
+                $("#status" + friendID).addClass('onlineStatus');
+                $("#boxStatus" + friendID).text('Online');
+                $("#boxStatus" + friendID).removeClass('boxOfflineStatus');
+                $("#boxStatus" + friendID).addClass('boxOnlineStatus');
+            }
+            // Get Ofline status
+            myHub.client.userHasDisconnected = function (friendID) {
+                $("#status" + friendID).removeClass('onlineStatus');
+                $("#boxStatus" + friendID).text('Offline');
+                $("#boxStatus" + friendID).removeClass('boxOnlineStatus');
+                $("#boxStatus" + friendID).addClass('boxOfflineStatus');
+            }
+            // Start the conneciton to hub
+            $.connection.hub.start().done(function () {
+                // ASK to GET friend list
+                myHub.server.getFriendList('@Session["UserID"].ToString()');
+                //Register connectionID to HubConnection Data
+                myHub.server.connectToHub('@Session["UserID"].ToString()');
+                // Register Search Bar to Session User
+
+            }).fail(function () {
+                alert("Could not Connect!");
+            });
+
+            // Search Friend section
+            $("#friendSearch" + '@Session["UserID"].ToString()').autocomplete({
+                
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/User/SearchUserForChat",
+                        dataType: "json",
+                        type: "POST",
+                        data: {
+                            name: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.DisplayName,
+                                    value: item.UserID
+                                }
+                            }))
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    $("#friendChatLink" + ui.item.value).trigger("click");
+                },
+                minLength: 1
+            });
+        });
+
+        // Create conversation when click at Friend name
+        var conversation = (function () {
+            var createConversation = function (selector) {
+                //Delete current chatbox
+                $("#chatArea").empty();
+                var userID = $(selector).attr("role");
+                var userName = $(selector).find(".name").text();
+                var chatBoxContent = "chatBoxContent" + userID;
+
+                //Delele messages count
+                $('#mssCount'+userID).empty();
+                //////////////////STYLE FOR CHATBOX//////////////////
+                var boxHtml = "<div id='" + chatBoxContent + "' role=''>";
+                boxHtml += "<div class='top'>";
+                boxHtml += "<span class='name'>" + userName + "</span>";
+                if ($(selector).find('.onlineStatus').hasClass('onlineStatus')) {
+                    boxHtml += "<span id='boxStatus" + userID + "' class='boxOnlineStatus'>Online</span>";
+                }
+                else {
+                    boxHtml += "<span id='boxStatus" + userID + "' class='boxOfflineStatus'>Offline</span>";
+                }
+                boxHtml += "</div>";
+                boxHtml += "<div class='nano has-scrollbar' style='height:520px'>";
+                boxHtml += "<div id='scroll" + userID + "' class='nano-content pad-all' tabindex='0' style='right: -17px;'>";
+                boxHtml += "<ul id='chatLine" + userID + "' class='list-unstyled media-block'></ul>";
+                boxHtml += "</div></div>";
+                boxHtml += "<div class='write'>";
+                boxHtml += "<input type='text' id='textArea" + userID + "' placeholder='Viết tin nhắn...'><span style='font-size:1.8em; padding-top: 5px; padding-left: 30px; opacity: .25;' class='glyphicon glyphicon-send fa-5x'></span>";
+                boxHtml += "</div></div>";
+                /////////////////////////////////////////////////////////
+
+                $('#chatArea').append(boxHtml);
+
+                // Load Recent message
+                getRecentMessages(userID, chatBoxContent);
+
+                // Enter to send message
+                $("#textArea" + userID).keydown(function (evt) {
+                    if (evt.keyCode == 13) {
+                        var text = $(this).val();
+                        if (text == null) return;
+                        var messageID = $("#" + chatBoxContent).attr("role");
+                        sendMessage(userID, messageID, text);
+                        $(this).text("").val("");
+                        evt.preventDefault();
+                    }
+                });
+                // Close conversation
+                $("#" + chatBox).find("button").click(function (evt) {
+                    var boxID = $(this).attr("role");
+                    listChat = $.grep(listChat, function (value) {
+                        return value != boxID;
+                    });
+
+                    $(this).closest(".chatConversation").remove();
+                    $("#" + chatBoxContent).remove();
+                    evt.preventDefault();
+                });
+            }
+            var getRecentMessages = function (friendID, selector) {
+                var data = {
+                    friendID: friendID
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/GetRecentMessages",
+                    data: data,
+                    success: function (data, textstatus) {
+
+                        $("#" + selector).attr("role", data["MessageID"]);
+                        var dis1, dis2;
+                        for (var i = 0; i < data["Messages"].length; i++) {
+                            dis1 = ""; dis2 = "speech-time";
+                            if ('@Session["UserID"].ToString()' == data["Messages"][i]["Sender"]["ID"]) {
+                                dis1 = "speech-right"; dis2 = "speech-time-right";
+                            }
+                            var chatLine = " <li class='mar-btm'>";
+                            chatLine += " <div class='media-body pad-hor " + dis1 + " '>";
+                            chatLine += "<div class='speech'>";
+                            chatLine += "<p>" + data["Messages"][i]["Content"] + "</p>";
+                            chatLine += "<p class='"+dis2+"'";
+                            chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + data["DisplayTimes"][i];
+                            chatLine += "</p>";
+                            chatLine += "</div>";
+                            chatLine += "</div> </li>";
+                            $("#chatLine" + friendID).append(chatLine);
+                        }
+                        $("#scroll" + friendID).scrollTop($("#chatLine" + friendID).height());
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            };
+
+            var sendMessage = function (friendID, messageID, content) {
+                var data = {
+                    messageID: messageID,
+                    content: content
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/CreateMessage",
+                    data: data,
+                    success: function (data, textstatus) {
+                        var chatLine = " <li class='mar-btm'>";
+                        chatLine += " <div class='media-body pad-hor speech-right'>";
+                        chatLine += "<div class='speech'>";
+                        chatLine += "<p>" + content + "</p>";
+                        chatLine += "<p class='speech-time-right'";
+                        chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + data;
+                        chatLine += "</p>";
+                        chatLine += "</div>";
+                        chatLine += "</div> </li>";
+
+                        $("#chatLine" + friendID).append(chatLine);
+                        $("#scroll" + friendID).animate({ scrollTop: $("#chatLine" + friendID).height() }, 700);
+                        $.connection.hub.start().done(function () {
+                            // Get Chat Message
+                            myHub.server.sendMessage('@Session["UserID"].ToString()', friendID, content, data);
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            };
+            return {
+                createConversation: createConversation
+            };
+        })();
+    </script>
+}

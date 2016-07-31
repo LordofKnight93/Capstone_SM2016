@@ -1,0 +1,121 @@
+﻿<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+
+    <div class="row">
+        <div class="col-md-12" style="margin-top: -15px; margin-bottom: 5px">
+            <h4 style="color: #049f88">Kế hoạch</h4>
+            <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active" data-type="donator">
+                    <a id="tab-plan" data-toggle="tab" href="#tabplan">KẾ HOẠCH</a>
+                    @*@Ajax.ActionLink("KẾ HOẠCH TRIỂN KHAI", "DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)*@
+                </li>
+                <li data-type="admin">
+                    <a id="tab-fund" data-toggle="tab" href="#tabfund">NGÂN QUỸ DỰ ÁN</a>
+                    @*@Ajax.ActionLink("NGÂN QUỸ DỰ ÁN", "DetailFund", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)*@
+                </li>
+                <li data-type="admin">
+                    <a id="tab-budget" data-toggle="tab" href="#tabbudget">DỰ TRÙ KINH PHÍ</a>
+                   @*@Ajax.ActionLink("DỰ TRÙ KINH PHÍ", "BudgetAllView", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)*@
+                </li>
+                <li data-type="admin">
+                    <a id="tab-finance" data-toggle="tab" href="#tabfinance">KINH PHÍ THỰC TẾ</a>
+                    @*@Ajax.ActionLink("KINH PHÍ THỰC TẾ", "DetailFinance", "Budget", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, null)*@
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="tab-content">
+
+        <!-- Plan -->
+        <div id="tabplan" class="tab-pane fade in active">
+            @{ Html.RenderAction("DetailPlanRecord", "Plan", new { projectID = ViewBag.ProjectID, isLeader = ViewBag.IsLeader });}
+        </div>
+
+        <div id="tabfund" class="tab-pane fade in">
+        </div>
+
+        <div id="tabbudget" class="tab-pane fade in">
+        </div>
+
+        <div id="tabfinance" class="tab-pane fade in">
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tab-plan').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailPlanRecord", "Plan")",
+                data: {
+                    projectID: "@ViewBag.ProjectID",
+                    isLeader: "@ViewBag.IsLeader"
+                },
+                success: function (response) {
+                    $("#tabplan").html(response);
+                    $("#tabfund").empty();
+                    $("#tabbudget").empty();
+                    $("#tabfinance").empty();
+                }
+            });
+        });
+        $("#tab-fund").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailFund", "Budget")",
+                data: {
+                    projectID: "@ViewBag.ProjectID",
+                    isLeader: "@ViewBag.IsLeader"
+                },
+                success: function (response) {
+                    $("#tabplan").empty();
+                    $("#tabfund").html(response);
+                    $("#tabbudget").empty();
+                    $("#tabfinance").empty();
+                }
+            });
+        });
+        $("#tab-budget").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("BudgetAllView", "Budget")",
+                data: {
+                    projectID: "@ViewBag.ProjectID",
+                    isLeader: "@ViewBag.IsLeader"
+                },
+                success: function (response) {
+                    $("#tabplan").empty();
+                    $("#tabfund").empty();
+                    $("#tabbudget").html(response);
+                    $("#tabfinance").empty();
+                }
+            });
+        });
+        $("#tab-finance").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailFinance", "Budget")",
+                data: {
+                    projectID: "@ViewBag.ProjectID",
+                    isLeader: "@ViewBag.IsLeader"
+                },
+                success: function (response) {
+                    $("#tabplan").empty();
+                    $("#tabfund").empty();
+                    $("#tabbudget").empty();
+                    $("#tabfinance").html(response);
+                }
+            });
+        });
+    });
+</script>

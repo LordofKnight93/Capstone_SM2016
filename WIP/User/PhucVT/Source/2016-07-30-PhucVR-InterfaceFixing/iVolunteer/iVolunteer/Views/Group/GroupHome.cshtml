@@ -1,0 +1,199 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+    string viewclass = "";
+
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+}
+
+<div class="row">
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0;; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    <div class="@viewclass" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Group", new { groupID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsAdmin == null)
+                {
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
+                        @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @onclick = "resetTimes()" })
+                    </li>
+                }   
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
+                {
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
+                        @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @onclick = "resetTimes()" })
+                    </li>
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
+                        @Ajax.ActionLink("Thảo luận", "GroupDiscussion", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @onclick = "resetTimes()" })
+                    </li>
+                }
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Thành viên", "GroupStructure", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
+                    @Ajax.ActionLink("Thư viện", "GroupGallery", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Hoạt động", "ActivityHistory", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" })
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane fade in active" id="group-tab">
+                    @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsAdmin == null)
+                    {
+                        Html.RenderAction("GroupPublic", "Group");
+                    }
+                    @if(ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
+                    {
+                        Html.RenderAction("GroupDiscussion", "Group");
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@section scripts {
+    <script type="text/javascript">
+        var times = 1;
+        function resetTimes() {
+            times = 1;
+        }
+        function loadMorePost(event, groupID, section) {
+            var data = {
+                groupID: groupID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePost", "Group")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in load more Post in in DiscussionGroup");
+                }
+            });
+            event.preventDefault();
+        }
+        function loadMorePostInPublic(event, groupID, section) {
+            var data = {
+                groupID: groupID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostInPublic", "Group")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                    times++;
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
+            event.preventDefault();
+        }
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "discussion") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+                if ($('@("#loadMore" + Model.ID)').attr('role') == "public") {
+                    $('@("#loadMore" + Model.ID)').trigger('click');
+                }
+            }
+        });
+        function InteractPost(postID, action) {
+            var data = {
+                postID: postID
+            }
+            if (action == "likePost") {
+                $.ajax({
+                    url: '@Url.Action("LikePost","Group")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == false) {
+                            $('#likeCount' + postID).html(function (i, val) { return +val + 1 });
+                            $("#" + postID).attr("role", "dislikePost");
+                        }
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Like Post");
+                    }
+                });
+            }
+
+            else {
+                $.ajax({
+                    url: '@Url.Action("DislikePost","Group")',
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data.status == true && data.dislike == true) {
+                            if ($('#likeCount' + postID).html() == "1") {
+                                $('#likeCount' + postID).html("");
+                            }
+                            else {
+                                $('#likeCount' + postID).html(function (i, val) { return val - 1 });
+                            }
+                            $("#" + postID).attr("role", "likePost");
+
+                        }
+                    },
+                    error: function () {
+                        alert("not success in Dislike Post");
+                    }
+                });
+
+            }
+        }
+
+        //Show Symbol loading before ajax load
+        function OnBegin() {
+            var loadingHtml = "";
+            loadingHtml += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">';
+            loadingHtml += '<div class="progress"><div class="indeterminate"></div></div>';
+            loadingHtml += '</div';
+            $("#group-tab").html(loadingHtml);
+        }
+    </script>
+}

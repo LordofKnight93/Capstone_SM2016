@@ -1,0 +1,99 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+@Html.AntiForgeryToken()
+@*<div id="createGroupForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content">*@
+            <div class="modal-body">
+                <div class="row">
+
+                    <!-- Login -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row" style="margin: -10px 0 -5px 0;">
+                                <div class="col-sm-12">
+                                    <h4>Tạo nhóm mới</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Ajax.BeginForm("CreateGroup", "Group", null , new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "POST"}, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                {
+                                    <!-- Group Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="groupName">Tên nhóm:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.GroupName, new { htmlAttributes = new { @id = "groupName", @class = "form-control", @placeholder = "Tên nhóm..." } })
+                                            @Html.ValidationMessageFor(model => model.GroupName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Group Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="groupDescription">Mô tả: </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.GroupDescription, new { @id = "groupDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về nhóm ...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.GroupDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Email</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Email" } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Điện thoại</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Phone" } })
+                                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    // Error Message
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                            <label style="color:red;">@ViewBag.Message</label>
+                                        </div>
+                                    </div>
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-7 text-input">
+                                            <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                                        </div>
+                                        <div class="col-xs-2 text-input">
+                                            <button type="submit" class="btn btn-register">TẠO</button>
+                                        </div>
+                                    </div>
+                                }
+
+                                <div>
+                                    @ViewBag.Message
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @*</div>
+    </div>
+</div>*@

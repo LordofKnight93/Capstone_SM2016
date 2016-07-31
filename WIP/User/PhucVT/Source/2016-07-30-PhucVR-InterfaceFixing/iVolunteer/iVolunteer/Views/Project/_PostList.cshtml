@@ -1,0 +1,80 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+    <!--  Text Post -->
+        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+            <div class="row">
+                <div class="col-sm-7 col-md-7">
+                    <!-- Post Owner -->
+                    <table class="table-post-ava">
+                        <tr>
+                            <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                            <td class="td"><a href="" class="user-name">@item.PostInfomation.Creator.DisplayName</a></td>
+                        </tr>
+                        <tr>
+                            <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime()</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!-- Post Content -->
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="card-content">
+                        <p>@item.PostInfomation.Content</p>
+                    </div>
+                </div>
+            </div>
+            <div class="divider-holizon"></div>
+            <!-- Interaction Panel -->
+            <div class="row">
+                <!-- Interaction Button -->
+                <div class="col-md-6 col-sm-6">
+                    <button role="likePost" id="@item.PostInfomation.PostID" onclick="InteractPost(this.id, this.getAttribute('role'))" class="btn-card"><i class="glyphicon glyphicon-heart"></i> Like</button>
+                </div>
+                <!-- Interaction Counter -->
+                <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
+                    <div class="row">
+                        <ul class="list-interaction">
+                            <li>
+                                <i class="glyphicon glyphicon-heart" style="color: #dcaeae"></i>
+                                @if (item.LikerList.Count != 0)
+                                {
+                                    <span id="@("likeCount" + item.PostInfomation.PostID)" style="color: #cecece">@item.LikerList.Count</span>
+                                }
+                                else
+                                {
+                                    <span id="@("likeCount" + item.PostInfomation.PostID)" style="color: #cecece"></span>
+                                }
+                            </li>
+                            <li>
+                                <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
+                                @if (item.CommentList.Count != 0)
+                                {
+                                    <span style="color: #cecece">@item.CommentList.Count</span>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                @if (Session["UserID"] != null)
+                {
+                    Html.RenderAction("ShowAddCommentArea", "Project", new { postID = item.PostInfomation.PostID, projectID = ViewBag.ProjectID });
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12" style="padding-left: 7%">
+                    @Ajax.ActionLink("Xem bình luận khác", "GetCommentList", "Project", new { postID = item.PostInfomation.PostID }, new AjaxOptions { UpdateTargetId = "commentList" + item.PostInfomation.PostID, InsertionMode = InsertionMode.Replace }, new { @style = "color:#9BCABA" })
+                </div>
+            </div>
+            <div id="@("commentList" + item.PostInfomation.PostID)">
+            </div>
+        </div>
+                        }
+                    }
