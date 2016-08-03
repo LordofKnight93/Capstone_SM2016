@@ -1,0 +1,237 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.MainTask
+@{
+    string idMainTaskName = "idMainTaskName" + Model.MainTaskID;
+    DateTime date = DateTime.Today;
+    TimeSpan span = Model.Duedate - date;
+    int dateGap = span.Days;
+
+    string userID = Session["UserID"].ToString();
+    string displayName = Session["DisplayName"].ToString();
+    string role = Session["Role"].ToString();
+    string avtlink = "/Images/User/Avatar/" + userID + ".jpg";
+}
+<!-- Header -->
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-11">
+            <h4 id="main-task-title" style="font-weight: bold">@Model.Name</h4>
+            <input class="txt-edit-maintask-name" type="text" value="@Model.Name" id="txtMainTaskTitle" style="display: none; width: 90%" />
+            <i id="cancle-edit-name" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+</div>
+
+<div class="col-md-12" style="padding: 20px">
+    <div class="row">
+        <div class="col-sm-12">
+            <label>Ngày hết hạn</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            @if (dateGap >= 0)
+            {
+                <span id="main-task-duedate" class="badge is-complete">@Html.DisplayFor(Model=> Model.Duedate)</span>
+            }
+            else
+            {
+                <span id="main-task-duedate" class="badge is-due-past">@Html.DisplayFor(Model => Model.Duedate)</span>
+            }
+            <input class="txt-edit-maintask-duedate" type="datetime-local" id="txt-main-task-duedate" value="@Model.Duedate.Date.ToString("yyyy-MM-ddThh:mm")" style="display: none; width: 50%" />
+            <i id="cancle-edit-duedate" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 10px;">
+            <label>Mô tả</label>
+            <a id="cancle-edit-description" style="display: none; cursor: pointer">Hủy bỏ</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label id="main-task-description" style="font-weight: normal">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</label>
+            <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</textarea>
+        </div>
+    </div>
+</div>
+
+
+<!-- Detail -->
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="glyphicon mygray glyphicon-check"></span> Danh sách công việc</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <ol class="list-task" id="subtaskList">
+        @{ Html.RenderAction("ListSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+    </ol>
+</div>
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="glyphicon mygray glyphicon glyphicon-comment"></span> Bình luận</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-md-1 col-sm-1">
+                    <object type="image/jpg" data="@avtlink" width="40" height="40" style="border-radius: 5px"></object>
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    <textarea class="write-cmt-box" id="txt-comment" type="text" placeholder="Viết bình luận ..."></textarea>
+                </div>
+                <div>
+                    <button id="btn-sumit-comment" class="btn btn-image"><i class="material-icons md-mygreen">send</i></button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <ol class="comment-list" id="commentList">
+                @{ Html.RenderAction("ListComment", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+            </ol>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.IsLeader == true)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /**************************************************** Update Maintask Name *************************************************************/
+            //Show text field update main task name
+            $('#main-task-title').click(function () {
+                $('#main-task-title').hide();
+                $('#txtMainTaskTitle').show();
+                $('#cancle-edit-name').show();
+            });
+
+            //Cancel change maintask name
+            $('#cancle-edit-name').click(function () {
+                $('#main-task-title').show();
+                $('#txtMainTaskTitle').hide();
+                $('#cancle-edit-name').hide();
+                $('#txtMainTaskTitle').val($('#main-task-title').text());
+            });
+
+            //Update main task name
+            $('#txtMainTaskTitle').keypress(function (e) {
+                if (e.which == 13) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateMainTaskName", "Plan")",
+                        data: {
+                            planPhaseID: "@ViewBag.PlanPhaseID",
+                            mainTaskID: "@Model.MainTaskID",
+                            txtMainTaskContent: "" + $('#txtMainTaskTitle').val()
+                        },
+                        success: function (response) {
+                            $("#mainTaskDetail").html(response);
+                        }
+                    });
+                }
+            });
+
+            /************************************************* Update Maintask Description *****************************************************/
+
+            //show text area update decription
+            $('#main-task-description').click(function () {
+                $('#main-task-description').hide();
+                $('#cancle-edit-description').show();
+                $('#textarea-maintask-description').show();
+            });
+
+            $('#cancle-edit-description').click(function () {
+                $('#cancle-edit-description').hide();
+                $('#main-task-description').show();
+                $('#textarea-maintask-description').hide();
+                $('#textarea-maintask-description').val('@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))');
+            });
+
+            //update main task description
+            $('#textarea-maintask-description').keypress(function (e) {
+                if (e.which == 13) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateMainTaskDescription", "Plan")",
+                        data: {
+                            planPhaseID: "@ViewBag.PlanPhaseID",
+                            mainTaskID: "@Model.MainTaskID",
+                            txtMainTaskDescription: "" + $('#textarea-maintask-description').val()
+                        },
+                        success: function (response) {
+                            $("#mainTaskDetail").html(response);
+                        }
+                    });
+                }
+            });
+
+            /**************************************************** Update Maintask Duedate *************************************************************/
+
+            //show textfield update maintask duedate
+            $('#main-task-duedate').click(function () {
+                $('#main-task-duedate').hide();
+                $('#txt-main-task-duedate').show();
+                $('#cancle-edit-duedate').show();
+            });
+
+            $('#cancle-edit-duedate').click(function () {
+                $('#cancle-edit-duedate').hide();
+                $('#main-task-duedate').show();
+                $('#txt-main-task-duedate').hide();
+                $('#txt-main-task-duedate').val('@Model.Duedate.Date.ToString("yyyy-MM-ddThh:mm")');
+            });
+
+            //Update Maintask Duedate
+            $('#txt-main-task-duedate').keypress(function (e) {
+                if (e.which == 13) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateMainTaskDueDate", "Plan")",
+                        data: {
+                            planPhaseID: "@ViewBag.PlanPhaseID",
+                            mainTaskID: "@Model.MainTaskID",
+                            txtMainTaskDuedate: "" + $('#txt-main-task-duedate').val()
+                        },
+                        success: function (response) {
+                            $("#mainTaskDetail").html(response);
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        /******************************************************** Add cmt *****************************************************************/
+        $("#txt-comment").keypress(function (e) {
+            if (e.which == 13) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AddComment", "Plan")",
+                    data: {
+                        planPhaseID: "@ViewBag.PlanPhaseID",
+                        mainTaskID: "@Model.MainTaskID",
+                        cmtContent: "" + $('#txt-comment').val()
+                    },
+                    success: function (response) {
+                        $("#commentList").html(response);
+                        $("#txt-comment").val('');
+                    }
+                });
+            }
+        });
+    });
+</script>

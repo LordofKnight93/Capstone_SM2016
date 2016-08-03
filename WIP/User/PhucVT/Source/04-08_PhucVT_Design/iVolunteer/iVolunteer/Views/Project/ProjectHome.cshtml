@@ -1,0 +1,99 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+    }
+    <div class="@viewclass" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Project", new { projectID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+        
+        @if (ViewBag.IsJoined == false && ViewBag.IsSponsored == true)
+        {
+            <h5>Bạn đã quyên góp, tài trợ cho sự kiện này.</h5>
+        }
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsSponsored == false)
+                {
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
+                        @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                }
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                {
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
+                        @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
+                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="plantab" href="#plan" data-toggle="tab">KẾ HOẠCH</a>-->
+                        @Ajax.ActionLink("Kế hoạch", "ProjectPlan", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                    </li>
+                }
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="budgettab" href="#member" data-toggle="tab">THÀNH VIÊN</a>-->
+                    @Ajax.ActionLink("Thành viên", "ProjectStructure", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
+                    @Ajax.ActionLink("Thư viện", "ProjectGallery", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Thông tin", "ProjectInformation", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane active" id="project-tab">
+                    @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsSponsored == false)
+                    {
+                        Html.RenderAction("ProjectPublic", "Project");
+                    }
+                    @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                    {
+                        Html.RenderAction("ProjectDiscussion", "Project");
+                    }
+                </div>
+
+            </div>
+      
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    
+}
+
+
+
+
+
+
+
+

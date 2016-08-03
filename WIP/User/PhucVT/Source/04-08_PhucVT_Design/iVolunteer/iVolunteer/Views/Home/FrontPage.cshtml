@@ -1,0 +1,150 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+@{ 
+    ViewBag.Title = "Trang chủ";
+}
+<div class="row background-container">
+    @{ Html.RenderPartial("_SlideQuotes", new ViewDataDictionary());}
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Hoạt động nổi bật</h4>
+        </div>
+        @if (Session["UserID"] != null)
+        {
+            <div class="col-md-6" style="text-align: right; padding: 10px;">
+                @Ajax.ActionLink("TẠO HOẠT ĐỘNG MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
+            </div>
+        }
+        <div class="col-md-12">
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    @foreach (var item in Model)
+    {
+    @*<!-- Col 1 -->
+    <div class="col-md-3 col-sm-4 col-xs-6">
+        <div class="card-panel" style="padding: 5px 20px">
+            <div class="row">
+                <!-- Post content -->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align: center">
+                            <table class="table-home-post">
+                                <tbody>
+                                    <tr>
+                                        <td><img src="@item.Get_AvatarLink()" alt="" height="140px" width="140px"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID})" style="font-weight: bold; color: #049f88;">
+                                            @Html.DisplayFor(modelItem => item.ProjectName)
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @*<tr>
+                                        <td>
+                                            <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Đơn vị tổ chức">domain</i>
+                                            <span><a href="" style="font-weight: bold;">Quỹ Vỏ Chai</a></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p>@Html.DisplayFor(modelItem => item.ProjectShortDescription)</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <ul class="list-post">
+                                <li>
+                                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Địa điểm">place</i>
+                                    <span>@Html.DisplayFor(modelItem => item.Location)</span>
+                                </li>
+                                <li>
+                                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Lĩnh vực">view_list</i>
+                                    <span>@Html.DisplayFor(modelItem => item.TagsString)</span>
+                                </li>
+                                <li>
+                                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Thời gian">access_time</i>
+                                    <span>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</span>
+                                </li>
+                                <li>
+                                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Email">mail_outline</i>
+                                    <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                </li>
+                                <li>
+                                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="" data-placement="left" data-original-title="Điện Thoại">phone</i>
+                                    <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+    <div class="col-md-3 col-sm-4 col-xs-6" style="padding: 5px;">
+        <div class="card">
+            <div class="card-image">
+                <img src="@item.Get_CoverLink()" height="350px" style="object-fit: cover">
+                <div class="project-information">
+                    <div class="meta-data">
+                        <div class="title">
+                            <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID})" style="font-weight: bold; color: #fff;">
+                                @Html.DisplayFor(modelItem => item.ProjectName)
+                            </a>
+                        </div>
+                        <div class="info">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <p>@Html.DisplayFor(modelItem => item.ProjectShortDescription)</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <ul class="list-project-info info-detail">
+                                        <li>
+                                            <i class="material-icons md-18" data-toggle="tooltip" title="Địa điểm" data-placement="left">place</i>
+                                            <span>@Html.DisplayFor(modelItem => item.Location)</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-tags md-18" data-toggle="tooltip" title="Lĩnh vực" data-placement="left"></i>
+                                            <span>@Html.DisplayFor(modelItem => item.TagsString)</span>
+                                        </li>
+                                        <li>
+                                            <i class="material-icons md-18" data-toggle="tooltip" title="Thời gian" data-placement="left">access_time</i>
+                                            <span>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</span>
+                                        </li>
+                                        <li>
+                                            <i class="material-icons md-18" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
+                                            <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                        </li>
+                                        <li>
+                                            <i class="material-icons md-18" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
+                                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="fix-position-info">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <i class="fa fa-user fa-cus-18"></i><span style="font-size: 14px; padding-right: 10px;">&nbsp; @item.MemberCount</span>
+                            <i class="fa fa-rss fa-cus-18"></i><span style="font-size: 14px; padding-right: 10px;">&nbsp; @item.FollowerCount</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

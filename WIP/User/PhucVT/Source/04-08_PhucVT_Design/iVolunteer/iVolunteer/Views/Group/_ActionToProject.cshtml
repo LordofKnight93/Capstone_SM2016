@@ -1,0 +1,54 @@
+﻿@using iVolunteer.Common
+<ul class="list-action-to-target">
+    @if (ViewBag.IsJoined != true)
+    {
+        if (ViewBag.IsJoinRequested == true)
+        {
+            <li>
+                @*//Hủy yêu cầu tham gia*@
+                @Ajax.RawActionLink("<span class='glyphicon glyphicon-log-in my-green' aria-hidden='true'></span><span class='action-to-target-text'>  Hủy yêu cầu tham gia</span>", "CancelGroupJoinRequest", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn muốn hủy yêu cầu tham gia sự kiện này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            </li>
+        }
+        else
+        {
+            <li>
+                @*//Đại diện nhóm tham gia*@
+                @Ajax.RawActionLink("<i class='material-icons'>group_add</i><span class='action-to-target-text'>  Đại diện nhóm tham gia</span> ", "MemberNotInProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            </li>
+        }
+    }
+    else
+    {
+        //Rời sự kiện
+        <li>
+            @Ajax.RawActionLink("<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span><span class='action-to-target-text'>  Rời sự kiện</span>", "ProjectResign", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia sự kiện này nữa ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+        </li>
+    }
+
+    @if (ViewBag.IsSponsored != true)
+    {
+        if (ViewBag.IsSponsorRequested == true)
+        {
+            //Hủy yêu cầu ủng hộ
+            <li>
+                @Ajax.RawActionLink("<i class='material-icons'>money_off</i><span class='action-to-target-text'>  Hủy yêu cầu ủng hộ</span>", "CancelGroupSponsorRequest", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn muốn hủy yêu cầu ủng hộ sự kiện này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            </li>
+        }
+        else
+        {
+            //Đại diện nhóm ủng hộ
+            <li>
+                @Ajax.RawActionLink("<i class='material-icons'>attach_money</i><span class='action-to-target-text'>  Đại diện nhóm ủng hộ</span>", "MemberNotSponsorProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+            </li>
+        }
+    }
+    else
+    {
+        <li>
+            <button type="button" class="btn btn-default action-to-target-link" aria-label="Left Align">
+                <i class="material-icons md-mygreen">attach_money</i>
+                <span class="action-to-target-text"> Đã ủng hộ</span>
+            </button>
+        </li>
+    }
+</ul>

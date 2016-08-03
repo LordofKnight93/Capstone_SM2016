@@ -1,0 +1,128 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.SubTask
+@{ string idupdate = "#addSubTaskForm" + ViewBag.MainTaskID; }
+@using (Ajax.BeginForm("AddSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "VadidateSubTask();", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div style="text-align: center">
+            @ViewBag.Message
+        </div>
+
+        <div class="row">
+            <div class="col-md-10 col-sm-offset-1">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên công việc ..." } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-content" style="font-weight: normal;">@ViewBag.MessageContent</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-10 col-sm-offset-1">
+                <input type="hidden" id="txtUserID" name="txtUserID" />
+                <input type="text" class="form-control" name="txtAssign" id="assign" placeholder="Người thực hiện ..."/>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-10 col-sm-offset-1">
+                @Html.EditorFor(model => model.Deadline, new { htmlAttributes = new { @id = "subtaskDeadline", @class = "form-control datetimepicker", @data_format = "dd/MM/yyyy hh:mm:ss", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.Deadline, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-deadline" style="font-weight: normal;">@ViewBag.MessageDeadline</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-10 col-sm-offset-1">
+                @Html.DropDownListFor(model => model.Priolity, new SelectListItem[] {
+                                                                    new SelectListItem() {Text = "THẤP", Value = "1" },
+                                                                    new SelectListItem() {Text = "BÌNH THƯỜNG", Value = "2" },
+                                                                    new SelectListItem() {Text = "CAO", Value = "3" } },
+                                                      new { @class = "form-control", @type = "date" })
+                @Html.ValidationMessageFor(model => model.Priolity, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform">
+                    HỦY
+                </a>
+                <input type="submit" value="THÊM" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function VadidateSubTask() {
+        $("form").removeData("validator");
+        $("form").removeData("unobtrusiveValidation");
+        $.validator.unobtrusive.parse("form");
+    }
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+        var errorContent = $('#error-content', result.responseText).length > 0;
+        var errorDeadline = $('#error-deadline', result.responseText).length > 0;
+
+        if (isError || errorContent || errorDeadline) {
+            // there was an error => we update the container of the form
+            $('#addSubTaskForm').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            //$('#frm .field-validation-error').hide();
+            //$('#frm .input-validation-error').removeClass('input-validation-error');
+            $('#subtaskList').html(result.responseText);
+        }
+    }
+    $(document).ready(function () {
+        // Search Member
+        $("#assign").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    url: "@Url.Action("ProjectMembersToAssign","Project")",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        sourceID: '@ViewBag.PlanPhaseID',
+                        target: 'plan',
+                        name: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.DisplayName,
+                                value: item.UserID
+                            }
+                        }))
+                    },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $("#txtUserID").val(ui.item.value);
+                $("#assign").val(ui.item.label);
+                return false;
+            }
+        });
+
+        $("#clearform").click(function () {
+            $("#addSubTaskForm").empty();
+        });
+
+        $('#Content').keypress(function () {
+            $('[data-valmsg-for="Content"]').hide();
+            $('#error-content').hide();
+        });
+
+        $('#subtaskDeadline').focus(function () {
+            $('[data-valmsg-for="Deadline"]').hide();
+            $('#error-deadline').hide();
+        });
+
+    });
+</script>

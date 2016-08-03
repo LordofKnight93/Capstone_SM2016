@@ -1,0 +1,69 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.BudgetItem
+
+@using (Ajax.BeginForm("AddBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="col-md-3" style="padding-right: 0">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nội dung ..." } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-content" style="font-weight: normal;">@ViewBag.MessageContent</span>
+            </div>
+
+            <div class="col-md-3" style="padding-right: 0">
+                @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Đơn giá ..." } })
+                @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2" style="padding-right: 0">
+                @Html.EditorFor(model => model.Quatity, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số lượng ..." } })
+                @Html.ValidationMessageFor(model => model.Quatity, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2" style="padding-right: 0">
+                @Html.EditorFor(model => model.Unit, new { htmlAttributes = new { @class = "form-control", @placeholder = "Đơn vị ..." } })
+                @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-2" style="padding-right: 0">
+                <button type="submit" id="save-budget-item" class="btn btn-image">
+                    <i class="material-icons">save</i>
+                </button>
+                <a class="btn btn-image" id="clearform">
+                    <i class="material-icons">cancel</i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#add-item-test-" + '@ViewBag.BudgetRecordID').empty();
+        });
+
+        $('#Content').keypress(function () {
+            $('[data-valmsg-for="Content"]').hide();
+            $('#error-content').hide();
+        });
+    });
+
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+        var errorContent = $('#error-content', result.responseText).length > 0;
+
+        if (isError || errorContent) {
+            // there was an error => we update the container of the form
+            $("#add-item-test-" + '@ViewBag.BudgetRecordID').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#add-item-test-" + '@ViewBag.BudgetRecordID').empty();
+            $("#budgetItemDetails" + '@ViewBag.BudgetRecordID').html(result.responseText);
+        }
+    };
+</script>

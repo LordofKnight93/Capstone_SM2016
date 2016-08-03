@@ -1,0 +1,51 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+}
+
+<div class="row">
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    <div class="@viewclass" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "User", new { userID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                <li class="col-md-2 active" data-toggle = "tab" >
+                    @Ajax.ActionLink("Thông tin", "PersonalInformation", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#user-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle = "tab" >
+                   @Ajax.ActionLink("Bạn bè", "Friends", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#user-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle = "tab" >
+                    @Ajax.ActionLink("Nhóm", "JoinedGroups", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#user-tab')" }) 
+                </li>
+                <li class="col-md-2" data-toggle = "tab" >
+                    @Ajax.ActionLink("Hoạt động", "ActivityHistory", "User", new { userID = Model.ID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#user-tab')" })
+                </li>
+            </ul><div id="panelContent" class="tab-content clearfix">
+                <div id="user-tab" class="tab-pane active">
+                    @{ Html.RenderAction("PersonalInformation", "User", new { userID = Model.ID });}
+                </div>
+            </div>
+</div>
+    </div>
+
+</div>
+

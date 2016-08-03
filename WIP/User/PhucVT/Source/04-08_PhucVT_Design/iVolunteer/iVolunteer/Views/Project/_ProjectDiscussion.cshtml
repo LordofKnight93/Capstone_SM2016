@@ -1,0 +1,5 @@
+﻿@Html.Partial("_PostCreate")
+<div id="postList">
+    @{Html.RenderAction("GetPostList", "Project", new { projectID = ViewBag.ProjectID });}
+</div>
+<a id="loadMorePost" href="" onclick="@("loadMorePostProject(event,'" + ViewBag.ProjectID +"', this.getAttribute('role'))")"></a>

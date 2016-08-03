@@ -1,0 +1,9 @@
+﻿@if (ViewBag.Role == "Leader")
+{
+    @Html.Partial("_PostCreate")
+}
+<div id="postList">
+    @{Html.RenderAction("GetPostList_InPublic", "Project", new { projectID = ViewBag.ProjectID });}
+</div>
+
+    <a id="loadMorePost" href="" onclick="@("loadMorePostInPublicProject(event,'" + ViewBag.ProjectID +"', this.getAttribute('role'))")"></a>

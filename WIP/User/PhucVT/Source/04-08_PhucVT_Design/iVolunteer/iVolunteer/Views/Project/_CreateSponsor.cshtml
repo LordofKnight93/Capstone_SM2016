@@ -1,0 +1,96 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Sponsor
+
+@Html.AntiForgeryToken()
+@*<div id="createSponsorForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content">*@
+            <div class="modal-body">
+                <div class="row">
+
+                    <!-- Login -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row" style="margin: -10px 0 -5px 0;">
+                                <div class="col-sm-12">
+                                    <h4>Đăng ký thông tin tài trợ, quyên góp</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Ajax.BeginForm("CreateSponsor", "Project", null , new AjaxOptions {InsertionMode = InsertionMode.Replace, UpdateTargetId = "popup-content", HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                {
+                                    <input type="hidden" name="projectID" value="@ViewBag.ProjectID"/>
+                                    <!-- Sponsor Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Họ và tên : </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.SponsorName, new { htmlAttributes = new { @id = "sponsorName", @class = "form-control", @placeholder = "Tên nhà tài trợ, quyên góp ..." } })
+                                            @Html.ValidationMessageFor(model => model.SponsorName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Sponsor Address -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateStart">Địa chỉ : </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.SponsorAddress, new { htmlAttributes = new { @id = "address", @class = "form-control", @placeholder = "Địa chỉ ..."} })
+                                            @Html.ValidationMessageFor(model => model.SponsorAddress, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Sponsor Email -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateEnd">Email : </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.SponsorEmail, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Địa chỉ email ..." } })
+                                            @Html.ValidationMessageFor(model => model.SponsorEmail, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Sponsor Phone -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="projectDescription">Số điện thoại : </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.SponsorPhone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Số điện thoại ..." } })
+                                            @Html.ValidationMessageFor(model => model.SponsorPhone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    // Error Message
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                            <label style="color:red;">@ViewBag.Message</label>
+                                        </div>
+                                    </div>
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-7 text-input">
+                                            <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                                        </div>
+                                        <div class="col-xs-2 text-input">
+                                            <button type="submit" class="btn btn-register">GỬI</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @*</div>
+    </div>
+</div>*@

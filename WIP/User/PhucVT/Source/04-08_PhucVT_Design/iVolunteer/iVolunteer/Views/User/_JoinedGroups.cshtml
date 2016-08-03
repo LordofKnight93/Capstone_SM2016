@@ -1,0 +1,46 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
+        <div class="col-sm-12">
+            <h4>Nhóm đang tham gia</h4>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+    
+    <!-- List Groups -->
+                @foreach (var item in Model)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
+                                </div>
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <a href="@Url.Action("GroupHome","Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
+                                    </div>
+                                    <div class="row">
+                                        <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
+                                    </div>
+                                    <div class="row">
+                                        <table style="font-size: 14px;" width="60%">
+                                            <tr>
+                                                <td style="color: #049f88;">THÀNH VIÊN</td>
+                                                <td>@Html.DisplayFor(modelItem => item.MemberCount)</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <!-- Interaction Button -->
+                                    <div class="row" style="margin-top: 10px" id="@item.GroupID">
+                                        @{ Html.RenderAction("ActionToGroup", "Account", new { groupID = item.GroupID });}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider-holizon"></div>
+                }
+
+</div>

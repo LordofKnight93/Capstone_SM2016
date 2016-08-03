@@ -1,0 +1,72 @@
+﻿<div class="row">
+    <div class="col-md-12">
+        <div class="sub-container" id="plancontain">
+            <div class="row">
+
+                <!-- On this day task -->
+                @*@{Html.Partial("_ProjectPlanThisdayTask");}*@
+                <div class="col-sm-5" id="testplantarget">
+
+                    <!-- Task Count -->
+                    <div id="taskCount">
+                        @{ Html.RenderAction("TaskCount", "Plan", new { projectID = ViewBag.ProjectID });}
+                    </div>
+
+                    <!-- Detail Task on this day -->
+                    <div id="taskOnThisDay" style="margin-top: 15px">
+                        @{ Html.RenderAction("ListTaskOfThisDay", "Plan", new { projectID = ViewBag.ProjectID });}
+                    </div>
+
+                    <!-- My Task -->
+                    <div id="myTask">
+                        @{ Html.RenderAction("MyTask", "Plan", new { projectID = ViewBag.ProjectID });}
+                    </div>
+
+                </div>
+
+                <!-- Project All Plan -->
+                <div class="col-sm-7">
+
+                    <!-- Phase -->
+                    <div id="updatePlanPhaseBox">
+                        @{ Html.RenderAction("DetailPlanPhase", "Plan", new { projectID = ViewBag.ProjectID });}
+                    </div>
+
+                    @if (ViewBag.IsLeader == true)
+                    {
+                    <!-- Add Phase -->
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-panel card-grey">
+                                <!--<label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>-->
+                                @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                <div id="addPlanPhaseForm">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#taskdetail').on('hidden.bs.modal', function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailPlanRecord", "Plan")",
+                data: {
+                    projectID: "@ViewBag.ProjectID"
+                },
+                success: function (response) {
+                    $("#tabplanbudget").html(response);
+                }
+            });
+        });
+    });
+</script>

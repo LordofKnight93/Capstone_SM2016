@@ -1,0 +1,40 @@
+﻿@using iVolunteer.Common
+@*@if (ViewBag.IsLiked == true)
+    {
+        <button style="color: rgb(225, 115, 115)" role="likePost" id="@ViewBag.PostID" onclick="InteractPost(this.id, this.getAttribute('role'))" class="btn-card"><i class="glyphicon glyphicon-heart"></i> Like</button>
+    }
+    else
+    {
+        <button style="color: gray" role="likePost" id="@ViewBag.PostID" onclick="InteractPost(this.id, this.getAttribute('role'))" class="btn-card"><i class="glyphicon glyphicon-heart"></i> Like</button>
+    }*@
+
+@if (ViewBag.IsLiked == true)
+{
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-heart'></span>", "DislikePost", "Group", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: rgb(225, 115, 115); font-size: 1.1em" })
+    @*@Ajax.ActionLink("Like", "DislikePost", "Group", new { postID = ViewBag.PostID}, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: rgb(225, 115, 115)" })*@
+if (ViewBag.LikeCount != 0)
+{
+    <span style="color: #cecece; font-size: 0.8em">@ViewBag.LikeCount</span>
+}
+else
+{
+    <span style="color: #cecece; font-size: 0.8em"></span>
+}
+    @*<button style="color: rgb(225, 115, 115)" role="likePost" id="@ViewBag.PostID" onclick="InteractPost(this.id, this.getAttribute('role'))" class="btn-card"><i class="glyphicon glyphicon-heart"></i> Like</button>*@
+}
+else
+{
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-heart'></span>", "LikePost", "Group", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color:gray; font-size: 1.1em" })
+    @*@Ajax.ActionLink("Like", "LikePost", "Group", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: gray" })*@
+if (ViewBag.LikeCount != 0)
+{
+    <span style="color: #cecece; font-size: 0.8em">@ViewBag.LikeCount</span>
+}
+else
+{
+    <span style="color: #cecece; font-size: 0.8em"></span>
+}
+    @*<button style="color: gray" role="likePost" id="@ViewBag.PostID" onclick="InteractPost(this.id, this.getAttribute('role'))" class="btn-card"><i class="glyphicon glyphicon-heart"></i> Like</button>*@
+}
+
+

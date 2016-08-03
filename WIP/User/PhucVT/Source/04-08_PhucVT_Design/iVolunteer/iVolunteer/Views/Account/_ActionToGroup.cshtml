@@ -1,0 +1,78 @@
+﻿@using iVolunteer.Common
+<ul class="list-action-to-target">
+    @if (ViewBag.IsUser == true)
+    {
+        if (ViewBag.IsAdmin == true)
+        {
+            if (ViewBag.IsActivate == true)
+            {
+                <li>
+                    @Ajax.ActionLink("Khóa", "DeactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                </li>
+            }
+            else
+            {
+                <li>
+                    @Ajax.ActionLink("Kích hoạt", "ActivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                </li>
+            }
+        }
+        else
+        {
+            if (ViewBag.IsJoined != true)
+            {
+                if (ViewBag.IsRequested == true)
+                {
+                    //Hủy yêu cầu
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action-active' aria-hidden='true'></i><span class='action-to-target-text'>  Hủy yêu cầu tham gia</span>", "CancelJoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+                else
+                {
+                    //Tham gia
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+
+                if (ViewBag.IsFollowing == true)
+                {
+                    //Hủy theo dõi
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action-active' aria-hidden='true'></i>  Hủy theo dõi</span>", "UnfollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+                else
+                {
+                    //Theo dõi
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+            }
+            else
+            {
+                //Rời nhóm
+                <li>
+                    @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Rời nhóm</span>", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn rời nhóm này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
+
+            if (ViewBag.IsReported == true)
+            {
+                //Hủy báo cáo
+                <li>
+                    @Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
+            else
+            {
+                <li>
+                    <button class="btn btn-default action-to-target-link" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.GroupID, targetType = 1})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
+                    @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
+                </li>
+            }
+        }
+    }
+</ul>

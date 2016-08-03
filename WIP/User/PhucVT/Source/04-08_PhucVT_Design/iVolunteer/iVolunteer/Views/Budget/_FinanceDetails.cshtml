@@ -1,0 +1,88 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.FinanceItem>
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@{ int count = 0; }
+@if (Model.Count != 0)
+{
+    foreach (var group in Model.OrderByDescending(item => item.Date).GroupBy(item => item.Date))
+    {
+        count++;
+        string idcollapse = "collapse" + count;
+        string hrefcollapse = "#collapse" + count;
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel-group" style="margin-bottom: 20px">
+                    <!-- Đầu mục -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title" style="padding: 0;">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h4 style="font-weight: bold; line-height: 30px">@group.Key</h4>
+                                        </div>
+
+                                        <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                            <a data-toggle="collapse" href="@hrefcollapse"><i class="material-icons">keyboard_arrow_up</i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="@idcollapse" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="financeItemDetails">
+                                    <ol class="main-list-task">
+                                            @foreach (var item in group)
+                                            {
+                                                <li>
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <h4>@item.Term</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <object type="image/svg+xml" data="~/images/icons/assign-group.svg" width="18" height="18"></object>
+                                                                    <span class="assign"><a href="@Url.Action("UserHome", "User", new { userID = Html.Encode(item.Payer.ID)})">@item.Payer.DisplayName</a></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4" style="text-align: right">
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    <label>@String.Format(info, "{0:C0}", item.Amount)</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+                                                                    @if (ViewBag.IsLeader == true)
+                                                                    {
+
+                                                                        @*<h4 style="color: #049f88; font-weight: bold">@Html.DisplayFor(modelItem => item.Total) <span> VND </span></h4>*@
+                                                                        @*@Ajax.ActionLink("edit", "EditBudgetRecord", "Budget", new { budgetID = Html.DisplayFor(modelItem => item.BudgetRecordID), isLeader = ViewBag.IsLeader }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })*@
+                                                                        @*<button class="btn btn-image" data-toggle="tooltip" title="Xóa" onclick="location.href ='@Url.Action("DeleteBudgetRecord","Budget", new { budgetID = Html.DisplayFor(modelItem => item.BudgetRecordID) })'"><i class="material-icons md-20">delete</i></button>*@
+                                                                        @Ajax.ActionLink("delete", "DeleteFinanceItem", "Budget", new { financeID = ViewBag.FinanceID, financeItemID = Html.Encode(item.FinanceItemID).ToString() }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer; padding-left: 8px" })
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ol>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+    }
+}

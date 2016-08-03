@@ -1,0 +1,574 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="iVolunteerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="SQL_AcAc_Relation">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="FriendID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="FriendID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_AcAl_Relation">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="AlbumID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Account">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="IndentifyID" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="DisplayName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DateOfChange" Type="datetime" />
+    <Property Name="IsAdmin" Type="bit" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+    <Property Name="IsConfirm" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_AcGr_Relation">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_AcIm_Relation">
+    <Key>
+      <PropertyRef Name="ImageID" />
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="ImageID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_AcPo_Relation">
+    <Key>
+      <PropertyRef Name="PostID" />
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="PostID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_AcPr_Relation">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Album">
+    <Key>
+      <PropertyRef Name="AlbumID" />
+    </Key>
+    <Property Name="AlbumID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" />
+    <Property Name="IsPublic" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Budget">
+    <Key>
+      <PropertyRef Name="BudgetID" />
+    </Key>
+    <Property Name="BudgetID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Group">
+    <Key>
+      <PropertyRef Name="GroupID" />
+    </Key>
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_GrPr_Relation">
+    <Key>
+      <PropertyRef Name="GroupID" />
+      <PropertyRef Name="ProjectID" />
+      <PropertyRef Name="Relation" />
+    </Key>
+    <Property Name="GroupID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Relation" Type="int" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_GuestPr_Relation">
+    <Key>
+      <PropertyRef Name="SponsorID" />
+    </Key>
+    <Property Name="SponsorID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_HubConnection">
+    <Key>
+      <PropertyRef Name="ConnectionID" />
+    </Key>
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ConnectionID" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Image">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="AlbumID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Message">
+    <Key>
+      <PropertyRef Name="MessageID" />
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="MessageID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Plan">
+    <Key>
+      <PropertyRef Name="PlanID" />
+    </Key>
+    <Property Name="PlanID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Post">
+    <Key>
+      <PropertyRef Name="PostID" />
+    </Key>
+    <Property Name="PostID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="DateCreate" Type="datetime" Nullable="false" />
+    <Property Name="DateLastActivity" Type="datetime" Nullable="false" />
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" />
+    <Property Name="GroupID" Type="varchar" MaxLength="24" />
+    <Property Name="IsPinned" Type="bit" />
+    <Property Name="IsPublic" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SQL_Project">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="InProgress" Type="bit" Nullable="false" />
+    <Property Name="IsActivate" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_AlbumSD_GroupSD">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="0..1" />
+    <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_Album">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AlbumSD_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="0..1" />
+    <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Album">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Budget_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Budget">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Message_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_Message" Type="Self.SQL_Message" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_Message">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Plan_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_Plan" Type="Self.SQL_Plan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Plan">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_GroupSD">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="0..1" />
+    <End Role="SQL_Post" Type="Self.SQL_Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_Post">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PostSD_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="0..1" />
+    <End Role="SQL_Post" Type="Self.SQL_Post" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Post">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcAl_Relation_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcAl_Relation" Type="Self.SQL_AcAl_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcAl_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcAl_Relation_SQL_Album">
+    <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="1" />
+    <End Role="SQL_AcAl_Relation" Type="Self.SQL_AcAl_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Album">
+        <PropertyRef Name="AlbumID" />
+      </Principal>
+      <Dependent Role="SQL_AcAl_Relation">
+        <PropertyRef Name="AlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcIm_Relation_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcIm_Relation" Type="Self.SQL_AcIm_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcIm_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcIm_Relation_SQL_Image">
+    <End Role="SQL_Image" Type="Self.SQL_Image" Multiplicity="1" />
+    <End Role="SQL_AcIm_Relation" Type="Self.SQL_AcIm_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Image">
+        <PropertyRef Name="ImageID" />
+      </Principal>
+      <Dependent Role="SQL_AcIm_Relation">
+        <PropertyRef Name="ImageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcPo_Relation_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcPo_Relation" Type="Self.SQL_AcPo_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcPo_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_AcPo_Relation_SQL_Post">
+    <End Role="SQL_Post" Type="Self.SQL_Post" Multiplicity="1" />
+    <End Role="SQL_AcPo_Relation" Type="Self.SQL_AcPo_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Post">
+        <PropertyRef Name="PostID" />
+      </Principal>
+      <Dependent Role="SQL_AcPo_Relation">
+        <PropertyRef Name="PostID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Group">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GrPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GrPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_GuestPr_Relation_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_GuestPr_Relation" Type="Self.SQL_GuestPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_GuestPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_HubConnection_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_HubConnection" Type="Self.SQL_HubConnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_HubConnection">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_Image_SQL_Album">
+    <End Role="SQL_Album" Type="Self.SQL_Album" Multiplicity="1" />
+    <End Role="SQL_Image" Type="Self.SQL_Image" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Album">
+        <PropertyRef Name="AlbumID" />
+      </Principal>
+      <Dependent Role="SQL_Image">
+        <PropertyRef Name="AlbumID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Friend_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcAc_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Friend_Account1">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcAc_Relation" Type="Self.SQL_AcAc_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcAc_Relation">
+        <PropertyRef Name="FriendID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Group_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcGr_Relation" Type="Self.SQL_AcGr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcGr_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Group_GroupSD">
+    <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
+    <End Role="SQL_AcGr_Relation" Type="Self.SQL_AcGr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Group">
+        <PropertyRef Name="GroupID" />
+      </Principal>
+      <Dependent Role="SQL_AcGr_Relation">
+        <PropertyRef Name="GroupID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Project_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_AcPr_Relation" Type="Self.SQL_AcPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_AcPr_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Project_ProjectSD">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_AcPr_Relation" Type="Self.SQL_AcPr_Relation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_AcPr_Relation">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="iVolunteerModelStoreContainer">
+    <EntitySet Name="SQL_AcAc_Relation" EntityType="Self.SQL_AcAc_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_AcAl_Relation" EntityType="Self.SQL_AcAl_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Account" EntityType="Self.SQL_Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_AcGr_Relation" EntityType="Self.SQL_AcGr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_AcIm_Relation" EntityType="Self.SQL_AcIm_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Budget" EntityType="Self.SQL_Budget" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Post" EntityType="Self.SQL_Post" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SQL_Project" EntityType="Self.SQL_Project" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AlbumSD_GroupSD" Association="Self.FK_AlbumSD_GroupSD">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_Album" EntitySet="SQL_Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Album" EntitySet="SQL_Album" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Budget_ProjectSD" Association="Self.FK_Budget_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Message_Account" Association="Self.FK_Message_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_Message" EntitySet="SQL_Message" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Plan_ProjectSD" Association="Self.FK_Plan_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Plan" EntitySet="SQL_Plan" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_GroupSD" Association="Self.FK_PostSD_GroupSD">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_Post" EntitySet="SQL_Post" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PostSD_ProjectSD" Association="Self.FK_PostSD_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Post" EntitySet="SQL_Post" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Account" Association="Self.FK_SQL_AcAl_Relation_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcAl_Relation_SQL_Album" Association="Self.FK_SQL_AcAl_Relation_SQL_Album">
+      <End Role="SQL_Album" EntitySet="SQL_Album" />
+      <End Role="SQL_AcAl_Relation" EntitySet="SQL_AcAl_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcIm_Relation_SQL_Account" Association="Self.FK_SQL_AcIm_Relation_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcIm_Relation" EntitySet="SQL_AcIm_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcIm_Relation_SQL_Image" Association="Self.FK_SQL_AcIm_Relation_SQL_Image">
+      <End Role="SQL_Image" EntitySet="SQL_Image" />
+      <End Role="SQL_AcIm_Relation" EntitySet="SQL_AcIm_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcPo_Relation_SQL_Account" Association="Self.FK_SQL_AcPo_Relation_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_AcPo_Relation_SQL_Post" Association="Self.FK_SQL_AcPo_Relation_SQL_Post">
+      <End Role="SQL_Post" EntitySet="SQL_Post" />
+      <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Group" Association="Self.FK_SQL_GrPr_Relation_SQL_Group">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Project" Association="Self.FK_SQL_GrPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="Self.FK_SQL_HubConnection_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_Image_SQL_Album" Association="Self.FK_SQL_Image_SQL_Album">
+      <End Role="SQL_Album" EntitySet="SQL_Album" />
+      <End Role="SQL_Image" EntitySet="SQL_Image" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Friend_Account" Association="Self.FK_User_Friend_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Friend_Account1" Association="Self.FK_User_Friend_Account1">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcAc_Relation" EntitySet="SQL_AcAc_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcGr_Relation" EntitySet="SQL_AcGr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Group_GroupSD" Association="Self.FK_User_Group_GroupSD">
+      <End Role="SQL_Group" EntitySet="SQL_Group" />
+      <End Role="SQL_AcGr_Relation" EntitySet="SQL_AcGr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_Account" Association="Self.FK_User_Project_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_AcPr_Relation" EntitySet="SQL_AcPr_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Project_ProjectSD" Association="Self.FK_User_Project_ProjectSD">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_AcPr_Relation" EntitySet="SQL_AcPr_Relation" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

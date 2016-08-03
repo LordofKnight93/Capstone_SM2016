@@ -1,0 +1,8 @@
+﻿@Html.Partial("_PostCreate")
+<div id="pinnedPost">
+    @{Html.RenderAction("GetPinnedPost", "Group", new { groupID = ViewBag.GroupID });}
+</div>
+<div id="postList">
+    @{Html.RenderAction("GetPostList", "Group", new { groupID = ViewBag.GroupID });}
+</div>
+<a id="loadMorePost" href="" onclick="@("loadMorePost(event,'" + ViewBag.GroupID +"', this.getAttribute('role'))")"></a>

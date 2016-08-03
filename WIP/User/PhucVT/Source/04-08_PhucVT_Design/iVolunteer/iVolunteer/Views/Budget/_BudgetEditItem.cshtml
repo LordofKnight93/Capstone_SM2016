@@ -1,0 +1,90 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.BudgetItem
+
+@using (Ajax.BeginForm("EditBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = ViewBag.BudgetItemID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-content" style="font-weight: normal;">@ViewBag.MessageContent</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-unitprice" style="font-weight: normal;">@ViewBag.MessageUnitPrice</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Quatity, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Quatity, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Quatity, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-quatity" style="font-weight: normal;">@ViewBag.MessageQuatity</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Unit, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Unit, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Unit, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#dialog-edit-budget-item").empty();
+        });
+
+        $('#Content').keypress(function () {
+            $('[data-valmsg-for="Content"]').hide();
+            $('#error-content').hide();
+        });
+
+        $('#UnitPrice').keypress(function () {
+            $('[data-valmsg-for="UnitPrice"]').hide();
+            $('#error-unitprice').hide();
+        });
+
+        $('#Quatity').keypress(function () {
+            $('[data-valmsg-for="Quatity"]').hide();
+            $('#error-quatity').hide();
+        });
+    });
+
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+        var errorContent = $('#error-content', result.responseText).length > 0;
+        var errorUnitPrice = $('#error-unitprice', result.responseText).length > 0;
+        var errorQuatity = $('#error-quatity', result.responseText).length > 0;
+
+        if (isError || errorContent || errorUnitPrice || errorQuatity) {
+            // there was an error => we update the container of the form
+            $("#dialog-edit-budget-item").html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $('#dialog-edit-budget-item').dialog('close');
+            $("#budgetItemDetails" + '@ViewBag.BudgetRecordID').html(result.responseText);
+        }
+    };
+</script>

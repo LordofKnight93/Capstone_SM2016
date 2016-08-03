@@ -1,0 +1,17 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+@{
+    ViewBag.Title = "Kết quả tìm kiếm";
+}
+<div class="row">
+
+    @if (Session["UserID"] != null)
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+
+    <div class="col-md-9" id="main_content">
+        @{ Html.RenderAction("NextResultPage", "Group", new { name = ViewBag.name, page = 1 });}
+    </div>
+</div>
