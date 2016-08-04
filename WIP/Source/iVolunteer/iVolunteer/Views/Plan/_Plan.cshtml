@@ -6,175 +6,22 @@
                 <!-- On this day task -->
                 @*@{Html.Partial("_ProjectPlanThisdayTask");}*@
                 <div class="col-sm-5" id="testplantarget">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="calendar-container">
-                                <div class="calendar-date">
-                                    <p class="calendar-date-day" id="today-day"></p>
-                                    <p class="calendar-date-date" id="today-date"></p>
-                                    <p class="calendar-date-month-year" id="today-month-year"></p>
-                                </div>
-                                <div class="calendar-month">
-                                    <div id="calendar-month-header">
-                                        <span id="calendar-month-year"></span>
-                                    </div>
-                                    <div id="calendar-month-dates">
-                                    </div>
-                                </div>
-                            </div>
-                            <script type="text/javascript">
-                                //this function will find today's date
-                                $(document).ready(function() {
-                                    var day_name = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
-                                    var month_name = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
-                                    var d = new Date();
-                                    setText('today-day', day_name[d.getDay()]);
-                                    setText('today-date', d.getDate());
-                                    setText('today-month-year', month_name[d.getMonth()] + ' ' + (1900 + d.getYear()));
 
-                                    var month = d.getMonth();
-                                    var year = d.getFullYear();
-                                    var first_date = month_name[month] + " " + 1 + " " + year;
-                                    var tmp = new Date(first_date).toDateString();
-                                    var first_day = tmp.substring(0, 3);
-                                    var day_no = day_name.indexOf(first_day);
-                                    var days = new Date(year, month + 1, 0).getDate();
-                                    var calendar = get_calendar(day_no, days);
-                                    document.getElementById("calendar-month-year").innerHTML = month_name[month] + " " + year;
-                                    document.getElementById("calendar-month-dates").appendChild(calendar);
-                                });
-
-                                //this function will set the text value of 
-                                function setText(id, val) {
-                                    if (val < 10) {
-                                        val = '0' + val;    //add leading 0 if val < 10
-                                    }
-                                    document.getElementById(id).innerHTML = val;
-                                };
-
-                                function get_calendar(day_no, days) {
-                                    var table = document.createElement('table');
-                                    var tr = document.createElement('tr');
-
-                                    //row for the day letters
-                                    for (var c = 0; c <= 6; c++) {
-                                        var td = document.createElement('td');
-                                        td.innerHTML = "SMTWTFS"[c];
-                                        tr.appendChild(td);
-                                    }
-                                    table.appendChild(tr);
-
-                                    //create 2nd row
-                                    tr = document.createElement('tr');
-                                    var c;
-                                    for (c = 0; c <= 6; c++) {
-                                        if (c == day_no) {
-                                            break;
-                                        }
-                                        var td = document.createElement('td');
-                                        td.innerHTML = "";
-                                        tr.appendChild(td);
-                                    }
-
-                                    var count = 1;
-                                    for (; c <= 6; c++) {
-                                        var td = document.createElement('td');
-                                        td.innerHTML = count;
-                                        count++;
-                                        tr.appendChild(td);
-                                    }
-                                    table.appendChild(tr);
-
-                                    //rest of the date rows
-                                    for (var r = 3; r <= 7; r++) {
-                                        tr = document.createElement('tr');
-                                        for (var c = 0; c <= 6; c++) {
-                                            if (count > days) {
-                                                table.appendChild(tr);
-                                                return table;
-                                            }
-                                            var td = document.createElement('td');
-                                            td.innerHTML = count;
-                                            count++;
-                                            tr.appendChild(td);
-                                        }
-                                        table.appendChild(tr);
-                                    }
-                                    return table;
-                                };
-                            </script>
-                        </div>
+                    <!-- Task Count -->
+                    <div id="taskCount">
+                        @{ Html.RenderAction("TaskCount", "Plan", new { projectID = ViewBag.ProjectID });}
                     </div>
 
                     <!-- Detail Task on this day -->
                     <div id="taskOnThisDay" style="margin-top: 15px">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <h4>Công việc hôm nay</h4>
-                                <div class="divider-holizon"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <ol class="list-task">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="priolity low"></div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="checkbox">
-                                                    <input id="task1" type="checkbox">
-                                                    <label for="task1">
-                                                        Khởi động truyền thông và kick off dự án qua tất cả các kênh.
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <ul class="list-task-infor">
-                                                    <li>
-                                                        <i class="material-icons md-18 md-myred">access_time</i>
-                                                        <span class="overdue">22:00</span>
-                                                    </li>
-                                                    <li>
-                                                        <i class="material-icons md-18 md-mygreen">perm_identity</i>
-                                                        <span class="pending">Nguyễn Trường Giang</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="priolity high"></div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <div class="checkbox">
-                                                    <input id="task2" type="checkbox">
-                                                    <label for="task2">
-                                                        Lên kế hoạch chuẩn bị hậu cần.
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <ul class="list-task-infor">
-                                                    <li>
-                                                        <i class="material-icons md-18 md-mygreen">access_time</i>
-                                                        <span class="pending">22:00</span>
-                                                    </li>
-                                                    <li>
-                                                        <i class="material-icons md-18 md-mygreen">perm_identity</i>
-                                                        <span class="pending">Nguyễn Trường Giang</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
+                        @{ Html.RenderAction("ListTaskOfThisDay", "Plan", new { projectID = ViewBag.ProjectID });}
                     </div>
+
+                    <!-- My Task -->
+                    <div id="myTask">
+                        @{ Html.RenderAction("MyTask", "Plan", new { projectID = ViewBag.ProjectID });}
+                    </div>
+
                 </div>
 
                 <!-- Project All Plan -->
@@ -182,17 +29,17 @@
 
                     <!-- Phase -->
                     <div id="updatePlanPhaseBox">
-                        @{ Html.RenderAction("DetailPlanPhase", "Plan", new { projectID = ViewBag.ProjectID, useRole = ViewBag.UserRole });}
+                        @{ Html.RenderAction("DetailPlanPhase", "Plan", new { projectID = ViewBag.ProjectID });}
                     </div>
 
-                    @if (ViewBag.UserRole == "1")
+                    @if (ViewBag.IsLeader == true)
                     {
                     <!-- Add Phase -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="sub-container">
+                            <div class="card-panel card-grey">
                                 <!--<label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>-->
-                                @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                                 <div id="addPlanPhaseForm">
 
                                 </div>
@@ -206,3 +53,20 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#taskdetail').on('hidden.bs.modal', function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailPlanRecord", "Plan")",
+                data: {
+                    projectID: "@ViewBag.ProjectID"
+                },
+                success: function (response) {
+                    $("#tabplanbudget").html(response);
+                }
+            });
+        });
+    });
+</script>

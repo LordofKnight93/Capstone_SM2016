@@ -1,46 +1,48 @@
-﻿<!--Leader-->
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row">
-        <div class="col-sm-12" style="margin-top: -20px">
-            <h4>Thành Viên</h4>
-            <div class="divider-holizon"></div>
-        </div>
-    </div>
-
-    <div class="row" style="margin-bottom: 10px">
-        <div class="col-sm-12">
-            <ul class="nav sub-nav-tabs">
-                <li class="active" data-type="admin" data-toggle = "tab" >
-                    @Ajax.ActionLink("QUẢN LÝ", "ProjectLeaders", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
-                </li>
-                <li data-type="member" data-toggle = "tab">
-                    @Ajax.ActionLink("THÀNH VIÊN", "ProjectMembers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
-                </li>
-                @if (ViewBag.IsLeader == true)
-                {
-                <li data-type="request"data-toggle="tab">
-                    @Ajax.ActionLink("YÊU CẦU GIA NHẬP", "UserJoinRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
-                </li>
-                }
-            </ul>
-        </div>
-    </div>
-
-    <div class="tab-content" id="content-panel">
-        <div id="content-panel" class="tab-pane fade in active">
-            @{ Html.RenderAction("ProjectLeaders", "Project", new { projectID = ViewBag.ProjectID });
-            }
-            </div>
-            @*<div id="member-panel" class="tab-pane fade in">
-                @{ Html.RenderAction("GroupMembers", "Group", new { groupID = ViewBag.GroupID });
-                }
-            </div>
-            @if (ViewBag.IsLeader == true)
-            {
-                <div id="request-panel" class="tab-pane fade in">
-                    @{ Html.RenderAction("GroupRequests", "Group", new { groupID = ViewBag.GroupID });
-                    }
-                </div>
-            }*@
-        </div>
+﻿<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <table>
+        <tr>
+            <td>
+                @Ajax.ActionLink("NHÓM TỔ CHỨC", "OrganizedGroups", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("CÁ NHÂN TỔ CHỨC", "OrganizedUsers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NHÓM ỦNG HỘ", "SponsoredGroups", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NHÓM MUỐN ỦNG HỘ", "GroupSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("CÁ NHÂN ỦNG HỘ", "SponsoredUsers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("CÁ NHÂN MUỐN ỦNG HỘ", "UserSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NGƯỜI NGOÀI ỦNG HỘ", "SponsoredGuests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NGƯỜI NGOÀI MUỐN ỦNG HỘ", "GuestSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NHÓM THAM GIA", "JoinedGroups", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("NHÓM MUỐN THAM GIA", "GroupJoinRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("QUẢN LÝ", "ProjectLeaders", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("THÀNH VIÊN", "ProjectMembers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("CÁ NHÂN MUỐN THAM GIA", "UserJoinRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+            <td>
+                @Ajax.ActionLink("CÁ NHÂN ĐƯỢC ĐỀ XUẤT", "SuggestedUsers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace })
+            </td>
+        </tr>
+    </table>
 </div>

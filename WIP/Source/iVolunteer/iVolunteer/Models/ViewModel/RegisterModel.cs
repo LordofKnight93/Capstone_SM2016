@@ -5,9 +5,18 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
+using iVolunteer.Common;
 
 namespace iVolunteer.Models.ViewModel
 {
+    public class BirthdayAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            DateTime d = Convert.ToDateTime(value);
+            return d <= DateTime.Now;
+        }
+    }
     public class RegisterModel
     {
         //Email
@@ -20,6 +29,7 @@ namespace iVolunteer.Models.ViewModel
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu!")]
         [PasswordPropertyText(true)]
         [DisplayName("Mật khẩu")]
+        [RegularExpression(@"(^[A-Z](?=.*[0-9])(?=.*[a-z])|^[a-z](?=.*[A-Z])(?=.*[0-9])|^[0-9](?=.*[a-z])(?=.*[A-Z]))[a-zA-Z0-9]{7,14}$", ErrorMessage = Error.PASSWORD_INVALID)]
         public string Password { get; set; }
 
         //Xác nhận mật khẩu
@@ -42,13 +52,15 @@ namespace iVolunteer.Models.ViewModel
         //Ngày sinh
         [Required(ErrorMessage = "Vui lòng nhập nhập ngày sinh!")]
         [DisplayName("Ngày sinh")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date, ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Birthday(ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
         public DateTime Birthday { get; set; }
 
         //Số CMT
         [Required(ErrorMessage = "Vui lòng nhập số chứng minh thư!")]
         [DisplayName("Số chứng minh thư")]
-        [RegularExpression(@"^[0-9]*$")]
+        [RegularExpression(@"^(([0-9]{12})|([0-9]{9}))$", ErrorMessage ="Chỉ chấp nhận số và độ dài 9 hoặc 12 ký tự!")]
         [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]
         public string IdentifyID { get; set; }
 
@@ -58,7 +70,7 @@ namespace iVolunteer.Models.ViewModel
 
         //Số điện thoại
         [DisplayName("Điện thoại")]
-        [RegularExpression(@"^[0-9]*$",ErrorMessage ="Chỉ chấp nhận ký tự số!")]
+        [Phone(ErrorMessage = "Số điện thoại không đúng định dạng")]
         public string Phone { get; set; }
     }
 }

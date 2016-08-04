@@ -1,0 +1,19 @@
+﻿@using iVolunteer.Common
+
+
+@if (ViewBag.IsLeader == true)
+{
+    if (ViewBag.IsPinned == true)
+    {
+        @Ajax.RawActionLink("<span class='glyphicon glyphicon-pushpin'></span>", "UnpinPost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #e1b725;" })
+    }
+    else
+    {
+        @Ajax.RawActionLink("<span class='glyphicon glyphicon-pushpin'></span>", "PinPost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #cecece;" })
+    }
+}
+@if(ViewBag.IsOwner == true)
+{
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeletePost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #cecece;" })
+}
+

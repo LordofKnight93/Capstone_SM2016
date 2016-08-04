@@ -9,11 +9,11 @@ namespace iVolunteer.Models.ViewModel
 {
     public class LoginModel
     {
-        [Required]
+        [Required(ErrorMessage ="Vui lòng nhập email!")]
         [EmailAddress]
         [DisplayName("Email")]
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Vui lòng nhập mật khẩu!")]
         [PasswordPropertyText(true)]
         [DisplayName("Mật khẩu")]
         public string Password { get; set; }

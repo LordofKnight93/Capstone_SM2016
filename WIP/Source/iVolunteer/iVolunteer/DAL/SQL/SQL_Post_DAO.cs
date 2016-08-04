@@ -30,5 +30,59 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        public bool Delete_Post(string postID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    dbEntities.SQL_Post.Remove(post);
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
+        public bool PinPost(string postID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    post.IsPinned = true;
+                    dbEntities.SaveChanges();
+                }
+                return true;
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
+        public bool UnpinPost(string postID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Post post = dbEntities.SQL_Post.FirstOrDefault(p => p.PostID == postID);
+                    post.IsPinned = false;
+                    dbEntities.SaveChanges();
+                }
+                return true;
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
     }
 }

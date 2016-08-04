@@ -1,4 +1,7 @@
-﻿<div class="row">
+﻿@{
+    ViewBag.Title = "Trò chuyện";
+}
+<div class="row">
     <div class="col-md-3">
         @{Html.RenderAction("NavigationPanel", "Account");}
     </div>
@@ -51,8 +54,8 @@
     <script src="~/signalr/hubs"></script>
     @*New Script for FriendSEarch*@
     @*<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.10.0.min.js" type="text/javascript"></script>*@
-<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
-<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />
+@*<script src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/jquery-ui.min.js" type="text/javascript"></script>
+<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />*@
     <script>
         $(document).ready(function () {
             if (typeof (myHub) === "undefined") {
@@ -73,7 +76,7 @@
                     else {
                         friendItem += "<p id='status" + friend["ID"] + "' class=''></p>";
                     }
-                    friendItem += "  <img src='https://cdn3.iconfinder.com/data/icons/black-easy/512/538474-user_512x512.png' alt=''></img>";
+                    friendItem += "  <img src='/Images/User/Avatar/" + friend["ID"] + ".jpg' alt=''></img>";
                     friendItem += "  <span class='name'>" + friend["DisplayName"] + "</span>";
                     friendItem += "<span class='preview'><span><span id='mssCount" + friend["ID"] + "' class='previewInside'></span>";
                     friendItem += " </li>";

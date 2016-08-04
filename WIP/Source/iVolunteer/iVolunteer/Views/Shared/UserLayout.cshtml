@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     <link rel="icon" href="~/Images/logo_lite.png" type="image/x-icon" sizes="16x16">
+    @*<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />*@
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    @{ 
+    @{
         string userID = Session["UserID"].ToString();
         string displayName = Session["DisplayName"].ToString();
         string role = Session["Role"].ToString();
@@ -30,38 +33,34 @@
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">
-
                 @if (role == "Admin")
                 {
 
                 }
                 else
                 {
-                            <!-- Navbar left -->
-                    { Html.RenderPartial("_NotificationPanel", new ViewDataDictionary());  }
-                        }
-
-                <!-- Search bar -->
-                <div class="col-sm-5 col-md-5">
-                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search"}))
-                    {
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0" maxlength="100">
-                            <select name="option" class="form-control" style="width: 25%; border-left:0">
-                                <option value="User">Bạn Bè</option>
-                                <option value="Project">Dự Án</option>
-                                <option value="Group">Nhóm</option>
-                            </select>
-                            <div class="input-group-btn" style="width: 1%">
-                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                            </div>
-                        </div>
-                    }
-                    
-                </div>
+                    <!-- Navbar left -->
+                    { Html.RenderPartial("_NotificationPanel", new ViewDataDictionary()); }
+                }
+                <ul class="nav navbar-nav">
+                    <li><a title="Trang chủ" href="@Url.Action("FrontPage","Home")" style="color: #fff;">TRANG CHỦ</a></li>
+                    <li><a title="Bảng tin" id="logo" href="@Url.Action("Newfeed","Home")" style="color: #fff;">BẢNG TIN</a></li>'
+                    <li><a title="Phòng chat" href="#" onclick="location.href='@Url.Action("ChatRoom", "Home")'" style="color: #fff;">TRÒ CHUYỆN</a></li>
+                </ul>
 
                 <!-- Navbar Right -->
                 <ul class="nav navbar-nav navbar-right">
+                    <li style="padding-right: 0;">
+                        <div class="search-dropdown navbar-form">
+                            <input type="text" class="txt-search" id="searchArea" name="name" autocomplete="off" placeholder="Tìm kiếm...">
+                            <i class="material-icons md-20" style="color: #fff">search</i>
+                            <ul class="dropdown-content" id="listSearchBar">
+                                <li role="Group" class="searchItem" onclick="search(this)">Tìm nhóm <span class="searchKey" id="srchGrVal"></span></li>
+                                <li role="Project" class="searchItem" onclick="search(this)">Tìm dự án <span class="searchKey" id="srchPrVal"></span></li>
+                                <li role="User" class="searchItem" onclick="search(this)">Tìm thành viên <span class="searchKey" id="srchUsVal"></span></li>
+                            </ul>
+                        </div>
+                    </li>
                     @if (role == "Admin")
                     {
                         <li class="dropdown">
@@ -76,126 +75,243 @@
                             </ul>
                         </li>
                     }
-                    <li><a title="Trang chủ" id="logo" href="@Url.Action("Newfeed","Home")" style="color: #fff; font-weight: bold;">Trang chủ</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding: 4px 10px 1.5px 15px">
-                            <img src=@avtlink height="30" width="30" style="border: 2px solid #fff; border-radius: 5px">
-                            <span style="color: #fff; font-weight: bold; line-height: 45px">@displayName</span>
-                            <span class="caret" style="color: #fff"></span>
+                        <a href="#" class="dropdown-toggle user-dropbox" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="line-height: 40px ;padding: 2px 10px 1.5px 15px">
+                            <img src=@avtlink height="32" width="32" style="border: 1px solid #fff; border-radius: 2px">
+                            <span style="color: #fff; line-height: 45px">@displayName</span>
+                            <span class="caret" style="color: #fff;"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a data-container="body" data-toggle="modal" data-target="#createProjectForm" style="cursor: pointer">Tạo dự án</a></li>
+                            <li>@Ajax.ActionLink("Tạo sự kiện mới", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
                             <li role="separator" class="divider"></li>
-                            <li><a data-container="body" data-toggle="modal" data-target="#createGroupForm" style="cursor: pointer">Tạo nhóm</a></li>
+                            <li>@Ajax.ActionLink("Tạo nhóm mới", "CreateGroup", "Group", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
                             <li role="separator" class="divider"></li>
                             @*<li class="dropdown-header">NGƯỜI DÙNG</li>*@
                             <li><a href="@Url.Action("UserHome", "User", new { userID = userID })">Hồ sơ cá nhân</a></li>
-                            <li><a href="@Url.Action("ChangePassword","Account")">Đổi mật khẩu</a></li>
+                            <li>@Ajax.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
                             <li><a href="@Url.Action("LogOut","Home")">Đăng xuất</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="guide.html">Trợ giúp</a></li>
-                            <li><a href="help.html">Hỗ trợ</a></li>
-                            <li><a href="report.html">Báo cáo sự cố</a></li>
+                            <li><a href="report.html">Góp ý & Báo cáo sự cố</a></li>
                         </ul>
                     </li>
-                </ul>  
+                </ul>
 
             </div><!--/.nav-collapse -->
         </div>
     </nav>
 
     <!-------------Body Container------------>
-    <div class="container background-container">
-
-         @RenderBody()
-        <button class="fixedChatButton" onclick="location.href='@Url.Action("ChatRoom", "Home")'"><p>Chatroom</p></button>
+    <div id="dynamicContainer" class="container background-container">
+        @RenderBody()
+        @*<button class="fixedChatButton" onclick="location.href='@Url.Action("ChatRoom", "Home")'"><p>Chatroom</p></button>*@
     </div>
 
+    <div class="modal fade" role="dialog" id="popup">
+        <div class="modal-dialog modal-lg modal-md">
+            <div class="modal-content" id="popup-content">
 
-    <!------------Create New Project Fade Modal-------------->
-    <div id="createProjectForm" class="modal fade" role="dialog">
-        @{ Html.RenderPartial("~/Views/Project/_CreateProject.cshtml", new ViewDataDictionary());  }
+            </div>
         </div>
-        <!------------Create New Group Fade Modal-------------->
-        @{ Html.RenderPartial("~/Views/Group/_CreateGroup.cshtml", new ViewDataDictionary());  }
+    </div>
 
-        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        @section scripts {
-            <script type="text/javascript">
-                var frmnewprovider = $("#formValidation");
-                $(document).ready(function () {
-                    frmnewprovider.submit(function (e) {
-                        e.preventDefault();
-                        frmnewprovider.validate();
-                        if (frmnewprovider.valid()) {
-                            $.ajax({
-                                url: "/Home/Login",
-                                type: "POST",
-                                contentType: "application/json; charset=utf-8",
-                                data: JSON.stringify({
-                                    Email: frmnewprovider.find('#Email').val(),
-                                    Password: frmnewprovider.find('#Password').val(),
-                                }),
-                                success: function (result) {
-                                    //if record was added to db, then...
-                                    window.location.replace('/Home/Newfeed'); //we can redirect
-                                    //or simply close our modal.
-                                    //$('#mdlnewprovider').modal('hide');
-                                },
-                                error: function (result) {
-                                    alert('error');
-                                }
-                            });
-                        }
-                    });
-                });
-            </script>
-        }
-        @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-        <script type="text/javascript">
-            $('.modal-dialog').parent().on('show.bs.modal', function (e) { $(e.relatedTarget.attributes['data-target'].value).appendTo('body'); })
-        </script>
-        <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-        <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
-        <script src="~/scripts/phucvt_custom.js"></script>
-        <script src="~/scripts/jquery.validate.js"></script>
-        @RenderSection("scripts", required: false)
+    <!-- Task Detail Form -->
+    <div id="taskdetail" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row" id="mainTaskDetail">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--SCRIPT-->
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/scripts/phucvt_custom.js"></script>
+    @RenderSection("scripts", required: false)
     <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
+
+    @*  ------------------------- SEARCH BAR --------------------------- *@
+    <script>
+        /***************************** Script for search bar ******************************************/
+        $("#searchArea").keyup(function () {
+            delay(function () {
+                $("#srchGrVal").html($("#searchArea").val());
+                $("#srchPrVal").html($("#searchArea").val());
+                $("#srchUsVal").html($("#searchArea").val());
+
+                var searchAreaWidth = $('#searchArea').width() + 35;
+                $('#listSearchBar').width(searchAreaWidth);
+
+                var searchItemWidth = $('#searchArea').width() - 10;
+                $("#srchGrVal").css('max-width', searchItemWidth + 'px');
+                $("#srchPrVal").css('max-width', searchItemWidth + 'px');
+                $("#srchUsVal").css('max-width', searchItemWidth + 'px');
+
+                $(".dropdown-content").show();
+
+            }, 100);
+
+        });
+
+        $('div.search-dropdown').mouseleave(function () {
+            $(".dropdown-content").hide();
+        });
+
+        if ($("#searchArea").val().length < 1) {
+            $(".dropdown-content").hide();
+        }
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('.dropdown-content').length) {
+                if ($('.dropdown-content').is(":visible")) {
+                    $('.dropdown-content').hide();
+                }
+            }
+        });
+        var $listItems = $('li.searchItem');
+
+        function search(selector) {
+            var name = $("#searchArea").val();
+            var option = $(selector).attr('role');
+            window.location.href = "/Home/Search?name=" + name + "&option=" + option;
+        }
+        var $current;
+        $('#searchArea').keydown(function (e) {
+            var key = e.keyCode,
+                $selected = $listItems.filter('.selected');
+
+
+            if (key != 40 && key != 38 && key != 13) return;
+
+            $listItems.removeClass('selected');
+
+            if (key == 40) // Down key
+            {
+                if (!$selected.length || $selected.is(':last-child')) {
+                    $current = $listItems.eq(0);
+                } else {
+                    $current = $selected.next();
+                }
+            } else if (key == 38) // Up key
+            {
+                if (!$selected.length || $selected.is(':first-child')) {
+                    $current = $listItems.last();
+                } else {
+                    $current = $selected.prev();
+                }
+            } else if (key == 13) {
+                search($current);
+            }
+            $current.addClass('selected');
+        });
+
+        /**************************************************************** Load More coment ***************************************/
+        function loadMoreComment(postID) {
+            $("#loadMoreComment" + postID).remove();
+        }
+    </script>
+    @*  ------------------------- NOTIFICATION --------------------------- *@
     <script>
         $(document).ready(function () {
+            //Add Blur Class
+            $('.div-change-cover').hover(function () {
+                $('.cover-img').addClass('blur');
+            }, function () {
+                $('.cover-img').removeClass('blur');
+            });
+
             if (typeof (notifHub) === "undefined") {
                 notifHub = $.connection.notificationHub;
             }
-            //GET FRIEND request count
+            ///////////////////////////////////
+            /////////  POP_UP COUNT //////////
+            /////////////////////////////////
+            //POP_UP FRIEND request count
             notifHub.client.getFriendRequests = function (userID) {
                 $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
             }
-            //GET JOIN group request count
+            //POP_UP FRIEND REQUEST ACCEPTED count
+            notifHub.client.getFriendRequestAccepted = function (userID) {
+                $("#friendRequest" + userID).html(function (i, val) { return +val + 1 });
+            }
+            //POP_UP JOIN group request count
             notifHub.client.getJoinGroupRequests = function (leadersID) {
                 //alert("Got JG Request!!!");
                 for (var index = 0; index < leadersID.length; index++) {
                     var leaderID = leadersID[index];
-                        $("#notification" + leaderID).html(function (i, val) { return +val + 1 });
+                    $("#notification" + leaderID).html(function (i, val) { return +val + 1 });
                 }
             }
+            //POP_UP JOIN Project request count
+            notifHub.client.getJoinProjectRequests = function (leadersID) {
+                //alert("Got JG Request!!!");
+                for (var index = 0; index < leadersID.length; index++) {
+                    var leaderID = leadersID[index];
+                    $("#notification" + leaderID).html(function (i, val) { return +val + 1 });
+                }
+            }
+            //POP_UP JOIN group request accepted
+            notifHub.client.getJoinGroupAccepted = function (userID) {
+                $("#notification" + userID).html(function (i, val) { return +val + 1 });
+            }
+            //POP_UP JOIN project request accepted
+            notifHub.client.getJoinProjectAccepted = function (userID) {
+                $("#notification" + userID).html(function (i, val) { return +val + 1 });
+            }
+            //POP_UP TASK related INFO
+            notifHub.client.getTaskRelatedInfo = function (userID) {
+                $("#notification" + userID).html(function (i, val) { return +val + 1 });
+            }
 
-            //Load Friend Request Count when user Access page//
+            //////////////////////////////////////////////////////////
+            ///////// GET NOTIFICATION NUMBERS (loading page) ///////
+            ////////////////////////////////////////////////////////
+            // 1.  Load Notification Count
             $.ajax({
                 type: "POST",
-                url: "/Account/GetNumberOfFriendRequest",
+                data: { userID: '@Session["UserID"].ToString()' },
+                url: "/User/GetNotificationsCount",
                 success: function (data, textstatus) {
-                    if(data!=0)$("#friendRequest" + '@Session["UserID"]').text(data);
+                    if (data != 0) $("#notification" + '@Session["UserID"]').text(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Error in get Friend Request Count");
                 }
-
-
             });
-            // Click on Noification Button
+
+            // 2. Load Friend Request Count
+            $.ajax({
+                type: "POST",
+                url: "/Account/GetNumberOfFriendRequest",
+                success: function (data, textstatus) {
+                    if (data != 0) $("#friendRequest" + '@Session["UserID"]').text(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Error in get Friend Request Count");
+                }
+            });
+            ////////////////////////////////
+            //////// CLICK  BUTTON ////////
+            //////////////////////////////
+
+            // 1.  Click on Noification Button
             $("#notificationButton" + '@Session["UserID"].ToString()').click(function (evt) {
                 //display List of request
                 var data = {
@@ -206,31 +322,321 @@
                     url: "/User/LoadNotification",
                     data: data,
                     success: function (data, textstatus) {
+                        if (data == false) {
+                        };
                         for (var index = 0; index < data.length; index++) {
                             var request = data[index];
-                            if (request["IsSeen"] != true) {
-                                // Get Request List
-                                //alert(request["DisplayName"]);
-                                var tem = "<div class='row'>";
-                                tem += "<div role='" + request["NotifyID"] + "' id='joinGroupRequestItem" + request["Actors"][0]["ID"] + "' class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                            // 1. Leader Promotion in Group|Project item
+                            if (request["Type"] == 14 || request["Type"] == 13) {
+                                var tem = "<div id='promotion" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
                                 tem += "    <div class='row'>";
                                 tem += "        <div class='col-xs-2'>";
-                                tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border='1'></object>";
+                                if (request["Type"] == 14) {
+                                    tem += "            <object type='image/jpg' data='/Images/Group/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-8'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã được thăng chức trưởng nhóm</label>";
+                                }
+                                else {
+                                    tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-8'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã được thăng chức trưởng dự án</label>";
+                                }
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenPromotion" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#seenPromotion" + request["NotifyID"]).click(function (evt) {
+                                    seenPromotion(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 2. New POST created item
+                            if (request["Type"] == 9 || request["Type"] == 11) {
+                                var tem = "<div id='newPostCreatedItem" + request["NotifyID"] + "' class='row'>";
+                                if (request["Type"] == 9) {
+                                    tem += "<div class='friendRequestItem'>";
+                                    tem += "    <div class='row'>";
+                                    tem += "        <div class='col-xs-2'>";
+                                    tem += "            <object type='image/jpg' data='/Images/Group/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-10'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở nhóm</label>";
+                                    tem += "            </div>";
+                                    tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='newPostLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
+                                    tem += "            </div>";
+                                    tem += "        </div>";
+                                    tem += "    </div>";
+                                    tem += "</div>";
+                                    tem += "</div>";
+
+                                    // APPEND recieved item to LIST
+                                    $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                    //Event when click on SEEN group request accepted button
+                                    $("#newPostLink" + request["NotifyID"]).click(function (evt) {
+                                        seenNewPostCreatedInGroup(this);
+                                        evt.preventDefault();
+                                    });
+                                }
+                                else {
+                                    tem += "<div class='friendRequestItem'>";
+                                    tem += "    <div class='row'>";
+                                    tem += "        <div class='col-xs-2'>";
+                                    tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-10'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở dự án</label>";
+                                    tem += "            </div>";
+                                    tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='newPostLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
+                                    tem += "            </div>";
+                                    tem += "        </div>";
+                                    tem += "    </div>";
+                                    tem += "</div>";
+                                    tem += "</div>";
+
+                                    // APPEND recieved item to LIST
+                                    $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                    //Event when click on SEEN group request accepted button
+                                    $("#newPostLink" + request["NotifyID"]).click(function (evt) {
+                                        seenNewPostCreatedInProject(this);
+                                        evt.preventDefault();
+                                    });
+                                }
+
+                            }
+                            // 2.2 Post commented
+                            if (request["Type"] == 10 || request["Type"] == 12) {
+                                var tem = "<div id='postCmtedItem" + request["NotifyID"] + "' class='row'>";
+                                if (request["Type"] == 10) {
+                                    tem += "<div class='friendRequestItem'>";
+                                    tem += "    <div class='row'>";
+                                    tem += "        <div class='col-xs-2'>";
+                                    tem += "            <object type='image/jpg' data='/Images/Group/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-10'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                    if ((request["Actors"].length - 1) != 0) {
+                                        tem += "   <label class='noti-friend-intro' style='color: #337ab7; margin-left: -10px; margin-top: -5px; font-size: 0.8em'>+" + (request["Actors"].length - 1) + " người khác</label>";
+                                    }
+                                    tem += "            </div><div class='row'><div class='col-xs-12' style='padding: 0px 10px;'><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã bình luận bài viết của bạn ở nhóm</label></div></div>";
+                                    tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8' style='padding: 0px;'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='postCmtedLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
+                                    tem += "            </div>";
+                                    tem += "        </div>";
+                                    tem += "    </div>";
+                                    tem += "</div>";
+                                    tem += "</div>";
+
+                                    // APPEND recieved item to LIST
+                                    $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                    //Event when click on SEEN group request accepted button
+                                    $("#postCmtedLink" + request["NotifyID"]).click(function (evt) {
+                                        seenPostCommentedInGroup(this);
+                                        evt.preventDefault();
+                                    });
+                                }
+                                else {
+                                    tem += "<div class='friendRequestItem'>";
+                                    tem += "    <div class='row'>";
+                                    tem += "        <div class='col-xs-2'>";
+                                    tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-10'>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: #337ab7; margin-left: -10px; margin-top: -5px; font-size: 0.8em'>+" + (request["Actors"].length - 1) + " người khác</label>";
+                                    tem += "            </div><div class='row'><div class='col-xs-12' style='padding: 0px 10px;'><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã bình luận bài viết của bạn ở dự án</label></div></div>";
+                                    tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8' style='padding: 0px;'>";
+                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='postCmtedLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
+                                    tem += "            </div>";
+                                    tem += "        </div>";
+                                    tem += "    </div>";
+                                    tem += "</div>";
+                                    tem += "</div>";
+
+                                    // APPEND recieved item to LIST
+                                    $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                    //Event when click on SEEN group request accepted button
+                                    $("#postCmtedLink" + request["NotifyID"]).click(function (evt) {
+                                        seenPostCommentedInProject(this);
+                                        evt.preventDefault();
+                                    });
+                                }
+
+                            }
+                            // 3.1 Task MODIFIED item
+                            if (request["Type"] == 8) {
+                                var tem = "<div id='taskModifiedItem" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-7'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-friend-intro' style='color: gray'>Nhiệm vụ của bạn có sự thay đổi!</label>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-handler'>dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-3' style='padding-top: 30px;'><a href='' role='" + request["NotifyID"] + "' id='taskModifiedLink" + request["NotifyID"] + "' style='margin-left:-20px; font-size: 0.8em'>Xem chi tiết ..</a></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#taskModifiedLink" + request["NotifyID"]).click(function (evt) {
+                                    seenTaskModified(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 3.2 Task ASSIGNMENT item
+                            if (request["Type"] == 6) {
+                                var tem = "<div id='taskAssignmentItem" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-7'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-friend-intro' style='color: gray'>Bạn được giao nhiệm vụ mới!</label>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-handler'>dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-3' style='padding-top: 30px;'><a href='' role='" + request["NotifyID"] + "' id='taskAssignmentLink" + request["NotifyID"] + "' style='margin-left:-20px; font-size: 0.8em'>Xem chi tiết ...</a></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#taskAssignmentLink" + request["NotifyID"]).click(function (evt) {
+                                    seenTaskAssignment(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 4.1 Join PROJECT ACEEPTED item
+                            if (request["Type"] == 4) {
+                                var tem = "<div id='seenJoinRequestAcceptedItem" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-8'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng, bạn đã là thành viên</label>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-handler'>Dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenJoinRequestAccepted" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#seenJoinRequestAccepted" + request["NotifyID"]).click(function (evt) {
+                                    seenJoinRequestAccepted(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 4.2 Join GROUP ACCEPTED item
+                            if (request["Type"] == 3) {
+                                var tem = "<div id='seenJoinRequestAcceptedItem" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/Group/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-8'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã là thành viên</label>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-handler'>nhóm </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenJoinRequestAccepted" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#seenJoinRequestAccepted" + request["NotifyID"]).click(function (evt) {
+                                    seenJoinRequestAccepted(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 4.3 Join Project Request item
+                            if (request["Type"] == 2) {
+                                var tem = "<div class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border=''></object>";
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-7'>";
                                 tem += "            <div class='row'>";
                                 tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
-                                tem += "                <label id='joinGroupRequestStatus" + request["Actors"][0]["ID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
-                                tem += "            </div><a href=''>" + request["Destination"]["DisplayName"] + "<a><div class='row'></div>";
-                                tem += "        </div><div id='requestHandleArea" + request["Actors"][0]["ID"] + "'>";
-                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
-                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                                tem += "                <label id='joinProjectRequestStatus" + request["NotifyID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào dự án</label>";
+                                tem += "            </div><div class='row'><a class='noti-friend-destination' href=''>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                tem += "        </div><div id='requestHandleArea" + request["NotifyID"] + "'>";
+                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
                                 tem += "        </div>";
-                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
-                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinGroupRequest" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
-                                tem += "        </div></div><div class='col-xs-1'></div>";
+                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                                tem += "        </div><div class='col-xs-1'></div></div>";
                                 tem += "    </div>";
                                 tem += "</div>";
                                 tem += "</div>";
@@ -240,13 +646,58 @@
 
 
                                 //Event when click on ACCEPT friend button
-                                $("#acceptJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                $("#acceptJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
+                                    acceptJoinProjectRequest(this);
+                                    evt.preventDefault();
+                                });
+
+                                //Event when click on DENY friend button
+                                $("#denyJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
+                                    denyJoinProjectRequest(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
+                            // 4.4 Join Group Request item
+                            if (request["Type"] == 1) {
+                                // Get Request List
+                                //alert(request["DisplayName"]);
+                                var tem = "<div class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-7'>";
+                                tem += "            <div class='row'>";
+                                tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <label id='joinGroupRequestStatus" + request["NotifyID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
+                                tem += "            </div><div class='row'><a class='noti-friend-destination' href=''>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                tem += "        </div><div id='requestHandleArea" + request["NotifyID"] + "'>";
+                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                                tem += "        </div>";
+                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinGroupRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                                tem += "        </div><div class='col-xs-1'></div></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+
+                                //Event when click on ACCEPT friend button
+                                $("#acceptJoinGroupRequest" + request["NotifyID"]).click(function (evt) {
                                     acceptJoinGroupRequest(this);
                                     evt.preventDefault();
                                 });
 
                                 //Event when click on DENY friend button
-                                $("#denyJoinGroupRequest" + request["Actors"][0]["ID"]).click(function (evt) {
+                                $("#denyJoinGroupRequest" + request["NotifyID"]).click(function (evt) {
                                     denyJoinGroupRequest(this);
                                     evt.preventDefault();
                                 });
@@ -264,13 +715,51 @@
                 //evt.preventDefault();
             });
 
-
-            // Click on Friend Notification Button
+            // 2.  Click on Friend Notification Button
             $("#friendNotifButton" + '@Session["UserID"].ToString()').click(function (evt) {
                 //display List of request
                 var data = {
                     userID: '@Session["UserID"].ToString()',
                 };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/LoadFriendRequestAccepted",
+                    data: data,
+                    success: function (data, textstatus) {
+                        if (data == false) return;
+                        for (var index = 0; index < data.length; index++) {
+                            var request = data[index];
+                            var tem = "<div id='friendAcceptedItem" + request["Actors"][0]["ID"] + "' class='row'>";
+                            tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
+                            tem += "    <div class='row'>";
+                            tem += "        <div class='col-xs-2'>";
+                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Actors"][0]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                            tem += "        </div>";
+                            tem += "        <div class='col-xs-7'>";
+                            tem += "            <div class='row'>";
+                            tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                            tem += "            </div>";
+                            tem += "            <div class='row'>";
+                            tem += "                <label class='noti-friend-intro' style='color: gray'>Đã đồng ý lời mời kết bạn.</label>";
+                            tem += "            </div>";
+                            tem += "        </div><div class='col-xs-3' role = '" + request["Actors"][0]["ID"] + "'><button role='" + request["NotifyID"] + "' id='seenFriendRequestAccepted" + request["Actors"][0]["ID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                            tem += "    </div>";
+                            tem += "</div>";
+                            tem += "</div>";
+
+                            // APPEND recieved item to LIST
+                            $("#friendNotifList" + '@Session["UserID"].ToString()').append(tem);
+
+                            $("#seenFriendRequestAccepted" + request["Actors"][0]["ID"]).click(function (evt) {
+                                seenFriendAccepted(this);
+                                evt.preventDefault();
+                            });
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("Error in Load Friend Accepted");
+                    }
+                });
                 $.ajax({
                     type: "POST",
                     url: "/User/LoadFriendRequestNotif",
@@ -280,20 +769,20 @@
                             var request = data[index];
                             // Get Request List
                             //alert(request["DisplayName"]);
-                            var tem ="<div class='row'>";
+                            var tem = "<div class='row'>";
                             tem += "<div class='friendRequestItem' style='margin-left: 15px; margin-right:15px; padding:10px'>";
                             tem += "    <div class='row'>";
                             tem += "        <div class='col-xs-2'>";
-                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["UserID"] + ".jpg' width='40' height='40' border='1'></object>";
+                            tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["UserID"] + ".jpg' width='40' height='40' border=''></object>";
                             tem += "        </div>";
                             tem += "        <div class='col-xs-7'>";
                             tem += "            <div class='row'>";
-                            tem += "                <a href='' class='noti-friend-name'>"+ request["DisplayName"] +"</a>";
+                            tem += "                <a href='' class='noti-friend-name'>" + request["DisplayName"] + "</a>";
                             tem += "            </div>";
                             tem += "            <div class='row'>";
                             tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Đã gửi lời kết bạn</label>";
                             tem += "            </div>";
-                            tem += "        </div><div id='requestHandleArea"+ request["UserID"] +"'>";
+                            tem += "        </div><div id='requestHandleArea" + request["UserID"] + "'>";
                             tem += "        <div class='col-xs-1' style='padding: 0'>";
                             tem += "            <button role='" + request["UserID"] + "' id='acceptFriend" + request["UserID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
                             tem += "        </div><div class='col-xs-1'></div>";
@@ -332,6 +821,9 @@
 
                 //evt.preventDefault();
             });
+            ////////////////////////////////
+            //////// Connect to HUB ///////
+            //////////////////////////////
             $.connection.hub.start().done(function () {
 
             }).fail(function () {
@@ -339,14 +831,15 @@
             });
         });
 
+        // 1-a Accept JOIN GROUP request
         function acceptJoinGroupRequest(selector) {
 
-            var requestID = $(selector).attr('role');
+            var notifyID = $(selector).parent().attr('id')
             var data = {
                 userID: '@Session["UserID"].ToString()',
-                requestID: requestID,
+                requestID: $(selector).attr('role'),
                 groupID: $(selector).parent().attr('role'),
-                notifyID: $('#joinGroupRequestItem'+ requestID).attr('role')
+                notifyID: notifyID
             }
             $.ajax({
                 type: "POST",
@@ -354,8 +847,8 @@
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
-                        $('#requestHandleArea' + requestID).empty();
-                        $('#joinGroupRequestStatus' + requestID).text('Kết nạp vào nhóm thành công');
+                        $('#requestHandleArea' + notifyID).empty();
+                        $('#joinGroupRequestStatus' + notifyID).text('Kết nạp vào nhóm thành công');
                     }
                     else {
                         alert("Error in accept join Group Request");
@@ -366,13 +859,14 @@
                 }
             });
         }
+        // 1-b Deny JOIN GROUP request
         function denyJoinGroupRequest(selector) {
-            var requestID = $(selector).attr('role');
+            var notifyID = $(selector).parent().attr('id')
             var data = {
                 userID: '@Session["UserID"].ToString()',
-                requestID: requestID,
+                requestID: $(selector).attr('role'),
                 groupID: $(selector).parent().attr('role'),
-                notifyID: $('#joinGroupRequestItem' + requestID).attr('role')
+                notifyID: notifyID
             }
             $.ajax({
                 type: "POST",
@@ -380,8 +874,8 @@
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
-                        $('#requestHandleArea' + requestID).empty();
-                        $('#joinGroupRequestStatus' + requestID).text('Từ đã từ chối kết nạp vào nhóm');
+                        $('#requestHandleArea' + notifyID).empty();
+                        $('#joinGroupRequestStatus' + notifyID).text('Từ đã từ chối kết nạp vào nhóm');
                     }
                     else {
                         alert("Error in accept join Group Request");
@@ -392,6 +886,87 @@
                 }
             });
         }
+
+        // 2-a Accept JOIN PROJECT request
+        function acceptJoinProjectRequest(selector) {
+            var notifyID = $(selector).parent().attr('id')
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: $(selector).attr('role'),
+                projectID: $(selector).parent().attr('role'),
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Project/AcceptRequestOnNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + notifyID).empty();
+                        $('#joinProjectRequestStatus' + notifyID).text('Kết nạp vào dự án thành công');
+                    }
+                    else {
+                        alert("Error in accept join project Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in accept join project REquest!");
+                }
+            });
+        }
+        // 2-b Deny JOIN PROJECT request
+        function denyJoinProjectRequest(selector) {
+            var notifyID = $(selector).parent().attr('id')
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                requestID: $(selector).attr('role'),
+                projectID: $(selector).parent().attr('role'),
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/Project/DenyRequestOnNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#requestHandleArea' + notifyID).empty();
+                        $('#joinProjectRequestStatus' + notifyID).text('Đã từ chối kết nạp vào dự án');
+                    }
+                    else {
+                        alert("Error in deny join Group Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("not success in deny join group REquest!");
+                }
+            });
+        }
+        // 1|2-c seen JOIN GROUP Accepted
+        function seenJoinRequestAccepted(selector) {
+            var notifyID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#seenJoinRequestAcceptedItem' + notifyID).remove();
+                    }
+                    else {
+                        alert("Error in Seen Join Group|Project Request Accepted");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Join Group|Project Accepted");
+                }
+            });
+        }
+
+        // 3-a Accept FRIEND request
         function acceptFriendRequest(selector) {
             var otherID = $(selector).attr('role');
             var data = {
@@ -404,7 +979,6 @@
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
-                        alert("Added friend");
                         $('#requestHandleArea' + otherID).empty();
                         $('#friendRequestStatus' + otherID).text('Kết bạn thành công');
                     }
@@ -417,6 +991,7 @@
                 }
             });
         }
+        // 3-b Deny FRIEND request
         function denyFriendRequest(selector) {
             var otherID = $(selector).attr('role');
             var data = {
@@ -441,6 +1016,326 @@
                 }
             });
         }
+        // 3-c Seen Friend Accepted request
+        function seenFriendAccepted(selector) {
+
+            var requestID = $(selector).parent().attr('role');
+
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: $(selector).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenFriendRequestAccepted",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#friendAcceptedItem' + requestID).remove();
+                    }
+                    else {
+                        return;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Error in Seen friend Accepted");
+                }
+            });
+        }
+
+        // 4-a Seen Task Assignment Notification
+        function seenTaskAssignment(selector) {
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: $(selector).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted", //Same function
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#taskAssignmentItem' + $(selector).parent().attr('role')).remove();
+                    }
+                    else {
+                        alert("Error in Seen Task Assingment");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Task Assingment");
+                }
+            });
+            var destinationID = $(selector).parent().attr('role')
+            var url = "/Project/..../Plan?PhaseId=" + NestId
+        }
+        // 4-b Seen Task Modified
+        function seenTaskModified(selector) {
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: $(selector).attr('role')
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted", //Same function
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#taskModifiedItem' + $(selector).parent().attr('role')).remove();
+                    }
+                    else {
+                        alert("Error in Seen Task Modified");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Task Modifed");
+                }
+            });
+            var destinationID = $(selector).parent().attr('role')
+            var url = "/Project/..../Plan?PhaseId=" + NestId
+        }
+
+        // 5-a Seen New Post created in Group
+        function seenNewPostCreatedInGroup(selector) {
+            var userID = '@Session["UserID"].ToString()';
+            var notifyID = $(selector).attr('role');
+            var destinationID = $(selector).parent().attr('role');
+            var postID = $(selector).parent().parent().attr('role');
+            //alert(userID + "|" + notifyID + "|" + destinationID + "|" + postID);
+            var data = {
+                userID: userID,
+                groupID: destinationID,
+                notifyID: notifyID,
+                postID: postID,
+                type: "newPost"
+            }
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    //Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with upload progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    //Download progress
+                    xhr.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with download progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "/Group/SeenNewPostNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    $("#dynamicContainer").html(data.groupHome);
+                    $("#group-tab").html(data.groupDiscusson);
+                    $("#postList").html(data.post);
+
+                    if ($('#notification').is(":visible")) {
+                        $('#notification').hide();
+                        $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Post commented in Group");
+                }
+            });
+        }
+        // 5-b Seen Postcommented in Group
+        function seenPostCommentedInGroup(selector) {
+            var userID = '@Session["UserID"].ToString()';
+            var notifyID = $(selector).attr('role');
+            var destinationID = $(selector).parent().attr('role');
+            var postID = $(selector).parent().parent().attr('role');
+            //alert(userID + "|" + notifyID + "|" + destinationID + "|" + postID);
+            var data = {
+                userID: userID,
+                groupID: destinationID,
+                notifyID: notifyID,
+                postID: postID,
+                type: "postCommented"
+            }
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    //Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with upload progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    //Download progress
+                    xhr.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with download progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "/Group/SeenNewPostNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    $("#dynamicContainer").html(data.groupHome);
+                    $("#group-tab").html(data.groupDiscusson);
+                    $("#postList").html(data.post);
+                    if (data.type == "postCommented") {
+                        $("#showComment" + postID).trigger('click');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Post commented in Group");
+                }
+            });
+        }
+
+        // 6-a Seen New Post created in Project
+        function seenNewPostCreatedInProject(selector) {
+            var userID = '@Session["UserID"].ToString()';
+            var notifyID = $(selector).attr('role');
+            var destinationID = $(selector).parent().attr('role');
+            var postID = $(selector).parent().parent().attr('role');
+            //alert(userID + "|" + notifyID + "|" + destinationID + "|" + postID);
+            var data = {
+                userID: userID,
+                projectID: destinationID,
+                notifyID: notifyID,
+                postID: postID,
+                type: "newPost"
+            }
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    //Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with upload progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    //Download progress
+                    xhr.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with download progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "/Project/SeenNewPostNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    $("#dynamicContainer").html(data.projectHome);
+                    $("#group-tab").html(data.projectDiscusson);
+                    $("#postList").html(data.post);
+
+                    if ($('#notification').is(":visible")) {
+                        $('#notification').hide();
+                        $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Post commented in Project");
+                }
+            });
+        }
+        // 6-b Seen Postcommented in Group
+        function seenPostCommentedInProject(selector) {
+            var userID = '@Session["UserID"].ToString()';
+            var notifyID = $(selector).attr('role');
+            var destinationID = $(selector).parent().attr('role');
+            var postID = $(selector).parent().parent().attr('role');
+            //alert(userID + "|" + notifyID + "|" + destinationID + "|" + postID);
+            var data = {
+                userID: userID,
+                projectID: destinationID,
+                notifyID: notifyID,
+                postID: postID,
+                type: "postCommented"
+            }
+            $.ajax({
+                xhr: function () {
+                    var xhr = new window.XMLHttpRequest();
+                    //Upload progress
+                    xhr.upload.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with upload progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    //Download progress
+                    xhr.addEventListener("progress", function (evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            //Do something with download progress
+                            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+                            $("#dynamicContainer").html(loadingHtml);
+                        }
+                    }, false);
+                    return xhr;
+                },
+                type: "POST",
+                url: "/Project/SeenNewPostNotify",
+                data: data,
+                success: function (data, textstatus) {
+                    $("#dynamicContainer").html(data.projectHome);
+                    $("#group-tab").html(data.projectDiscusson);
+                    $("#postList").html(data.post);
+                    if (data.type == "postCommented") {
+                        $("#showComment" + postID).trigger('click');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Post commented in Project");
+                }
+            });
+        }
+
+        // 7-a Seen Promotion in Group | Project
+        function seenPromotion(selector) {
+            var notifyID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#promotion' + notifyID).remove();
+                    }
+                    else {
+                        alert("Error in Seen Join Group|Project Promotion");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Join Group|Project Promotion");
+                }
+            });
+        }
 
         // DELETE friend request click when click outside
         $(document).click(function (event) {
@@ -458,9 +1353,227 @@
             }
         })
 
+        //Show Symbol loading before ajax loading
+        function OnBegin(id) {
+            var loadingHtml = "";
+            loadingHtml += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">';
+            loadingHtml += '<div class="progress"><div class="indeterminate"></div></div>';
+            loadingHtml += '</div';
+            $(id).html(loadingHtml);
+        }
 
+        //On begin popup
+        function OnBeginPopup() {
+            console.log("on begin");
+            var loadingPopup = "";
+            loadingPopup += '<div class="preloader-wrapper small active">';
+            loadingPopup += '<div class="spinner-layer spinner-green-only">';
+            loadingPopup += '<div class="circle-clipper left">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div><div class="gap-patch">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div><div class="circle-clipper">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div>';
+            loadingPopup += '</div>';
+            loadingPopup += '</div>';
+            $('#popup-content').html(loadingPopup);
+            console.log("load html loading");
+            $('#popup').modal('show');
+            console.log("show popup");
+        }
     </script>
-
+    @*  ------------------------- REPORT --------------------------- *@
+    <script type="text/javascript">
+        var dialog = $('<div style="display:none" class="loading" style="padding: 10px;"></div>').appendTo('body');
+        var successDialog = $('<div style="display:none" class="reportloading"></div>').appendTo('body');
+        $(function () {
+            $('button#displayReport').click(function () {
+                var url = this.getAttribute('href');
+                dialog.dialog({
+                    title: 'Lý do báo cáo',
+                    width: 400,
+                    resizable: false,
+                    close: function (event, ui) {
+                        dialog.remove();
+                    },
+                    modal: true
+                });
+                dialog.load(url, function (responseText, textStatus, XMLHttpRequest) {
+                    dialog.removeClass('loading');
+                    $('#submitReport').submit(function () {
+                        $.ajax({
+                            url: this.action,
+                            type: this.method,
+                            data: $(this).serialize(),
+                            success: function (data) {
+                                if (data.status == true) {
+                                    successDialog.dialog({
+                                        title: 'Thông báo',
+                                        width: 300,
+                                        resizable: false,
+                                        close: function (event, ui) {
+                                            successDialog.remove();
+                                            location.reload();
+                                        },
+                                        modal: true
+                                    });
+                                    successDialog.append(data.message);
+                                    dialog.remove();
+                                }
+                                else {
+                                    successDialog.dialog({
+                                        title: 'Thông báo',
+                                        width: 300,
+                                        resizable: false,
+                                        close: function (event, ui) {
+                                            successDialog.remove();
+                                            successDialog.empty();
+                                        },
+                                        modal: true
+                                    });
+                                    successDialog.append(data.message);
+                                }
+                            }
+                        });
+                        return false;
+                    });
+                });
+                return false;
+            });
+        });
+    </script>
+    @*  ------------------------- POST in GROUP ----------------(groupHome)----------- *@
+    <script type="text/javascript">
+        var times = 1;
+        function resetTimes() {
+            times = 1;
+        }
+        function loadMorePost(event, groupID, section) {
+            var data = {
+                groupID: groupID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePost", "Group")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                },
+                error: function () {
+                    alert("not success in load more Post in in DiscussionGroup");
+                }
+            });
+            event.preventDefault();
+        }
+        function loadMorePostInPublic(event, groupID, section) {
+            var data = {
+                groupID: groupID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostInPublic", "Group")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
+            event.preventDefault();
+        }
+        $(window).scroll(function () {
+            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+                $("#loadMorePost").trigger('click');
+                times++;
+            }
+        });
+        //Check if Post is blank before sending
+        function isPostBlank(event) {
+            times = 1;
+            if ($("#postContent").val() == null || $("#postContent").val().trim() == "") {
+                event.preventDefault();
+            }
+            $("#postImageHandler").css("visibility", "hidden");
+        }
+        //Check if Comment is blank before sending
+        function isCommentBlank(event, postID) {
+            if ($("#comment" + postID).val() == null || $("#comment" + postID).val().trim() == "") {
+                event.preventDefault();
+            }
+        }
+        </script>
+    @*  ------------------------- POST in PROJECT ----------------(groupHome)----------- *@
+    <script type="text/javascript">
+        function loadMorePostProject(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePost", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                },
+                error: function () {
+                    alert("not success in  Post");
+                }
+            });
+            event.preventDefault();
+        }
+        function loadMorePostInPublicProject(event, projectID, section) {
+            var data = {
+                projectID: projectID,
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostInPublic", "Project")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#postList").append(partialView);
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
+            event.preventDefault();
+        }
+    </script>
+    @* ---------------------- UPLOAD IMAGE TO POST ---------------------- *@
+    <script  type="text/javascript">
+        function uploadImage(event) {
+            event.preventDefault();
+            var formdata = new FormData($('#uploadImageToPostForm').get(0));
+            $.ajax({
+                url: '@Url.Action("UploadPostImage", "Group", new { id = Session["UserID"].ToString() })',
+                type: 'POST',
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (imgLink) {
+                    if (imgLink != null) {
+                        //postImageHandler
+                        $("#imageToPostArea").html(imgLink.toLowerCase());
+                        $("#imageToPostArea").attr("value", imgLink.toLowerCase());
+                        var area = "<label>Uploaded image</label><button class='btn-card' onclick='delPostImage(event)'><span class='glyphicon glyphicon-remove' style='color: #cecece; font-size: 0.9em'></span></button>"
+                        $("#postImageHandler").html(area)
+                        $("#postImageHandler").css("visibility", "visible");
+                    }
+                }
+            });
+        }
+        function delPostImage(event) {
+            event.preventDefault();
+            alert("Delete Image");
+            $("#postImageHandler").val("");
+        }
         
+    </script>
 </body>
 </html>

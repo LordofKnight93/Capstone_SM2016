@@ -37,7 +37,7 @@ namespace iVolunteer.Common
         {
             if (String.IsNullOrEmpty(identifyID)) return false;
             else
-                return NUMBERONLY_PATTERN.IsMatch(identifyID) && identifyID.Length == 9;
+                return NUMBERONLY_PATTERN.IsMatch(identifyID) && (identifyID.Length == 9 || identifyID.Length == 12);
         }
         /// <summary>
         /// check valid phone, only contain number
@@ -61,6 +61,29 @@ namespace iVolunteer.Common
             else
                 return PASSWORD_PATTERN.IsMatch(password);
         }
-        
+
+        /// <summary>
+        /// check valid deline, the dateline must be in furture
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static bool IsValidDeadlineWithToday(DateTime date)
+        {
+            if (date < DateTime.Today) return false;
+            else return true;
+        }
+
+        /// <summary>
+        /// check validate between two date
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"></param>
+        /// <returns></returns>
+        public static bool IsValidDeadlineTwoDate(DateTime date1, DateTime date2)
+        {
+            if (date1 > date2) return false;
+            else return true;
+        }
+
     }
 }

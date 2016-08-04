@@ -1,6 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -9,6 +11,8 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
     [BsonIgnoreExtraElements]
     public class BudgetItem
     {
+        public ObjectId BudgetItemID { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập nội dung.")]
         public string Content { get; set; }
         public double UnitPrice { get; set; }
         public int Quatity { get; set; }
@@ -17,6 +21,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
 
         public BudgetItem()
         {
+            this.BudgetItemID = new ObjectId();
             this.Content = "";
             this.UnitPrice = 0.0;
             this.Quatity = 0;
@@ -24,6 +29,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         }
         public BudgetItem(BudgetItem item)
         {
+            this.BudgetItemID = ObjectId.GenerateNewId();
             this.Content = item.Content;
             this.UnitPrice = item.UnitPrice;
             this.Quatity = item.Quatity;

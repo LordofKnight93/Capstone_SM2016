@@ -4,14 +4,14 @@
         <div class="noti_Counter" id="@("notification" + @Session["UserID"].ToString())"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
         <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
         <div class="noti_Button" id="noti_Button">
-            <span id="@("notificationButton" + Session["UserID"].ToString())" class="glyphicon glyphicon-bell glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Thông báo"></span>
+            <span id="@("notificationButton" + Session["UserID"].ToString())" class="fa fa-bell fa-cus-white" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Thông báo" style="-ms-transform: rotate(20deg); -webkit-transform: rotate(20deg); transform: rotate(20deg);"></span>
         </div>
         <!--THE NOTIFICAIONS DROPDOWN BOX.-->
         <div class="notifications" id="notification">
             <div style="height:350px;">
                 <div class="row" style="margin: 0">
                     <div class="col-xs-12">
-                        <h3>Thông báo</h3>
+                        <label class="notification-title">Thông báo</label>
                         <div class="divider-holizon"></div>
                         <div class="partial-view-container" id="@("notificationList" + Session["UserID"].ToString())">
                             @*@Html.Partial("_PopupNotification")*@
@@ -25,15 +25,15 @@
     <li class="noti_Container">
         <p class="noti_Counter" id="@("friendRequest" + @Session["UserID"].ToString())"></p>   <!--SHOW NOTIFICATIONS COUNT.-->
         <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
-        <div class="noti_Button" id="friend_Button">
-            <span id="@("friendNotifButton" + Session["UserID"].ToString())" class="glyphicon glyphicon-user glyphicon-nav-top" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Bạn bè"></span>
+        <div class="noti_Button" id="friend_Button" style="margin-right: 18px">
+            <span id="@("friendNotifButton" + Session["UserID"].ToString())" class="fa fa-user-plus fa-cus-white" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Bạn bè"></span>
         </div>
         <!--THE NOTIFICAIONS DROPDOWN BOX.-->
         <div class="notifications" id="friend">
             <div style="height:350px;">
                 <div class="row" style="margin: 0">
                     <div class="col-xs-12">
-                        <h3>Bạn bè</h3>
+                        <label class="notification-title">Bạn bè</label>
                         <div class="divider-holizon"></div>
                         <div id="@("friendNotifList" + Session["UserID"].ToString())" class="partial-view-container">
                             @*@Html.Partial("_PopupFriend")*@
@@ -44,7 +44,7 @@
             <div class="seeAll"><a href=@Url.Action("FriendRequestAll","Home")>Xem thêm ...</a></div>
         </div>
     </li>
-    <li class="noti_Container">
+    @*<li class="noti_Container">
         <div class="noti_Counter" id="mess_Counter"></div>   <!--SHOW NOTIFICATIONS COUNT.-->
         <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
         <div class="noti_Button" id="mess_Button" style="margin-right: 18px">
@@ -65,7 +65,7 @@
             </div>
             <div class="seeAll"><a href=@Url.Action("MessageAll","Home")>Xem thêm ...</a></div>
         </div>
-    </li>
+    </li>*@
     <li class="divider-vertical"></li>
 
 </ul>

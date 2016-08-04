@@ -51,6 +51,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FoolproofValidation, Version=0.9.5851.39121, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FoolproofValidation.0.9.4518\lib\net45\FoolproofValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -175,10 +179,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.min.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\material-icons.css" />
@@ -229,6 +240,11 @@
     <Content Include="Models\SQL\iVolunteerSQL.edmx.diagram">
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Content>
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
@@ -251,6 +267,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
+    <Compile Include="Common\HelperExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
@@ -264,6 +281,8 @@
     <Compile Include="DAL\MongoDB\Mongo_Budget_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
     <Compile Include="Common\ValidationHelper.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Finance_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Fund_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Plan_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
@@ -293,6 +312,8 @@
     <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Finance.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Fund.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
@@ -312,10 +333,15 @@
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\FinanceItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\InsideDonator.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\MainTask.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\OutsideDonator.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\SubTask.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TaskCount.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TeamFoundDonator.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
@@ -388,8 +414,10 @@
     <Compile Include="Models\SQL\SQL_Project.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModel\ChangePasswordModel.cs" />
     <Compile Include="Models\ViewModel\LoginModel.cs" />
     <Compile Include="Models\ViewModel\RegisterModel.cs" />
+    <Compile Include="Models\ViewModel\ReportModel.cs" />
     <Compile Include="Models\ViewModel\SearchModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -407,7 +435,6 @@
     <Content Include="Views\Shared\_ImageUpload.cshtml" />
     <Content Include="Views\Account\_NavigationPanel.cshtml" />
     <Content Include="Views\Shared\UserLayout.cshtml" />
-    <Content Include="Views\Shared\_Comment.cshtml" />
     <Content Include="Views\Shared\ErrorMessage.cshtml" />
     <Content Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Home\_Login.cshtml" />
@@ -421,7 +448,6 @@
     <Content Include="Views\Account\_JoinedGroups.cshtml" />
     <Content Include="Views\Account\_JoinedProjects.cshtml" />
     <Content Include="Views\User\UserHome.cshtml" />
-    <Content Include="Views\Project\ProjectHome.cshtml" />
     <Content Include="Views\User\_PersonalInformation.cshtml" />
     <Content Include="Views\User\_JoinedGroups.cshtml" />
     <Content Include="Views\User\_CurrentProjects.cshtml" />
@@ -430,30 +456,18 @@
     <Content Include="Views\Group\_CurrentProjects.cshtml" />
     <Content Include="Views\Project\_ProjectInformation.cshtml" />
     <Content Include="Views\Group\_ActivityHistory.cshtml" />
-    <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Account\_ActionToGroup.cshtml" />
     <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
     <Content Include="Views\Group\_GroupStructure.cshtml" />
     <Content Include="Views\User\_FriendList.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Shared\_NotificationPanel.cshtml" />
-    <Content Include="Views\Shared\_PopupNotification.cshtml" />
-    <Content Include="Views\Shared\_PopupFriend.cshtml" />
-    <Content Include="Views\Shared\_PopupMessage.cshtml" />
-    <Content Include="Views\Shared\_PostCreate.cshtml" />
-    <Content Include="Views\Shared\_PostWriteComment.cshtml" />
-    <Content Include="Views\Shared\_PostInteractionPanel.cshtml" />
-    <Content Include="Views\Shared\_PostContent.cshtml" />
-    <Content Include="Views\Shared\_PostOwner.cshtml" />
     <Content Include="Views\Group\_GroupPublic.cshtml" />
     <Content Include="Views\Group\_GroupDiscussion.cshtml" />
     <Content Include="Views\Group\_GroupGallery.cshtml" />
     <Content Include="Views\Project\_ProjectPublic.cshtml" />
     <Content Include="Views\Project\_ProjectDiscussion.cshtml" />
-    <Content Include="Views\Project\_ProjectStructuresss.cshtml" />
+    <Content Include="Views\Project\_ProjectStructure.cshtml" />
     <Content Include="Views\Project\_ProjectGallery.cshtml" />
-    <Content Include="Views\Project\_ProjectPlanThisdayTask.cshtml" />
-    <Content Include="Views\Project\_ProjectPlanTaskDetail.cshtml" />
     <Content Include="Views\Project\SearchProject.cshtml" />
     <Content Include="Views\Group\SearchGroup.cshtml" />
     <Content Include="Views\User\SearchUser.cshtml" />
@@ -471,7 +485,6 @@
     <Content Include="Views\Group\_ParticipatedProjects.cshtml" />
     <Content Include="Views\Group\_SponsoredProjects.cshtml" />
     <Content Include="Views\Account\_ActionToProject.cshtml" />
-    <Content Include="Views\User\View.cshtml" />
     <Content Include="Views\Account\_FriendRequestList.cshtml" />
     <Content Include="Views\User\_Friends.cshtml" />
     <Content Include="Views\Admin\BannedObjects.cshtml" />
@@ -482,35 +495,88 @@
     <Content Include="Views\Admin\AdminHome.cshtml" />
     <Content Include="Views\Project\_ProjectLeaders.cshtml" />
     <Content Include="Views\Project\_ProjectMembers.cshtml" />
-    <Content Include="Views\Project\_ProjectStructure.cshtml" />
-    <Content Include="Views\Project\_ProjectRequests.cshtml" />
     <Content Include="Views\Project\_UserJoinRequests.cshtml" />
     <Content Include="Views\Project\_CreateSponsor.cshtml" />
     <Content Include="Views\Project\_UserSponsorRequests.cshtml" />
     <Content Include="Views\Project\_GroupJoinRequests.cshtml" />
     <Content Include="Views\Project\_GroupSponsorRequests.cshtml" />
-    <Content Include="Views\Project\_ProjectOrganizers.cshtml" />
-    <Content Include="Views\Project\_ProjectSponsors.cshtml" />
+    <Content Include="Views\Project\_SponsoredUsers.cshtml" />
     <Content Include="Views\Project\_JoinedGroups.cshtml" />
     <Content Include="Views\Project\_SponsoredGroups.cshtml" />
     <Content Include="Views\Project\_OrganizedGroups.cshtml" />
     <Content Include="Views\Shared\_ChatRoom.cshtml" />
-    <Content Include="Views\Budget\_BudgetError.cshtml" />
-    <Content Include="Views\Budget\_EditEachFieldBudgetItem.cshtml" />
+    <Content Include="Views\Account\_FriendNotInGroup.cshtml" />
+    <Content Include="Views\Group\_UpdateGroupInformation.cshtml" />
+    <Content Include="Views\Account\_FriendNotInProject.cshtml" />
+    <Content Include="Views\Project\_OrganizedUsers.cshtml" />
+    <Content Include="Views\Project\_SponsoredGuests.cshtml" />
+    <Content Include="Views\Project\_GuestSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_SuggestedUsers.cshtml" />
+    <Content Include="Views\Account\_InvitedProjects.cshtml" />
+    <Content Include="Views\Account\_LeadGroups.cshtml" />
+    <Content Include="Views\Group\_ActionToProject.cshtml" />
+    <Content Include="Views\Group\_MemberSelector.cshtml" />
+    <Content Include="Views\Project\_GroupMembersList.cshtml" />
+    <Content Include="Views\Project\_MembersNotOrganizer.cshtml" />
+    <Content Include="Views\Project\_JoinedGroupsNotOrganizer.cshtml" />
+    <Content Include="Views\Project\_UpdateProjectInformation.cshtml" />
+    <Content Include="Views\Account\_ChangePassword.cshtml" />
+    <Content Include="Views\Project\_ProjectResult.cshtml" />
+    <Content Include="Views\Group\_GroupResult.cshtml" />
+    <Content Include="Views\User\_UserResult.cshtml" />
+    <Content Include="Views\Home\_ForgotPassword.cshtml" />
+    <Content Include="Views\Group\_PostList.cshtml" />
+    <Content Include="Views\Group\_PostWriteComment.cshtml" />
+    <Content Include="Views\Group\_PostCreate.cshtml" />
+    <Content Include="Views\Project\_PostList.cshtml" />
+    <Content Include="Views\Project\_PostCreate.cshtml" />
+    <Content Include="Views\Project\_PostWriteComment.cshtml" />
+    <Content Include="Views\Report\_GroupReport.cshtml" />
+    <Content Include="Views\Report\_ProjectReport.cshtml" />
+    <Content Include="Views\Report\_UserReport.cshtml" />
+    <Content Include="Views\Project\ProjectHome.cshtml" />
+    <Content Include="Views\Group\_CommentList.cshtml" />
+    <Content Include="Views\Project\_CommentList.cshtml" />
+    <Content Include="Views\Group\_LikeStatus.cshtml" />
+    <Content Include="Views\Project\_LikeStatus.cshtml" />
+    <Content Include="Views\Group\_ActionToPost.cshtml" />
+    <Content Include="Views\Group\_PinnedPost.cshtml" />
+    <Content Include="Views\Shared\_ImageUploadInPost.cshtml" />
+    <Content Include="Views\Shared\_PostImage_Temp.cshtml" />
+    <Content Include="Views\Home\_SlideQuotes.cshtml" />
     <Content Include="Views\Budget\_Budget.cshtml" />
     <Content Include="Views\Budget\_BudgetAddItem.cshtml" />
     <Content Include="Views\Budget\_BudgetAddRecord.cshtml" />
     <Content Include="Views\Budget\_BudgetEditItem.cshtml" />
     <Content Include="Views\Budget\_BudgetEditRecord.cshtml" />
+    <Content Include="Views\Budget\_BudgetError.cshtml" />
     <Content Include="Views\Budget\_BudgetItem.cshtml" />
     <Content Include="Views\Budget\_BudgetRecord.cshtml" />
+    <Content Include="Views\Budget\_EditEachFieldBudgetItem.cshtml" />
+    <Content Include="Views\Budget\_Finance.cshtml" />
+    <Content Include="Views\Budget\_FinanceAddItem.cshtml" />
+    <Content Include="Views\Budget\_FinanceDetails.cshtml" />
+    <Content Include="Views\Budget\_Fund.cshtml" />
+    <Content Include="Views\Budget\_FundAddTeamFoundDonator.cshtml" />
+    <Content Include="Views\Budget\_FundInsideDonator.cshtml" />
+    <Content Include="Views\Budget\_FundIsReceiveTeamFoundDonator.cshtml" />
+    <Content Include="Views\Budget\_FundOutsideDonator.cshtml" />
+    <Content Include="Views\Budget\_FundTeamFoundDonator.cshtml" />
     <Content Include="Views\Plan\_AddMainTask.cshtml" />
     <Content Include="Views\Plan\_AddPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_AddSubTask.cshtml" />
     <Content Include="Views\Plan\_EditPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_ListSubTask.cshtml" />
     <Content Include="Views\Plan\_MainTask.cshtml" />
+    <Content Include="Views\Plan\_MainTaskDetail.cshtml" />
+    <Content Include="Views\Plan\_MyTask.cshtml" />
     <Content Include="Views\Plan\_Plan.cshtml" />
+    <Content Include="Views\Plan\_PlanComment.cshtml" />
     <Content Include="Views\Plan\_PlanPhase.cshtml" />
+    <Content Include="Views\Plan\_TaskCount.cshtml" />
+    <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
+    <Content Include="Views\User\_UpdatePersonalInformation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -520,7 +586,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Report\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

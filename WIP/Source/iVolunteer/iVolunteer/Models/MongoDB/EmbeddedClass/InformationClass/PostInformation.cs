@@ -40,7 +40,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.ImgLink = "";
             this.LikeCount = 0;
             this.CommentCount = 0;
-            this.IsPinned = Status.IS_PINNED;
+            this.IsPinned = Status.IS_NOT_PINNED;
             this.IsPublic = Status.IS_PRIVATE;
         }
     }

@@ -1,13 +1,6 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;" id="current">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Sự kiện đang tham gia</h4>
-        </div>
-    </div>
-    
-    
     <!-- List Project -->
                 @foreach (var item in Model)
                 {
@@ -26,33 +19,38 @@
                                         <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
                                     </div>
                                     <div class="row">
-                                        <table style="font-size: 14px;" width="60%">
+                                        <table style="font-size: 14px;" width="90%">
                                             <tr>
-                                                <td style="color: #049f88;">ĐỊA ĐIỂM</td>
+                                                <td style="color: #049f88;" width="15%">THAM GIA</td>
+                                                <td>@Html.DisplayFor(modelItem => item.MemberCount) người</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #049f88;" width="15%">ĐỊA ĐIỂM</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Location)</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #049f88;">LĨNH VỰC</td>
-                                                <td>Môi trường, Con người</td>
+                                                <td style="color: #049f88;" width="15%">LĨNH VỰC</td>
+                                                <td>@Html.DisplayFor(modelItem => item.TagsString)</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #049f88;">THỜI GIAN</td>
+                                                <td style="color: #049f88;" width="15%">THỜI GIAN</td>
                                                 <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
                                             </tr>
                                             <tr>
-                                                <td style="color: #049f88;">LIÊN HỆ</td>
+                                                <td style="color: #049f88;" width="15%">LIÊN HỆ</td>
                                                 <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
                                             </tr>
                                         </table>
                                     </div>
+                                    @if (ViewBag.IsMyHome == true)
+                                    {
+                                        <div class="row" style="margin-top: 10px" id="@item.ProjectID">
+                                            @{Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });
+                                            }
+                                        </div>
+                                                }
                                 </div>
-                                @if (ViewBag.IsMyHome == true)
-                                {
-                                    <div class="row" style="margin-top: 10px" id="@item.ProjectID">
-                                        @{Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });
-                                        }
-                                    </div>
-                                }
+                               
                             </div>
                         </div>
                     </div>

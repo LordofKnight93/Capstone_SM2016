@@ -1,6 +1,6 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PlanPhaseInformation
 
-@using (Ajax.BeginForm("EditPlanPhase", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, userRole = ViewBag.UserRole }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "updatePlanPhaseBox" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+@using (Ajax.BeginForm("EditPlanPhase", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "updatePlanPhaseBox" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
     

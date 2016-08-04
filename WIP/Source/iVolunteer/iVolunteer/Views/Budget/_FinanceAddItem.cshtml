@@ -1,0 +1,122 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.FinanceItem
+
+@using (Ajax.BeginForm("AddFinanceItem", "Budget", new { financeID = ViewBag.FinanceID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Term, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Term, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Term, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="payer" class="control-label col-md-2">Người thanh toán</label>
+            <div class="col-md-8">
+                <input type="hidden" id="txtUserID" name="txtUserID"/>
+                <input type="text" class="form-control" name="txtPayer" id="payer"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", @type= "date" } })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-date" style="font-weight: normal;">@ViewBag.MessagePayDate</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform">
+                    HỦY
+                </a>
+                <input type="submit" value="THÊM" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#addFinanceItemForm").empty();
+        });
+
+        $('#Term').keypress(function () {
+            $('[data-valmsg-for="Term"]').hide();
+        });
+
+        $('#Amount').keypress(function () {
+            $('[data-valmsg-for="Amount"]').hide();
+        });
+
+        $('#Date').keypress(function () {
+            $('[data-valmsg-for="Date"]').hide();
+            $('#error-date').hide();
+        });
+
+        // Search Member
+        $("#payer").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    url: "@Url.Action("ProjectMembersToAssign","Project")",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        sourceID: '@ViewBag.FinanceID',
+                        target: 'finance',
+                        name: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.DisplayName,
+                                value: item.UserID
+                            }
+                        }))
+                    },
+                    error: function () {
+                        alert("Error");
+                    }
+                });
+            },
+            select: function (event, ui) {
+                $("#txtUserID").val(ui.item.value);
+                $("#payer").val(ui.item.label);
+                return false;
+            }
+        });
+    });
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+        var errorPayDate = $('#error-date', result.responseText).length > 0;
+
+        if (isError || errorPayDate) {
+            // there was an error => we update the container of the form
+            $('#addFinanceItemForm').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#addFinanceItemForm").empty();
+            $("#tabplanbudget").html(result.responseText);
+        }
+    };
+
+</script>
+
+

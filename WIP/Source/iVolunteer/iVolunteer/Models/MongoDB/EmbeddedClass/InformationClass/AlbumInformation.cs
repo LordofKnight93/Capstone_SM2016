@@ -14,7 +14,9 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public string AlbumID { get; set; }
         public string AlbumName { get; set; }
         public SDLink Creator { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime DateCreate { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime DateLastActivity { get; set; }
         public int ImageCount { get; set; }
         public int LikeCount { get; set; }

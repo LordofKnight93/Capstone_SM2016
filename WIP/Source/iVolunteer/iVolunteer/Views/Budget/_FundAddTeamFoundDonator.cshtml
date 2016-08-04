@@ -1,0 +1,110 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.TeamFoundDonator
+
+@using (Ajax.BeginForm("AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID, isLeader = ViewBag.IsLeader }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Information, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Information, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Information, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReceiveDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.ReceiveDate, new { htmlAttributes = new { @class = "form-control", @type = "date"} })
+                @Html.ValidationMessageFor(model => model.ReceiveDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Method, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.Method, new SelectListItem[] {
+                                                                    new SelectListItem() {Text = "TIỀN MẶT", Value = "1" },
+                                                                    new SelectListItem() {Text = "CHUYỂN KHOẢN", Value = "2" } }, 
+                                                                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Method, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsReceived, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @*<div class="checkbox">
+                    @Html.EditorFor(model => model.IsReceived)
+                    @Html.ValidationMessageFor(model => model.IsReceived, "", new { @class = "text-danger" })
+                </div>*@
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.IsReceived)
+                    @Html.ValidationMessageFor(model => model.IsReceived, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.IsReceived)
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform">
+                    HỦY
+                </a>
+                <input type="submit" value="THÊM" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#addTeamFoundDonatorForm").empty();
+        });
+
+        $('#Name').keypress(function () {
+            $('[data-valmsg-for="Name"]').hide();
+        });
+
+        $('#Amount').keypress(function () {
+            $('[data-valmsg-for="Amount"]').hide();
+        });
+
+        $('#ReceiveDate').keypress(function () {
+            $('[data-valmsg-for="ReceiveDate"]').hide();
+        });
+    });
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+
+        if (isError) {
+            // there was an error => we update the container of the form
+            $('#addTeamFoundDonatorForm').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#addFinanceItemForm").empty();
+            $("#tabplanbudget").html(result.responseText);
+        }
+    };
+</script>
+

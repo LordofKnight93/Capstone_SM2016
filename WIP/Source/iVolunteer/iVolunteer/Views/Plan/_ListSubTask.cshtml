@@ -1,0 +1,379 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.SubTask>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        //id for task status
+        string taskviewid = "subtask" + item.SubTaskID;
+        string statusviewid = "status" + item.SubTaskID;
+        string selectnewstatus = "selectstatus" + item.SubTaskID;
+        string selectstatusbox = "selectbox" + item.SubTaskID;
+        string cbxStatus = "cbxstatus-" + item.SubTaskID;
+
+        //id for task content
+        string lbContent = "lbContent-" + item.SubTaskID;
+        string txtContent = "txtContent-" + item.SubTaskID;
+        string btnContentClose = "btnContentClose-" + item.SubTaskID;
+
+        //id for Deadline
+        string spDeadline = "spDeadline-" + item.SubTaskID;
+        string txtDeadline = "txtDeadline-" + item.SubTaskID;
+        string btnDeadlineClose = "btnDeadlineClose-" + item.SubTaskID;
+
+        //id for Assign
+        string spAssign = "spAssign-" + item.SubTaskID;
+        string txtAssign = "txtAssign-" + item.SubTaskID;
+        string txtAssignID = "txtAssignID-" + item.SubTaskID;
+        string btnAssignClose = "btnAssignClose-" + item.SubTaskID;
+
+        <li>
+            <div>
+                @if (ViewBag.IsLeader == true)
+                {
+                    <div class="delete-sub-task">
+                        @Ajax.ActionLink("delete", "DeleteSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID, subTaskID = item.SubTaskID },
+                                                                        new AjaxOptions { UpdateTargetId = "subtaskList", InsertionMode = InsertionMode.Replace },
+                                                                        new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer; " })
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (item.Priolity == 1)
+                    {
+                            <div class="priolity low"></div>
+                        }
+                        else if (item.Priolity == 2)
+                        {
+                            <div class="priolity medium"></div>
+                        }
+                        else
+                        {
+                            <div class="priolity high"></div>
+                        }
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <div class="checkbox" style="margin-bottom: 0">
+                                    @if (item.IsDone == 3)
+                                    {
+                                        <input id="@cbxStatus" type="checkbox" checked disabled>
+                                    }
+                                    else
+                                    {
+                                        <input id="@cbxStatus" type="checkbox" disabled>
+                                    }
+                                    <label for="@cbxStatus">
+                                        @*@item.Content*@
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-11" style="padding-left: 0; padding-top: 10px;">
+                                @if (item.IsDone == 3)
+                                {
+                                    <label id="@lbContent" style="font-weight: normal; text-decoration: line-through; font-style: italic;">@item.Content</label>
+                                    <input class="txt-edit-subtask-content" id="@txtContent" value="@item.Content" style="display: none;" />
+                                    <i id="@btnContentClose" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+                                }
+                                else if (item.IsDone != 3)
+                                {
+                                    <label id="@lbContent" style="font-weight: normal;">@item.Content</label>
+                                    <input class="txt-edit-subtask-content" id="@txtContent" value="@item.Content" style="display: none;" />
+                                    <i id="@btnContentClose" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <ul class="list-task-infor">
+                            <li id="@statusviewid">
+                                @if (item.IsDone == 1)
+                                {
+                                    <span class="badge is-unread-notification">ĐANG CHỜ</span>
+                                }
+                                else if (item.IsDone == 2)
+                                {
+                                    <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
+                                }
+                                else if (item.IsDone == 3)
+                                {
+                                    <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                }
+                                else
+                                {
+                                    <span class="badge is-due-past">THỰC HIỆN LẠI</span>
+                                }
+                            </li>
+                            <li id="@selectnewstatus" style="display: none">
+                                @*<form style="display: inline" method="post" id="@formchangestatus">*@
+                                <select class="slc-task-status" id="@selectstatusbox">
+                                    <option value="1">ĐANG CHỜ</option>
+                                    <option value="2">ĐANG THỰC HIỆN</option>
+                                    <option value="3">ĐÃ HOÀN THÀNH</option>
+                                    <option value="4">THỰC HIỆN LẠI</option>
+                                </select>
+                                @*</form>*@
+                            </li>
+                            <li>
+                                <i class="material-icons md-18 md-myred">access_time</i>
+                                <span id="@spDeadline" class="overdue">@item.Deadline</span>
+                                <input class="txt-edit-subtask-deadline" id="@txtDeadline" type="datetime-local" value="@item.Deadline.Date.ToString("yyyy-MM-ddThh:mm")" style="display: none;" />
+                                <i id="@btnDeadlineClose" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+                            </li>
+                            <li>
+                                <i class="material-icons md-18 md-mygray">perm_identity</i>
+                                <span id="@spAssign" class="assign-people">@item.AssignPeople.DisplayName</span>
+                                <input class="txt-edit-subtask-assign" id="@txtAssign" value="@item.AssignPeople.DisplayName" style="display: none;" />
+                                <input id="@txtAssignID" value="@item.AssignPeople.ID" type="hidden" />
+                                <i id="@btnAssignClose" class="material-icons" style="display: none; cursor: pointer">cancel</i>
+                            </li>
+                        </ul>
+                        @if (ViewBag.IsLeader == true && item.IsDone != 3)
+                        {
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+
+                                    /************************************ Update Sub Task Content ***********************************/
+                                    $("#" + '@lbContent').click(function () {
+                                        $("#" + '@lbContent').hide();
+                                        $("#" + '@txtContent').show();
+                                        $("#" + '@btnContentClose').show();
+                                    });
+
+                                    //Hide textfield subtask content
+                                    $("#" + '@btnContentClose').click(function () {
+                                        $("#" + '@lbContent').show();
+                                        $("#" + '@txtContent').hide();
+                                        $("#" + '@txtContent').val($("#" + '@lbContent').text());
+                                        $("#" + '@btnContentClose').hide();
+                                    });
+
+                                    //Update to DB
+                                    $("#" + '@txtContent').keypress(function (e) {
+                                        if (e.which == 13) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@Url.Action("UpdateSubTaskContent", "Plan")",
+                                                data: {
+                                                    planPhaseID: "@ViewBag.PlanPhaseID",
+                                                    mainTaskID: "@ViewBag.MainTaskID",
+                                                    subTaskID: "@item.SubTaskID",
+                                                    txtSubTaskContent: "" + $("#" + '@txtContent').val()
+                                                },
+                                                success: function (response) {
+                                                    $("#subtaskList").html(response);
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                    /*************************************************** Update Sub Task Deadline **********************************/
+
+                                    //Show textfield subtask deadline
+                                    $("#" + '@spDeadline').click(function () {
+                                        $("#" + '@spDeadline').hide();
+                                        $("#" + '@txtDeadline').show();
+                                        $("#" + '@btnDeadlineClose').show();
+                                    });
+
+                                    //Hide textfield subtask content
+                                    $("#" + '@btnDeadlineClose').click(function () {
+                                        $("#" + '@spDeadline').show();
+                                        $("#" + '@txtDeadline').hide();
+                                        $("#" + '@txtDeadline').val('@item.Deadline.Date.ToString("yyyy-MM-ddThh:mm")');
+                                        $("#" + '@btnDeadlineClose').hide();
+                                    });
+
+                                    //Update to DB
+                                    $("#" + '@txtDeadline').keypress(function (e) {
+                                        if (e.which == 13) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@Url.Action("UpdateSubTaskDateline", "Plan")",
+                                                data: {
+                                                    planPhaseID: "@ViewBag.PlanPhaseID",
+                                                    mainTaskID: "@ViewBag.MainTaskID",
+                                                    subTaskID: "@item.SubTaskID",
+                                                    txtSubTaskDateline: "" + $("#" + '@txtDeadline').val()
+                                                },
+                                                success: function (response) {
+                                                    $("#subtaskList").html(response);
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                    /************************************** Update Assign ***********************************************/
+                                    //Show textfield subtask deadline
+                                    $("#" + '@spAssign').click(function () {
+                                        $("#" + '@spAssign').hide();
+                                        $("#" + '@txtAssign').show();
+                                        $("#" + '@btnAssignClose').show();
+                                    });
+
+                                    //Hide textfield subtask content
+                                    $("#" + '@btnAssignClose').click(function () {
+                                        $("#" + '@spAssign').show();
+                                        $("#" + '@txtAssign').hide();
+                                        $("#" + '@txtAssign').val($("#" + '@spAssign').text());
+                                        $("#" + '@txtAssignID').val('@item.AssignPeople.ID');
+                                        $("#" + '@btnAssignClose').hide();
+                                    });
+
+                                    @{ string url = "/Project/ProjectMembersToAssign?planPhaseID=" + @ViewBag.PlanPhaseID; }
+                                    // Search Member
+                                    $("#" + '@txtAssign').autocomplete({
+                                        source: function (request, response) {
+
+                                            $.ajax({
+                                                url: "@url",
+                                                dataType: "json",
+                                                type: "POST",
+                                                data: {
+                                                    name: request.term
+                                                },
+                                                success: function (data) {
+                                                    response($.map(data, function (item) {
+                                                        return {
+                                                            label: item.DisplayName,
+                                                            value: item.UserID
+                                                        }
+                                                    }))
+                                                },
+                                                error: function () {
+                                                    alert("Error");
+                                                }
+                                            });
+                                        },
+                                        select: function (event, ui) {
+                                            $("#" + '@txtAssignID').val(ui.item.value);
+                                            $("#" + '@txtAssign').val(ui.item.label);
+
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@Url.Action("UpdateSubTaskAssign", "Plan")",
+                                                data: {
+                                                    planPhaseID: "@ViewBag.PlanPhaseID",
+                                                    mainTaskID: "@ViewBag.MainTaskID",
+                                                    subTaskID: "@item.SubTaskID",
+                                                    txtSubTaskAssignID: "" + $("#" + '@txtAssignID').val()
+                                                },
+                                                success: function (response) {
+                                                    $("#subtaskList").html(response);
+                                                }
+                                            });
+                                            return false;
+                                        }
+                                    });
+
+                                });
+                            </script>
+                        }
+                        @if(ViewBag.IsLeader == true || Session["UserID"].ToString().Equals(item.AssignPeople.ID) && item.IsDone != 3)
+                        {
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+
+                                    @{
+                                        string newstatusviewid = "#" + statusviewid;
+                                        string newselectnewstatus = "#" + selectnewstatus;
+                                        string selectstatusboxnew = "#" + selectstatusbox;
+                                    }
+                                    /************************************ Change Sub Task Status ****************************************/
+
+                                    //when hover task status
+                                    $('@newstatusviewid').hover(function () {
+                                        $('@newstatusviewid').hide();
+                                        $('@newselectnewstatus').css('display', 'inline');
+                                    });
+
+                                    $('@newselectnewstatus').mouseleave(function () {
+                                        $('@newstatusviewid').css('display', 'inline');
+                                        $('@newselectnewstatus').hide();
+                                    });
+
+                                    $('@selectstatusboxnew').on('change', function () {
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "@Url.Action("ChangeTaskStatus", "Plan")",
+                                            data: {
+                                                planPhaseID: "@ViewBag.PlanPhaseID",
+                                                mainTaskID: "@ViewBag.MainTaskID",
+                                                subTaskID: "@item.SubTaskID",
+                                                slcStatus: "" + $('@selectstatusboxnew').val()
+                                            },
+                                            success: function (response) {
+                                                $("#subtaskList").html(response);
+                                            }
+                                        });
+                                    });
+
+                                    $("#" + '@cbxStatus').removeAttr("disabled");
+
+                                    $("#" + '@cbxStatus').click(function () {
+                                        var newStatus = "";
+                                        if ($("#" + '@cbxStatus').is(':checked')){
+                                            newStatus = "3";
+                                        }
+                                        else {
+                                            newStatus = "2";
+                                        }
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "@Url.Action("ChangeTaskStatus", "Plan")",
+                                            data: {
+                                                planPhaseID: "@ViewBag.PlanPhaseID",
+                                                mainTaskID: "@ViewBag.MainTaskID",
+                                                subTaskID: "@item.SubTaskID",
+                                                slcStatus: "" + newStatus
+                                            },
+                                            success: function (response) {
+                                                $("#subtaskList").html(response);
+                                            }
+                                        });
+                                    });
+                                });
+                            </script>
+                        }
+                        @if(ViewBag.IsLeader == false && item.IsDone == 3)
+                        {
+                            <script type="text/javascript">
+                                $(document).ready(function () {
+                                    $("#" + '@cbxStatus').attr('disabled', true);
+                                    $("#" + '@statusviewid').hover(function () {
+                                        $("#" + '@statusviewid').show();
+                                        $("#" + '@selectnewstatus').hide();
+                                    });
+                                });
+                            </script>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </li>
+        }
+    }
+    else
+    {
+
+    }
+@if (ViewBag.IsLeader == true)
+            {
+                string idupdate = "addSubTaskForm" + ViewBag.MainTaskID;
+    <li>
+        <div class="row">
+            <div class="col-sm-12">
+                <!--<label style="font-weight: bold; color: #049f88;">THÊM CÔNG VIỆC ...</label>-->
+                @Ajax.ActionLink("THÊM MỤC ...", "AddSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID }, new AjaxOptions { UpdateTargetId = "addSubTaskForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+            </div>
+            <div class="col-sm-12" id="addSubTaskForm">
+
+            </div>
+        </div>
+    </li>
+}

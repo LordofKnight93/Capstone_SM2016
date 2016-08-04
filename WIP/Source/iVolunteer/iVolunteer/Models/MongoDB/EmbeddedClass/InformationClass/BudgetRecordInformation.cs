@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Common;
 using MongoDB.Bson.Serialization.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
@@ -14,6 +15,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     {
         public string BudgetRecordID { get; set; }
         public SDLink Project { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập tên đầu mục.")]
         public string Name { get; set; }
         public double Total { get; set; }
         public BudgetRecordInformation()

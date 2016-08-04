@@ -1,6 +1,6 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.BudgetItem
 
-@using (Ajax.BeginForm("EditEachFieldBudgetItem", "Budget", new { budgetID = ViewBag.BudgetID, itemContent = ViewBag.ItemContent, field = ViewBag.Field, userRole = ViewBag.UserRole }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "budgetItemDetails" + ViewBag.BudgetID }, new { @id = "formValidation", @class = "register-form" }))
+@using (Ajax.BeginForm("EditEachFieldBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = ViewBag.BudgetItemID, field = ViewBag.Field }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form" }))
 {
     @Html.AntiForgeryToken()
 
@@ -79,3 +79,37 @@
         }
     </div>
 }
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#edit-budget-item-info").empty();
+        });
+
+        $('#Content').keypress(function () {
+            $('[data-valmsg-for="Content"]').hide();
+        });
+
+        $('#UnitPrice').keypress(function () {
+            $('[data-valmsg-for="UnitPrice"]').hide();
+        });
+
+        $('#Quatity').keypress(function () {
+            $('[data-valmsg-for="Quatity"]').hide();
+        });
+    });
+
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+
+        if (isError) {
+            // there was an error => we update the container of the form
+            $("#edit-budget-item-info").html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#edit-budget-item-info").empty();
+            $("#budgetItemDetails" + '@ViewBag.BudgetRecordID').html(result.responseText);
+        }
+    };
+</script>

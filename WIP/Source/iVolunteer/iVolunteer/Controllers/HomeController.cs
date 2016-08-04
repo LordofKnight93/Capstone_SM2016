@@ -25,7 +25,7 @@ namespace iVolunteer.Controllers
             try
             {
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.FrontPage_Project();
+                var result = projectDAO.FrontPage_Project(0, 10);
                 return View("FrontPage", result);
             }
             catch
@@ -58,6 +58,11 @@ namespace iVolunteer.Controllers
 
         public ActionResult Newfeed()
         {
+            if (Session["UserID"] == null)
+            {
+                return FrontPage();
+            }
+
             if (Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("Newfeed");
         }
@@ -70,42 +75,13 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Register(RegisterModel registerModel)
         {
+            if(!ModelState.IsValid) return View("Register", registerModel);
+
             // if user already login then redirect ro new feed
             if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
 
             string err = "";
             bool isValid = true;
-
-            // validate information
-            if (!ValidationHelper.IsValidEmail(registerModel.Email))
-            {
-                err = Error.EMAIL_INVALID + Environment.NewLine;
-                isValid = false;
-            }
-
-            if (!ValidationHelper.IsValidIdentifyID(registerModel.IdentifyID))
-            {
-                err = Error.IDENTIFYID_INVALID + Environment.NewLine;
-                isValid = false;
-            }
-
-            if (!ValidationHelper.IsValidPassword(registerModel.Password))
-            {
-                err = Error.PASSWORD_INVALID + Environment.NewLine;
-                isValid = false;
-            }
-
-            if (!ValidationHelper.IsValidPhone(registerModel.Phone))
-            {
-                err = Error.PHONE_INVALID + Environment.NewLine;
-                isValid = false;
-            }
-
-            if (!isValid)
-            {
-                ViewBag.Message = err;
-                return View("Register", registerModel);
-            }
 
             try
             {
@@ -192,7 +168,7 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel loginModel)
         {
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid) return PartialView("_Login", loginModel);
 
             SQL_Account account = null;
             try
@@ -203,28 +179,28 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("Login", loginModel);
+                return PartialView("_Login", loginModel);
             }
 
             if (account == null)
             {
                 ViewBag.Message = Error.ACCOUNT_NOT_EXIST;
-                return View("Login", loginModel);
+                return PartialView("_Login", loginModel);
             }
             if (!account.IsActivate)
             {
                 ViewBag.Message = Error.ACCOUNT_BANNED;
-                return View("Login", loginModel);
+                return PartialView("_Login", loginModel);
             }
             if (!account.IsConfirm)
             {
                 ViewBag.Message = Error.EMAIL_NOT_CONFIRM;
-                return View("Login", loginModel);
+                return PartialView("_Login", loginModel);
             }
             if (account.Password != loginModel.Password)
             {
                 ViewBag.Message = Error.WRONG_PASSWORD;
-                return View("Login", loginModel);
+                return PartialView("_Login", loginModel);
             }
             // code save cookie wil be added here later
 
@@ -233,11 +209,12 @@ namespace iVolunteer.Controllers
             Session["DisplayName"] = account.DisplayName;
             Session["Role"] = account.IsAdmin ? "Admin" : "User";
 
-            //redirect
-            if (account.IsAdmin)
-                return RedirectToAction("Manage", "Admin");
-            else
-                return RedirectToAction("Newfeed","Home");
+            return JavaScript("location.reload(true)");
+            ////redirect
+            //if (account.IsAdmin)
+            //    return RedirectToAction("Manage", "Admin");
+            //else
+            //    return RedirectToAction("Newfeed","Home");
         }
 
         public ActionResult LogOut()
@@ -248,23 +225,69 @@ namespace iVolunteer.Controllers
 
         public ActionResult Search(string name, string option)
         {
-            if (String.IsNullOrEmpty(name) || name.Length > 100)
-            {
-                ViewBag.Message = "Độ dài chuỗi nhập vào từ 0 đến 100 ký tự";
-                return View("ErrorMessage");
-            }
-            
             switch (option)
             {
                 case "User":
-                    return RedirectToAction("SearchUser", "User", new { name = name });
+                    if (String.IsNullOrEmpty(name.Trim()) || name.Trim().Length > 100)
+                    {
+                        ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
+                        return View("ErrorMessage");
+                    }
+                    return RedirectToAction("SearchUser", "User", new { name = name, page = 1 });
                 case "Group":
-                    return RedirectToAction("SearchGroup", "Group", new { name = name });
+                    if (String.IsNullOrEmpty(name.Trim()) || name.Trim().Length > 100)
+                    {
+                        ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
+                        return View("ErrorMessage");
+                    }
+                    return RedirectToAction("SearchGroup", "Group", new { name = name, page = 1 });
                 case "Project":
-                    return RedirectToAction("SearchProject", "Project", new { name = name });
+                    SearchModel searchModel = new SearchModel();
+                    searchModel.Name = name;
+                    TempData["SearchModel"] = searchModel;
+                    return RedirectToAction("SearchProject", "Project");
                 default:
-                    ViewBag.Message = Error.WRONG_PASSWORD;
+                    ViewBag.Message = Error.INVALID_INFORMATION;
                     return View("ErrorMessage");
+            }
+        }
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return PartialView("_ForgotPassword");
+        }
+        [HttpPost]
+        public ActionResult ForgotPassword(string email)
+        {
+            try
+            {
+                ViewBag.Email = email;
+
+                if (!ValidationHelper.IsValidEmail(email))
+                {
+                    ViewBag.Message = Error.EMAIL_INVALID;
+                    return PartialView("_ForgotPassword");
+                }
+
+                SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                if(!accountDAO.Is_Email_Exist(email))
+                {
+                    ViewBag.Message = "Email này chưa đăng ký!";
+                    return PartialView("_ForgotPassword");
+                }
+                //get password
+                string password = accountDAO.Get_Account_By_Email(email).Password;
+                //encrypt here
+
+                //sent mail here
+
+                ViewBag.Message = "Mật khẩu đã được gửi vào hòm thư!";
+                return PartialView("_ForgotPassword");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
             }
         }
     }

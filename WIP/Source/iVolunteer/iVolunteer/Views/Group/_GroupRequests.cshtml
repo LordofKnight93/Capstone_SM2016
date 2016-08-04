@@ -9,10 +9,9 @@
                 <!-- Header -->
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>@Model.Count() yêu cầu</h4>
+                        <h4>@Model.Count() người muốn gia nhập</h4>
                     </div>
                     <div class="col-sm-2" style="text-align: right">
-                        <button class="btn btn-image" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="material-icons">person_add</i></button>
                     </div>
 
                     <!-- Search bar -->
@@ -36,53 +35,55 @@
                 <div class="row">
                     @foreach (var item in Model)
                     {
-                    <!-- Member -->
-                        <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
-                            <div class="member-container">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <img src="@item.Get_AvatarLink()" height="70" width="70">
+                        <div id="@item.UserID">
+                            <!-- Member -->
+                            <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                                <div class="member-container">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <img src="@item.Get_AvatarLink()" height="70" width="70">
+                                        </div>
+
+                                        <div class="col-xs-5">
+                                            <div class="row">
+                                                <label class="member-name">
+                                                    <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px">
+                                                <label class="member-sumerise">
+                                                    @Html.DisplayFor(modelItem => item.Address)
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px">
+                                                <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="divider-vertical-member"></div>
+
+                                        <div class="col-xs-4">
+                                            <div class="row" style="text-align: center">
+                                                <label class="member-position" style="font-size: 14px">
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px; text-align: center">
+                                                <label class="member-department">
+                                                    @Ajax.ActionLink(" Đồng ý ", "AcceptRequest", "Group", new { requestID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
+                                                </label>
+                                            </div>
+                                            <div class="row" style="margin-top: -7px; text-align: center">
+                                                <label class="member-department">
+                                                    @Ajax.ActionLink(" Từ chối ", "DeclineRequest", "Group", new { requestID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-                                    <div class="col-xs-5">
-                                        <div class="row">
-                                            <label class="member-name">
-                                                <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
-                                            </label>
-                                        </div>
-                                        <div class="row" style="margin-top: -7px">
-                                            <label class="member-sumerise">
-                                                @Html.DisplayFor(modelItem => item.Address)
-                                            </label>
-                                        </div>
-                                        <div class="row" style="margin-top: -7px">
-                                            <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="divider-vertical-member"></div>
-
-                                    <div class="col-xs-4">
-                                        <div class="row" style="text-align: center">
-                                            <label class="member-position" style="font-size: 14px">
-                                            </label>
-                                        </div>
-                                        <div class="row" style="margin-top: -7px; text-align: center">
-                                            <label class="member-department">
-                                               @Ajax.ActionLink(" Đồng ý ", "AcceptRequest", "Group", new { requestID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
-                                            </label>
-                                        </div>
-                                        <div class="row" style="margin-top: -7px; text-align: center">
-                                            <label class="member-department">
-                                                @Ajax.ActionLink(" Từ chối ", "DeclineRequest", "Group", new { requestID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace })
-                                            </label>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
-                    }
+                                                    }
                 </div>
             </div>
         </div>

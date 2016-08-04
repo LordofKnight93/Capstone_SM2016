@@ -3,7 +3,7 @@
 <div class="card-panel">
     <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
         <div class="col-sm-12">
-            <h4>Sự kiện đang tham gia</h4>
+            <h4>Dự án đang tham gia</h4>
         </div>
     </div>
     <div class="divider-holizon"></div>
@@ -22,7 +22,8 @@
     <!-- Add New Project -->
     <div class="row">
         <div class="col-xs-12" style="margin-top: 20px">
-            <a style="font-weight: bold; color: #049f88; cursor: pointer" data-container="body" data-toggle="modal" data-target="#createProjectForm">TẠO DỰ ÁN MỚI ...</a>
+            @*<a style="font-weight: bold; color: #049f88; cursor: pointer" data-container="body" data-toggle="modal" data-target="#createProjectForm">TẠO DỰ ÁN MỚI ...</a>*@
+            @Ajax.ActionLink("TẠO HOẠT ĐỘNG MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
         </div>
     </div>
 

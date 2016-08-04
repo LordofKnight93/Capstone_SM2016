@@ -90,8 +90,20 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
+        //Get Total Money
+        public double Get_TotalMoneyCost(string projectID)
+        {
+            List<BudgetRecordInformation> listBudget = Get_BudgetAllRecord(projectID);
+            double totalCost = 0;
+            for (int i=0; i< listBudget.Count(); i++)
+            {
+                totalCost += listBudget[i].Total;
+            }
+            return totalCost;
+        }
+
         //Get Budget Item
-        public double Get_BudgetItem(string budgetID, string itemContent)
+        public double Get_BudgetItemCost(string budgetID, string itemContent)
         {
             try
             {
@@ -121,6 +133,22 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
+        //Get Budget Item
+        public BudgetItem Get_BudgetItem(string budgetRecordID, string budgetItemID)
+        {
+            List<BudgetItem> currentBudgetItemList = Get_BudgetItemList(budgetRecordID);
+            BudgetItem item = new BudgetItem();
+            for (int i =0; i<currentBudgetItemList.Count(); i++)
+            {
+                if (currentBudgetItemList[i].BudgetItemID == ObjectId.Parse(budgetItemID))
+                {
+                    item = currentBudgetItemList[i];
+                    break;
+                }
+            }
+            return item;
+        }
+
         //Add Budget Item
         public bool Add_BudgetItem(string budgetID, BudgetItem item)
         {
@@ -138,7 +166,7 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         //Delete budget item
-        public bool Delete_BudgetItem(string budgetID, string itemName)
+        public bool Delete_BudgetItem(string budgetID, string budgetItemID)
         {
             try
             {
@@ -146,17 +174,31 @@ namespace iVolunteer.DAL.MongoDB
                 List<BudgetItem> bitem = Get_BudgetItemList(budgetID);
                 for (int i = 0; i < bitem.Count(); i++)
                 {
-                    if (bitem[i].Content.Equals(itemName))
+                    if (bitem[i].BudgetItemID == ObjectId.Parse(budgetItemID))
                     {
                         cost = bitem[i].Cost;
                         break;
                     }
                 }
                 var budget_filter = Builders<Mongo_Budget>.Filter.Eq(bg => bg._id, new ObjectId(budgetID));
-                var item_filter = Builders<BudgetItem>.Filter.Eq(it => it.Content, itemName);
+                var item_filter = Builders<BudgetItem>.Filter.Eq(it => it.BudgetItemID, ObjectId.Parse(budgetItemID));
                 var update = Builders<Mongo_Budget>.Update.PullFilter(bg => bg.Item, item_filter).Inc(bg => bg.BudgetRecordInformation.Total, -cost);
                 var result = collection.UpdateOne(budget_filter, update);
                 return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        //Get Project ID
+        public string Get_ProjectID(string budgetRecordID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(bg => bg.BudgetRecordInformation.BudgetRecordID == budgetRecordID);
+                return result.BudgetRecordInformation.Project.ID;
             }
             catch
             {
@@ -180,24 +222,40 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
+        //Update BudgetRecord Name
+        public bool Update_BudgetRecordName(string budgetRecordID, string newName)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetRecordID);
+                var update = Builders<Mongo_Budget>.Update.Set(bg => bg.BudgetRecordInformation.Name, newName);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         //Update Budget Item Infor
-        public bool Update_BudgetItem(string budgetID, string itemName, BudgetItem item)
+        public bool Update_BudgetItem(string budgetRecordID, string budgetItemID, BudgetItem item)
         {
             try
             {
                 double cost = 0;
-                List<BudgetItem> bitem = Get_BudgetItemList(budgetID);
+                List<BudgetItem> bitem = Get_BudgetItemList(budgetRecordID);
                 for (int i = 0; i< bitem.Count(); i++)
                 {
-                    if (bitem[i].Content.Equals(itemName))
+                    if (bitem[i].BudgetItemID == ObjectId.Parse(budgetItemID))
                     {
                         cost = bitem[i].Cost;
                         break;
                     }
                 }
                 var filter = Builders<Mongo_Budget>.Filter.And(
-                                                    Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetID),
-                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.Content == itemName));
+                                                    Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetRecordID),
+                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.BudgetItemID == ObjectId.Parse(budgetItemID)));
                 var update =Builders<Mongo_Budget>.Update.Set(bg => bg.Item[-1].Content, item.Content)
                                                          .Set(bg => bg.Item[-1].UnitPrice, item.UnitPrice)
                                                          .Set(bg => bg.Item[-1].Quatity, item.Quatity)
@@ -214,13 +272,13 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         //Update Budget Item Content
-        public bool Update_BudgetItemContent(string budgetID, string itemName, string newContent)
+        public bool Update_BudgetItemContent(string budgetID, string budgetItemID, string newContent)
         {
             try
             {
                 var filter = Builders<Mongo_Budget>.Filter.And(
                                                     Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetID),
-                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.Content == itemName));
+                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.BudgetItemID == ObjectId.Parse(budgetItemID)));
                 var update = Builders<Mongo_Budget>.Update.Set(bg => bg.Item[-1].Content, newContent);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -231,7 +289,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         //Update Budget Item Unit Price
-        public bool Update_BudgetItemUnitPrice(string budgetID, string itemName, double unitPrice)
+        public bool Update_BudgetItemUnitPrice(string budgetID, string budgetItemID, double unitPrice)
         {
             try
             {
@@ -240,7 +298,7 @@ namespace iVolunteer.DAL.MongoDB
                 List<BudgetItem> bitem = Get_BudgetItemList(budgetID);
                 for (int i = 0; i < bitem.Count(); i++)
                 {
-                    if (bitem[i].Content.Equals(itemName))
+                    if (bitem[i].BudgetItemID == ObjectId.Parse(budgetItemID))
                     {
                         cost = bitem[i].Cost;
                         quatity = bitem[i].Quatity;
@@ -249,7 +307,7 @@ namespace iVolunteer.DAL.MongoDB
                 }
                 var filter = Builders<Mongo_Budget>.Filter.And(
                                                     Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetID),
-                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.Content == itemName));
+                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.BudgetItemID == ObjectId.Parse(budgetItemID)));
                 var update = Builders<Mongo_Budget>.Update.Set(bg => bg.Item[-1].UnitPrice, unitPrice)
                                                          .Set(bg => bg.Item[-1].Cost, unitPrice * quatity)
                                                          .Inc(bg => bg.BudgetRecordInformation.Total, unitPrice * quatity - cost);
@@ -262,7 +320,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         //Update Budget Item Quatity
-        public bool Update_BudgetItemQuatity(string budgetID, string itemName, int quatity)
+        public bool Update_BudgetItemQuatity(string budgetID, string budgetItemID, int quatity)
         {
             try
             {
@@ -271,7 +329,7 @@ namespace iVolunteer.DAL.MongoDB
                 List<BudgetItem> bitem = Get_BudgetItemList(budgetID);
                 for (int i = 0; i < bitem.Count(); i++)
                 {
-                    if (bitem[i].Content.Equals(itemName))
+                    if (bitem[i].BudgetItemID == ObjectId.Parse(budgetItemID))
                     {
                         cost = bitem[i].Cost;
                         unitPrice = bitem[i].UnitPrice;
@@ -280,7 +338,7 @@ namespace iVolunteer.DAL.MongoDB
                 }
                 var filter = Builders<Mongo_Budget>.Filter.And(
                                                     Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetID),
-                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.Content == itemName));
+                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.BudgetItemID == ObjectId.Parse(budgetItemID)));
                 var update = Builders<Mongo_Budget>.Update.Set(bg => bg.Item[-1].Quatity, quatity)
                                                          .Set(bg => bg.Item[-1].Cost, quatity * unitPrice)
                                                          .Inc(bg => bg.BudgetRecordInformation.Total, quatity * unitPrice - cost);
@@ -293,13 +351,13 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         //Update Budget Item Unit
-        public bool Update_BudgetItemUnit(string budgetID, string itemName, string unit)
+        public bool Update_BudgetItemUnit(string budgetID, string budgetItemID, string unit)
         {
             try
             {
                 var filter = Builders<Mongo_Budget>.Filter.And(
                                                     Builders<Mongo_Budget>.Filter.Eq(bg => bg.BudgetRecordInformation.BudgetRecordID, budgetID),
-                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.Content == itemName));
+                                                    Builders<Mongo_Budget>.Filter.ElemMatch(bg => bg.Item, it => it.BudgetItemID == ObjectId.Parse(budgetItemID)));
                 var update = Builders<Mongo_Budget>.Update.Set(bg => bg.Item[-1].Unit, unit);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;

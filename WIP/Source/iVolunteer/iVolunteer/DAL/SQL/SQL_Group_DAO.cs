@@ -21,7 +21,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     dbEntities.SQL_Group.Add(group);
-                    dbEntities.SaveChangesAsync();
+                    dbEntities.SaveChanges();
                     return true;
                 }
             }

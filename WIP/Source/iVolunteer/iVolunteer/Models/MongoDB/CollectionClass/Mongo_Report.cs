@@ -13,21 +13,30 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public ObjectId _Id { get; set; }
         public SDLink Actor { get; set; }
         public SDLink Destination { get; set; }
-        public int Type { get; set; }
-        
+        public string Reason { get; set; }
+        public string Detail { get; set; }
         public Mongo_Report()
         {
             this._Id = new ObjectId();
             this.Actor = new SDLink();
             this.Destination = new SDLink();
-            this.Type = 0;
+            this.Reason = "";
+            this.Detail = "";
         }
-        public Mongo_Report(SDLink actor, SDLink destination, int type)
+        public Mongo_Report(SDLink actor, SDLink destination, string reason, string detail)
         {
             this._Id = ObjectId.GenerateNewId();
             this.Actor = actor;
             this.Destination = destination;
-            this.Type = type;
+            this.Reason = reason;
+            this.Detail = detail;
         }
-     }
+        public Mongo_Report(SDLink actor, SDLink destination, string reason)
+        {
+            this._Id = ObjectId.GenerateNewId();
+            this.Actor = actor;
+            this.Destination = destination;
+            this.Reason = reason;
+        }
+    }
 }

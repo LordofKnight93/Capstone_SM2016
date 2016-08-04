@@ -27,13 +27,14 @@ namespace iVolunteer.Controllers
             return View();
         }
         /// <summary>
-
+        /// Report USER|GROUP|PROJECT
         /// </summary>
         /// <param name="targetID"></param>
         /// <param name="targetType"></param>
         /// <returns></returns>
-        public ActionResult ReportTarget(string targetID, int targetType)
+        public ActionResult ReportTarget(ReportModel report, string targetID, int targetType)
         {
+            if (!ModelState.IsValid) return Json(new { status = false, message = "Mời bạn nêu lý do trước khi gửi báo cáo!" });
             try
             {
                 if (Session["UserID"] == null)
@@ -49,7 +50,7 @@ namespace iVolunteer.Controllers
                 // initiallize report destination
                 SDLink destination = new SDLink();
                 //report reason 
-                int reason = 0;
+                //int reason = 0;
                 using (var transaction = new TransactionScope())
                 {
                     try
@@ -92,9 +93,16 @@ namespace iVolunteer.Controllers
                         }
                         //create Mongo Report
                         Mongo_Report_DAO mongoReportDAO = new Mongo_Report_DAO();
-                        Mongo_Report mgReport = new Mongo_Report(creator, destination, reason);
-                        mongoReportDAO.Add_Report(mgReport);
-
+                        if (report.Detail == null)
+                        {
+                            Mongo_Report mgReport = new Mongo_Report(creator, destination, report.Reason);
+                            mongoReportDAO.Add_Report(mgReport);
+                        }
+                        else
+                        {
+                            Mongo_Report mgReport = new Mongo_Report(creator, destination, report.Reason, report.Detail);
+                            mongoReportDAO.Add_Report(mgReport);
+                        }
                         transaction.Complete();
                     }
                     catch
@@ -103,8 +111,9 @@ namespace iVolunteer.Controllers
                         return PartialView("ErrorMessage");
                     }
                 }
-                ViewBag.Message = "Gửi yêu cầu thành công. Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh";
-                return PartialView("ErrorMessage");
+                ViewBag.Message = "Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh";
+                //return PartialView("ErrorMessage");
+                return Json(new { status = true, message = "Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh" });
             }
             catch
             {
@@ -158,8 +167,22 @@ namespace iVolunteer.Controllers
                     return PartialView("ErrorMessage");
                 }
             }
-            ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
+            //ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
+            //return PartialView("ErrorMessage");
+
+            //return RedirectToAction("ActionToGroup", "Account", new { groupID = targetID });
+            var ctrl = new AccountController();
+            ctrl.ControllerContext = ControllerContext;
+            return ctrl.ActionToGroup(targetID);
+        }
+        public ActionResult DisplayReport(string targetID, int targetType)
+        {
+            ViewBag.TargetID = targetID;
+            if (targetType == 1) return PartialView("_GroupReport");
+            if (targetType == 2) return PartialView("_ProjectReport");
+            if (targetType == 3) return PartialView("_UserReport");
             return PartialView("ErrorMessage");
         }
     }
+
 }

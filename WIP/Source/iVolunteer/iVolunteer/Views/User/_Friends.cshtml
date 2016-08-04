@@ -10,13 +10,13 @@
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
             <ul class="nav sub-nav-tabs">
-                <li class="active" data-type="friend" data-toggle="tab">
+                <li class="active" data-type="member" data-toggle="tab">
                     @Ajax.ActionLink("BẠN BÈ", "FriendList", "User", new { userID = ViewBag.UserID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
                 </li>
                 @if (ViewBag.IsMyHome == true)
                 {
                     <li data-type="request" data-toggle="tab">
-                        @Ajax.ActionLink("YÊU CẦU KẾT BẠN", "FriendRequestList", "Account", null, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
+                        @Ajax.ActionLink("LỜI MỜI KẾT BẠN", "FriendRequestList", "Account", null, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace }, null)
                     </li>
                 }
             </ul>

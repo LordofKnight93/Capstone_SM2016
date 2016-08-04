@@ -4,7 +4,15 @@
     <!-- Tổng quan -->
     <div class="row">
         <div class="col-md-12" style="margin-top: -20px">
-            <h4 style="color: #049f88">Tổng quan</h4>
+            <h4 style="color: #049f88">
+                Tổng quan
+                @if (ViewBag.IsLeader == true)
+                {
+                    <button class="btn btn-image" title="Chỉnh sửa">
+                        <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdateGroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                    </button>
+                }
+            </h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
     </div>
@@ -17,13 +25,13 @@
     <!-- Thời gian -->
     <div class="row">
         <div class="col-md-12">
-            <h4 style="color: #049f88">Thời gian</h4>
+            <h4 style="color: #049f88">Ngày thành lập</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p><strong>Ngày thành lập: </strong>@Html.DisplayFor(model => model.DateCreate)</p>
+            <p>@Html.DisplayFor(model => model.DateCreate)</p>
         </div>
     </div>
 
@@ -48,7 +56,8 @@
             </ul>
         </div>
     </div>
+</div>
 
-@*@{ Html.RenderAction("CurrentProjects", "Group", new { groupID = Model.GroupID });
-}*@
+@{ Html.RenderAction("CurrentProjects", "Group", new { groupID = Model.GroupID });
+}
 

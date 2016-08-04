@@ -15,12 +15,16 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     public class GroupInformation 
     {
         public string GroupID { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập tên nhóm!")]
         public string GroupName { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateCreate { get; set; }
         public string GroupDescription { get; set; }
         public int MemberCount { get; set; }
+        [EmailAddress(ErrorMessage ="Địa chỉ email không đúng định dạng!")]
         public string Email { get; set; }
+        [Phone(ErrorMessage ="Số điện thoại không đúng định dạng!")]
         public string Phone { get; set; }
         public bool IsActivate { get; set; }
 

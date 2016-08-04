@@ -1,6 +1,19 @@
 ﻿$(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-    $("[rel='tooltip']").tooltip();
+    $('[data-toggle="tooltip"]').tooltip({
+        'selector': '',
+        'container': 'body'
+    });
+
+    $("[rel='tooltip']").tooltip({
+        'selector': '',
+        'container': 'body'
+    });
+
+    //Set the carousel options
+    $('#quote-carousel').carousel({
+        pause: true,
+        interval: 4000,
+    });
 
     // ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
     //$('#noti_Counter')
@@ -102,9 +115,9 @@
     //});
 
 
-    //Message
+    ////Message
 
-    // ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
+    //// ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
     //$('#mess_Counter')
     //    .css({
     //        opacity: 0
@@ -153,7 +166,7 @@
     //    return false; // DO NOTHING WHEN CONTAINER IS CLICKED.
     //});
 
-    // HIDE NOTIFICATIONS WHEN CLICKED ANYWHERE ON THE PAGE.
+    //// HIDE NOTIFICATIONS WHEN CLICKED ANYWHERE ON THE PAGE.
     //$(document).click(function () {
     //    $('#notifications').hide();
 

@@ -27,5 +27,14 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.LikerList = new List<SDLink>();
             this.CommentList = new List<Comment>();
         }
+        public Mongo_Post(PostInformation postInfor)
+        {
+            this._id = ObjectId.GenerateNewId();
+            this.PostInfomation = postInfor;
+            this.PostInfomation.PostID = this._id.ToString();
+            this.LikerList = new List<SDLink>();
+            this.CommentList = new List<Comment>();
+
+        }
     }
 }

@@ -1,0 +1,131 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.InsideDonator>
+
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group" style="margin-bottom: 20px">
+            <!-- Đầu mục -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title" style="padding: 0;">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h4 style="font-weight: bold; line-height: 30px">Danh người đăng kí ủng hộ trong hệ thống:</h4>
+                                </div>
+
+                                <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                    <a data-toggle="collapse" href="#insideDonatorCollapse"><i class="material-icons">keyboard_arrow_up</i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="insideDonatorCollapse" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div id="financeItemDetails">
+                            <ol class="main-list-task" style="margin-bottom: 20px">
+                                @if (Model.Count != 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        string idcheck = "checkbox" + item.Donator.ID;
+                                        <li style="border-top: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                                            <table width="100%">
+                                                <colgroup>
+                                                    <col width="5% />"
+                                                    <col width="25%" />
+                                                    <col width="30%" />
+                                                    <col width="30%" />
+                                                    <col width="10%" />
+                                                </colgroup>
+                                                <tr>
+                                                    <td rowspan="2">
+                                                        @if (item.IsReceived == true)
+                                                        {
+                                                            <div class="checkbox">
+                                                                <input id="@idcheck" type="checkbox" disabled>
+                                                                <label for="@idcheck">
+
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <div class="checkbox">
+                                                                <input id="@idcheck" type="checkbox">
+                                                                <label for="@idcheck">
+
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <h4 style="margin-bottom: 3px">@Html.DisplayFor(modelItem => item.Donator.DisplayName)</h4>
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        <h4>@String.Format(info, "{0:c}", item.Amount)</h4>
+                                                        @if (item.IsReceived == true)
+                                                        {
+                                                            <h4 style="color: #049f88">ĐÃ NHẬN</h4>
+                                                        }
+                                                        else
+                                                        {
+                                                            <h4 style="color: #ff0000">CHƯA NHẬN</h4>
+                                                        }
+                                                    </td>
+                                                    <td rowspan="2" style="text-align: right">
+                                                        @if (ViewBag.UserRole == "1" || ViewBag.UserRole == "0" && item.IsReceived == false)
+                                                        {
+
+                                                            @*<h4 style="color: #049f88; font-weight: bold">@Html.DisplayFor(modelItem => item.Total) <span> VND </span></h4>*@
+                                                            @*@Ajax.ActionLink("edit", "EditBudgetRecord", "Budget", new { budgetID = Html.DisplayFor(modelItem => item.BudgetRecordID), userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })*@
+                                                            @*<button class="btn btn-image" data-toggle="tooltip" title="Xóa" onclick="location.href ='@Url.Action("DeleteBudgetRecord","Budget", new { budgetID = Html.DisplayFor(modelItem => item.BudgetRecordID) })'"><i class="material-icons md-20">delete</i></button>*@
+                                                            @Ajax.ActionLink("delete", "DeleteTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID, userRole = ViewBag.UserRole, donatorID = item.Donator.ID }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer; padding-left: 8px" })
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <object type="image/svg+xml" data="~/images/icons/time.svg" width="18" height="18"></object>
+                                                        <span class="pending">@Html.DisplayFor(modelItem => item.ReceivedDate)</span>
+                                                    </td>
+                                                    <td>
+                                                        @if (item.Method == 1)
+                                                        {
+                                                            <object type="image/svg+xml" data="~/images/icons/money.svg" width="18" height="18"></object>
+                                                            <span class="pending">TIỀN MẶT</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <object type="image/svg+xml" data="~/images/icons/credit-card.svg" width="18" height="18"></object>
+                                                            <span class="pending">CHUYỂN KHOẢN</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><h4>Mục này chưa có thông tin nào</h4></li>
+                                }
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

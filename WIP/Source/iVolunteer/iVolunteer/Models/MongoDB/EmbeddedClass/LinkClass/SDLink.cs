@@ -72,6 +72,12 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass
             this.DisplayName = "bài đăng";
             this.Handler = "Post";
         }
+        public SDLink(string postID)
+        {
+            this.ID = postID;
+            this.DisplayName = "bài đăng";
+            this.Handler = "Post";
+        }
 
         public string Get_AvatarLink()
         {

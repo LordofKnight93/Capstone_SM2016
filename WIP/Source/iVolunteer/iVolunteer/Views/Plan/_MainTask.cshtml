@@ -8,70 +8,79 @@
             DateTime date = DateTime.Today;
             TimeSpan span = item.Duedate - date;
             int dateGap = span.Days;
+
+            string mainTaskLiID = "maintask" + item.MainTaskID;
             <!-- Main Task 1 -->
-            <li data-container="plancontain" data-toggle="modal" data-target="#taskdetail">
+            <li id="@mainTaskLiID">
+                @if (ViewBag.IsLeader == true)
+                {
+                    <div class="delete-main-task">
+                        @Ajax.ActionLink("delete", "DeleteMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
+                                                                             new AjaxOptions { UpdateTargetId = "maintastlist" + ViewBag.PlanPhaseID, InsertionMode = InsertionMode.Replace },
+                                                                             new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer;" })
+                    </div>
+                }
                 <div class="row">
                     <div class="col-sm-12">
-                        <lable>@Html.DisplayFor(modelItem => item.Name)</lable>
-                    </div>
-                    <div class="col-sm-12">
-                        <ul class="main-list-task-infor">
-                            <li>
-                                <object type="image/svg+xml" data="~/images/icons/assign-group.svg" width="18" height="18"></object>
-                                <span class="assign"><a>@Html.DisplayFor(modelItem => item.Assign.DisplayName)</a></span>
-                            </li>
-                            <li>
-                                <object type="image/svg+xml" data="~/images/icons/tick-box.svg" width="16" height="16"></object>
-                                <span class="task-count">0/@Html.DisplayFor(modelItem => item.SubTaskCount)</span>
-                            </li>
-                            @if (dateGap >= 0)
-                            {
-                                <li>
-                                    <object type="image/svg+xml" data="~/images/icons/time.svg" width="16" height="16"></object>
-                                    <span class="task-count">@Html.DisplayFor(modelItem => item.Duedate)</span>
-                                </li>
-                            }
-                            else
-                            {
-                                <li>
-                                    <object type="image/svg+xml" data="~/images/icons/time.svg" width="16" height="16"></object>
-                                    <span class="task-count" style="color: red">@Html.DisplayFor(modelItem => item.Duedate)</span>
-                                </li>
-                            }
-                        </ul>
+                        <div class="card-panel sub-card-panel">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @*<lable>@Html.DisplayFor(modelItem => item.Name)</lable>*@
+                                    @Ajax.ActionLink(@item.Name, "MainTaskDetail", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
+                                                                                           new AjaxOptions { UpdateTargetId = "mainTaskDetail", InsertionMode = InsertionMode.Replace, OnComplete = "ShowModal()" },
+                                                                                           new { @id="openMainTaskModal", @data_target= "#taskdetail", @style = "color: #000; cursor: pointer" })
+                                </div>
+                                <div class="col-sm-12">
+                                    <ul class="main-list-task-infor">
+                                        <li>
+                                            <span class="glyphicon mygray glyphicon-check" aria-hidden="true"></span>
+                                            <span class="task-count">@item.TaskDoneCount/@item.SubTaskCount</span>
+                                        </li>
+                                        <li>
+                                            <i class="material-icons md-16 md-mygray">chat_bubble_outline</i>
+                                            <span class="task-count">@Html.DisplayFor(modelItem => item.CommentCount)</span>
+                                        </li>
+                                        @if (dateGap >= 0)
+                                        {
+                                            <li>
+                                                <span class="glyphicon mygray glyphicon-time" aria-hidden="true"></span>
+                                                <span class="task-count">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <span class="glyphicon mygray glyphicon-time" aria-hidden="true"></span>
+                                                <span class="task-count" style="color: red">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
-            <!-- Main Task 2
-            <li id="testplan">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <lable>Truyền thông cho dự án</lable>
-                    </div>
-                    <div class="col-sm-12">
-                        <ul class="main-list-task-infor">
-                            <li>
-                                <object type="image/svg+xml" data="~/images/icons/assign-group.svg" width="18" height="18"></object>
-                                <span class="assign">Ban Truyền Thông</span>
-                            </li>
-                            <li>
-                                <object type="image/svg+xml" data="~/images/icons/tick-box.svg" width="16" height="16"></object>
-                                <span class="task-count">1/3</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>-->
         }
     }
-    @if (ViewBag.UserRole == "1")
+    else
+    {
+        <li>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 10px;">
+                    <label>Giai đoạn này chưa có công việc nào!</label>
+                </div>
+            </div>
+        </li>
+    }
+    @if (ViewBag.IsLeader == true)
     {
         string idupdate = "addMainTaskForm" + ViewBag.PlanPhaseID;
         <li>
             <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-12" style="margin-top: 25px;">
                     <!--<label style="font-weight: bold; color: #049f88;">THÊM CÔNG VIỆC ...</label>-->
-                    @Ajax.ActionLink("THÊM  CÔNG VIỆC ...", "AddMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, userRole = ViewBag.UserRole }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                    @Ajax.ActionLink("THÊM  CÔNG VIỆC ...", "AddMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                 </div>
                 <div class="col-sm-12" id="@idupdate">
 
@@ -80,37 +89,13 @@
         </li>
     }
 </ol>
-@*<div>
-    <h4>MainTask</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+<script>
+    function AddAttr() {
+        $('#openMainTaskModal').attr('data-toggle', 'modal');
+    }
+    function ShowModal() {
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Duedate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Duedate)
-        </dd>
-
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>*@
+        $('#taskdetail').modal('show');
+    }
+</script>

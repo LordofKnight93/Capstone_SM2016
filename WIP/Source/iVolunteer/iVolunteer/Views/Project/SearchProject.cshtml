@@ -1,4 +1,4 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+﻿@model iVolunteer.Models.ViewModel.SearchModel
 @{
     ViewBag.Title = "Kết quả tìm kiếm";
 }
@@ -12,21 +12,8 @@
                 }
     
     <div class="col-md-9" id="main_content">
-        <!-- Result Counter -->
-        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-            <div class="row">
-                <div class="col-md-8">
-                    <h4>@Model.Count() kết quả</h4>
-                </div>
-                <div class="col-md-4" style="text-align: right;">
-                    <h4 style="color: #049f88; font-weight: bold; cursor: pointer;" id="advance-search">TÌM KIẾM NÂNG CAO</h4>
-                    <h4 style="color: #ccc; font-weight: bold; cursor: pointer; display: none" id="advance-search-close">HỦY</h4>
-                </div>
-            </div>
-        </div>
-
         <!-- Advance Search -->
-        <div class="card-panel" style="margin: 0.5rem 0 1rem 0; display: none" id="advance-search-panel">
+        <div class="card-panel" style="margin: 0.5rem 0 1rem 0" id="advance-search-panel">
             <div class="row">
                 <div class="col-md-12" style="margin-top: -20px">
                     <h4 style="color: #049f88">Tìm kiếm nâng cao</h4>
@@ -37,14 +24,15 @@
             <div class="row">
                 <div class="col-sm-10 col-sm-offset-1">
                     <!--form role="form" class="login-form"> -->
-                    <form class="register-form" style="margin-top: 30px">
+                    @using (Ajax.BeginForm("AdvancedSearchProject", "Project", null, new AjaxOptions { UpdateTargetId = "result-content", InsertionMode = InsertionMode.Replace }))
+                    {
                         <!-- Project Name -->
                         <div class="row">
                             <div class="col-xs-4 register-label">
                                 <label for="projectName">Tên dự án:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                <input id="projectName" class="form-control" placeholder="Tên dự án...">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
                             </div>
                         </div>
 
@@ -54,7 +42,7 @@
                                 <label for="dateStart">Ngày bắt đầu:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                <input id="dateStart" class="form-control" placeholder="Ngày bắt đầu..." type="date">
+                                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @id = "dateStart", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date" } })
                             </div>
                         </div>
 
@@ -64,99 +52,107 @@
                                 <label for="dateEnd">Ngày kết thúc:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                <input id="dateEnd" class="form-control" placeholder="Ngày kết thúc..." type="date">
-                            </div>
-                        </div>
-
-                        <!-- Project Tags -->
-                        <div class="row">
-                            <div class="col-xs-4 register-label">
-                                <label for="projectTags">Tags:</label>
-                            </div>
-                            <div class="col-xs-5 text-input">
-                                <input id="projectTags" class="form-control" placeholder="Tags...">
+                                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
                             </div>
                         </div>
 
                         <!-- Project Place -->
                         <div class="row">
                             <div class="col-xs-4 register-label">
-                                <label for="projectPlace">Place:</label>
+                                <label for="projectPlace">Địa điểm:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                <input id="projectPlace" class="form-control" placeholder="Địa điểm...">
+                                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @id = "location", @class = "form-control", @placeholder = "Địa điểm" } })
+                            </div>
+                        </div>
+
+                        <!--Tag checkbox list-->
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <p class="row">Chủ đề tình nguyện</p>
+                                <div>
+                                    <input type="checkbox" class="row" value="Giáo dục" name="tagsList" />Giáo dục
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Văn hóa" name="tagsList" />Văn hóa
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Y tế" name="tagsList" />Y tế
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Xã hội" name="tagsList" />Xã hội
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Môi trường" name="tagsList" />Môi trường
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Du lịch" name="tagsList" />Du lịch
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Thể thao" name="tagsList" />Thể thao
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <p class="row">Đối tượng hướng đến</p>
+                                <div>
+                                    <input type="checkbox" class="row" value="Trẻ em" name="tagsList"  />Trẻ em
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Người nghèo" name="tagsList" />Người nghèo
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Người khuyết tật" name="tagsList" />Người khuyết tật
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" />Vùng thiên tai
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Động vật" name="tagsList" />Động vật
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <p class="row">Hình thức hoạt động</p>
+                                <div>
+                                    <input type="checkbox" class="row" value="Ủng hộ" name="tagsList" />Ủng hộ
+                                </div>
+                                <div>
+                                    <input type="checkbox" class="row" value="Đi thực tế" name="tagsList" />Đi thực tế
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <p class="row">Trạng thái</p>
+                                <div>
+                                    <input type="radio" class="row" value="true" name="progress" checked/>Chưa kết thúc
+                                    <input type="radio" class="row" value="false" name="progress" />Đã kết thúc
+                                </div>
+                                <div>
+                                    @Html.CheckBoxFor(model => model.Recruiting) Đang tuyển thành viên
+                                </div>
                             </div>
                         </div>
 
                         <!-- Button -->
                         <div class="row" style="margin-top: 30px">
                             <div class="col-xs-2 col-xs-offset-5 text-input">
+                                <input type="hidden" value="1" name="page" />
                                 <button type="submit" class="btn btn-register">TÌM KIẾM</button>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-
-        </div>
-@if (Model.Count() > 0)
-{
-        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-            <div class="row">
-                <div class="col-md-12">
-                    @foreach (var item in Model)
-                    {
-                    <div class="divider-holizon"></div>
-                    <div class="row">
-
-                        <!-- Avata -->
-                        <div class="col-sm-3">
-                            <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
-                        </div>
-
-                        <!-- Content -->
-                        <div class="col-sm-9">
-                            <div class="row">
-                                <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.ProjectName)</a>
-                            </div>
-                            <div class="row">
-                                <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
-                            </div>
-                            <div class="row">
-                                <table style="font-size: 14px;" width="60%">
-                                    <tr>
-                                        <td style="color: #049f88;">ĐỊA ĐIỂM</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Location)n</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #049f88;">LĨNH VỰC</td>
-                                        <td>Môi trường, Con người</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #049f88;">THỜI GIAN</td>
-                                        <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #049f88;">LIÊN HỆ</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
-                                    </tr>
-                                </table>
-                            </div>
-
-                            <!-- Interaction Button -->
-                            <div class="row" style="margin-top: 10px" id="@item.ProjectID">
-                                @{ Html.RenderAction("ActionToProject", "Account", new { projectID = item.ProjectID });}
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="divider-holizon"></div>
-                    }
+                        }
                 </div>
             </div>
         </div>
-}
+        <div id="result-content">
+            @{ Html.RenderAction("NextResultPage", "Project", new { page = 1 });}
+        </div>
     </div>
-
-
 </div>

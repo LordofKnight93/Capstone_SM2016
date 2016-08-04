@@ -1,0 +1,74 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <!-- Tổng quan -->
+    @using (Ajax.BeginForm("UpdateGroupInformation", "Group", null, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, null))
+    {
+        @Html.HiddenFor(model => model.GroupName)
+        <div class="row">
+            <input type="hidden" name="groupID" value="@Model.GroupID" />
+            <div class="col-md-12" style="margin-top: -20px">
+                <h4 style="color: #049f88">
+                    Tổng quan
+                </h4>
+                <div class="divider-holizon" style="margin-top: -8px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>@Html.EditorFor(model => model.GroupDescription, new { htmlAttributes = new { @class = "form-control" } })</p>
+            </div>
+        </div>
+
+        <!-- Thời gian -->
+        <div class="row">
+            <div class="col-md-12">
+                <h4 style="color: #049f88">Ngày thành lập</h4>
+                <div class="divider-holizon" style="margin-top: -8px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>@Html.DisplayFor(model => model.DateCreate)</p>
+            </div>
+        </div>
+
+        <!-- Liên hệ-->
+        <div class="row">
+            <div class="col-md-12">
+                <h4 style="color: #049f88">Liên hệ</h4>
+                <div class="divider-holizon" style="margin-top: -8px"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-post">
+                    <li>
+                        <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
+                        <span>@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })</span>
+                        <span>@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })</span>
+                    </li>
+                    <li>
+                        <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
+                        <span>@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })</span>
+                        <span>@Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                <label style="color:red;">@ViewBag.Message</label>
+            </div>
+        </div>
+                                    <!-- Button -->
+                            <div class="row" style="margin-top: 60px">
+                                <div class="col-xs-2 col-xs-offset-7 text-input">
+                                    @Ajax.ActionLink("Hủy", "GroupInformation", "Group", new { projectID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                </div>
+                                <div class="col-xs-2 text-input">
+                                    <button type="submit" class="btn btn-register">CẬP NHẬT</button>
+                                </div>
+                            </div>
+    }
+</div>

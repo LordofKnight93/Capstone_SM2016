@@ -13,6 +13,7 @@ using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using iVolunteer.Models.ViewModel;
 using iVolunteer.Common;
 
 namespace iVolunteer.DAL.MongoDB
@@ -93,16 +94,16 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// increase member count by 1
+        /// increase member count by number
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Member_Join(string projectID)
+        public bool Members_Join(string projectID, int number)
         {
             try
             {
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
-                var update = Builders<Mongo_Project>.Update.Inc(pr => pr.ProjectInformation.MemberCount, 1);
+                var update = Builders<Mongo_Project>.Update.Inc(pr => pr.ProjectInformation.MemberCount, number);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -112,16 +113,16 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// decrease member count by 1
+        /// decrease member count by number
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Member_Out(string projectID)
+        public bool Members_Out(string projectID, int number)
         {
             try
             {
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
-                var update = Builders<Mongo_Project>.Update.Inc(pr => pr.ProjectInformation.MemberCount, -1);
+                var update = Builders<Mongo_Project>.Update.Inc(pr => pr.ProjectInformation.MemberCount, -number);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -132,21 +133,24 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// udpate project information, only update description, email, phone,d ate start, date end
+        /// udpate project information, only update short and full description, email, phone, date start, date end, tagsString, location
         /// </summary>
         /// <param name="projectID"></param>
         /// <param name="newInfo"></param>
         /// <returns></returns>
-        public bool Update_proupInformation(string projectID, ProjectInformation newInfo)
+        public bool Update_ProjectInformation(string projectID, ProjectInformation newInfo)
         {
             try
             {
                 var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
                 var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.ProjectShortDescription, newInfo.ProjectShortDescription)
+                                                         .Set(pr => pr.ProjectInformation.ProjectFullDescription, newInfo.ProjectFullDescription)
                                                          .Set(pr => pr.ProjectInformation.Email, newInfo.Email)
                                                          .Set(pr => pr.ProjectInformation.Phone, newInfo.Phone)
+                                                         .Set(pr => pr.ProjectInformation.Location, newInfo.Location)
                                                          .Set(pr => pr.ProjectInformation.DateStart, newInfo.DateStart)
-                                                         .Set(pr => pr.ProjectInformation.DateEnd, newInfo.DateEnd);
+                                                         .Set(pr => pr.ProjectInformation.DateEnd, newInfo.DateEnd)
+                                                         .Set(pr => pr.ProjectInformation.TagsString, newInfo.TagsString);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -194,23 +198,130 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
-
         /// <summary>
-        /// search active and confirmed project
+        /// close a proejct
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="option">true to include deactive project, false to find active project only</param>
+        /// <param name="projectID"></param>
         /// <returns></returns>
-        public List<ProjectInformation> Project_Search(string name, bool allStatus)
+        public bool Close(string projectID)
         {
             try
             {
-                var preResult = collection.AsQueryable().Where(pr => pr.ProjectInformation.ProjectName.ToLower().Contains(name.ToLower()));
-                if (allStatus == false)
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.ProjectID, projectID);
+                var update = Builders<Mongo_Project>.Update.Set(pr => pr.ProjectInformation.InProgress, Status.ENDED);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// search active project, for user usage
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<ProjectInformation> Active_Project_Search(SearchModel searchModel, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.InProgress, searchModel.Progress)
+                           & Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.IsActivate, Status.IS_ACTIVATE);
+
+                if(!String.IsNullOrEmpty(searchModel.Name))
                 {
-                    preResult = preResult.Where(pr => pr.ProjectInformation.IsActivate == Status.IS_ACTIVATE);
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.ProjectName.ToLower().Contains(searchModel.Name.ToLower()));
                 }
-                var result = preResult.Select(pr => pr.ProjectInformation).ToList();
+
+                if (!String.IsNullOrEmpty(searchModel.Location))
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.Location.ToLower().Contains(searchModel.Location.ToLower()));
+                }
+
+                if(searchModel.DateStart != null)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.DateStart > searchModel.DateStart);
+                }
+
+                if (searchModel.DateEnd != null)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.DateStart <= searchModel.DateEnd);
+                }
+
+                if (searchModel.Recruiting == true)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.IsRecruit == Status.IS_RECRUITING);
+                }
+
+                int tagsCount = searchModel.TagsList == null ? 0 : searchModel.TagsList.Count();
+
+                if(tagsCount > 0)
+                {
+                    foreach(var item in searchModel.TagsList)
+                    {
+                        filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.TagsString.Contains(item));
+                    }
+                }
+
+                var result = collection.Find(filter).ToList()
+                                                    .Select(pr => pr.ProjectInformation).Skip(skip).Take(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// search all project, for admin usage
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<ProjectInformation> Project_Search(SearchModel searchModel, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.InProgress, searchModel.Progress);
+
+                if (!String.IsNullOrEmpty(searchModel.Name))
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.ProjectName.ToLower().Contains(searchModel.Name.ToLower()));
+                }
+
+                if (!String.IsNullOrEmpty(searchModel.Location))
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.Location.ToLower().Contains(searchModel.Location.ToLower()));
+                }
+
+                if (searchModel.DateStart != null)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.DateStart >= searchModel.DateStart);
+                }
+
+                if (searchModel.DateEnd != null)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.DateStart <= searchModel.DateEnd);
+                }
+
+                if (searchModel.Recruiting == true)
+                {
+                    filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.IsRecruit == Status.IS_RECRUITING);
+                }
+
+                int tagsCount = searchModel.TagsList == null ? 0 : searchModel.TagsList.Count();
+
+                if (tagsCount > 0)
+                {
+                    foreach (var item in searchModel.TagsList)
+                    {
+                        filter = filter & Builders<Mongo_Project>.Filter.Where(pr => pr.ProjectInformation.TagsString.Contains(item));
+                    }
+                }
+
+                var result = collection.Find(filter).ToList()
+                                                    .Select(pr => pr.ProjectInformation).Skip(skip).Take(number).ToList();
                 return result;
             }
             catch
@@ -222,15 +333,15 @@ namespace iVolunteer.DAL.MongoDB
         /// load project for frontpage
         /// </summary>
         /// <returns></returns>
-        public List<ProjectInformation> FrontPage_Project()
+        public List<ProjectInformation> FrontPage_Project(int skip, int number)
         {
             try
             {
                 var result = collection.AsQueryable().Select(pr => pr.ProjectInformation)
                                                      .Where(pr => pr.InProgress == Status.ONGOING
                                                                && pr.IsActivate == Status.IS_ACTIVATE)
-                                                     .OrderByDescending(pr => pr.FollowerCount)
-                                                     .Take(8).ToList();
+                                                     .OrderByDescending(pr => pr.FollowerCount).Skip(skip)
+                                                     .Take(number).ToList();
                 return result;
             }
             catch
@@ -280,7 +391,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_Project>.Filter.Eq(gr => gr.ProjectInformation.IsActivate, Status.IS_BANNED);
+                var filter = Builders<Mongo_Project>.Filter.Eq(pr => pr.ProjectInformation.IsActivate, Status.IS_BANNED);
                 var result = collection.Find(filter).ToList();
                 List<SDLink> BannedProjects = new List<SDLink>();
                 foreach (var item in result)
@@ -390,7 +501,7 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// add guest sponsor request
+        /// accept guest sponsor request
         /// </summary>
         /// <param name="projectID"></param>
         /// <param name="guest"></param>

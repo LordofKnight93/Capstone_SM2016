@@ -66,6 +66,36 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// add relations that a group organized a project
+        /// </summary>
+        /// <param name="listID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Add_Organized_Groups(string[] listID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    foreach (var item in listID)
+                    {
+                        SQL_GrPr_Relation relation = new SQL_GrPr_Relation();
+                        relation.GroupID = item;
+                        relation.ProjectID = projectID;
+                        relation.Relation = GrPrRelation.ORGANIZE_RELATION;
+                        relation.Status = Status.ACCEPTED;
+                        dbEntities.SQL_GrPr_Relation.Add(relation);
+                    }
+                    dbEntities.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// add a relation that a group sponsored a project
@@ -481,7 +511,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                   && rl.Relation == AcPrRelation.MEMBER_RELATION
+                                                                   && rl.Relation == GrPrRelation.MEMBER_RELATION
                                                                    && rl.Status == Status.ACCEPTED
                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.GroupID).ToList();
@@ -505,7 +535,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                   && rl.Relation == AcPrRelation.ORGANIZE_RELATION
+                                                                   && rl.Relation == GrPrRelation.ORGANIZE_RELATION
                                                                    && rl.Status == Status.ACCEPTED
                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.GroupID).ToList();
@@ -529,7 +559,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                   && rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                   && rl.Relation == GrPrRelation.SPONSOR_RELATION
                                                                    && rl.Status == Status.ACCEPTED
                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.GroupID).ToList();
@@ -554,7 +584,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                   && rl.Relation == AcPrRelation.MEMBER_RELATION
+                                                                   && rl.Relation == GrPrRelation.MEMBER_RELATION
                                                                    && rl.Status == Status.PENDING
                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.GroupID).ToList();
@@ -579,7 +609,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                   && rl.Relation == AcPrRelation.SPONSOR_RELATION
+                                                                   && rl.Relation == GrPrRelation.SPONSOR_RELATION
                                                                    && rl.Status == Status.PENDING 
                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
                                                              .Select(rl => rl.GroupID).ToList();
@@ -682,6 +712,30 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
                                                                    && rl.SQL_Project.InProgress == Status.ENDED)
                                                              .Select(rl => rl.ProjectID).Distinct().ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// get joined group that not organizer of project 
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public List<string> Get_JoinedGroups_Not_Organizer(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.ProjectID == projectID
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
+                                                             .Select(rl => rl.GroupID).Distinct()
+                                                             .Except(Get_Organized_Groups(projectID)).ToList();
                     return result;
                 }
             }

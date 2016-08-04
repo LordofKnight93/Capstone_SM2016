@@ -119,6 +119,38 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public Mongo_Post Get_Mg_PinnedPost(string destinationID, bool permission)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.PostInfomation.Destination.ID == destinationID
+                                                              && p.PostInfomation.IsPublic == permission
+                                                              && p.PostInfomation.IsPinned == Status.IS_PINNED);
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public string Get_PinnedPost_ID(string destinationID, bool permission)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.PostInfomation.Destination.ID == destinationID
+                                                              && p.PostInfomation.IsPublic == permission
+                                                              && p.PostInfomation.IsPinned == Status.IS_PINNED);
+                if(result == null)
+                {
+                    return null;
+                }
+                else return result.PostInfomation.PostID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// get a numbers of comment or a post
         /// </summary>
@@ -131,7 +163,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result = collection.AsQueryable().FirstOrDefault(p => p.PostInfomation.PostID == postID);
-                return result.CommentList.Skip(skip).Take(number).ToList();
+                return result.CommentList.OrderByDescending(cm => cm.DateCreate).Skip(skip).Take(number).ToList();
             }
             catch
             {
@@ -235,7 +267,7 @@ namespace iVolunteer.DAL.MongoDB
                 var post_filter = Builders<Mongo_Post>.Filter.Eq(p => p._id, new ObjectId(postID));
                 var user_filter = Builders<SDLink>.Filter.Eq(u => u.ID, userID);
                 var update = Builders<Mongo_Post>.Update.PullFilter(p => p.LikerList, user_filter)
-                                                        .Inc(p => p.PostInfomation.CommentCount, -1); ;
+                                                        .Inc(p => p.PostInfomation.LikeCount, -1); ;
                 var result = collection.UpdateOne(post_filter, update);
                 return result.IsAcknowledged;
             }
@@ -258,6 +290,31 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, groupID)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.GROUP)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PUBLIC);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get Post in Public section of Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_Public_Post_By_ProjectID(string projectID, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, projectID)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.PROJECT)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PUBLIC);
                 var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
                 var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
@@ -282,10 +339,103 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, groupID)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.GROUP)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PRIVATE);
                 var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
                 var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
                 return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get Post in Discussion Section of Project
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_Private_Post_By_ProjectID(string projectID, int skip, int number)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.ID, projectID)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.PROJECT)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PRIVATE);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
+                var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Is_User_Liked(string userID, string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Where(p => p.PostInfomation.PostID == postID && p.LikerList.Any(u => u.ID == userID));
+                var result = collection.Find(filter).ToList().Count;
+                return result != 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public Mongo_Post Get_Mg_Post_By_ID(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID);
+                var result = collection.Find(filter).FirstOrDefault();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Is_Pinned(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID )
+                             & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, true);
+                var result = collection.Find(filter).FirstOrDefault();
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Set_IsPin(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID);
+                var update = Builders<Mongo_Post>.Update.Set(p => p.PostInfomation.IsPinned, true);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Set_IsNotPin(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID);
+                var update = Builders<Mongo_Post>.Update.Set(p => p.PostInfomation.IsPinned, false);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
             }
             catch
             {

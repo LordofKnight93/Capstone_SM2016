@@ -10,7 +10,15 @@
                 <div class="col-sm-5">
                     <div class="row" style="text-align: center">
                         <div class="col-xs-12">
-                            <h4>Thông tin cá nhân</h4>
+                            <h4>
+                                Thông tin cá nhân
+                                @if (ViewBag.IsMyHome == true)
+                                {
+                                    <button class="btn btn-image" title="Chỉnh sửa">
+                                        <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                                    </button>
+                                }
+                            </h4>
                             <div class="divider-holizon"></div>
                         </div>
                     </div>
@@ -31,10 +39,6 @@
                                         <label style="font-weight: normal" id="namedisplay">@Html.DisplayFor(model => model.RealName)</label>
                                         <input type="text" placeholder="Võ Tôn Phúc" class="form-control" style="display: none" id="txtname">
                                     </td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
@@ -50,60 +54,36 @@
                                             <p>Nữ</p>
                                         }
                                     </td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/birthday.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Birthday)</td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/identifyID.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.IdentifyID)</td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/house.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Address)</td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/mail.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Email)</td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/phone-call.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Phone)</td>
-                                    <td>
-                                        <button id="editname" class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
-                                        <button id="savename" class="btn btn-image" type="submit" style="display: none"><i class="material-icons md-20 md-mygreen">save</i></button>
-                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -114,36 +94,39 @@
                 <div class="col-sm-7">
                     <div class="row" style="text-align: center">
                         <div class="col-xs-12">
-                            <h4>Thông tin tình nguyện</h4>
+                            <h4>Thông tin tình nguyện
+                            @if (ViewBag.IsMyHome == true)
+                            {
+                                <button class="btn btn-image" title="Chỉnh sửa">
+                                    <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                                </button>
+                            }</h4>
                             <div class="divider-holizon"></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                             <table class="table-user-volunteer-info">
-                                <colgroup>
-                                    <col width="25%">
-                                    <col width="65%">
-                                    <col width="10%">
-                                </colgroup>
+                                @*<colgroup>
+                                    <col width="30%">
+                                    <col width="60%">
+                                </colgroup>*@
                                 <tr>
-                                    <td style="color: #049f88">LĨNH VỰC QUAN TÂM</td>
-                                    <td>
-                                        Động vật
-                                        <br> Trẻ em
-                                        <br> Giáo dục
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
+                                    <td style="color: #049f88" width="30%">QUAN TÂM</td>
+                                    <td style="text-align: justify" width="60%">
+                                        @Html.DisplayFor(model => model.Interest)
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="color: #049f88">KĨ NĂNG &amp; KINH NGHIỆM</td>
-                                    <td style="text-align: justify">
-                                        Tình nguyện về cơ bản là cống hiến thời gian, sức lực và kĩ năng mà không đòi hỏi lợi ích cá nhân. Khác với nhiều thứ trong cuộc sống, sự lựa chọn tồn tại trong công việc tình nguyện. Là một tình nguyện viên, bạn quyết định đóng góp theo cách riêng của mình mà không phải chịu áp lực hành động từ người khác.
+                                    <td style="color: #049f88" width="30%">KĨ NĂNG</td>
+                                    <td style="text-align: justify" width="60%">
+                                        @Html.DisplayFor(model => model.Skills)
                                     </td>
-                                    <td>
-                                        <button class="btn btn-image" type="submit"><i class="material-icons md-20 md-mygreen">edit</i></button>
+                                </tr>
+                                <tr>
+                                    <td style="color: #049f88" width="30%">KINH NGHIỆM</td>
+                                    <td style="text-align: justify" width="60%">
+                                        @Html.DisplayFor(model => model.Experience)
                                     </td>
                                 </tr>
                             </table>
@@ -157,4 +140,26 @@
     </div>
 
 </div>
-@{ Html.RenderAction("CurrentProjects", "User", new { userID = Model.UserID });}
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <ul class="nav sub-nav-tabs">
+                <li class="active"  data-toggle="tab">
+                    @Ajax.ActionLink("SỰ KIỆN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                </li>
+                @if (ViewBag.IsMyHome == true)
+                {
+                    <li data-toggle="tab">
+                        @Ajax.ActionLink("LỜI MỜI THAM GIA", "InvitedProjects", "Account", null, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="sub-content-panel">
+            @{ Html.RenderAction("CurrentProjects", "User", new { userID = Model.UserID });}
+    </div>
+</div>
+

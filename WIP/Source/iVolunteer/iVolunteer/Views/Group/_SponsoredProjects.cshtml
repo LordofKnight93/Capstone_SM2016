@@ -8,7 +8,7 @@
                 <!-- Header -->
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>@Model.Count() sự kiện</h4>
+                        <h4>@Model.Count() hoạt động</h4>
                     </div>
                 </div>
 
@@ -31,21 +31,21 @@
                                             <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
                                         </div>
                                         <div class="row">
-                                            <table style="font-size: 14px;" width="60%">
+                                            <table style="font-size: 14px;" width="90%">
                                                 <tr>
-                                                    <td style="color: #049f88;">ĐỊA ĐIỂM</td>
+                                                    <td style="color: #049f88;" width="15%">ĐỊA ĐIỂM</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Location)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="color: #049f88;">LĨNH VỰC</td>
-                                                    <td>Môi trường, Con người</td>
+                                                    <td style="color: #049f88;" width="15%">LĨNH VỰC</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.TagsString)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="color: #049f88;">THỜI GIAN</td>
+                                                    <td style="color: #049f88;" width="15%">THỜI GIAN</td>
                                                     <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="color: #049f88;">LIÊN HỆ</td>
+                                                    <td style="color: #049f88;" width="15%">LIÊN HỆ</td>
                                                     <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
                                                 </tr>
                                             </table>

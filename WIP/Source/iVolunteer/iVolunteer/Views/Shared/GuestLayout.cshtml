@@ -7,6 +7,7 @@
     <title>@ViewBag.Title</title>
     <link rel="icon" href="../Images/logo_lite.png" type="image/x-icon" sizes="16x16"> 
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
@@ -25,90 +26,168 @@
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">
-                <!-- Navbar left -->
-                
-                
-                <!-- Search bar -->
-                <div class="col-sm-5 col-md-5">
-                    @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "navbar-form", @role = "search" }))
-                    {
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Nhập từ khóa và chọn trường tìm kiếm" name="name" style="width: 75%; border-right: 0" maxlength="100">
-                            <select name="option" class="form-control" style="width: 25%; border-left:0">
-                                <option value="User">Bạn Bè</option>
-                                <option value="Project">Dự Án</option>
-                                <option value="Group">Nhóm</option>
-                            </select>
-                            <div class="input-group-btn" style="width: 1%">
-                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                            </div>
-                        </div>
-                    }
-
-                </div>
 
                 <!-- Navbar Right -->
-                <div class="nav navbar-nav navbar-right">
-                    <div class="btn-group navbar-btn">
-                        <button class="btn btn-default" data-toggle="modal" data-target="#loginForm">
-                            Đăng nhập hoặc Đăng ký
-                        </button>                       
-                    </div>
-                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li style="padding-right: 15px;">
+                        <div class="search-dropdown navbar-form">
+                            <input type="text" class="txt-search" id="searchArea" name="name" autocomplete="off" placeholder="Tìm kiếm...">
+                            <i class="material-icons md-20" style="color: #fff">search</i>
+                            <ul class="dropdown-content" id="listSearchBar">
+                                <li role="Group" class="searchItem" onclick="search(this)">Tìm nhóm <span class="searchKey" id="srchGrVal"></span></li>
+                                <li role="Project" class="searchItem" onclick="search(this)">Tìm dự án <span class="searchKey" id="srchPrVal"></span></li>
+                                <li role="User" class="searchItem" onclick="search(this)">Tìm thành viên <span class="searchKey" id="srchUsVal"></span></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="btn-group navbar-btn">
+                            @Ajax.ActionLink("Đăng nhập hoặc đăng ký", "Login", "Home", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup" }, new { @class = "btn btn-login" })
+                        </div>
+                    </li>
+                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
-    <!------------Login Fade Modal-------------->
 
-    @{Html.RenderPartial("~/Views/Home/_Login.cshtml", new ViewDataDictionary());}
-
+    <div  class="modal fade" role="dialog" id="popup">
+       <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content" id="popup-content">
+                
+        </div>
+       </div>
+    </div>
 
     <!-------------Body Container------------>
       <div class="container background-container">
-        
            @RenderBody()
-
      </div>
-
-    
-
+    @* --------------SCRIPT SECTION--------- *@
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-    @section scripts {
-        <script type="text/javascript">
-        var frmnewprovider = $("#formValidation");
-        $(document).ready(function () {
-            frmnewprovider.submit(function (e) {
-                e.preventDefault();
-                frmnewprovider.validate();
-                if (frmnewprovider.valid()) {
-                    $.ajax({
-                        url: "/Home/Login",
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({
-                            Email: frmnewprovider.find('#Email').val(),
-                            Password: frmnewprovider.find('#Password').val(),
-                        }),
-                        success: function (result) {
-                            //if record was added to db, then...
-                            window.location.replace('/Home/Newfeed'); //we can redirect
-                            //or simply close our modal.
-                            //$('#mdlnewprovider').modal('hide');
-                        },
-                        error: function (result) {
-                            alert('error');
-                        }
-                    });
-                }
-            });
-        });
-        </script>
-    }
-    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
+    <script>
+        $('#popup').on('toggle', function () {
+            $('#popup-content').empty();
+        })
+    </script>
+    
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/scripts/phucvt_custom.js"></script>
     <script src="~/scripts/jquery.validate.js"></script>
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        /****************************************************************  Script for Search Bar **************************************/
+        $("#searchArea").keyup(function () {
+            delay(function () {
+                $("#srchGrVal").html($("#searchArea").val());
+                $("#srchPrVal").html($("#searchArea").val());
+                $("#srchUsVal").html($("#searchArea").val());
+
+                var searchAreaWidth = $('#searchArea').width() + 35;
+                $('#listSearchBar').width(searchAreaWidth);
+
+                var searchItemWidth = $('#searchArea').width() - 10;
+                $("#srchGrVal").css('max-width', searchItemWidth + 'px');
+                $("#srchPrVal").css('max-width', searchItemWidth + 'px');
+                $("#srchUsVal").css('max-width', searchItemWidth + 'px');
+
+                $(".dropdown-content").show();
+
+            }, 100);
+
+        });
+
+        $('div.search-dropdown').mouseleave(function () {
+            $(".dropdown-content").hide();
+        });
+
+        if ($("#searchArea").val().length < 1) {
+            $(".dropdown-content").hide();
+        }
+        var delay = (function () {
+            var timer = 0;
+            return function (callback, ms) {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('.dropdown-content').length) {
+                if ($('.dropdown-content').is(":visible")) {
+                    $('.dropdown-content').hide();
+                }
+            }
+        });
+        var $listItems = $('li.searchItem');
+
+        function search(selector) {
+            var name = $("#searchArea").val();
+            var option = $(selector).attr('role');
+            window.location.href = "/Home/Search?name=" + name + "&option=" + option;
+        }
+        var $current;
+        $('#searchArea').keydown(function (e) {
+            var key = e.keyCode,
+                $selected = $listItems.filter('.selected');
+
+
+            if (key != 40 && key != 38 && key != 13) return;
+
+            $listItems.removeClass('selected');
+
+            if (key == 40) // Down key
+            {
+                if (!$selected.length || $selected.is(':last-child')) {
+                    $current = $listItems.eq(0);
+                } else {
+                    $current = $selected.next();
+                }
+            } else if (key == 38) // Up key
+            {
+                if (!$selected.length || $selected.is(':first-child')) {
+                    $current = $listItems.last();
+                } else {
+                    $current = $selected.prev();
+                }
+            } else if (key == 13) {
+                search($current);
+            }
+            $current.addClass('selected');
+        });
+
+        //Show Symbol loading before ajax loading
+        function OnBegin(id) {
+            var loadingHtml = "";
+            loadingHtml += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">';
+            loadingHtml += '<div class="progress"><div class="indeterminate"></div></div>';
+            loadingHtml += '</div';
+            $(id).html(loadingHtml);
+        }
+
+        //On begin popup
+        function OnBeginPopup() {
+            console.log("on begin");
+            var loadingPopup = "";
+            loadingPopup += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0; text-align: center; height: 150px; line-height: 150px;">';
+            loadingPopup += '<div class="preloader-wrapper active">';
+            loadingPopup += '<div class="spinner-layer spinner-green-only">';
+            loadingPopup += '<div class="circle-clipper left">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div><div class="gap-patch">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div><div class="circle-clipper">';
+            loadingPopup += '<div class="circle"></div>';
+            loadingPopup += '</div>';
+            loadingPopup += '</div>';
+            loadingPopup += '</div>';
+            loadingPopup += '</div>';
+            $('#popup-content').html(loadingPopup);
+            console.log("load html loading");
+            $('#popup').modal('show');
+            console.log("show popup");
+        }
+    </script>
 </body>
 </html>

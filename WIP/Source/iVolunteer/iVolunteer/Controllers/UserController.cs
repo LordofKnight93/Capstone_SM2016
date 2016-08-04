@@ -74,7 +74,7 @@ namespace iVolunteer.Controllers
         {
             ViewBag.Action = "UploadAvatar";
             ViewBag.Controller = "User";
-            return View("_ImageUpload");
+            return PartialView("_ImageUpload");
         }
 
         [HttpPost]
@@ -90,7 +90,7 @@ namespace iVolunteer.Controllers
                 return RedirectToAction("UserHome", "User", new { userID = userID });
 
             }
-            else return View("_ImageUpload");
+            else return PartialView("_ImageUpload");
 
         }
 
@@ -99,7 +99,7 @@ namespace iVolunteer.Controllers
         {
             ViewBag.Action = "UploadCover";
             ViewBag.Controller = "User";
-            return View("_ImageUpload");
+            return PartialView("_ImageUpload");
         }
 
         [HttpPost]
@@ -115,7 +115,7 @@ namespace iVolunteer.Controllers
                 return RedirectToAction("UserHome", "User", new { userID = userID });
 
             }
-            else return View("_ImageUpload");
+            else return PartialView("_ImageUpload");
         }
 
         public ActionResult PersonalInformation(string userID)
@@ -230,7 +230,6 @@ namespace iVolunteer.Controllers
             }
         }
 
-        [ChildActionOnly]
         public ActionResult CurrentProjects(string userID)
         {
             // check if parameter valid
@@ -365,22 +364,41 @@ namespace iVolunteer.Controllers
         }
         public ActionResult SearchUser(string name)
         {
+            ViewBag.Name = name;
+            return View("SearchUser");
+        }
+
+        public ActionResult NextResultPage(string name, int page)
+        {
             try
             {
-                if (String.IsNullOrEmpty(name))
+                if (page <= 0) page = 1;
+                if (String.IsNullOrEmpty(name.Trim()))
                 {
-                    ViewBag.Message = Error.INVALID_INFORMATION;
-                    return View("ErrorMessage");
+                    ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
+                    return PartialView("ErrorMessage");
                 }
 
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
 
                 List<AccountInformation> result = new List<AccountInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = userDAO.User_Search(name, true);
-                else result = userDAO.User_Search(name, false);
+                    result = userDAO.User_Search(name, 10 * (page - 1), 10);
+                else result = userDAO.Active_User_Search(name, 10 * (page - 1), 10);
 
-                return View("SearchUser", result);
+                ViewBag.Name = name;
+
+                if (result.Count == 0)
+                {
+                    if (page == 1)
+                        ViewBag.Message = "Không tìm thấy kết quả";
+                    else
+                        ViewBag.Message = "Không còn kết quả nào nữa!";
+                    return PartialView("ErrorMessage");
+                }
+
+                ViewBag.NextPage = page + 1;
+                return PartialView("_UserResult", result);
             }
             catch
             {
@@ -440,7 +458,7 @@ namespace iVolunteer.Controllers
                     messageDAO.Add_Message(sqlmessage1);
                     messageDAO.Add_Message(sqlmessage2);
 
-                    var result1 = new { messages = "", messageID = message._id.ToString() };
+                    var result1 = new { messages = "", MessageID = message._id.ToString() };
                     return Json(result1);
                 }
                 List<MessageItem> messages = mgMessageDAO.Get_Recent_Messages(messageID);
@@ -508,7 +526,6 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public string SearchUserForChat(string name)
         {
-            if (Session["UserID"] == null) return null;
             try
             {
                 if (String.IsNullOrEmpty(name))
@@ -521,8 +538,8 @@ namespace iVolunteer.Controllers
 
                 List<AccountInformation> result = new List<AccountInformation>();
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    result = userDAO.User_Search(name, true);
-                else result = userDAO.User_Search(name, false);
+                    result = userDAO.User_Search(name, 0, 10);
+                else result = userDAO.Active_User_Search(name, 0, 10);
 
                 return JsonConvert.SerializeObject(result);
             }
@@ -531,6 +548,10 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// Load all Friend request notificaton
+        /// </summary>
+        /// <returns></returns>
         public JsonResult LoadFriendRequestNotif()
         {
             if (Session["UserID"] == null) return null;
@@ -552,6 +573,31 @@ namespace iVolunteer.Controllers
             }
 
         }
+        /// <summary>
+        /// Load all Friend request accepted Notification
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult LoadFriendRequestAccepted()
+        {
+            try
+            {
+                if (Session["UserID"] == null) return null;
+
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifList = userDAO.Get_FriendAcceptedNotification(userID, 0, 5);
+                if (notifList == null) return Json(false);
+                return Json(notifList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Load all Unseen Notification
+        /// </summary>
+        /// <returns></returns>
         public JsonResult LoadNotification()
         {
             try
@@ -560,8 +606,8 @@ namespace iVolunteer.Controllers
 
                 string userID = Session["UserID"].ToString();
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                var notifList = userDAO.Get_Notifications(userID, 0, 5);
-
+                var notifList = userDAO.Get_UnSeen_Notifications(userID, 0, 5);
+                if (notifList == null) return Json(false);
                 return Json(notifList);
             }
             catch
@@ -569,6 +615,108 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// Count unseen notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public JsonResult GetNotificationsCount(string userID)
+        {
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            return Json(userDAO.Count_Notifications(userID));
+        }
+        /// <summary>
+        /// Announce that user has seen this notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public JsonResult SeenJoinRequestAccepted(string userID, string notifyID)
+        {
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+        /// <summary>
+        /// Annouce that user has seen this friend request accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
+        public JsonResult SeenFriendRequestAccepted(string userID, string notifyID)
+        {
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+        [HttpGet]
+        public ActionResult UpdatePersonalInformation()
+        {
+            // check if parameter valid
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
 
+            try
+            {
+                string userID = Session["UserID"].ToString();
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Get_PersonalInformation(userID);
+                return PartialView("_UpdatePersonalInformation", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdatePersonalInformation(PersonalInformation newInfo)
+        {
+            /// check if parameter valid
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            if(!ModelState.IsValid) return PartialView("_UpdatePersonalInformation", newInfo);
+
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                if (userID != newInfo.UserID)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var result = userDAO.Update_PersonalInformation(userID, newInfo);
+                return PersonalInformation(userID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
     }
 }

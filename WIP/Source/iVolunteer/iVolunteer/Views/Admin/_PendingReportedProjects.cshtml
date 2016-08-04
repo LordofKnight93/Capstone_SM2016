@@ -1,34 +1,37 @@
 ﻿@model Tuple<List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Report>, List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>>
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <div class="row" style="margin-top: -18px; margin-bottom: -5px;">
-        <div class="col-sm-12">
-            <h4>Danh sách dự án vi phạm</h4>
-        </div>
-    </div>
-    <table class="table">
-        @foreach (var project in Model.Item2)
-        {
+<table id="reportTable" class="table table-borderless" style="top:-1px">
+    @foreach (var project in Model.Item2)
+    {
+        <tbody id="@project.ID">
             <tr>
-                <th>Dự án vi phạm</th>
-                <td><a>@project.DisplayName</a></td>
-                <td><input type="button" class ="btn btn-warning" value="Đình chỉ" onclick="location.href ='@Url.Action("DeactivateProject","Admin", new { projectID = project.ID })'" />
-                <input type="button" class ="btn btn-default" value="Bỏ qua" onclick="location.href ='@Url.Action("IgnoreProjectReport","Admin", new { projectID = project.ID })'" /></td>
+                <th><a style="font-size: 1.1em" href="">@project.DisplayName</a></th>
+                <th>
+                    <button role="@project.ID" id="deactivateProject" style="margin-right: 5px" class="btn btn-warning btn-xs" href="@Url.Action("DeactivateProject","Admin")">Đình chỉ</button>
+                    <button role="@project.ID" id="ignoreProject" style="margin-right: 0px" class="btn btn-default btn-xs" href="@Url.Action("IgnoreProjectReport","Admin")">Bỏ qua</button>
+                </th>
             </tr>
             <tr>
-                <td>Người báo cáo</td>
-                <td>Nội dung báo cáo</td>
+                <td class="header">Người báo cáo</td>
+                <td class="header">Nội dung báo cáo</td>
             </tr>
-            foreach (var item in Model.Item1)
+            @foreach (var item in Model.Item1)
             {
                 if (item.Destination.ID == project.ID)
                 {
                     <tr>
-                        <td><a>@item.Actor.DisplayName</a></td>
-                        <td><a>@item.Type</a></td>
+                        <td class="col-md-4"><a href="">@item.Actor.DisplayName</a></td>
+                        @if (@item.Detail != null)
+                        {
+                            <td class="col-md-8">@item.Reason : @item.Detail</td>
+                        }
+                        else
+                        {
+                            <td class="col-md-8">@item.Reason</td>
+                        }
                     </tr>
                 }
             }
-        }
-    </table>
-</div>
+        </tbody>
+    }
+</table>
 

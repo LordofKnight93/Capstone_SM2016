@@ -1,7 +1,7 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation
 
-<div class="card-panel">
-    <div class="row" style="text-align: center;">
+<div class="card-panel" style="padding: 0;">
+    @*<div class="row" style="text-align: center;">
         <div class="col-sm-12">
             @{ string avtlink = "/Images/User/Avatar/" + Model.UserID + ".jpg";}
             <img type="image/svg+xml" src=@avtlink width="80" height="80" border="1">
@@ -12,8 +12,16 @@
     </div>
     <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4" style="text-align: center; color: #049f88">
-            <i class="material-icons" data-toggle="tooltip" title="" data-original-title="Sự kiện">assignment</i>
-            <p style="text-align: center; font-weight: bold">@Html.DisplayFor(model => model.ProjectCount)</p>
+            <i class="material-icons" data-toggle="tooltip" title="" data-original-title="Hoạt động đã tổ chức">assignment</i>
+            <p style="text-align: center; font-weight: bold">@Html.DisplayFor(model => model.OrganizedProjectCount)</p>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="" data-original-title="Hoạt động đã ủng hộ">assignment</i>
+            <p style="text-align: center; font-weight: bold">@Html.DisplayFor(model => model.SponsoredProjectCount)</p>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4" style="text-align: center; color: #049f88">
+            <i class="material-icons" data-toggle="tooltip" title="" data-original-title="Hoạt động đã tham gia">assignment</i>
+            <p style="text-align: center; font-weight: bold">@Html.DisplayFor(model => model.JoinedProjectCount)</p>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4" style="text-align: center; color: #049f88">
             <i class="material-icons" data-toggle="tooltip" title="Nhóm">group</i>
@@ -22,6 +30,43 @@
         <div class="col-xs-3 col-sm-3 col-md-3" style="text-align: center; color: #049f88">
             <i class="material-icons" data-toggle="tooltip" title="Bạn bè">person</i>
             <p style="text-align: center; font-weight: bold">@Html.DisplayFor(model => model.FriendCount)</p>
+        </div>
+    </div>*@
+    <div class="card-image profile-booth">
+        @{ string avtlink = "/Images/User/Avatar/" + Model.UserID + ".jpg";}
+        @{ string coverlink = "/Images/User/Cover/" + Model.UserID + ".jpg";}
+        <img src=@coverlink height="220px" width="100%" style="object-fit: cover">
+        <div class="profile-pic">
+            <img src=@avtlink height="60" width="60">
+        </div>
+        <div class="profile-booth-info">
+            <div class="profile-booth-name">
+                <a href="@Url.Action("UserHome", "User", new { userID = Model.UserID})">@Html.DisplayFor(model => model.DisplayName)</a>
+            </div>
+            <div class="profile-booth-count-list">
+                <ul class="profile-count-list">
+                    <li>
+                        <i class="fa fa-sign-language fa-cus-20" aria-hidden="true" data-toggle="tooltip" title="Hoạt động đã tổ chức" data-original-title="Hoạt động đã tổ chức"></i>
+                        <span>@Model.OrganizedProjectCount</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-money fa-cus-20" aria-hidden="true" data-toggle="tooltip" title="Hoạt động đã ủng hộ" data-original-title="Hoạt động đã ủng hộ"></i>
+                        <span>@Model.SponsoredProjectCount</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-calendar-check-o fa-cus-20" aria-hidden="true" data-toggle="tooltip" title="Hoạt động đã tham gia" data-original-title="Hoạt động đã tham gia"></i>
+                        <span>@Model.JoinedProjectCount</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-users fa-cus-20" aria-hidden="true" data-toggle="tooltip" title="Nhóm" data-original-title="Nhóm"></i>
+                        <span>@Model.GroupCount</span>
+                    </li>
+                    <li>
+                        <i class="fa fa-user fa-cus-20" aria-hidden="true" data-toggle="tooltip" title="Bạn bè" data-original-title="Bạn bè"></i>
+                        <span>@Model.FriendCount</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

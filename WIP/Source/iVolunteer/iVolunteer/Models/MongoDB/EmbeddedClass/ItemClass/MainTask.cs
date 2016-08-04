@@ -1,4 +1,5 @@
 ﻿using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
@@ -11,26 +12,35 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
     [BsonIgnoreExtraElements]
     public class MainTask
     {
+        public ObjectId MainTaskID { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập nội dung công việc chính.")]
         public string Name { get; set; }
         public string Description { get; set; }
         public SDLink Assign { get; set; }
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm:ss}", ApplyFormatInEditMode = true)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
         public DateTime Duedate { get; set; }
+        public int TaskDoneCount { get; set; }
         public int SubTaskCount { get; set; }
+        public int CommentCount { get; set; }
         public List<SubTask> Subtask { get; set; }
         public List<Comment> Comment { get; set; }
         public MainTask()
         {
+            this.MainTaskID = ObjectId.GenerateNewId();
             this.Name = "";
             this.Description = "";
             this.Assign = new SDLink();
             this.Duedate = new DateTime();
+            this.TaskDoneCount = 0;
             this.SubTaskCount = 0;
+            this.CommentCount = 0;
             this.Subtask = new List<SubTask>();
             this.Comment = new List<Comment>();
         }
         public MainTask(MainTask task)
         {
+            this.MainTaskID = ObjectId.GenerateNewId();
             this.Name = task.Name;
             this.Description = task.Description;
             this.Assign = task.Assign;

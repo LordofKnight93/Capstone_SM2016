@@ -5,13 +5,33 @@
     <!-- Tổng quan -->
     <div class="row">
         <div class="col-md-12" style="margin-top: -20px">
-            <h4 style="color: #049f88">Tổng Quan</h4>
+            <h4 style="color: #049f88">
+                Tổng Quan
+                @if (ViewBag.IsLeader == true && Model.InProgress)
+                {
+                    <button class="btn btn-image" title="Chỉnh sửa">
+                        <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdateProjectInformation", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                    </button>
+                }
+            </h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             @Html.DisplayFor(model => model.ProjectShortDescription)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Lĩnh vực</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.DisplayFor(model => model.TagsString)
         </div>
     </div>
 
@@ -39,6 +59,41 @@
         <div class="col-md-12">
             <p><strong>Thời gian bắt đầu: </strong>@Html.DisplayFor(model => model.DateStart)</p>
             <p><strong>Thời gian kết thúc: </strong>@Html.DisplayFor(model => model.DateEnd)</p>
+
+    @if (Model.InProgress)
+    {
+        if (ViewBag.IsLeader == true)
+        {
+                @Ajax.ActionLink("Kết thúc hoạt động", "EndProject", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc hoạt động, bạn sẽ không thể mở lại hoạt động nay sau khi đã kết thúc ?" }, new { @type = "button", @class = "btn btn-default" })
+        }
+        if (Model.IsRecruit)
+        {
+            if (ViewBag.IsLeader == true)
+            {
+                @Ajax.ActionLink("Kết thúc tuyển thành viên", "StopRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc tuyển thành viên ?" }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                <button type="button">Đang tuyển thành viên</button>
+            }
+        }
+        else
+        {
+            if (ViewBag.IsLeader == true)
+            {
+                @Ajax.ActionLink("Bắt đầu tuyển thành viên", "StartRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            }
+            else
+            {
+                <button type="button">Đã kết thúc đợt tuyển thành viên</button>
+            }
+        }
+    }
+    else
+    {
+        <button type="button">Đã kết thúc</button>
+    }
+
         </div>
     </div>
 

@@ -1,0 +1,208 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
+
+@Html.AntiForgeryToken()
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    @*<div id="createProjectForm" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg modal-md">
+            <div class="modal-content">*@
+    <div class="modal-body">
+        <div class="row">
+
+            <!-- Login -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="row" style="margin: -10px 0 -5px 0;">
+                        <div class="col-sm-12">
+                            <h4>Thay đổi thông tin hoạt động</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider-holizon"></div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <!--form role="form" class="login-form"> -->
+                        @using (Ajax.BeginForm("UpdateProjectInformation", "Project", null, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                        {
+                            <input type="hidden" name="projectID" value="@Model.ProjectID" />
+                                    <!-- Project Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Tên dự án:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.DisplayFor(model => model.ProjectName, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                                            @Html.HiddenFor(model => model.ProjectName)
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Start -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateStart">Ngày bắt đầu:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @id = "dateStart", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date"} })
+                                            @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Date End-->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateEnd">Ngày kết thúc:</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
+                                            @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Project Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="projectShortDescription">Mô tả tóm tắt: </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.ProjectShortDescription, new { @id = "projectShortDescription", @class = "form-control", @rows = "2", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.ProjectShortDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Project Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="projectFullDescription">Mô tả chi tiết: </label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.ProjectFullDescription, new { @id = "projectFullDescription", @class = "form-control", @rows = "6", @placeholder = "Mô tả chi tiết về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.ProjectFullDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Địa điểm</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @id = "location", @class = "form-control", @placeholder = "Địa điểm" } })
+                                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Email</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Email" } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Điện thoại</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Phone" } })
+                                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <!--Tag checkbox list-->
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Chủ đề tình nguyện</p>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Giáo dục" name="tagsList" @(Model.TagsString.Contains("Giáo dục") ? "checked" : "" ) />Giáo dục
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Văn hóa" name="tagsList" @(Model.TagsString.Contains("Văn hóa") ? "checked" : "" ) />Văn hóa
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Y tế" name="tagsList" @(Model.TagsString.Contains("Y tế") ? "checked" : "" ) />Y tế
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Xã hội" name="tagsList" @(Model.TagsString.Contains("Xã hội") ? "checked" : "" ) />Xã hội
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Môi trường" name="tagsList" @(Model.TagsString.Contains("Môi trường") ? "checked" : "" ) />Môi trường
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Du lịch" name="tagsList" @(Model.TagsString.Contains("Du lịch") ? "checked" : "" ) />Du lịch
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Thể thao" name="tagsList" @(Model.TagsString.Contains("Thể thao") ? "checked" : "" ) />Thể thao
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Đối tượng hướng đến</p>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Trẻ em" name="tagsList" @(Model.TagsString.Contains("Trẻ em") ? "checked" : "" ) />Trẻ em
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Người nghèo" name="tagsList" @(Model.TagsString.Contains("Người nghèo") ? "checked" : "" ) />Người nghèo
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Người khuyết tật" name="tagsList" @(Model.TagsString.Contains("Người khuyết tật") ? "checked" : "" ) />Người khuyết tật
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" @(Model.TagsString.Contains("Vùng thiên tai") ? "checked" : "" ) />Vùng thiên tai
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Động vật" name="tagsList" @(Model.TagsString.Contains("Động vật") ? "checked" : "" ) />Động vật
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Hình thức hoạt động</p>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Ủng hộ" name="tagsList" @(Model.TagsString.Contains("Ủng hộ") ? "checked" : "" ) />Ủng hộ
+                                            </div>
+                                            <div>
+                                                <input type="checkbox" class="row" value="Đi thực tế" name="tagsList" @(Model.TagsString.Contains("Đi thực tế") ? "checked" : "" ) />Đi thực tế
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            // Error Message
+                            <div class="row">
+                                <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                    <label style="color:red;">@ViewBag.Message</label>
+                                </div>
+                            </div>
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-7 text-input">
+                                            @Ajax.ActionLink("Hủy", "ProjectInformation", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace}, new { @type = "button", @class = "btn btn-default" })
+                                        </div>
+                                        <div class="col-xs-2 text-input">
+                                            <button type="submit" class="btn btn-register">CẬP NHẬT</button>
+                                        </div>
+                                    </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</div>
+            </div>
+        </div>*@
+</div>

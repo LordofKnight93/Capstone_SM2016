@@ -1,9 +1,9 @@
-﻿@Html.Partial("_PostCreate")
-
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    @Html.Partial("_PostOwner")
-    @Html.Partial("_PostContent")
-    @Html.Partial("_PostInteractionPanel")
-    @Html.Partial("_Comment")
-    @Html.Partial("_PostWriteComment")
+﻿@if (ViewBag.Role == "Leader")
+{
+    @Html.Partial("_PostCreate")
+}
+<div id="postList">
+    @{Html.RenderAction("GetPostList_InPublic", "Project", new { projectID = ViewBag.ProjectID });}
 </div>
+
+    <a id="loadMorePost" href="" onclick="@("loadMorePostInPublicProject(event,'" + ViewBag.ProjectID +"', this.getAttribute('role'))")"></a>

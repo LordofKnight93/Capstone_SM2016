@@ -71,6 +71,34 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        /// <summary>
+        /// Search Acount Information For Project
+        /// </summary>
+        /// <param name="listID"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<AccountInformation> Search_AccountsInformationForProject(List<string> listID, string name)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(gr => gr.AccountInformation.UserID, listID);
+                var result = collection.Find(filter).ToList().Select(gr => gr.AccountInformation).Where(u => u.DisplayName.ToLower().Contains(name.ToLower())).ToList();
+                if (result.Count != 0)
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// get SDlink of a user
         /// </summary>
@@ -116,8 +144,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -136,8 +163,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, -1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -149,7 +175,7 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// inscrease ProjectCOunt by 1
+        /// inscrease JoinedProjectCOunt by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -157,9 +183,46 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, 1);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.JoinedProjectCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// inscrease SponsoredProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Sponsor_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.SponsoredProjectCount, 1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// inscrease JOrganizedProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Organize_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.OrganizedProjectCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -170,7 +233,7 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// decrease ProjectCOunt by 1
+        /// decrease JoinedProjectCOunt by 1
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -178,9 +241,46 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
-                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.ProjectCount, -1);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.JoinedProjectCount, -1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// decrease SponsoredProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Not_Sponsor_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.SponsoredProjectCount, -1);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// decrease JOrganizedProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Not_Organize_Project(string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.OrganizedProjectCount, -1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -199,8 +299,7 @@ namespace iVolunteer.DAL.MongoDB
         {
             try
             {
-                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID)
-                           & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
+                var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
                 var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, 1);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
@@ -212,6 +311,25 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
+        /// decrease FriendCount by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        //public bool Delete_Friend(string userID)
+        //{
+        //    try
+        //    {
+        //        var filter = Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.UserID, userID);
+        //        var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.FriendCount, -1);
+        //        var result = collection.UpdateOne(filter, update);
+        //        return result.IsAcknowledged;
+        //    }
+        //    catch
+        //    {
+        //        throw;
+        //    }
+        //}
+        // <summary>
         /// decrease FriendCount by 1
         /// </summary>
         /// <param name="userID"></param>
@@ -254,20 +372,22 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// udpate user personal information, only phone and address
+        /// udpate user personal information, only phone and address, interest, skills, experience
         /// </summary>
         /// <param name="userID"></param>
         /// <param name=""></param>
         /// <returns></returns>
-        public bool Update_PersonalInformation(string userID, string newPhone, string newAddress)
+        public bool Update_PersonalInformation(string userID, PersonalInformation newInfo)
         {
             try
             {
                 var filter = Builders<Mongo_User>.Filter.Eq(u => u.PersonalInformation.UserID, userID)
                            & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
-                var update = Builders<Mongo_User>.Update.Set(u => u.PersonalInformation.Phone, newPhone)
-                                                        .Set(u => u.PersonalInformation.Address, newAddress)
-                                                        .Set(u => u.AccountInformation.Address, newAddress);
+                var update = Builders<Mongo_User>.Update.Set(u => u.PersonalInformation.Phone, newInfo.Phone)
+                                                        .Set(u => u.PersonalInformation.Address, newInfo.Address)
+                                                        .Set(u => u.PersonalInformation.Skills, newInfo.Skills)
+                                                        .Set(u => u.PersonalInformation.Experience, newInfo.Experience)
+                                                        .Set(u => u.PersonalInformation.Interest, newInfo.Interest);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -278,21 +398,38 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
-        /// search active and confirmed user
+        /// search active user, for user usage
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="option">true to include deactive user, false to find active user only</param>
         /// <returns></returns>
-        public List<AccountInformation> User_Search(string name, bool allStatus)
+        public List<AccountInformation> Active_User_Search(string name, int skip, int number)
         {
             try
             {
-                var preResult = collection.AsQueryable().Where(u => u.AccountInformation.DisplayName.ToLower().Contains(name.ToLower()));
-                if(allStatus == false)
-                {
-                    preResult = preResult.Where(u => u.AccountInformation.IsActivate == Status.IS_ACTIVATE);
-                }
-                var result = preResult.Select(u => u.AccountInformation).ToList();
+                var result = collection.AsQueryable().Where(ac => ac.AccountInformation.DisplayName.ToLower().Contains(name.ToLower())
+                                                               && ac.AccountInformation.IsActivate == Status.IS_ACTIVATE)
+                                                     .Skip(skip).Take(number)
+                                                     .Select(ac => ac.AccountInformation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// search all user, for admin usage
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public List<AccountInformation> User_Search(string name, int skip, int number)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(ac => ac.AccountInformation.DisplayName.ToLower().Contains(name.ToLower()))
+                                                     .Skip(skip).Take(number)
+                                                     .Select(ac => ac.AccountInformation).ToList();
                 return result;
             }
             catch
@@ -454,7 +591,343 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        /// <summary>
+        /// Count number of Notification for UserID
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int Count_Notifications(string userID)
+        {
+            try
+            {
+                var num = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type != Notify.FRIEND_REQUEST_ACCEPTED).Count();
+                //var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                //int count = result.NotificationList.Count(nt => nt.IsSeen == false);
+                return num;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Count number of Friend Accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public int Count_FriendAccepted(string userID)
+        {
+            try
+            {
+                var num = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type == Notify.FRIEND_REQUEST_ACCEPTED).Count();
+                //var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
+                //int count = result.NotificationList.Count(nt => nt.IsSeen == false);
+                return num;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get friend accepted notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_FriendAcceptedNotification(string userID, int skip, int number)
+        {
+            try
+            {
+                var result1 = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type == Notify.FRIEND_REQUEST_ACCEPTED);
+                return result1.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get all unseen notificaiton of user
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="skip"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public List<Notification> Get_UnSeen_Notifications(string userID, int skip, int number)
+        {
+            try
+            {
+                var result1 = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type != Notify.FRIEND_REQUEST_ACCEPTED);
+                return result1.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public bool Is_Post_Has_Unseen_Notify(string userID, string postID)
+        {
+            try
+            {
+                var count = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == postID && item.IsSeen == false).Count();
+                return count != 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get notify about post commented
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public string Get_PostCmted_NotifyID(string userID, string postID, int type)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == postID && item.Type == type && item.IsSeen == false).ToList();
+                return result.ElementAt(0).NotifyID;
 
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get Join Group request's notification 
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestor"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public string Get_JoinGroup_NotifyID(string userID, string requestor, string groupID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == requestor && item.Destination.ID == groupID && item.Type == Notify.JOIN_GROUP_REQUEST && item.IsSeen == false).ToList();
+                return result.ElementAt(0).NotifyID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get Join Project's notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestor"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public string Get_JoinProject_NotifyID(string userID, string requestor, string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == requestor && item.Destination.ID == projectID && item.Type == Notify.JOIN_PROJECT_REQUEST && item.IsSeen == false).ToList();
+                return result.ElementAt(0).NotifyID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Get all notification of post that have unseen comment
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public string Get_PostCmted_Unseen_NotifyID(string userID, string postID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == postID && item.IsSeen == false);
+                var notifyID = result.ElementAt(0).NotifyID;
+                return notifyID;
 
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Add actor to list commentor of a post
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <param name="actor"></param>
+        /// <returns></returns>
+        public bool Add_Actor_To_PostCmted_Notify(string userID, string notifyID, SDLink actor)
+        {
+            try
+            {
+                var user_filter = Builders<Mongo_User>.Filter.Where(u => u.AccountInformation.UserID == userID && u.NotificationList.Any(no => no.NotifyID == notifyID));
+                var update = Builders<Mongo_User>.Update.AddToSet(u => u.NotificationList.ElementAt(-1).Actors, actor);
+                var result = collection.UpdateOne(user_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// If Actor already in actor list of PostCommted Notification
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="notifyID"></param>
+        /// <param name="actorID"></param>
+        /// <returns></returns>
+        public bool Is_Actor_In_Notify(string userID, string notifyID, string actorID)
+        {
+            try
+            {
+                //var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(ntl => ntl.NotificationList).Where( nt => nt.NotifyID == notifyID).SelectMany(acl => acl.Actors).Where(ac => ac.ID == actorID).ToList();
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(ntl => ntl.NotificationList).Where(nt => nt.NotifyID == notifyID).ToList();
+                List<SDLink> actors = new List<SDLink>();
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    if (result[i].Actors.Where(ac => ac.ID == actorID).Count() == 0)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// increase each user groupcount by 1
+        /// </summary>
+        /// <param name="listID"></param>
+        /// <returns></returns>
+        public bool Batch_Join_Group(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, 1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// decrease each user groupCount by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Batch_Out_Group(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.GroupCount, -1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// inscrease each user JoinedProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Batch_Join_Project(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.JoinedProjectCount, 1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// inscrease each user SponsoredProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Batch_Sponsor_Project(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.SponsoredProjectCount, 1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// inscrease each user OrganizedProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Batch_Organize_Project(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.OrganizedProjectCount, 1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// decrease each user JoinedProjectCOunt by 1
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public bool Batch_Out_Project(IEnumerable<string> listID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_User>.Filter.In(u => u.AccountInformation.UserID, listID);
+                var update = Builders<Mongo_User>.Update.Inc(u => u.AccountInformation.JoinedProjectCount, -1);
+                var result = collection.UpdateMany(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

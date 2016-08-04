@@ -19,7 +19,7 @@ namespace iVolunteer.Controllers
 {
     public class AdminController : Controller
     {
-        [HttpGet] 
+        [HttpGet]
         public ActionResult Manage()
         {
             return View("AdminHome");
@@ -89,6 +89,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateGroup(string groupID)
         {
+            if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -114,11 +115,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
+            return Json(true);
         }
         /// <summary>
         /// Ignore Reports to Group
@@ -127,6 +130,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreGroupReport(string groupID)
         {
+            if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -140,15 +144,17 @@ namespace iVolunteer.Controllers
                     reportDAO.Delete_Reports(groupID);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Deactivate Project
@@ -157,7 +163,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateProject(string projectID)
         {
-
+            if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -179,15 +185,17 @@ namespace iVolunteer.Controllers
                     mgReportDAO.Delete_Reports(projectID);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");'
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Ignore Reports to Project
@@ -196,6 +204,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreProjectReport(string projectID)
         {
+            if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -209,15 +218,17 @@ namespace iVolunteer.Controllers
                     reportDAO.Delete_Reports(projectID);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Deactivate User
@@ -226,7 +237,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateUser(string userID)
         {
-
+            if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -248,15 +259,17 @@ namespace iVolunteer.Controllers
                     mgReportDAO.Delete_Reports(userID);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Ignore Reports to User
@@ -265,6 +278,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreUserReport(string userID)
         {
+            if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -278,15 +292,17 @@ namespace iVolunteer.Controllers
                     reportDAO.Delete_Reports(userID);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayPendingReport", "Admin");
+            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         public ActionResult DisplayBannedObjects()
         {
@@ -321,6 +337,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateGroup(string groupID)
         {
+            if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -334,15 +351,17 @@ namespace iVolunteer.Controllers
                     mgGroupDAO.Set_Activation_Status(groupID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayBannedObjects", "Admin");
+            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
         /// <summary>
         /// Reactivate banned Project
@@ -351,6 +370,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateProject(string projectID)
         {
+            if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -364,15 +384,17 @@ namespace iVolunteer.Controllers
                     mgProjectDAO.Set_Activation_Status(projectID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayBannedObjects", "Admin");
+            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
         /// <summary>
         /// Reactivate banned User
@@ -381,6 +403,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateUser(string userID)
         {
+            if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -394,15 +417,17 @@ namespace iVolunteer.Controllers
                     mgUserDAO.Set_Activation_Status(userID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
+                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return View("ErrorMessage");
+                    //ViewBag.Message = Error.UNEXPECT_ERROR;
+                    //return View("ErrorMessage");
+                    return Json(false);
                 }
             }
-            return RedirectToAction("DisplayBannedObjects", "Admin");
+            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
 
     }
