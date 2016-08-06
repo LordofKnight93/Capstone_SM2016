@@ -22,11 +22,20 @@ namespace iVolunteer.Controllers
 {
     public class GroupController : Controller
     {
+        /// <summary>
+        /// グループの設立画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult CreateGroup()
         {
             return PartialView("_CreateGroup");
         }
+        /// <summary>
+        /// グループを節理る
+        /// </summary>
+        /// <param name="groupInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateGroup(GroupInformation groupInfo)
         {
@@ -37,7 +46,7 @@ namespace iVolunteer.Controllers
             groupInfo.MemberCount = 1;
             groupInfo.IsActivate = Status.IS_ACTIVATE;
 
-            //craete creator
+            //create creator
             string userID = Session["UserID"].ToString();
 
             //create mongo Group
@@ -85,6 +94,11 @@ namespace iVolunteer.Controllers
 
             return JavaScript("window.location = '" + Url.Action("GroupHome", "Group", new { groupID = sql_Group.GroupID }) + "'");
         }
+        /// <summary>
+        /// グループのホーム画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult GroupHome(string groupID)
         {
@@ -127,6 +141,11 @@ namespace iVolunteer.Controllers
                 return View("GroupHome", result);
             }
         }
+        /// <summary>
+        /// グループのアバターとカバーの変更画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string groupID)
@@ -157,6 +176,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// アバターを変更
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangeAvatar(string id)
         {
@@ -180,6 +204,11 @@ namespace iVolunteer.Controllers
             }
             else return PartialView("_ImageUpload");
         }
+        /// <summary>
+        /// カバー変更画面を表示
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangeCover(string id)
         {
@@ -190,6 +219,11 @@ namespace iVolunteer.Controllers
             ViewBag.ID = id;
             return PartialView("_ImageUpload");
         }
+        /// <summary>
+        /// カバー写真を変更
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UploadCover(string id)
         {
@@ -203,6 +237,11 @@ namespace iVolunteer.Controllers
             }
             else return PartialView("_ImageUpload");
         }
+        /// <summary>
+        /// グループの情報画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupInformation(string groupID)
         {
             // check if parameter valid
@@ -233,6 +272,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループのリーダーリスト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupLeaders(string groupID)
         {
             // check if parameter valid
@@ -264,6 +308,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループのメンバーリスト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupMembers(string groupID)
         {
             // check if parameter valid
@@ -294,6 +343,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループの参加要求リスト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupRequests(string groupID)
         {
             // check if parameter valid
@@ -321,6 +375,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 公開セクション画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupPublic(string groupID)
         {
             if (Session["UserID"] == null)
@@ -341,20 +400,38 @@ namespace iVolunteer.Controllers
             ViewBag.InSection = "Public";
             return PartialView("_GroupPublic");
         }
+        /// <summary>
+        /// 相談セクション画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupDiscussion(string groupID)
         {
             ViewBag.InSection = "Discussion";
             ViewBag.GroupID = groupID;
             return PartialView("_GroupDiscussion");
         }
+        /// <summary>
+        /// 写真アルバムセクション画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GroupGallery()
         {
             return PartialView("_GroupGallery");
         }
+        /// <summary>
+        /// 計画セクション画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GroupPlan()
         {
             return PartialView("_GroupPlan");
         }
+        /// <summary>
+        /// 構成セクション画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupStructure(string groupID)
         {
             try
@@ -376,11 +453,22 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループ検索画面を表示
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ActionResult SearchGroup(string name)
         {
             ViewBag.Name = name;
             return View("SearchGroup");
         }
+        /// <summary>
+        /// 検索結果画面を表示
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult NextResultPage(string name, int page)
         {
             try
@@ -420,6 +508,12 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 参加要求を承認
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult AcceptRequest(string requestID, string groupID)
         {
             try
@@ -481,6 +575,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 参加要求を拒否
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult DeclineRequest(string requestID, string groupID)
         {
             try
@@ -513,6 +613,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// リーダーを昇進させる
+        /// </summary>
+        /// <param name="memberID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult SetLeader(string memberID, string groupID)
         {
             try
@@ -548,6 +654,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Send notification to promoted member
+        /// 昇進通知を放送
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="memberID"></param>
@@ -577,6 +684,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// メンバー状態を設定
+        /// </summary>
+        /// <param name="leaderID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult SetMember(string leaderID, string groupID)
         {
             try
@@ -609,6 +722,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// メンバーを排出
+        /// </summary>
+        /// <param name="memberID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult ExpelMember(string memberID, string groupID)
         {
             try
@@ -661,6 +780,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 開催するプロジェクトリスト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult OrganizedProjects(string groupID)
         {
@@ -688,6 +812,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 寄付したプロジェクトリスト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult SponsoredProjects(string groupID)
         {
@@ -715,6 +844,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 参加したプロジェクトのリスト画面をひょじ
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult ParticipatedProjects(string groupID)
         {
@@ -742,6 +876,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 活動セクション画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult ActivityHistory(string groupID)
         {
             // check if parameter valid
@@ -762,6 +901,14 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 通知パーネルで参加要求を承認
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestID"></param>
+        /// <param name="groupID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
         public JsonResult AcceptRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
         {
             SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
@@ -793,6 +940,14 @@ namespace iVolunteer.Controllers
             SendJoinGroupRequestAccepted(userID, requestID, groupID, notifyID);
             return Json(true);
         }
+        /// <summary>
+        /// 通知パーネルで参加要求を拒否
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestID"></param>
+        /// <param name="groupID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
         public JsonResult DenyRequestOnNotif(string userID, string requestID, string groupID, string notifyID)
         {
             if (userID == null) return Json(false);
@@ -823,6 +978,14 @@ namespace iVolunteer.Controllers
             }
             return Json(true);
         }
+        /// <summary>
+        /// 要求承認の通知を放送
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestID"></param>
+        /// <param name="groupID"></param>
+        /// <param name="notifyID"></param>
+        /// <returns></returns>
         public bool SendJoinGroupRequestAccepted(string userID, string requestID, string groupID, string notifyID)
         {
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
@@ -853,7 +1016,8 @@ namespace iVolunteer.Controllers
 
         }
         /// <summary>
-        /// Create Post 
+        /// Create Post
+        /// ポストを作成
         /// </summary>
         /// <param name="postInfor"></param>
         /// <param name="groupID"></param>
@@ -869,9 +1033,13 @@ namespace iVolunteer.Controllers
             //Create creator
             string userID = Session["UserID"].ToString();
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
-            SDLink creator = userDAO.Get_SDLink(userID);
-            //create destination 
             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+
+            //If the post is in Public -> creator = destination;
+            SDLink creator = new SDLink();
+            if (inSection == "Discussion") creator = userDAO.Get_SDLink(userID);
+            else creator = groupDAO.Get_SDLink(groupID);
+            //create destination 
             SDLink group = groupDAO.Get_SDLink(groupID);
 
             postInfor.DateCreate = DateTime.Now;
@@ -933,13 +1101,13 @@ namespace iVolunteer.Controllers
             }
             SendNewPostNotify(userID, sql_Post.PostID, groupID);
             ViewBag.GroupID = groupID;
-            //if (inSection == "Discussion") return GetPostList(groupID);
-            //return GetPostList_InPublic(groupID);
+            ModelState.Clear();
             if (inSection == "Discussion") return GroupDiscussion(groupID);
             return GroupPublic(groupID);
         }
         /// <summary>
-        /// Send New post created Notification to all Group's members except Post creator
+        /// Send New post created Notification to all Group's members
+        /// 新しいポストの通知を放送
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="postID"></param>
@@ -981,6 +1149,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 相談セクションにあるポストリストを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public PartialViewResult GetPostList(string groupID)
         {
             try
@@ -995,6 +1168,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 公開セクションにあるポストリストを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public PartialViewResult GetPostList_InPublic(string groupID)
         {
             try
@@ -1009,12 +1187,37 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// コメントブロークを表示
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public PartialViewResult ShowCommentArea(string postID, string groupID)
+        {
+            ViewBag.GroupID = groupID;
+            ViewBag.PostID = postID;
+            return PartialView("_CommentArea");
+        }
+        /// <summary>
+        /// コメント記載部分を表示
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public PartialViewResult ShowAddCommentArea(string postID, string groupID)
         {
             ViewBag.GroupID = groupID;
             ViewBag.PostID = postID;
             return PartialView("_PostWriteComment");
         }
+        /// <summary>
+        /// コメントを記載
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult AddComment(Comment comment, string postID, string groupID)
         {
             if (Session["UserID"] == null)
@@ -1050,7 +1253,8 @@ namespace iVolunteer.Controllers
             }
         }
         /// <summary>
-        /// Send Post commented Notification to Post Owner
+        /// Send Post commented Notification
+        /// ポストがコメントされた通知を放送
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="postID"></param>
@@ -1094,14 +1298,20 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// コメントリストを取得
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
         public PartialViewResult GetCommentList(string postID)
         {
             try
             {
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<Comment> commentList = postDAO.Get_Comments(postID, 0, 5);
+                if (postDAO.Get_Cmt_Count(postID) > 5)
+                    ViewBag.LoadMore = true;
                 ViewBag.PostID = postID;
-                ViewBag.IsFirstTime = true;
                 return PartialView("_CommentList", commentList);
             }
             catch
@@ -1109,6 +1319,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 残りのコメントを取得
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
         public PartialViewResult LoadOtherComment(string postID)
         {
             try
@@ -1116,7 +1331,7 @@ namespace iVolunteer.Controllers
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<Comment> commentList = postDAO.Get_Comments(postID, 5, 100);
                 ViewBag.PostID = postID;
-                ViewBag.IsFirstTime = false;
+                ViewBag.LoadMore = false;
                 return PartialView("_CommentList", commentList);
             }
             catch
@@ -1124,6 +1339,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// ポストをライク
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
         public ActionResult LikePost(string postID)
         {
             if (Session["UserID"] == null)
@@ -1143,7 +1363,6 @@ namespace iVolunteer.Controllers
                 mongo_Post_DAO.Add_LikerList(postID, creator);
 
                 ViewBag.postID = postID;
-                //return Json(new { status = true, dislike = false });
                 return IsLiked(postID);
             }
             catch
@@ -1151,6 +1370,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// ポストをライクしたかを判定
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
         public PartialViewResult IsLiked(string postID)
         {
             int likeCount = 0;
@@ -1180,6 +1404,11 @@ namespace iVolunteer.Controllers
             ViewBag.PostID = postID;
             return PartialView("_LikeStatus");
         }
+        /// <summary>
+        /// ポストをディスライク
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
         public ActionResult DislikePost(string postID)
         {
             if (Session["UserID"] == null)
@@ -1189,12 +1418,10 @@ namespace iVolunteer.Controllers
             Mongo_Post_DAO mongo_Post_DAO = new Mongo_Post_DAO();
             try
             {
-                //write to DB
                 mongo_Post_DAO.Set_DateLastActivity(postID, DateTime.Now.ToLocalTime());
                 mongo_Post_DAO.Delete_LikerList(postID, Session["UserID"].ToString());
 
                 ViewBag.postID = postID;
-                //return Json(new { status = true, dislike = true });
                 return IsLiked(postID);
             }
             catch
@@ -1202,6 +1429,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 現在参加プルジェクト画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult CurrentProjects(string groupID)
         {
@@ -1229,6 +1461,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループに友達を紹介
+        /// </summary>
+        /// <param name="friendID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddMembers(string[] friendID, string groupID)
         {
@@ -1282,6 +1520,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループ情報を更新画面を表示
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult UpdateGroupInformation(string groupID)
         {
@@ -1314,6 +1557,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループ情報を更新
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="newInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UpdateGroupInformation(string groupID, GroupInformation newInfo)
         {
@@ -1348,6 +1597,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// プロジェクトへ操作
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult ActionToProject(string groupID, string projectID)
         {
             try
@@ -1372,6 +1627,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// get member that not join or send join request to project
+        /// プロジェクトにいないグループのメンバーを取得
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
@@ -1406,7 +1662,8 @@ namespace iVolunteer.Controllers
             }
         }
         /// <summary>
-        /// represnt group to send join request to sa project
+        /// represent group to send join request to a project
+        /// グループの代表としてプロジェクトへ参加要求
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
@@ -1466,6 +1723,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// get member that not sponsor or send sponsor request to project
+        /// プロジェクトの寄付者でもなく寄付要求者でもないグループメンバーを取得
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
@@ -1502,6 +1760,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// represnt group to send sponsor request to sa project
+        /// グループの代表としてプロジェクトに寄付要求
         /// </summary>
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
@@ -1559,7 +1818,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// メンバーを辞任
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult ProjectResign(string groupID, string projectID)
         {
             try
@@ -1589,6 +1853,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 相談セクションでさらにポストを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="times"></param>
+        /// <returns></returns>
         public PartialViewResult LoadMorePost(string groupID, int times)
         {
             try
@@ -1604,6 +1874,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 公開セクションでさらにぽうとを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="times"></param>
+        /// <returns></returns>
         public PartialViewResult LoadMorePostInPublic(string groupID, int times)
         {
             try
@@ -1619,6 +1895,15 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// ポストにリダイレクト
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <param name="notifyID"></param>
+        /// <param name="postID"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public ActionResult SeenNewPostNotify(string userID, string groupID, string notifyID, string postID, string type)
         {
             SDLink result = null;
@@ -1626,8 +1911,12 @@ namespace iVolunteer.Controllers
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
             try
             {
-
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                if (!postDAO.Is_Exist(postID))
+                {
+                    userDAO.Set_Notification_IsSeen(userID, notifyID);
+                    return Json(new { error = true, message = "Bài viết này không tồn tại." });
+                }
                 posts.Add(postDAO.Get_Mg_Post_By_ID(postID));
                 SQL_Group_DAO sqlDAO = new SQL_Group_DAO();
                 if (sqlDAO.IsActivate(groupID))
@@ -1663,11 +1952,19 @@ namespace iVolunteer.Controllers
                 userDAO.Set_Notification_IsSeen(userID, notifyID);
                 ViewBag.GroupID = groupID;
                 var groupHome = RenderRazorViewToString(this.ControllerContext, "GroupHome", result);
-                var groupDiscusson = RenderRazorViewToString(this.ControllerContext, "_GroupDiscussion", null);
+                //var groupDiscusson = RenderRazorViewToString(this.ControllerContext, "_GroupDiscussion", null);
                 var post = RenderRazorViewToString(this.ControllerContext, "_PostList", posts);
-                return Json(new { groupHome, groupDiscusson, post, type });
+                //return Json(new { groupHome, groupDiscusson, post, type });
+                return Json(new { groupHome, post, type });
             }
         }
+        /// <summary>
+        /// 多重ビューをレンダー
+        /// </summary>
+        /// <param name="controllerContext"></param>
+        /// <param name="viewName"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static string RenderRazorViewToString(ControllerContext controllerContext, string viewName, object model)
         {
             controllerContext.Controller.ViewData.Model = model;
@@ -1681,6 +1978,12 @@ namespace iVolunteer.Controllers
                 return stringWriter.GetStringBuilder().ToString();
             }
         }
+        /// <summary>
+        /// ポストへ操作
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public PartialViewResult ActionToPost(string postID, string groupID)
         {
             if (Session["UserID"] == null)
@@ -1713,6 +2016,12 @@ namespace iVolunteer.Controllers
             ViewBag.PostID = postID;
             return PartialView("_ActionToPost");
         }
+        /// <summary>
+        /// ポストを削除
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult DeletePost(string postID, string groupID)
         {
 
@@ -1725,10 +2034,13 @@ namespace iVolunteer.Controllers
             Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
             SQL_AcPo_Relation_DAO relation = new SQL_AcPo_Relation_DAO();
             SQL_Post_DAO sqlPost = new SQL_Post_DAO();
-            using(TransactionScope trans = new TransactionScope())
+            bool permission = true;
+
+            using (TransactionScope trans = new TransactionScope())
             {
                 try
                 {
+                    permission = postDAO.Is_InPublic(postID);
                     //Delete all relation related to this Post
                     relation.Delete_all_relations(postID);
                     //Delete Post in SQL
@@ -1747,23 +2059,34 @@ namespace iVolunteer.Controllers
                     throw;
                 }
             }
+            if (permission) return GroupPublic(groupID);
             return GroupDiscussion(groupID);
         }
+        /// <summary>
+        /// ポストを固定化
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult PinPost(string postID, string groupID)
         {
             SQL_Post_DAO sqlPost = new SQL_Post_DAO();
             Mongo_Post_DAO mgPost = new Mongo_Post_DAO();
-
+            bool permission = true;
             //Check if this is Current Pinned Post
-            if(!mgPost.Is_Pinned(postID))
+            if (!mgPost.Is_Pinned(postID))
             {
                 using (var trans = new TransactionScope())
                 {
                     try
                     {
+                        permission = mgPost.Is_InPublic(postID);
                         //get current Pin
-                        string currentPinID = mgPost.Get_PinnedPost_ID(groupID, false);
-                        if(currentPinID != null)
+                        string currentPinID = "";
+                        if (permission) currentPinID = mgPost.Get_PinnedPost_ID(groupID, true);
+                        else currentPinID = mgPost.Get_PinnedPost_ID(groupID, false);
+
+                        if (currentPinID != null)
                         {
                             //Delete current Pin
                             sqlPost.UnpinPost(currentPinID);
@@ -1782,16 +2105,25 @@ namespace iVolunteer.Controllers
                     }
                 }
             }
+            if (permission) return GroupPublic(groupID);
             return GroupDiscussion(groupID);
         }
+        /// <summary>
+        /// ポストの固定状態を削除
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult UnpinPost(string postID, string groupID)
         {
             SQL_Post_DAO sqlPost = new SQL_Post_DAO();
             Mongo_Post_DAO mgPost = new Mongo_Post_DAO();
+            bool permission = true;
             using (var trans = new TransactionScope())
             {
                 try
                 {
+                    permission = mgPost.Is_InPublic(postID);
                     sqlPost.UnpinPost(postID);
                     mgPost.Set_IsNotPin(postID);
 
@@ -1803,8 +2135,14 @@ namespace iVolunteer.Controllers
                     throw;
                 }
             }
+            if (permission) return GroupPublic(groupID);
             return GroupDiscussion(groupID);
         }
+        /// <summary>
+        /// ピンポストを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public PartialViewResult GetPinnedPost(string groupID)
         {
             Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
@@ -1820,6 +2158,30 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// ピンポストを取得
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public PartialViewResult GetPinnedPost_InPublic(string groupID)
+        {
+            Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+            try
+            {
+                Mongo_Post pinPost = postDAO.Get_Mg_PinnedPost(groupID, true);
+
+                ViewBag.GroupID = groupID;
+                return PartialView("_PinnedPost", pinPost);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// ポストに写真追加画面を表示
+        /// </summary>
+        /// <returns></returns>
         public PartialViewResult AddImageToPost()
         {
             string userID = Session["UserID"].ToString();
@@ -1828,6 +2190,11 @@ namespace iVolunteer.Controllers
             ViewBag.ID = userID;
             return PartialView("_ImageUploadInPost");
         }
+        /// <summary>
+        /// ポスト写真をアプロード
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult UploadPostImage(string id)
         {
             HttpPostedFileBase file = Request.Files["Image"];
@@ -1845,6 +2212,35 @@ namespace iVolunteer.Controllers
                 
             }
             else return PartialView("_ImageUpload");
+        }
+        public ActionResult ViewPost(string notifyID, string postID, string groupID)
+        {
+            if (Session["UserID"].ToString() == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+            try
+            {
+                string userID = Session["UserID"].ToString();
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                //CHeck if post is deleted
+                if (!postDAO.Is_Exist(postID))
+                {
+                    ViewBag.Message = "Bài viết không tồn tại.";
+                    return PartialView("ErrorMessage");
+                }
+                Mongo_Post post = postDAO.Get_Mg_Post_By_ID(postID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                //Set notify isSEEN
+                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                ViewBag.GroupID = groupID;
+                return PartialView("_PinnedPost", post);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

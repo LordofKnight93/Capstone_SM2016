@@ -1,4 +1,7 @@
 ﻿@Html.Partial("_PostCreate")
+<div id="pinnedPost">
+    @{Html.RenderAction("GetPinnedPost", "Project", new { projectID = ViewBag.ProjectID });}
+</div>
 <div id="postList">
     @{Html.RenderAction("GetPostList", "Project", new { projectID = ViewBag.ProjectID });}
 </div>

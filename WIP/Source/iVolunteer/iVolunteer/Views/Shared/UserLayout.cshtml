@@ -1135,14 +1135,21 @@
                 url: "/Group/SeenNewPostNotify",
                 data: data,
                 success: function (data, textstatus) {
-                    $("#dynamicContainer").html(data.groupHome);
-                    $("#group-tab").html(data.groupDiscusson);
-                    $("#postList").html(data.post);
-
-                    if ($('#notification').is(":visible")) {
-                        $('#notification').hide();
-                        $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                    if (data.error == true) {
+                        $("#dynamicContainer").html(data.message);
                     }
+                    else {
+                        $("#dynamicContainer").html(data.groupHome);
+                        //$("#group-tab").html(data.groupDiscusson);
+                        //$("#postList").html(data.post);
+                        $("#group-tab").html(data.post);
+
+                        if ($('#notification').is(":visible")) {
+                            $('#notification').hide();
+                            $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                        }
+                    }
+
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("Not success in Seen Post commented in Group");
@@ -1190,11 +1197,18 @@
                 url: "/Group/SeenNewPostNotify",
                 data: data,
                 success: function (data, textstatus) {
-                    $("#dynamicContainer").html(data.groupHome);
-                    $("#group-tab").html(data.groupDiscusson);
-                    $("#postList").html(data.post);
-                    if (data.type == "postCommented") {
-                        $("#showComment" + postID).trigger('click');
+                    if (data.error == true) {
+                        $("#dynamicContainer").html(data.message);
+                    }
+                    else {
+                        $("#dynamicContainer").html(data.groupHome);
+                        //$("#group-tab").html(data.groupDiscusson);
+                        //$("#postList").html(data.post);
+                        $("#group-tab").html(data.post);
+
+                        if (data.type == "postCommented") {
+                            $("#showComment" + postID).trigger('click');
+                        }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1244,13 +1258,19 @@
                 url: "/Project/SeenNewPostNotify",
                 data: data,
                 success: function (data, textstatus) {
-                    $("#dynamicContainer").html(data.projectHome);
-                    $("#group-tab").html(data.projectDiscusson);
-                    $("#postList").html(data.post);
+                    if (data.error == true) {
+                        $("#dynamicContainer").html(data.message);
+                    }
+                    else {
+                        $("#dynamicContainer").html(data.projectHome);
+                        //$("#project-tab").html(data.projectDiscusson);
+                        //$("#postList").html(data.post);
+                        $("#project-tab").html(data.post);
 
-                    if ($('#notification').is(":visible")) {
-                        $('#notification').hide();
-                        $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                        if ($('#notification').is(":visible")) {
+                            $('#notification').hide();
+                            $('#notificationList' + '@Session["UserID"].ToString()').empty();
+                        }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1258,7 +1278,7 @@
                 }
             });
         }
-        // 6-b Seen Postcommented in Group
+        // 6-b Seen Postcommented in Project
         function seenPostCommentedInProject(selector) {
             var userID = '@Session["UserID"].ToString()';
             var notifyID = $(selector).attr('role');
@@ -1299,11 +1319,17 @@
                 url: "/Project/SeenNewPostNotify",
                 data: data,
                 success: function (data, textstatus) {
-                    $("#dynamicContainer").html(data.projectHome);
-                    $("#group-tab").html(data.projectDiscusson);
-                    $("#postList").html(data.post);
-                    if (data.type == "postCommented") {
-                        $("#showComment" + postID).trigger('click');
+                    if (data.error == true) {
+                        $("#dynamicContainer").html(data.message);
+                    }
+                    else {
+                        $("#dynamicContainer").html(data.projectHome);
+                        //$("#project-tab").html(data.projectDiscusson);
+                        //$("#postList").html(data.post);
+                        $("#project-tab").html(data.post);
+                        if (data.type == "postCommented") {
+                            $("#showComment" + postID).trigger('click');
+                        }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1361,7 +1387,11 @@
             loadingHtml += '</div';
             $(id).html(loadingHtml);
         }
-
+        function OnBegin() {
+            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
+            $("#notifyPage").html(loadingHtml);
+        }
+        
         //On begin popup
         function OnBeginPopup() {
             console.log("on begin");
@@ -1488,6 +1518,7 @@
         $(window).scroll(function () {
             if ($(window).scrollTop() + $(window).height() == $(document).height()) {
                 $("#loadMorePost").trigger('click');
+                $("#loadMorePostNewfeedLink").trigger('click');
                 times++;
             }
         });
@@ -1504,6 +1535,25 @@
             if ($("#comment" + postID).val() == null || $("#comment" + postID).val().trim() == "") {
                 event.preventDefault();
             }
+        }
+
+        function ldMrePstNf(event) {
+            $("#loadMorePostNewfeedLink").remove();
+            var data = {
+                times: times
+            }
+            $.ajax({
+                url: '@Url.Action("LoadMorePostNewfeed", "Home")',
+                type: "POST",
+                data: data,
+                success: function (partialView) {
+                    $("#newfeedPostsArea").append(partialView);
+                },
+                error: function () {
+                    alert("not success in load Post in Newfeed");
+                }
+            });
+            event.preventDefault();
         }
         </script>
     @*  ------------------------- POST in PROJECT ----------------(groupHome)----------- *@

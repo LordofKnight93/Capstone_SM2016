@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post>
-
 @if (Model != null)
 {
     foreach (var item in Model)
@@ -11,8 +10,17 @@
                     <!-- Post Owner -->
                     <table class="table-post-ava">
                         <tr>
-                            <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
-                            <td class="td"><a href="" class="user-name">@item.PostInfomation.Creator.DisplayName</a></td>
+                            @if (item.PostInfomation.IsPublic == true)
+                            {
+                                <td rowspan="2"><img src="@("/Images/Group/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                <td class="td"><a href="@Url.Action("GroupHome","Group", new { userID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
+                            }
+                            else
+                            {
+                                <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                <td class="td"><a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a></td>
+                            }
+                            
                         </tr>
                         <tr>
                             <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime()</td>
@@ -49,17 +57,6 @@
                 <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
                     <div class="row">
                         <ul class="list-interaction">
-                            @*<li>
-                        <i class="glyphicon glyphicon-heart" style="color: #dcaeae"></i>
-                        @if (item.LikerList.Count != 0)
-                        {
-                            <span id="@("likeCount" + item.PostInfomation.PostID)" style="color: #cecece">@item.LikerList.Count</span>
-                        }
-                        else
-                        {
-                            <span id="@("likeCount" + item.PostInfomation.PostID)" style="color: #cecece"></span>
-                        }
-                    </li>*@
                             <li>
                                 <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
                                 @if (item.CommentList.Count != 0)
@@ -71,19 +68,8 @@
                     </div>
                 </div>
             </div>
-
-            <div>
-                @if (Session["UserID"] != null)
-                {
-                    Html.RenderAction("ShowAddCommentArea", "Group", new { postID = item.PostInfomation.PostID, groupID = ViewBag.GroupID });
-                }
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-sm-12" style="padding-left: 7%">
-                    @Ajax.ActionLink("Xem bình luận khác", "GetCommentList", "Group", new { postID = item.PostInfomation.PostID }, new AjaxOptions { UpdateTargetId = "commentList" + item.PostInfomation.PostID, InsertionMode = InsertionMode.Replace }, new { @id = "showComment" + item.PostInfomation.PostID, @style = "color:#9BCABA" })
-                </div>
-            </div>
-            <div id="@("commentList" + item.PostInfomation.PostID)">
+            <div id="@("commentArea" + item.PostInfomation.PostID)">
+                @{Html.RenderAction("ShowCommentArea", "Group", new { postID = item.PostInfomation.PostID, groupID = ViewBag.GroupID });}
             </div>
         </div>
                             }

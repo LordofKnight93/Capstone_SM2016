@@ -1,0 +1,157 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Notification>
+@{
+    ViewBag.Title = "Lịch sử thông báo";
+}
+<div class="row">
+    <div class="col-md-3">
+        @{Html.RenderAction("NavigationPanel", "Account");}
+    </div>
+    <div class="col-md-9">
+        <div id="notifyPage" class="card-panel">
+            <div class="notifyPageHeader">
+                <h4>Lịch sử thông báo</h4>
+            </div>
+            @foreach (var notify in Model)
+            {
+                //public const int JOIN_GROUP_ACCEPTED = 3;
+                if (notify.Type == 3)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Group/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <label>Chúc mừng! Bạn đã là thành viên nhóm <a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID })">@notify.Destination.DisplayName</a></label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int JOIN_PROJECT_ACCEPTED = 4;
+                else if (notify.Type == 4)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Project/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <label>Chúc mừng! Bạn đã là thành viên dự án <a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID })">@notify.Destination.DisplayName</a></label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int FRIEND_REQUEST_ACCEPTED = 5;
+                else if (notify.Type == 5)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/User/Avatar/"+ notify.Actors[0].ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã đồng ý lời mời kết bạn</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int TASK_ASSIGN = 6;
+                else if (notify.Type == 6)
+                {
+                }
+                //public const int POST_CREATED_IN_GROUP = 9;
+                else if (notify.Type == 9)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Group/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã viết bài ở nhóm</label><a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
+                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int POST_CMTED_IN_GROUP = 10;
+                else if (notify.Type == 10)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Group/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã bình luận <a href="">bài viết</a> của bạn ở nhóm </label><a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
+                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int POST_CREATED_IN_PROJECT = 11;
+                else if (notify.Type == 11)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Project/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã viết bài ở dự án</label><a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
+                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int POST_CMTED_IN_PROJECT = 12;
+                else if (notify.Type == 12)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Project/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã bình luận <a href="">bài viết</a> của bạn ở dự án </label><a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
+                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int LEADER_PROMOTE_IN_PROJECT = 13;
+                else if (notify.Type == 13)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Project/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <label>Chúc mừng! Bạn đã được thăng chức làm trưởng dự án <a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID })">@notify.Destination.DisplayName</a></label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                //public const int LEADER_PROMOTE_IN_GROUP = 14;
+                else if (notify.Type == 14)
+                {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/Group/Avatar/"+ notify.Destination.ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11">
+                                <label>Chúc mừng! Bạn đã được thằng chức làm trưởng nhóm <a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID })">@notify.Destination.DisplayName</a></label>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

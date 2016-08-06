@@ -1770,5 +1770,30 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Get all followed and Joined Project (for Newfeed usage)
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<string> Get_Followed_Projects(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
+                                                                   && rl.Relation == AcPrRelation.FOLLOW_RELATION
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Project.InProgress == Status.ONGOING)
+                                                             .Select(rl => rl.ProjectID).Distinct().ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -1072,3 +1072,4 @@ F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\User\PhucVT\Source\04-08_P
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\User\PhucVT\Source\04-08_PhucVT_Design\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\User\PhucVT\Source\04-08_PhucVT_Design\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb
 F:\CapstoneProject\CapstoneGitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\FoolproofValidation.dll
+D:\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\FoolproofValidation.dll

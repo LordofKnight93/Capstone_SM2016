@@ -1,10 +1,13 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PostInformation
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PostInformation
 <!-- Write post -->
-@using (Ajax.BeginForm("AddPost", "Project", new { projectID = ViewBag.ProjectID, inSection = ViewBag.InSection }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "postList" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+@using (Ajax.BeginForm("AddPost", "Project", new { projectID = ViewBag.ProjectID, inSection = ViewBag.InSection }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
     <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
         <form class="form-post" style="margin-bottom: 0;">
+            <div id="postImageHandler" style="visibility: hidden;"></div>
+            @Html.HiddenFor(model => model.ImgLink, new { @style = "visibility: hidden;", @id = "imageToPostArea" })
             <div class="row nav-project">
                 <!-- Post Content-->
                 @Html.TextAreaFor(model => model.Content, new { @id = "postContent", @class = "write-post-txt", @rows = "4", @placeholder = "Bài đăng của bạn...", @style = "resize: vertical; margin-bottom: 4px" })
@@ -13,7 +16,7 @@
             <div class="row" style="margin-top: 10px">
                 <!-- Post button -->
                 <div class="col-md-10" style="text-align: right">
-                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Ảnh"><i class="material-icons">landscape</i></button>
+                    @Ajax.RawActionLink("<span class='fa fa-picture-o fa-cus-green fa-cus-18'></span>", "AddImageToPost", "Project", new { }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "btn-card" })
                     <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chèn link"><i class="material-icons">insert_link</i></button>
                     <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Tag"><i class="material-icons md-18">local_offer</i></button>
                     <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Địa Điểm"><i class="material-icons md-20">place</i></button>

@@ -17,16 +17,11 @@ namespace iVolunteer.Controllers
 {
     public class PlanController : Controller
     {
-        public PlanController()
-        {
-            HtmlHelper.UnobtrusiveJavaScriptEnabled = true;
-        }
-        // GET: Plan
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// 段階リストを取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Get Detail Plan
         public ActionResult DetailPlanRecord(string projectID)
         {
@@ -57,7 +52,11 @@ namespace iVolunteer.Controllers
             }
 
         }
-
+        /// <summary>
+        /// 詳細段階を取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Get Detail Plan Phase
         public ActionResult DetailPlanPhase(string projectID)
         {
@@ -92,7 +91,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 段階を追加画面を表示
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Add Plan Phase
         [HttpGet]
         public ActionResult AddPlanPhase(string projectID)
@@ -132,7 +135,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 段階を追加
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddPlanPhase(PlanPhaseInformation info, string projectID)
         {
@@ -238,7 +246,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 段階を削除
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
         //Delete Plan Phase
         public ActionResult DeletePlanPhase(string planPhaseID)
         {
@@ -295,7 +307,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 段階を変更画面を表示
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
         //Edit Plan Phase
         [HttpGet]
         public ActionResult EditPlanPhase(string planPhaseID)
@@ -338,6 +354,12 @@ namespace iVolunteer.Controllers
             }
             
         }
+        /// <summary>
+        /// 段階を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="newinfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditPlanPhase(string planPhaseID, PlanPhaseInformation newinfo)
         {
@@ -399,7 +421,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// メーンタスクを取得
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
         //Get All Main Task of Phase
         public ActionResult DetailMainTask(string planPhaseID)
         {
@@ -428,7 +454,12 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 段階のタイトルを変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="txtPhaseName"></param>
+        /// <returns></returns>
         //Update Phase Name
         public ActionResult EditPlanPhaseName(string planPhaseID, string txtPhaseName)
         {
@@ -486,7 +517,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 段階の期間を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="txtStartTime"></param>
+        /// <param name="txtEndTime"></param>
+        /// <returns></returns>
         //Update Phase Time
         public ActionResult EditPlanPhaseTime(string planPhaseID, string txtStartTime, string txtEndTime)
         {
@@ -545,7 +582,12 @@ namespace iVolunteer.Controllers
             }
 
         }
-
+        /// <summary>
+        /// 詳細メーンタスクを取得
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
         //Get Main Task Detail
         public ActionResult MainTaskDetail(string planPhaseID, string mainTaskID)
         {
@@ -583,7 +625,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// メーンタスクを追加画面を表示
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
         //Add Main Task
         [HttpGet]
         public ActionResult AddMainTask(string planPhaseID)
@@ -618,7 +664,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// メーンタスクを追加
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="taskInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddMainTask(string planPhaseID, MainTask taskInfo)
         {
@@ -723,7 +774,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// メーンタスクを削除
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
         //Delete Main Task
         public ActionResult DeleteMainTask(string planPhaseID, string mainTaskID)
         {
@@ -782,7 +838,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// メーンタスクのタイトルを変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="txtMainTaskContent"></param>
+        /// <returns></returns>
         //Update Main Task Name
         public ActionResult UpdateMainTaskName(string planPhaseID, string mainTaskID, string txtMainTaskContent)
         {
@@ -844,7 +906,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// メーンタスクの記述を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="txtMainTaskDescription"></param>
+        /// <returns></returns>
         //Update Main Task Description
         public ActionResult UpdateMainTaskDescription(string planPhaseID, string mainTaskID, string txtMainTaskDescription)
         {
@@ -906,7 +974,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// メーンタスクの締め切りを変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="txtMainTaskDuedate"></param>
+        /// <returns></returns>
         public ActionResult UpdateMainTaskDuedate(string planPhaseID, string mainTaskID, string txtMainTaskDuedate)
         {
             if (!ModelState.IsValid) return View();
@@ -967,7 +1041,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// タスクを数える
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Task Count
         public ActionResult TaskCount(string projectID)
         {
@@ -992,7 +1070,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// サーブタスクリストを取得
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
         // View All Sub Task
         public ActionResult ListSubTask(string planPhaseID, string mainTaskID)
         {
@@ -1021,7 +1104,11 @@ namespace iVolunteer.Controllers
                 return View("_ProjectPlan");
             }
         }
-
+        /// <summary>
+        /// 当日のタスクリストを取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         // View List Task of Day
         public ActionResult ListTaskOfThisDay(string projectID)
         { 
@@ -1046,7 +1133,11 @@ namespace iVolunteer.Controllers
                 return View("_ProjectPlan");
             }
         }
-
+        /// <summary>
+        /// 正確的タスクを取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         // View My Task
         public ActionResult MyTask(string projectID)
         {
@@ -1072,7 +1163,12 @@ namespace iVolunteer.Controllers
                 return View("_ProjectPlan");
             }
         }
-
+        /// <summary>
+        /// サーブタスクを追加画面を表示
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
         //Add Sub Task
         [HttpGet]
         public ActionResult AddSubTask(string planPhaseID, string mainTaskID)
@@ -1107,7 +1203,14 @@ namespace iVolunteer.Controllers
             }
  
         }
-
+        /// <summary>
+        /// サーブタスクを追加
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="taskInfo"></param>
+        /// <param name="txtUserID"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddSubTask(string planPhaseID, string mainTaskID, SubTask taskInfo, string txtUserID)
         {
@@ -1223,7 +1326,13 @@ namespace iVolunteer.Controllers
             }
 
         }
-
+        /// <summary>
+        /// サーブタスクを削除
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <returns></returns>
         //Delete Sub Task
         public ActionResult DeleteSubTask(string planPhaseID, string mainTaskID, string subTaskID)
         {
@@ -1282,7 +1391,14 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// サーブタスクの内容を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="txtSubTaskContent"></param>
+        /// <returns></returns>
         //Update Sub Task Content
         public ActionResult UpdateSubTaskContent(string planPhaseID, string mainTaskID, string subTaskID, string txtSubTaskContent)
         {
@@ -1341,7 +1457,14 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// サーブタスクの締め切りを変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="txtSubTaskDateline"></param>
+        /// <returns></returns>
         //Update Sub Task Dateline
         public ActionResult UpdateSubTaskDateline(string planPhaseID, string mainTaskID, string subTaskID, string txtSubTaskDateline)
         {
@@ -1400,7 +1523,14 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// サーブタスクの状態を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="slcStatus"></param>
+        /// <returns></returns>
         //Change Task Status
         public ActionResult ChangeTaskStatus(string planPhaseID, string mainTaskID, string subTaskID, string slcStatus)
         {
@@ -1459,7 +1589,14 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// サーブタスクの担当者を変更
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="txtSubTaskAssignID"></param>
+        /// <returns></returns>
         //Update Sub Task Assign
         public ActionResult UpdateSubTaskAssign(string planPhaseID, string mainTaskID, string subTaskID, string txtSubTaskAssignID)
         {
@@ -1527,7 +1664,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// サーブタスク状態を変更
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="slcStatus"></param>
+        /// <returns></returns>
         //Update Sub Task Status in My Task
         public ActionResult ChangeTaskStatusInMyTask(string projectID, string subTaskID, string slcStatus)
         {
@@ -1590,7 +1733,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// コメントリストを取得
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
         // View All Comment
         public ActionResult ListComment(string planPhaseID, string mainTaskID)
         {
@@ -1609,7 +1757,13 @@ namespace iVolunteer.Controllers
                 return View("_ProjectPlan");
             }
         }
-
+        /// <summary>
+        /// コメントを記載
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="cmtContent"></param>
+        /// <returns></returns>
         // Add Comment
         public ActionResult AddComment(string planPhaseID, string mainTaskID, string cmtContent)
         {
@@ -1655,7 +1809,13 @@ namespace iVolunteer.Controllers
             }
 
         }
-
+        /// <summary>
+        /// コメントを削除
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="cmtID"></param>
+        /// <returns></returns>
         public ActionResult DeleteComment(string planPhaseID, string mainTaskID, string cmtID)
         {
             if (!ModelState.IsValid) return View();

@@ -563,7 +563,19 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result = collection.AsQueryable().FirstOrDefault(u => u.AccountInformation.UserID == userID);
-                return result.NotificationList.Skip(skip).Take(number).ToList();
+                return result.NotificationList.OrderByDescending(p => p.DateNotice).Skip(skip).Take(number).ToList();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public List<Notification> Get_Old_FriendAcceptedNotification(string userID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == true && item.Type == Notify.FRIEND_REQUEST_ACCEPTED);
+                return result.OrderByDescending(p => p.DateNotice).ToList();
             }
             catch
             {

@@ -20,12 +20,11 @@ namespace iVolunteer.Controllers
 {
     public class BudgetController : Controller
     {
-        // GET: Budget
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+        /// <summary>
+        /// 予算タブルを表示
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Get View
         public ActionResult BudgetAllView(string projectID)
         {
@@ -64,7 +63,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 詳細予算を取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Get Detail Budget Record
         public ActionResult DetailBudgetRecord(string projectID)
         {
@@ -98,7 +101,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 予算を追加画面を表示
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult AddBudgetRecordForm(string projectID)
         {
@@ -138,7 +145,12 @@ namespace iVolunteer.Controllers
             }
             
         }
-
+        /// <summary>
+        /// 予算を追加
+        /// </summary>
+        /// <param name="budgetInfo"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Add Budget Record
         [HttpPost]
         public ActionResult AddBudgetRecord(BudgetRecordInformation budgetInfo, string projectID)
@@ -239,7 +251,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <returns></returns>
         //Delete Budget Record
         public ActionResult DeleteBudgetRecord(string budgetRecordID)
         {
@@ -298,7 +314,11 @@ namespace iVolunteer.Controllers
             }
 
         }
-
+        /// <summary>
+        /// 予算を変更画面を表示
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <returns></returns>
         //Edit Budget Record
         [HttpGet]
         public ActionResult EditBudgetRecord(string budgetRecordID)
@@ -340,7 +360,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 予算を変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="newinfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditBudgetRecord(string budgetRecordID, BudgetRecordInformation newinfo)
         {
@@ -402,7 +427,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算タイトルを変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="txtRecordName"></param>
+        /// <returns></returns>
         //Update Record Name
         public ActionResult EditBudgetRecordName(string budgetRecordID, string txtRecordName)
         {
@@ -460,7 +490,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 詳細予算アイテムを取得
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <returns></returns>
         //Get Budget item
         public ActionResult DetailBudgetItem(string budgetRecordID)
         {
@@ -489,7 +523,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 予算アイテムを追加画面を表示
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <returns></returns>
         //Add Budget Item
         [HttpGet]
         public ActionResult AddBudgetItem(string budgetRecordID)
@@ -524,7 +562,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 予算アイテムを追加
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="itemInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddBudgetItem(string budgetRecordID, BudgetItem itemInfo)
         {
@@ -610,7 +653,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムを削除
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <returns></returns>
         //Delete Budget Item
         public ActionResult DeleteBudgetItem(string budgetRecordID, string budgetItemID)
         {
@@ -669,7 +717,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムを変更画面を表示
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <returns></returns>
         //Edit Budget Item
         [HttpGet]
         public ActionResult EditBudgetItem(string budgetRecordID, string budgetItemID)
@@ -713,7 +766,13 @@ namespace iVolunteer.Controllers
 
             
         }
-
+        /// <summary>
+        /// 予算アイテムを変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="newinfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditBudgetItem(string budgetRecordID, string budgetItemID, BudgetItem newinfo)
          {
@@ -808,7 +867,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムのフィールドを変更画面を表示
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="field"></param>
+        /// <param name="budgetItemID"></param>
+        /// <returns></returns>
         //Edit Each Field of Budget Item
         [HttpGet]
         public ActionResult EditEachFieldBudgetItem(string budgetRecordID, string field, string budgetItemID)
@@ -845,7 +910,14 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 予算アイテムのフィールドを変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="item"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="field"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult EditEachFieldBudgetItem(string budgetRecordID, BudgetItem item, string budgetItemID, string field)
         {
@@ -881,17 +953,14 @@ namespace iVolunteer.Controllers
                         case "content":
                             {
                                 return RedirectToAction("EditBudgetItemContent", "Budget", new { budgetRecordID = budgetRecordID, budgetItemID = budgetItemID, newContent = item.Content });
-                                break;
                             }
                         case "unitprice":
                             {
                                 return RedirectToAction("EditBudgetItemUnitPrice", "Budget", new { budgetRecordID = budgetRecordID, budgetItemID = budgetItemID, unitPrice = item.UnitPrice });
-                                break;
                             }
                         case "quatity":
                             {
                                 return RedirectToAction("EditBudgetItemQuatity", "Budget", new { budgetRecordID = budgetRecordID, budgetItemID = budgetItemID, quatity = item.Quatity });
-                                break;
                             }
                         case "unit":
                             {
@@ -917,7 +986,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムの内容を変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="newContent"></param>
+        /// <returns></returns>
         //update content
         public ActionResult EditBudgetItemContent(string budgetRecordID, string budgetItemID, string newContent)
         {
@@ -957,6 +1032,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 予算アイテムの金額を変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="unitPrice"></param>
+        /// <returns></returns>
         //update unitprice
         public ActionResult EditBudgetItemUnitPrice(string budgetRecordID, string budgetItemID, double unitPrice)
         {
@@ -996,7 +1078,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムの数量を変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="quatity"></param>
+        /// <returns></returns>
         //update quatity
         public ActionResult EditBudgetItemQuatity(string budgetRecordID, string budgetItemID, int quatity)
         {
@@ -1036,7 +1124,13 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 予算アイテムのユニットを変更
+        /// </summary>
+        /// <param name="budgetRecordID"></param>
+        /// <param name="budgetItemID"></param>
+        /// <param name="unit"></param>
+        /// <returns></returns>
         //update unit
         public ActionResult EditBudgetItemUnit(string budgetRecordID, string budgetItemID, string unit)
         {
@@ -1077,10 +1171,13 @@ namespace iVolunteer.Controllers
             }
         }
 
-        ///sumary
-        /// Finance
-        /// 
 
+
+         /// <summary>
+         /// 詳細ファイナンスを表示
+         /// </summary>
+         /// <param name="projectID"></param>
+         /// <returns></returns>
         //Finance View
         public ActionResult DetailFinance(string projectID)
         {
@@ -1116,7 +1213,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// ファイナンスアイテムを取得
+        /// </summary>
+        /// <param name="financeID"></param>
+        /// <returns></returns>
         public ActionResult DetailFinanceItem(string financeID)
         {
             // check if parameter valid
@@ -1152,7 +1253,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// ファイナンスアイテムを追加画面を表示
+        /// </summary>
+        /// <param name="financeID"></param>
+        /// <returns></returns>
         //Finance Add Item
         [HttpGet]
         public ActionResult AddFinanceItem(string financeID)
@@ -1196,7 +1301,13 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// ファイナンスアイテムを追加
+        /// </summary>
+        /// <param name="financeID"></param>
+        /// <param name="itemInfo"></param>
+        /// <param name="txtUserID"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddFinanceItem(string financeID, FinanceItem itemInfo, string txtUserID)
         {
@@ -1286,7 +1397,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// ファイナンスアイテムを削除
+        /// </summary>
+        /// <param name="financeID"></param>
+        /// <param name="financeItemID"></param>
+        /// <returns></returns>
         //Delete Finance Item
         public ActionResult DeleteFinanceItem(string financeID, string financeItemID)
         {  
@@ -1344,10 +1460,11 @@ namespace iVolunteer.Controllers
             }
         }
 
-        ///
-        /// Fund
-        /// 
-
+        /// <summary>
+        /// 詳細寄金を表示
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //Fund View
         public ActionResult DetailFund(string projectID)
         {
@@ -1381,7 +1498,11 @@ namespace iVolunteer.Controllers
                 return View("_ProjectPlan");
             }
         }
-
+        /// <summary>
+        /// 詳細寄付者を表示
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <returns></returns>
         //Detail Team Found Donator
         public ActionResult DetailTeamFoundDonator(string fundID)
         {
@@ -1419,7 +1540,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 詳細寄付者を追加画面を表示
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <returns></returns>
         //AddTeamFoundDonator
         [HttpGet]
         public ActionResult AddTeamFoundDonator(string fundID)
@@ -1464,7 +1589,12 @@ namespace iVolunteer.Controllers
             }
             
         }
-
+        /// <summary>
+        /// 詳細寄付者を追加
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <param name="donator"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddTeamFoundDonator(string fundID, TeamFoundDonator donator)
         {
@@ -1527,7 +1657,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-
+        /// <summary>
+        /// 詳細寄付者を削除
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <param name="teamFoundDonatorID"></param>
+        /// <returns></returns>
         //Delete  Team Found Donator
         public ActionResult DeleteTeamFoundDonator(string fundID, string teamFoundDonatorID)
         {
@@ -1586,6 +1721,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 振り込み状態を変更画面を表示
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <param name="teamFoundDonatorID"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult IsReceiceMoneyChange(string fundID, string teamFoundDonatorID)
         {
@@ -1593,7 +1734,13 @@ namespace iVolunteer.Controllers
             ViewBag.TeamFoundDonatorID = teamFoundDonatorID;
             return PartialView("_FundIsReceiveTeamFoundDonator");
         }
-
+        /// <summary>
+        /// 振り込み状態を変更
+        /// </summary>
+        /// <param name="fundID"></param>
+        /// <param name="teamFoundDonatorID"></param>
+        /// <param name="cbxIsReceive"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult IsReceiceMoneyChange(string fundID, string teamFoundDonatorID, string cbxIsReceive)
         {

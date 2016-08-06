@@ -577,6 +577,12 @@
     <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
     <Content Include="Views\User\_UpdatePersonalInformation.cshtml" />
+    <Content Include="Views\Group\_CommentArea.cshtml" />
+    <Content Include="Views\Home\NotificationsPage.cshtml" />
+    <Content Include="Views\Project\_CommentArea.cshtml" />
+    <Content Include="Views\Project\_ActionToPost.cshtml" />
+    <Content Include="Views\Project\_PinnedPost.cshtml" />
+    <Content Include="Views\Home\_NewfeedPosts.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

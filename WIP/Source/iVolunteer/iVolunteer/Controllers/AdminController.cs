@@ -19,11 +19,19 @@ namespace iVolunteer.Controllers
 {
     public class AdminController : Controller
     {
+        /// <summary>
+        /// 管理者画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Manage()
         {
             return View("AdminHome");
         }
+        /// <summary>
+        /// 未決報告画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DisplayPendingReport()
         {
             if (Session["UserID"] == null)
@@ -34,6 +42,10 @@ namespace iVolunteer.Controllers
 
             return View("PendingReportList");
         }
+        /// <summary>
+        /// 未決グループ報告を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DisplayPendingReportedGroup()
         {
             try
@@ -50,6 +62,10 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 未決プロジェクト報告を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DisplayPendingReportedProject()
         {
             try
@@ -66,6 +82,10 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 未決ユーザー報告を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DisplayPendingReportedUser()
         {
             try
@@ -84,6 +104,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Deactivate Group
+        /// グループを停止
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -95,18 +116,22 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set Banned status in SQL
+                    // SQLで停止状態を設定
                     SQL_Group_DAO sqlGroupDAO = new SQL_Group_DAO();
                     sqlGroupDAO.Deactive(groupID);
 
                     // Delete pending request in SQL
+                    // SQLで未決報告を削除
                     SQL_AcGr_Relation_DAO sqlRelation = new SQL_AcGr_Relation_DAO();
                     sqlRelation.Delete_Reports(groupID);
 
                     //Set banned status in Mongo
+                    //Mongoで停止状態を設定
                     Mongo_Group_DAO mgGroupDAO = new Mongo_Group_DAO();
                     mgGroupDAO.Set_Activation_Status(groupID, Status.IS_BANNED);
 
                     // Delete report in Mongo
+                    //Mongoで報告を削除
                     Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
                     mgReportDAO.Delete_Reports(groupID);
 
@@ -115,16 +140,14 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
             return Json(true);
         }
         /// <summary>
-        /// Ignore Reports to Group
+        /// Ignore Group's Report
+        /// グループの報告を無視
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -135,11 +158,13 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
-                    //Delete pending request in SQL
+                    // Delete pending request in SQL
+                    // SQLでの未決報告を削除
                     SQL_AcGr_Relation_DAO sqlRelation = new SQL_AcGr_Relation_DAO();
                     sqlRelation.Delete_Reports(groupID);
 
-                    //Delete report in Mongo
+                    // Delete report in Mongo
+                    // Mongoで報告を削除
                     Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
                     reportDAO.Delete_Reports(groupID);
 
@@ -149,15 +174,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Deactivate Project
+        /// プロジェクトを停止
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -169,18 +192,22 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set Banned status in SQL
+                    // SQLで停止状態を設定
                     SQL_Project_DAO sqlProjectDAO = new SQL_Project_DAO();
                     sqlProjectDAO.Deactive(projectID);
 
                     // Delete pending request in SQL
+                    // SQLで未決報告を削除
                     SQL_AcPr_Relation_DAO sqlRelation = new SQL_AcPr_Relation_DAO();
                     sqlRelation.Delete_Reports(projectID);
 
                     //Set banned status in Mongo
+                    //Mongoで停止状態を設定
                     Mongo_Project_DAO mgProjectDAO = new Mongo_Project_DAO();
                     mgProjectDAO.Set_Activation_Status(projectID, Status.IS_BANNED);
 
                     // Delete report in Mongo
+                    // Mongoで報告を削除
                     Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
                     mgReportDAO.Delete_Reports(projectID);
 
@@ -190,15 +217,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");'
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Ignore Reports to Project
+        /// プロジェクトの報告を無視
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
@@ -210,10 +235,12 @@ namespace iVolunteer.Controllers
                 try
                 {
                     //Delete pending request in SQL
+                    //SQLで未決報告要求を削除
                     SQL_AcPr_Relation_DAO sqlRelation = new SQL_AcPr_Relation_DAO();
                     sqlRelation.Delete_Reports(projectID);
 
                     //Delete report in Mongo
+                    //Mongoで報告を削除
                     Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
                     reportDAO.Delete_Reports(projectID);
 
@@ -223,15 +250,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Deactivate User
+        /// ユーザーを停止
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -243,18 +268,22 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set Banned status in SQL
+                    // SQLで停止状態を設定
                     SQL_Account_DAO sqlUserDAO = new SQL_Account_DAO();
                     sqlUserDAO.Deactive(userID);
 
                     // Delete pending request in SQL
+                    // SQLで未決要求を削除
                     SQL_AcAc_Relation_DAO sqlRelation = new SQL_AcAc_Relation_DAO();
                     sqlRelation.Delete_Reports(userID);
 
                     //Set banned status in Mongo
+                    //Mongoで停止状態を設定
                     Mongo_User_DAO mgUserDAO = new Mongo_User_DAO();
                     mgUserDAO.Set_Activation_Status(userID, Status.IS_BANNED);
 
                     // Delete report in Mongo
+                    //Monoで報告を削除
                     Mongo_Report_DAO mgReportDAO = new Mongo_Report_DAO();
                     mgReportDAO.Delete_Reports(userID);
 
@@ -264,15 +293,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
         /// <summary>
         /// Ignore Reports to User
+        /// ユーザー報告を無視
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
@@ -284,10 +311,12 @@ namespace iVolunteer.Controllers
                 try
                 {
                     //Delete pending request in SQL
+                    //SQLで未決要求を削除
                     SQL_AcAc_Relation_DAO sqlRelation = new SQL_AcAc_Relation_DAO();
                     sqlRelation.Delete_Reports(userID);
 
                     //Delete report in Mongo
+                    //Mongoでの報告を削除
                     Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
                     reportDAO.Delete_Reports(userID);
 
@@ -297,13 +326,14 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayPendingReport", "Admin");
         }
+        /// <summary>
+        /// 停止したものを表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DisplayBannedObjects()
         {
             if (Session["UserID"] == null)
@@ -332,6 +362,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Reactivate Banned Group
+        /// グループを再活性化
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -343,10 +374,12 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set activate status in SQL
+                    // SQLでの許可状態を設定
                     SQL_Group_DAO sqlGroupDAO = new SQL_Group_DAO();
                     sqlGroupDAO.Activate(groupID);
 
                     //Set activate status in Mongo
+                    //Mongoでの許可状態を設定
                     Mongo_Group_DAO mgGroupDAO = new Mongo_Group_DAO();
                     mgGroupDAO.Set_Activation_Status(groupID, Status.IS_ACTIVATE);
 
@@ -356,15 +389,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
         /// <summary>
         /// Reactivate banned Project
+        /// 停止したプロジェクトを再活性化
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
@@ -376,10 +407,12 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set activate status in SQL
+                    //SQLでの活性状態を設定
                     SQL_Project_DAO sqlProjectDAO = new SQL_Project_DAO();
                     sqlProjectDAO.Activate(projectID);
 
                     //Set activate status in Mongo
+                    //Mongoでの活性状態を設定
                     Mongo_Project_DAO mgProjectDAO = new Mongo_Project_DAO();
                     mgProjectDAO.Set_Activation_Status(projectID, Status.IS_ACTIVATE);
 
@@ -389,15 +422,13 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
         /// <summary>
         /// Reactivate banned User
+        /// 停止したユーザーを再活性化
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -409,10 +440,12 @@ namespace iVolunteer.Controllers
                 try
                 {
                     // Set activate status in SQL
+                    //SQLでの活性状態を設定
                     SQL_Account_DAO sqlAccountDAO = new SQL_Account_DAO();
                     sqlAccountDAO.Activate(userID);
 
                     //Set activate status in Mongo
+                    //Mongoで活性状態を設定
                     Mongo_User_DAO mgUserDAO = new Mongo_User_DAO();
                     mgUserDAO.Set_Activation_Status(userID, Status.IS_ACTIVATE);
 
@@ -422,12 +455,9 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    //ViewBag.Message = Error.UNEXPECT_ERROR;
-                    //return View("ErrorMessage");
                     return Json(false);
                 }
             }
-            //return RedirectToAction("DisplayBannedObjects", "Admin");
         }
 
     }

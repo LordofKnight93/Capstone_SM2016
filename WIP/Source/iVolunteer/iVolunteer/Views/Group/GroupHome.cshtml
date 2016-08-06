@@ -32,14 +32,14 @@
                 {
                     <li class="col-md-2 active" data-toggle="tab">
                         <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
-                        @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes()" })
+                        @Ajax.ActionLink("Hoạt động", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes()" })
                     </li>
                 }   
                 @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
                 {
                     <li class="col-md-2" data-toggle="tab">
                         <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
-                        @Ajax.ActionLink("Công khai", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes();" })
+                        @Ajax.ActionLink("Hoạt động", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes();" })
                     </li>
                     <li class="col-md-2 active" data-toggle="tab">
                         <!--a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->

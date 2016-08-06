@@ -21,6 +21,11 @@ namespace iVolunteer.Controllers
 {
     public class UserController : Controller
     {
+        /// <summary>
+        /// ユーザーホームページを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult UserHome(string userID)
         {
@@ -43,7 +48,11 @@ namespace iVolunteer.Controllers
             }
             return View("UserHome", result);
         }
-
+        /// <summary>
+        /// アバターカバー写真セクションを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         [OutputCache(Duration = 1)]
         public ActionResult AvatarCover(string userID)
@@ -68,7 +77,10 @@ namespace iVolunteer.Controllers
             }
             return PartialView("_AvatarCover", result);
         }
-
+        /// <summary>
+        /// アバター変更画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangeAvatar()
         {
@@ -76,7 +88,10 @@ namespace iVolunteer.Controllers
             ViewBag.Controller = "User";
             return PartialView("_ImageUpload");
         }
-
+        /// <summary>
+        /// アバター写真を更新
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UploadAvatar()
         {
@@ -91,9 +106,11 @@ namespace iVolunteer.Controllers
 
             }
             else return PartialView("_ImageUpload");
-
         }
-
+        /// <summary>
+        /// カバー変更画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangeCover()
         {
@@ -101,7 +118,10 @@ namespace iVolunteer.Controllers
             ViewBag.Controller = "User";
             return PartialView("_ImageUpload");
         }
-
+        /// <summary>
+        /// カバー写真を更新
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UploadCover()
         {
@@ -117,7 +137,11 @@ namespace iVolunteer.Controllers
             }
             else return PartialView("_ImageUpload");
         }
-
+        /// <summary>
+        /// プロファイル情報を表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult PersonalInformation(string userID)
         {
             // check if parameter valid
@@ -143,7 +167,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 参加したグループリストを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult JoinedGroups(string userID)
         {
             // check if parameter valid
@@ -174,6 +202,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 友達リスト
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult Friends(string userID)
         {
             // check if parameter valid
@@ -199,6 +232,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 友達リストを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult FriendList(string userID)
         {
             // check if parameter valid
@@ -229,7 +267,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 現在参加しているプロジェクトリストを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult CurrentProjects(string userID)
         {
             // check if parameter valid
@@ -260,6 +302,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 管理したプロジェクトリストを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult OrganizedProjects(string userID)
         {
@@ -287,6 +334,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 寄付したプロジェクトリストを取得
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult SponsoredProjects(string userID)
         {
@@ -314,6 +366,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 参加したプロジェクトのリストを表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult ParticipatedProjects(string userID)
         {
@@ -341,7 +398,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 過去の活動画面を表示
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
         public ActionResult ActivityHistory(string userID)
         {
             // check if parameter valid
@@ -362,12 +423,22 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public ActionResult SearchUser(string name)
         {
             ViewBag.Name = name;
             return View("SearchUser");
         }
-
+        /// <summary>
+        /// 次の検索結果画面を表示
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public ActionResult NextResultPage(string name, int page)
         {
             try
@@ -406,6 +477,10 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 友達リストを取得
+        /// </summary>
+        /// <returns></returns>
         public ActionResult displayFriendDemo()
         {
             try
@@ -420,6 +495,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 最近のメッセージを取得
+        /// </summary>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
         public JsonResult GetRecentMessages(string friendID)
         {
             if (Session["UserID"] == null) { return null; }
@@ -476,6 +556,12 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// メッセージを作成
+        /// </summary>
+        /// <param name="messageID"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
         public JsonResult CreateMessage(string messageID, string content)
         {
             string userID = Session["UserID"].ToString();
@@ -494,6 +580,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// 時間を形式
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
         public string Format_Time(DateTime time)
         {
             DateTime lcTime = time.ToLocalTime();
@@ -520,7 +611,8 @@ namespace iVolunteer.Controllers
             return displayTime;
         }
         /// <summary>
-        /// Search User in ChatBox !!!NEDD FOR CHAT SECTION
+        /// Search User in ChatBox
+        /// 友達リストを取得
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -550,6 +642,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Load all Friend request notificaton
+        /// 友達申請の通知を取得
         /// </summary>
         /// <returns></returns>
         public JsonResult LoadFriendRequestNotif()
@@ -575,6 +668,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Load all Friend request accepted Notification
+        /// 友達承認通知を取得
         /// </summary>
         /// <returns></returns>
         public JsonResult LoadFriendRequestAccepted()
@@ -596,6 +690,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Load all Unseen Notification
+        /// 見ていない通知リストを取得
         /// </summary>
         /// <returns></returns>
         public JsonResult LoadNotification()
@@ -617,6 +712,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Count unseen notification
+        /// 見ていない通知を数える
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -646,6 +742,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Annouce that user has seen this friend request accepted notification
+        /// 通知の状態をIsSeenに設定
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="notifyID"></param>
@@ -663,6 +760,10 @@ namespace iVolunteer.Controllers
                 return Json(false);
             }
         }
+        /// <summary>
+        /// プロファイル情報更新画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult UpdatePersonalInformation()
         {
@@ -687,6 +788,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// プロファイル情報を更新
+        /// </summary>
+        /// <param name="newInfo"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult UpdatePersonalInformation(PersonalInformation newInfo)
         {

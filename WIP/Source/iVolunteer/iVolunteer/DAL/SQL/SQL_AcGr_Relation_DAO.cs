@@ -781,5 +781,29 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// Get all followed and Joined Groups (for Newfeed usage)
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<string> Get_Followed_Groups(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.Where(rl => rl.UserID == userID
+                                                                    && rl.Relation == AcGrRelation.FOLLOW_RELATION
+                                                                    && rl.Status == Status.ACCEPTED
+                                                                    && rl.SQL_Group.IsActivate == Status.IS_ACTIVATE)
+                                                            .Select(rl => rl.GroupID).Distinct().ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -2035,9 +2035,8 @@ noti {
 
 .notification-title {
     display: block;
-    color: #333;
-    background: #FFF;
-    font-weight: bold;
+    font-weight: 500;
+    color: #757575;
     font-size: 14px;
     padding: 10px 0px 1px 0px;
     margin: 0;
@@ -2045,19 +2044,18 @@ noti {
 
 .seeAll {
     padding: 8px;
-    margin-right: 20px;
-    font-size: 12px;
-    font-weight: bold;
+    margin-right: 10px;
+    font-size: 0.8em;
     text-align: right;
 }
 
     .seeAll a {
-        color: #000;
+        color: #757575;
     }
 
         .seeAll a:hover {
             color: #049f88;
-            text-decoration: underline;
+            text-decoration: none;
         }
 
 
@@ -4523,4 +4521,43 @@ img.postImage {
     color: red;
     font-weight: bold;
     font-size: 18px;
+}
+.pinArea {
+   
+}
+.pinArea label{
+    font-weight: 400;
+    color: #757575
+}
+.icon-flipped {
+    margin: 0 10px;
+    color: #e8bc55;
+transform: scaleX(-1);
+-moz-transform: scaleX(-1);
+-webkit-transform: scaleX(-1);
+-ms-transform: scaleX(-1);
+}
+ .commentList {
+     padding-bottom: 10px;
+ }
+  .loadAllCmt {
+      padding: 15px 0px 0px 7%;
+ }
+ .loadAllCmt a{
+     color: #61b598;
+ }
+ /****************NOTIFICATION PAGE***************/
+.notifyItem-card {
+    width: 93%;
+    border: 1px solid #eaeaea;
+    margin: 0px 0px 8px 20px;
+    padding: 5px 10px 0px 10px;
+}
+.notifyItem-card label {
+    font-weight: normal;
+}
+.notifyPageHeader {
+    color: #757575;
+    text-align: right;
+    margin: 15px 45px;
 }

@@ -43,7 +43,7 @@
                 {
                     <li class="col-md-2" data-toggle="tab">
                         <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
-                        @Ajax.ActionLink("Công khai", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                        @Ajax.ActionLink("Hoạt động", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
                     </li>
                     <li class="col-md-2 active" data-toggle="tab">
                         <!--<a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->

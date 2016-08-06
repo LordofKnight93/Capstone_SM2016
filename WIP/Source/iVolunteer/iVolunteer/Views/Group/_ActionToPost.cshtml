@@ -11,9 +11,11 @@
     {
         @Ajax.RawActionLink("<span class='glyphicon glyphicon-pushpin'></span>", "PinPost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #cecece;" })
     }
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeletePost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #cecece;" })
 }
-@if(ViewBag.IsOwner == true)
+@if (ViewBag.IsOwner == true && ViewBag.IsLeader == false)
 {
+
     @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeletePost", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: #cecece;" })
 }
 

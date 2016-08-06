@@ -414,6 +414,20 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public bool Is_InPublic(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID)
+                             & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, true);
+                var result = collection.Find(filter).FirstOrDefault();
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public bool Set_IsPin(string postID)
         {
             try
@@ -436,6 +450,98 @@ namespace iVolunteer.DAL.MongoDB
                 var update = Builders<Mongo_Post>.Update.Set(p => p.PostInfomation.IsPinned, false);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public List<Mongo_Post> Get_NewFeed_Post(List<string> destinationIDs, int skip, int no)
+        {
+            try
+            {
+                List<Mongo_Post> posts = new List<Mongo_Post>();
+                var filter = Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs);
+                posts = collection.Find(filter).SortByDescending(p => p.PostInfomation.DateLastActivity).Skip(skip).Limit(no).ToList();
+                return posts;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Only get post in Public of each destination
+        /// </summary>
+        /// <param name="destinationIDs"></param>
+        /// <param name="skip"></param>
+        /// <param name="no"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_NewFeed_Post_Follower(List<string> destinationIDs, int skip, int no)
+        {
+            try
+            {
+                List<Mongo_Post> posts = new List<Mongo_Post>();
+                var filter = Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs)
+                           & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, true);
+                posts = collection.Find(filter).SortByDescending(p => p.PostInfomation.DateLastActivity).Skip(skip).Limit(no).ToList();  
+                return posts;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Create whole posts
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public List<Mongo_Post> Get_NewFeed_Post_All(List<string> destinationIDs, List<string> followDestinationIDs, int skip, int no)
+        {
+            try
+            {
+                //Follow destination's post
+                List<Mongo_Post> posts = new List<Mongo_Post>();
+                var filter = Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, followDestinationIDs)
+                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, true)
+                            | Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs);
+
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                //Normal 
+                //var filter2 = Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs);
+                //posts.AddRange(collection.Find(filter2).ToList());
+                //posts.AddRange(collection.Find(filter1).ToList());
+                posts = collection.Find(filter).Sort(sort).Skip(skip).Limit(no).ToList();
+                //posts.OrderBy(p => p.PostInfomation.DateLastActivity).Skip(skip).Take(no);
+
+                return posts;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public bool Is_Exist(string postID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(p => p.PostInfomation.PostID == postID);
+                return result != null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public int Get_Cmt_Count(string postID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.PostID, postID);
+                var result = collection.Find(filter).FirstOrDefault();
+                return result.PostInfomation.CommentCount;
             }
             catch
             {

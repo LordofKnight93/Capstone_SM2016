@@ -53,8 +53,8 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <label id="main-task-description" style="font-weight: normal">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</label>
-            <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</textarea>
+            <label id="main-task-description" style="font-weight: normal">@Model.Description</label>
+            <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@Model.Description</textarea>
         </div>
     </div>
 </div>
@@ -154,7 +154,7 @@
                 $('#cancle-edit-description').hide();
                 $('#main-task-description').show();
                 $('#textarea-maintask-description').hide();
-                $('#textarea-maintask-description').val('@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))');
+                $('#textarea-maintask-description').val('@Model.Description');
             });
 
             //update main task description

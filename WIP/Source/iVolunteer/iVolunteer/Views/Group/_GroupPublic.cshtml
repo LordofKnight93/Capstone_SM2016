@@ -2,6 +2,9 @@
 {
     @Html.Partial("_PostCreate")
 }
+<div id="pinnedPost">
+    @{Html.RenderAction("GetPinnedPost_InPublic", "Group", new { groupID = ViewBag.GroupID });}
+</div>
 <div id="postList">
     @{Html.RenderAction("GetPostList_InPublic", "Group", new { groupID = ViewBag.GroupID });}
 </div>

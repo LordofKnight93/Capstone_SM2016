@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-9 col-sm-9">
                 <div class="row">
-                    <a href="@Url.Action("Information",item.Creator.Handler, item.Creator.ID)" class="user-name">@item.Creator.DisplayName</a>
+                    <a href="@Url.Action("UserHome","User", new { userID = item.Creator.ID})" class="user-name">@item.Creator.DisplayName</a>
                 </div>
                 <div class="row">
                     <span style="font-size: 0.8em; color: #b4b4b4"> @item.DateCreate.ToLocalTime()</span>
@@ -21,9 +21,17 @@
         <div class="commentHorizontal"></div>
     </div>
 }
-@if (ViewBag.IsFirstTime == true) {
-    @Ajax.ActionLink("Hiện tất cả bình luận", "LoadOtherComment", "Group", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.PostID, @onclick = "loadMoreComment('" + ViewBag.PostID + "')" })
+@if (ViewBag.LoadMore == true)
+{
+    <div class="loadAllCmt">
+        @Ajax.ActionLink("Hiện tất cả bình luận", "LoadOtherComment", "Group", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.PostID, @onclick = "loadMoreComment('" + ViewBag.PostID + "')" })
+    </div>
 }
+
+<script>
+    $('@("#comment" + ViewBag.PostID)').val('');
+</script>
+
 
 
 

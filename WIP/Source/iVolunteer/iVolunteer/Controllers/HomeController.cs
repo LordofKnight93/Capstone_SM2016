@@ -20,6 +20,10 @@ namespace iVolunteer.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// ホームページを表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult FrontPage()
         {
             try
@@ -34,44 +38,130 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
+        /// <summary>
+        /// チャットルーム画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ChatRoom()
-
         {
             if (Session["UserID"] != null) return View("_ChatRoom");
             return View();
         }
-
-        public ActionResult NotificationAll()
+        /// <summary>
+        /// 過去の通知画面を表示
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult LoadAllNotification()
         {
-            return View("NotificationAll");
-        }
+            try
+            {
+                if (Session["UserID"] == null) return null;
 
-        public ActionResult MessageAll()
-        {
-            return View("MessageAll");
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                List<Notification> notifyList = userDAO.Get_Notifications(userID, 0, 100);
+                return View("NotificationsPage", notifyList);
+            }
+            catch
+            {
+                throw;
+            }
         }
-
+        /// <summary>
+        /// 過去の友達申請画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult FriendRequestAll()
         {
-            return View("FriendRequestAll");
-        }
+            try
+            {
+                if (Session["UserID"] == null) return null;
 
+                string userID = Session["UserID"].ToString();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                List<Notification> notifyList = userDAO.Get_Old_FriendAcceptedNotification(userID);
+                return View("FriendRequestAll", notifyList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// ニュースフィード画面を表示
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Newfeed()
         {
             if (Session["UserID"] == null)
             {
                 return FrontPage();
             }
-
             if (Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("Newfeed");
         }
+        public ActionResult LoadNewfeedPosts()
+        {
+            if (Session["UserID"] == null)
+            {
+                return FrontPage();
+            }
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                //Get Groups and Projects that User followed and joined
+                SQL_AcGr_Relation_DAO grRelation = new SQL_AcGr_Relation_DAO();
+                SQL_AcPr_Relation_DAO prRelation = new SQL_AcPr_Relation_DAO();
+                List<string> groups = grRelation.Get_Joined_Groups(userID);
+                List<string> projects = prRelation.Get_Current_Projects(userID);
+                List<string> flGroups = grRelation.Get_Followed_Groups(userID);
+                List<string> flProjects = prRelation.Get_Followed_Projects(userID);
+                List<string> destinations = new List<string>();
+                List<string> flDestinations = new List<string>();
+
+                if (groups.Count == 0 && projects.Count == 0 && flGroups.Count == 0 && flProjects.Count == 0)
+                {
+                    return PartialView("_NewfeedPosts", null);
+                }
+                else
+                {
+                    //if (groups.Count != 0 && projects.Count != 0)
+                    //{
+                    //    destinations.AddRange(groups);
+                    //    destinations.AddRange(projects);
+                    //}
+                    //else if (groups.Count != 0) destinations.AddRange(groups);
+                    //else destinations.AddRange(projects);
+                    destinations.AddRange(groups);
+                    destinations.AddRange(projects);
+                    flDestinations.AddRange(flGroups);
+                    flDestinations.AddRange(flProjects);
+                }
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<Mongo_Post> posts = postDAO.Get_NewFeed_Post_All(destinations, flDestinations, 0, 10);
+                return PartialView("_NewfeedPosts", posts);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// 登録画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Register()
         {
             if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
             return View();
         }
+        /// <summary>
+        /// 登録する
+        /// </summary>
+        /// <param name="registerModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Register(RegisterModel registerModel)
         {
@@ -158,13 +248,20 @@ namespace iVolunteer.Controllers
                 return View("Register", registerModel);
             }
         }
-
+        /// <summary>
+        /// ロギング画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult Login()
         {
             return PartialView("_Login");
         }
-
+        /// <summary>
+        /// ロギングする
+        /// </summary>
+        /// <param name="loginModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Login(LoginModel loginModel)
         {
@@ -216,13 +313,21 @@ namespace iVolunteer.Controllers
             //else
             //    return RedirectToAction("Newfeed","Home");
         }
-
+        /// <summary>
+        /// ログアウトする
+        /// </summary>
+        /// <returns></returns>
         public ActionResult LogOut()
         {
             Session.Abandon();
             return RedirectToAction("FrontPage", "Home");
         }
-
+        /// <summary>
+        /// 検索
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="option"></param>
+        /// <returns></returns>
         public ActionResult Search(string name, string option)
         {
             switch (option)
@@ -251,11 +356,20 @@ namespace iVolunteer.Controllers
                     return View("ErrorMessage");
             }
         }
+        /// <summary>
+        /// パスワード忘れ画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ForgotPassword()
         {
             return PartialView("_ForgotPassword");
         }
+        /// <summary>
+        /// パスワード忘れメールを放送
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ForgotPassword(string email)
         {
@@ -288,6 +402,32 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult LoadMorePostNewfeed(int times)
+        {
+            if(Session["UserID"] == null)
+            {
+                return FrontPage();
+            }
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                int skip = times * 10;
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                SQL_AcGr_Relation_DAO grRelation = new SQL_AcGr_Relation_DAO();
+                SQL_AcPr_Relation_DAO prRelation = new SQL_AcPr_Relation_DAO();
+                //List<string> groups = grRelation.Get_Followed_Joined_Groups(userID);
+                //List<string> projects = prRelation.Get_Followed_Joined_Projects(userID);
+                List<string> destinations = new List<string>();
+                //destinations.AddRange(groups);
+                //destinations.AddRange(projects);
+                List<Mongo_Post> posts = postDAO.Get_NewFeed_Post(destinations, skip, 10);
+                return PartialView("_NewfeedPosts", posts);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

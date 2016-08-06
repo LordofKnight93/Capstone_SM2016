@@ -25,6 +25,7 @@ namespace iVolunteer.Controllers
     {
         /// <summary>
         /// confirmation for user
+        /// ユーザーのアカウントを確認
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
@@ -45,7 +46,8 @@ namespace iVolunteer.Controllers
             return RedirectToAction("Login", "Home");
         }
         /// <summary>
-        /// child action, craete left navigation panel
+        /// child action, create left navigation panel
+        /// 左のナヴィゲーションパーネルを表示
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
@@ -66,6 +68,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// child action, get current projects for navigation panel
+        /// ナヴィゲーションパーネルにある現在の参加プロジェクトを表示
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
@@ -74,11 +77,12 @@ namespace iVolunteer.Controllers
             try
             {
                 string userID = Session["UserID"].ToString();
-
-                // get joined project list
+                // get current project list
+                // 現在の参加プロジェクトのリストを取得
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 var listID = relationDAO.Get_Current_Projects(userID);
-                // get joined project Info
+                // get current project Info
+                //そのプロジェクトの情報を取得
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                 var result = projectDAO.Get_ProjectsInformation(listID);
 
@@ -92,6 +96,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// child action, get joined groups for navigation panel
+        /// ナヴィゲーションパーネルにある現在の参加グループを表示
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
@@ -100,11 +105,12 @@ namespace iVolunteer.Controllers
             try
             {
                 string userID = Session["UserID"].ToString();
-
                 // get joined group list
+                //参加したグループのリストを取得
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                 var listID = relationDAO.Get_Joined_Groups(userID);
                 // get joined group Info
+                //そのグループの情報
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupsInformation(listID);
 
@@ -118,6 +124,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// child action, get joined projects for navigation panel
+        /// ナヴィゲーションパーネルにある過去の参加プロジェクトを表示
         /// </summary>
         /// <returns></returns>
         [ChildActionOnly]
@@ -128,9 +135,11 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 // get joined project list
+                // 過去参加したプロジェクトのリストを取得
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 var listID = relationDAO.Get_Joined_Projects(userID);
                 // get joined project Info
+                //そのプロジェクトの情報を取得
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                 var result = projectDAO.Get_ProjectsInformation(listID);
 
@@ -142,7 +151,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// グループをフォロー
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult FollowGroup(string groupID)
         {
             try
@@ -161,7 +174,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// グループのフォローを辞める
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult UnfollowGroup(string groupID)
         {
             try
@@ -180,7 +197,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトをフォロー
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult FollowProject(string projectID)
         {
             try
@@ -216,7 +237,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトのフォローをやめる
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult UnfollowProject(string projectID)
         {
             try
@@ -251,7 +276,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// グループへの操作
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         //child acton return action with group
         [ChildActionOnly]
         public ActionResult ActionToGroup(string groupID)
@@ -300,7 +329,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// グループの参加を要求
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult JoinGroupRequest(string groupID)
         {
             try
@@ -318,6 +351,7 @@ namespace iVolunteer.Controllers
                 {
                     relationDAO.Add_Request(userID, groupID);
                     //SEND join group NOTIFICATION to Group Leader(s)
+                    //グループのリーダー全員へ通知を送る
                     SendJoinGroupNotify(userID, groupID);
                 }
 
@@ -329,21 +363,28 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// グループへの参加要求を通知
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public bool SendJoinGroupNotify(string userID, string groupID)
         {
             try
             {
                 //Get group leader(s)ID 
+                //グループリーダー全員のIDを取得
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                 List<string> leadersID = relationDAO.Get_Leaders(groupID);
 
-                //Get SDLink 
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
                 SDLink actor = userDAO.Get_SDLink(userID);
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 SDLink destination = groupDAO.Get_SDLink(groupID);
-                //Add Notification item 
-                //Create Notifcation Item
+                
+                //Add Notifcation Item
+                //通知を作成
                 Notification notif = new Notification(actor, Notify.JOIN_GROUP_REQUEST, actor, destination);
 
                 foreach (var leader in leadersID)
@@ -351,6 +392,7 @@ namespace iVolunteer.Controllers
                     userDAO.Add_Notification(leader, notif);
                 }
                 //Connect to NotificationHub
+                //通知ハーブに接続
                 var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                 hubContext.Clients.All.getJoinGroupRequests(leadersID);
                 return true;
@@ -360,6 +402,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// グループの参加要求をキャンセル
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult CancelJoinGroupRequest(string groupID)
         {
             try
@@ -384,7 +431,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 他人への操作
+        /// </summary>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
         [ChildActionOnly]
         public ActionResult ActionToOtherUser(string otherID)
         {
@@ -393,6 +444,7 @@ namespace iVolunteer.Controllers
                 ViewBag.OtherID = otherID;
 
                 //check if is user is login
+                //ユーザーがロギングかを判定
                 if (Session["UserID"] == null)
                 {
 
@@ -414,6 +466,7 @@ namespace iVolunteer.Controllers
 
                 string userID = Session["UserID"].ToString();
                 //if same as currnet user
+                //同じユーザーかを判定
                 if (userID == otherID)
                 {
                     ViewBag.IsUser = false;
@@ -428,11 +481,13 @@ namespace iVolunteer.Controllers
 
 
                 //check if is friend
+                //すでに友達関係かを判定
                 if (relationDAO.Is_Friend(userID, otherID))
                 {
                     ViewBag.IsFriend = true;
                 }
                 //check if user send request
+                //すでに友達申請をしたかを判定
                 if (relationDAO.Is_Requested(userID, otherID))
                 {
                     ViewBag.IsRequested = true;
@@ -448,7 +503,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 共通の友人を取得
+        /// </summary>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
         public ActionResult MutalFriends(string otherID)
         {
             try
@@ -476,7 +535,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 友達申請を
+        /// </summary>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
         public ActionResult FriendRequest(string otherID)
         {
             try
@@ -491,19 +554,23 @@ namespace iVolunteer.Controllers
 
                 SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                 //check if target send request or not
+                //相手がすでに申請したかを判定
                 if (relationDAO.Is_Requested(otherID, userID))
                 {
                     AcceptFriendRequest(otherID);
                     //Send Friend Request Accepted Notification 
+                    //友達申請を承認
                     SendFriendRequestAccepted(userID, otherID);
                 }
                 else
                 {
-                    ///check if curent user has sent request or not 
+                    //check if curent user has sent request or not 
+                    //自分がすでに西進したかを判定
                     if (!relationDAO.Is_Requested(userID, otherID))
                     {
                         relationDAO.Add_Request(userID, otherID);
                         // Send notification
+                        //申請の通知を放送
                         SendFriendRequestNotify(userID, otherID);
                     }
                 }
@@ -516,6 +583,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 友達申請の通知を放送
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
         public bool SendFriendRequestNotify(string userID, string otherID)
         {
 
@@ -523,14 +596,20 @@ namespace iVolunteer.Controllers
             hubContext.Clients.All.getFriendRequests(otherID);
             return true;
         }
+        /// <summary>
+        /// 友達承認の通知を放送
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
         public bool SendFriendRequestAccepted(string userID, string requestID)
         {
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
             try
             {
-                //Send Friend REquest accepted to requested User
                 //Create Notify for request user
+                //相手への通知を作成
                 SDLink actor = userDAO.Get_SDLink(userID);
                 SDLink target = userDAO.Get_SDLink(requestID);
                 Notification notify = new Notification(actor, Notify.FRIEND_REQUEST_ACCEPTED, target);
@@ -547,6 +626,11 @@ namespace iVolunteer.Controllers
             }
 
         }
+        /// <summary>
+        /// 友達精神をキャンセル
+        /// </summary>
+        /// <param name="otherID"></param>
+        /// <returns></returns>
         public ActionResult CancelFriendRequest(string otherID)
         {
             try
@@ -570,7 +654,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトへの操作
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         //child acton return action with project
         [ChildActionOnly]
         public ActionResult ActionToProject(string projectID)
@@ -633,7 +721,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトへの参加を要求
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult JoinProjectRequest(string projectID)
         {
             try
@@ -651,6 +743,7 @@ namespace iVolunteer.Controllers
                 {
                     relationDAO.Add_Join_Request(userID, projectID);
                     //SEND join group NOTIFICATION to Project Leader(s)
+                    //プロジェクトのリーダー全員へ通知を放送
                     SendJoinProjectNotify(userID, projectID);
                 }
 
@@ -662,21 +755,26 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// プロジェクトの参加要求を放送
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public bool SendJoinProjectNotify(string userID, string projectID)
         {
             try
             {
                 //Get project leader(s)ID 
+                //リーダー全員のIDを取得
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 List<string> leadersID = relationDAO.Get_Leaders(projectID);
 
-                //Get SDLink 
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
                 SDLink actor = userDAO.Get_SDLink(userID);
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                 SDLink destination = projectDAO.Get_SDLink(projectID);
 
-                //Create Notifcation Item
                 Notification notif = new Notification(actor, Notify.JOIN_PROJECT_REQUEST, actor, destination);
 
                 foreach (var leader in leadersID)
@@ -685,6 +783,7 @@ namespace iVolunteer.Controllers
                 }
 
                 //Connect to NotificationHub
+                //通知ハーブに接続
                 var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                 hubContext.Clients.All.getJoinProjectRequests(leadersID);
 
@@ -695,6 +794,11 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        /// <summary>
+        /// グループの参加要求をキャンセル
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult CancelJoinProjectRequest(string projectID)
         {
             try
@@ -708,6 +812,7 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 //delete sql relation
+                //SQL＿関係を削除
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 relationDAO.Delete_Join_Request(userID, projectID);
 
@@ -719,7 +824,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトへ寄付要求
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult SponsorProjectRequest(string projectID)
         {
             try
@@ -744,7 +853,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトへの寄付要求をキャンセル
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult CancelSponsorProjectRequest(string projectID)
         {
             try
@@ -758,6 +871,7 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 //delete sql relation
+                //SQL_関係を削除
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 relationDAO.Delete_Sponsor_Request(userID, projectID);
 
@@ -769,7 +883,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 友達承認を
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
         public ActionResult AcceptFriendRequest(string requestID)
         {
             try
@@ -786,6 +904,7 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //delete sql relation
+                        //SQL_関係を削除
                         SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                         relationDAO.Accept_Request(userID, requestID);
 
@@ -798,6 +917,7 @@ namespace iVolunteer.Controllers
                         userDAO.Add_Friend_To_List(requestID, first);
 
                         //Send Friend Request Accepted NOTIFICATION
+                        //友達承認の通知を放送
                         SendFriendRequestAccepted(userID, requestID);
 
                         transaction.Complete();
@@ -818,7 +938,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 友達申請を拒否
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
         public ActionResult DeclineFriendRequest(string requestID)
         {
 
@@ -833,6 +957,7 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 //delete sql relation
+                //SQL_関係を削除
                 SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                 relationDAO.Delete_Request(requestID, userID);
 
@@ -844,7 +969,10 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 友達申請リストを取得
+        /// </summary>
+        /// <returns></returns>
         public ActionResult FriendRequestList()
         {
             try
@@ -858,6 +986,7 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 //delete sql relation
+                //SQL_関係を削除
                 SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                 var listID =  relationDAO.Get_Requests(userID);
 
@@ -872,7 +1001,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 友達を削除
+        /// </summary>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
         public ActionResult DeleteFriend(string friendID)
         {
             try
@@ -889,11 +1022,13 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //delete sql relation
+                        //SQL_関係を削除
                         SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                         relationDAO.Delete_Friend(friendID, userID);
                         relationDAO.Delete_Friend(userID, friendID);
 
                         //Delete Friend in FriendList
+                        //友達リストから削除
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
                         userDAO.Delete_Friend(userID, friendID);
                         userDAO.Delete_Friend(friendID, userID);
@@ -916,7 +1051,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// グループのリーダーを辞任
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
         public ActionResult GroupResign(string groupID)
         {
             try
@@ -933,6 +1072,7 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //delete sql relation
+                        //SQL_関係を削除
                         SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                         if (relationDAO.Is_Leader(userID, groupID))
                         {
@@ -981,7 +1121,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトのリーダー位置を辞任
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult ProjectResign(string projectID)
         {
             try
@@ -998,6 +1142,7 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //delete sql relation
+                        //SQL_関係を削除
                         SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                         if (relationDAO.Is_Leader(userID, projectID))
                         {
@@ -1045,6 +1190,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 通知パネルで友達承認を
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
         public JsonResult AcceptFriendRequestInNotif(string requestID)
         {
             try
@@ -1069,6 +1219,7 @@ namespace iVolunteer.Controllers
                         userDAO.Add_Friend_To_List(requestID, first);
 
                         //Send Friend Request Accepted NOTIFICATION
+                        //友達承認の通知を放送
                         SendFriendRequestAccepted(userID, requestID);
 
                         transaction.Complete();
@@ -1088,6 +1239,11 @@ namespace iVolunteer.Controllers
                 return Json(false);
             }
         }
+        /// <summary>
+        /// 通知パーネルで友達申請を拒否
+        /// </summary>
+        /// <param name="requestID"></param>
+        /// <returns></returns>
         public JsonResult DeclineFriendRequestInNotif(string requestID)
         {
 
@@ -1102,6 +1258,7 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 //delete sql relation
+                //SQL_関係を削除
                 SQL_AcAc_Relation_DAO relationDAO = new SQL_AcAc_Relation_DAO();
                 relationDAO.Delete_Request(requestID, userID);
 
@@ -1113,6 +1270,10 @@ namespace iVolunteer.Controllers
                 return Json(false);
             }
         }
+        /// <summary>
+        /// 友達申請を数える
+        /// </summary>
+        /// <returns></returns>
         public JsonResult GetNumberOfFriendRequest()
         {
             if (Session["UserID"] == null) return Json(0);
@@ -1132,7 +1293,14 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-        public ActionResult sendActivationEmail(string displayName, string email, string userID)
+        /// <summary>
+        /// アカウントの確認メールを放送
+        /// </summary>
+        /// <param name="displayName"></param>
+        /// <param name="email"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public ActionResult SendActivationEmail(string displayName, string email, string userID)
         {
 
             MailMessage message = new MailMessage();
@@ -1153,8 +1321,13 @@ namespace iVolunteer.Controllers
             return View("ErrorMessage");
 
         }
-
-        public void sendForgotPasswordEmail(string userID, string userName, string email)
+        /// <summary>
+        /// パスワードの忘れメールを放送
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="userName"></param>
+        /// <param name="email"></param>
+        public void SendForgotPasswordEmail(string userID, string userName, string email)
         {
 
             MailMessage message = new MailMessage();
@@ -1175,6 +1348,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// get friend not in a group
+        /// グループにいない友達リストを取得
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
@@ -1208,6 +1382,7 @@ namespace iVolunteer.Controllers
 
         /// <summary>
         /// get friend not in a project
+        /// プロジェクトにいない友達リストを取得
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
@@ -1241,7 +1416,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトに友達を紹介
+        /// </summary>
+        /// <param name="friendID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult SuggestFriends(string[] friendID, string projectID)
         {
             try
@@ -1268,7 +1448,10 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// 紹介されたプロジェクトリストを取得
+        /// </summary>
+        /// <returns></returns>
         public ActionResult InvitedProjects()
         {
             try
@@ -1290,7 +1473,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトの紹介を承認
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult AcceptInvitation(string projectID)
         {
             try
@@ -1328,7 +1515,11 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-
+        /// <summary>
+        /// プロジェクトの紹介を拒否
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
         public ActionResult DeclineInvitation(string projectID)
         {
             try
@@ -1348,6 +1539,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// get lead group to action to projectID
+        /// 管理するグループのリストの情報を取得
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
@@ -1357,10 +1549,12 @@ namespace iVolunteer.Controllers
             {
                 string userID = Session["UserID"].ToString();
 
-                // get joined project list
+                // get lead group list
+                // 現在管理するグループ全員のIDを取得
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                 var listID = relationDAO.Get_Lead_Groups(userID);
-                // get joined project Info
+                // get joined group Info
+                //そのグループの情報を取得
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 var result = groupDAO.Get_GroupsInformation(listID);
 
@@ -1374,11 +1568,20 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// パスワード変更画面を表示
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ChangePassword()
         {
             return PartialView("_ChangePassword");
         }
+        /// <summary>
+        /// パスワードを変更
+        /// </summary>
+        /// <param name="changePasswordModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel changePasswordModel)
         {

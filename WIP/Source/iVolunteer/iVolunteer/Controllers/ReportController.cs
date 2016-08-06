@@ -28,6 +28,7 @@ namespace iVolunteer.Controllers
         }
         /// <summary>
         /// Report USER|GROUP|PROJECT
+        /// ユーザー｜グループ｜プロジェクトを報告
         /// </summary>
         /// <param name="targetID"></param>
         /// <param name="targetType"></param>
@@ -121,6 +122,12 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
+        /// <summary>
+        /// 報告をキャンセル
+        /// </summary>
+        /// <param name="targetID"></param>
+        /// <param name="targetType"></param>
+        /// <returns></returns>
         public ActionResult CancelReport(string targetID, int targetType)
         {
             if (Session["UserID"] == null)
@@ -175,6 +182,12 @@ namespace iVolunteer.Controllers
             ctrl.ControllerContext = ControllerContext;
             return ctrl.ActionToGroup(targetID);
         }
+        /// <summary>
+        /// 報告リストを表示
+        /// </summary>
+        /// <param name="targetID"></param>
+        /// <param name="targetType"></param>
+        /// <returns></returns>
         public ActionResult DisplayReport(string targetID, int targetType)
         {
             ViewBag.TargetID = targetID;
