@@ -156,6 +156,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult FollowGroup(string groupID)
         {
             try
@@ -179,6 +180,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult UnfollowGroup(string groupID)
         {
             try
@@ -202,6 +204,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult FollowProject(string projectID)
         {
             try
@@ -242,6 +245,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult UnfollowProject(string projectID)
         {
             try
@@ -334,6 +338,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult JoinGroupRequest(string groupID)
         {
             try
@@ -407,6 +412,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult CancelJoinGroupRequest(string groupID)
         {
             try
@@ -508,6 +514,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="otherID"></param>
         /// <returns></returns>
+        [ChildActionOnly]
         public ActionResult MutalFriends(string otherID)
         {
             try
@@ -540,6 +547,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="otherID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult FriendRequest(string otherID)
         {
             try
@@ -631,6 +639,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="otherID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult CancelFriendRequest(string otherID)
         {
             try
@@ -726,6 +735,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult JoinProjectRequest(string projectID)
         {
             try
@@ -799,6 +809,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult CancelJoinProjectRequest(string projectID)
         {
             try
@@ -829,6 +840,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult SponsorProjectRequest(string projectID)
         {
             try
@@ -858,6 +870,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult CancelSponsorProjectRequest(string projectID)
         {
             try
@@ -888,6 +901,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="requestID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptFriendRequest(string requestID)
         {
             try
@@ -943,9 +957,9 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="requestID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineFriendRequest(string requestID)
         {
-
             try
             {
                 if (Session["UserID"] == null)
@@ -975,6 +989,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult FriendRequestList()
         {
+            if (!Request.IsAjaxRequest())
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+
             try
             {
                 if (Session["UserID"] == null)
@@ -1006,6 +1026,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="friendID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeleteFriend(string friendID)
         {
             try
@@ -1043,7 +1064,7 @@ namespace iVolunteer.Controllers
                     }
 
                 }
-                return null;
+                return ActionToOtherUser(friendID);
             }
             catch
             {
@@ -1056,6 +1077,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult GroupResign(string groupID)
         {
             try
@@ -1126,6 +1148,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult ProjectResign(string projectID)
         {
             try
@@ -1354,6 +1377,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult FriendNotInGroup(string groupID)
         {
+            if (!Request.IsAjaxRequest())
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+
             try
             {
                 if (Session["UserID"] == null)
@@ -1388,6 +1417,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult FriendNotInProject(string projectID)
         {
+            if (!Request.IsAjaxRequest())
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+
             try
             {
                 if (Session["UserID"] == null)
@@ -1426,7 +1461,11 @@ namespace iVolunteer.Controllers
         {
             try
             {
-                if (friendID == null) return FriendNotInProject(projectID);
+                if (friendID == null)
+                {
+                    ViewBag.ProjectID = projectID;
+                    return FriendNotInProject(projectID);
+                }
 
                 //check permission
                 if (Session["UserID"] == null)
@@ -1454,6 +1493,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult InvitedProjects()
         {
+            if (!Request.IsAjaxRequest())
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+
             try
             {
                 string userID = Session["UserID"].ToString();
@@ -1478,6 +1523,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptInvitation(string projectID)
         {
             try
@@ -1520,6 +1566,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineInvitation(string projectID)
         {
             try
@@ -1545,6 +1592,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult LeadGroups(string projectID)
         {
+            if (!Request.IsAjaxRequest())
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return View("ErrorMessage");
+            }
+
             try
             {
                 string userID = Session["UserID"].ToString();

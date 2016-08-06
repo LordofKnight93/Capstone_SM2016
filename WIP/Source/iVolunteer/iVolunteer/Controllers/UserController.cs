@@ -145,7 +145,7 @@ namespace iVolunteer.Controllers
         public ActionResult PersonalInformation(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -175,7 +175,7 @@ namespace iVolunteer.Controllers
         public ActionResult JoinedGroups(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -210,7 +210,7 @@ namespace iVolunteer.Controllers
         public ActionResult Friends(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -240,7 +240,7 @@ namespace iVolunteer.Controllers
         public ActionResult FriendList(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -275,7 +275,7 @@ namespace iVolunteer.Controllers
         public ActionResult CurrentProjects(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -311,7 +311,7 @@ namespace iVolunteer.Controllers
         public ActionResult OrganizedProjects(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -343,7 +343,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredProjects(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -375,7 +375,7 @@ namespace iVolunteer.Controllers
         public ActionResult ParticipatedProjects(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -406,7 +406,7 @@ namespace iVolunteer.Controllers
         public ActionResult ActivityHistory(string userID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(userID))
+            if (String.IsNullOrWhiteSpace(userID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -444,7 +444,7 @@ namespace iVolunteer.Controllers
             try
             {
                 if (page <= 0) page = 1;
-                if (String.IsNullOrEmpty(name.Trim()))
+                if (String.IsNullOrWhiteSpace(name.Trim()))
                 {
                     ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
                     return PartialView("ErrorMessage");
@@ -620,7 +620,7 @@ namespace iVolunteer.Controllers
         {
             try
             {
-                if (String.IsNullOrEmpty(name))
+                if (String.IsNullOrWhiteSpace(name))
                 {
                     ViewBag.Message = Error.INVALID_INFORMATION;
                     return null;

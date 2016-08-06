@@ -372,7 +372,7 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
         /// <summary>
-        /// udpate user personal information, only phone and address, interest, skills, experience
+        /// udpate user personal information, only phone and address, interest, skills, experience, email
         /// </summary>
         /// <param name="userID"></param>
         /// <param name=""></param>
@@ -385,6 +385,7 @@ namespace iVolunteer.DAL.MongoDB
                            & Builders<Mongo_User>.Filter.Eq(u => u.AccountInformation.IsActivate, Status.IS_ACTIVATE);
                 var update = Builders<Mongo_User>.Update.Set(u => u.PersonalInformation.Phone, newInfo.Phone)
                                                         .Set(u => u.PersonalInformation.Address, newInfo.Address)
+                                                        .Set(u => u.PersonalInformation.Email, newInfo.Email)
                                                         .Set(u => u.PersonalInformation.Skills, newInfo.Skills)
                                                         .Set(u => u.PersonalInformation.Experience, newInfo.Experience)
                                                         .Set(u => u.PersonalInformation.Interest, newInfo.Interest);

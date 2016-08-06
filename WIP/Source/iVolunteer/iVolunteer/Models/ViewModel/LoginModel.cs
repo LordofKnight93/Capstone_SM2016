@@ -10,7 +10,7 @@ namespace iVolunteer.Models.ViewModel
     public class LoginModel
     {
         [Required(ErrorMessage ="Vui lòng nhập email!")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng!")]
         [DisplayName("Email")]
         public string Email { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập mật khẩu!")]

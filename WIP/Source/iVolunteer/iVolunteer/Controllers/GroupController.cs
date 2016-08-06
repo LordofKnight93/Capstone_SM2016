@@ -245,7 +245,7 @@ namespace iVolunteer.Controllers
         public ActionResult GroupInformation(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -280,7 +280,7 @@ namespace iVolunteer.Controllers
         public ActionResult GroupLeaders(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -316,7 +316,7 @@ namespace iVolunteer.Controllers
         public ActionResult GroupMembers(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -351,7 +351,7 @@ namespace iVolunteer.Controllers
         public ActionResult GroupRequests(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -474,7 +474,7 @@ namespace iVolunteer.Controllers
             try
             {
                 if (page <= 0) page = 1;
-                if(String.IsNullOrEmpty(name.Trim()))
+                if(String.IsNullOrWhiteSpace(name.Trim()))
                 {
                     ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
                     return PartialView("ErrorMessage");
@@ -789,7 +789,7 @@ namespace iVolunteer.Controllers
         public ActionResult OrganizedProjects(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -821,7 +821,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredProjects(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -853,7 +853,7 @@ namespace iVolunteer.Controllers
         public ActionResult ParticipatedProjects(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -884,7 +884,7 @@ namespace iVolunteer.Controllers
         public ActionResult ActivityHistory(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1438,7 +1438,7 @@ namespace iVolunteer.Controllers
         public ActionResult CurrentProjects(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1472,7 +1472,11 @@ namespace iVolunteer.Controllers
         {
             try
             {
-                if(friendID == null) return GroupMembers(groupID);
+                if (friendID == null)
+                {
+                    ViewBag.GroupID = groupID;
+                    return GroupMembers(groupID);
+                }
 
                 //check permission
                 if (Session["UserID"] == null)
@@ -1529,7 +1533,7 @@ namespace iVolunteer.Controllers
         public ActionResult UpdateGroupInformation(string groupID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(groupID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1567,7 +1571,7 @@ namespace iVolunteer.Controllers
         public ActionResult UpdateGroupInformation(string groupID, GroupInformation newInfo)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(groupID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1635,7 +1639,7 @@ namespace iVolunteer.Controllers
         public ActionResult MemberNotInProject(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1731,7 +1735,7 @@ namespace iVolunteer.Controllers
         public ActionResult MemberNotSponsorProject(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");

@@ -61,12 +61,15 @@
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Birthday)</td>
                                 </tr>
+@if (ViewBag.IsMyHome == true)
+{
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/identifyID.svg" width="20" height="20"></object>
                                     </td>
                                     <td>@Html.DisplayFor(model => model.IdentifyID)</td>
                                 </tr>
+}
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/house.svg" width="20" height="20"></object>

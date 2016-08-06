@@ -285,7 +285,7 @@ namespace iVolunteer.Controllers
         public ActionResult ProjectInformation(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -318,7 +318,7 @@ namespace iVolunteer.Controllers
         public ActionResult OrganizedUsers(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -354,7 +354,7 @@ namespace iVolunteer.Controllers
         public ActionResult ProjectLeaders(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -390,7 +390,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredUsers(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -426,7 +426,7 @@ namespace iVolunteer.Controllers
         public ActionResult ProjectMembers(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -461,7 +461,7 @@ namespace iVolunteer.Controllers
         public ActionResult JoinedGroups(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -498,7 +498,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredGroups(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -535,7 +535,7 @@ namespace iVolunteer.Controllers
         public ActionResult OrganizedGroups(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -572,7 +572,7 @@ namespace iVolunteer.Controllers
         public ActionResult GroupJoinRequests(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -615,7 +615,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult GroupSponsorRequests(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -658,7 +658,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult UserJoinRequests(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -697,7 +697,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult UserSponsorRequests(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -749,10 +749,10 @@ namespace iVolunteer.Controllers
             {
                 if (searchModel == null) searchModel = new SearchModel();
 
-                if (String.IsNullOrEmpty(searchModel.Name))
+                if (String.IsNullOrWhiteSpace(searchModel.Name))
                     searchModel.Name = "";
 
-                if (String.IsNullOrEmpty(searchModel.Location))
+                if (String.IsNullOrWhiteSpace(searchModel.Location))
                     searchModel.Location = "";
 
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
@@ -859,7 +859,7 @@ namespace iVolunteer.Controllers
         public ActionResult ProjectPlan(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1350,11 +1350,15 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult CreateSponsor(string projectID, Sponsor guest)
         {
-            if (!ModelState.IsValid) return PartialView("_CreateSponsor", guest);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ProjectID = projectID;
+                return PartialView("_CreateSponsor", guest);
+            }
 
-            if (String.IsNullOrEmpty(guest.SponsorPhone.Trim())
-                && String.IsNullOrEmpty(guest.SponsorEmail.Trim())
-                && String.IsNullOrEmpty(guest.SponsorPhone.Trim()))
+            if (String.IsNullOrWhiteSpace(guest.SponsorPhone)
+                && String.IsNullOrWhiteSpace(guest.SponsorEmail)
+                && String.IsNullOrWhiteSpace(guest.SponsorPhone))
             {
                 ViewBag.ProjectID = projectID;
                 ViewBag.Message = "Bạn cần nhập ít nhất 1 thông tin liên lạc!"; ;
@@ -1387,7 +1391,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredGuests(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1423,7 +1427,7 @@ namespace iVolunteer.Controllers
         public ActionResult GuestSponsorRequests(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1576,7 +1580,7 @@ namespace iVolunteer.Controllers
         public ActionResult SuggestedUsers(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1737,7 +1741,7 @@ namespace iVolunteer.Controllers
         public ActionResult JoinedGroupMembers(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(projectID) || String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1775,7 +1779,7 @@ namespace iVolunteer.Controllers
         public ActionResult OrganizedGroupMembers(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(projectID) || String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1813,7 +1817,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsoredGroupMembers(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(projectID) || String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1852,7 +1856,7 @@ namespace iVolunteer.Controllers
         public ActionResult SponsorRequestGroupMembers(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(projectID) || String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -1884,7 +1888,7 @@ namespace iVolunteer.Controllers
         public ActionResult JoinRequestGroupMembers(string groupID, string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || String.IsNullOrEmpty(groupID))
+            if (String.IsNullOrWhiteSpace(projectID) || String.IsNullOrWhiteSpace(groupID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -2444,7 +2448,7 @@ namespace iVolunteer.Controllers
         public ActionResult UpdateProjectInformation(string projectID)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -2483,7 +2487,7 @@ namespace iVolunteer.Controllers
         public ActionResult UpdateProjectInformation(string projectID, ProjectInformation newInfo, string[] tagsList)
         {
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -2533,7 +2537,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult EndProject(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -3153,7 +3157,7 @@ namespace iVolunteer.Controllers
             Mongo_Plan_DAO planDao = new Mongo_Plan_DAO();
             var projectID = planDao.Get_ProjectID(planPhaseID);
             // check if parameter valid
-            if (String.IsNullOrEmpty(projectID))
+            if (String.IsNullOrWhiteSpace(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return null;
@@ -3266,7 +3270,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult StartRecruiting(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -3302,7 +3306,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult StopRecruiting(string projectID)
         {
-            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");

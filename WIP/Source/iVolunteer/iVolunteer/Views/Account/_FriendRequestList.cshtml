@@ -55,12 +55,12 @@
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink(" Đồng ý ", "AcceptFriendRequest", "Account", new { requestID = item.UserID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink(" Đồng ý ", "AcceptFriendRequest", "Account", new { requestID = item.UserID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                         <div class="row" style="margin-top: -7px; text-align: center">
                                             <label class="member-department">
-                                                @Ajax.ActionLink(" Từ chối ", "DeclineFriendRequest", "Account", new { requestID = item.UserID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
+                                                @Ajax.ActionLink(" Từ chối ", "DeclineFriendRequest", "Account", new { requestID = item.UserID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace })
                                             </label>
                                         </div>
                                     </div>

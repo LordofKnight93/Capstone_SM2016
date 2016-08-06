@@ -50,7 +50,7 @@ namespace iVolunteer.Models.ViewModel
         public bool Gender { get; set; }
 
         //Ngày sinh
-        [Required(ErrorMessage = "Vui lòng nhập nhập ngày sinh!")]
+        [Required(ErrorMessage = "Vui lòng nhập ngày sinh!")]
         [DisplayName("Ngày sinh")]
         [DataType(DataType.Date, ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

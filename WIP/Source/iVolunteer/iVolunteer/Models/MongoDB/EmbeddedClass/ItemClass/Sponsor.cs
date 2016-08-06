@@ -15,7 +15,6 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         public string SponsorID { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập họ và tên!")]
         public string SponsorName { get; set; }
-        [Required(ErrorMessage = "Vui lòng nhập địa chỉ!")]
         public string SponsorAddress { get; set; }
         [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng!")]
         public string SponsorEmail { get; set; }

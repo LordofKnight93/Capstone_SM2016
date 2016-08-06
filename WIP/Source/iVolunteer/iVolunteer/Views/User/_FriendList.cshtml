@@ -34,7 +34,6 @@
             <div class="row">
                 @foreach (var item in Model)
                 {
-                    <div id="@item.UserID">
                         <!-- Member -->
                         <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
                             <div class="member-container">
@@ -79,24 +78,25 @@
                                     @if (ViewBag.IsMyHome == true)
                                     {
                                         <div class="divider-vertical-member"></div>
+                                        <div id="@item.UserID">
+                                            @{ Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.UserID });}
+                                            @*<div class="col-xs-4">
+                                                <div class="row" style="text-align: center">
+                                                    <label class="member-position" style="font-size: 14px">
 
-                                        <div class="col-xs-4">
-                                            <div class="row" style="text-align: center">
-                                                <label class="member-position" style="font-size: 14px">
-
-                                                </label>
-                                            </div>
-                                            <div class="row" style="margin-top: -7px; text-align: center">
-                                                <label class="member-department">
-                                                    @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = item.UserID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " })
-                                                </label>
-                                            </div>
+                                                    </label>
+                                                </div>
+                                                <div class="row" style="margin-top: -7px; text-align: center">
+                                                    <label class="member-department">
+                                                        @Ajax.ActionLink("Hủy kết bạn", "DeleteFriend", "Account", new { friendID = item.UserID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " })
+                                                    </label>
+                                                </div>
+                                            </div>*@
                                         </div>
-                                    }
-                                </div>
+                                            }
+                                        </div>
                             </div>
                         </div>
-                    </div>
                                                     }
             </div>
         </div>

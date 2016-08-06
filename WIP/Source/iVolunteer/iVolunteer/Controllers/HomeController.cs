@@ -333,14 +333,14 @@ namespace iVolunteer.Controllers
             switch (option)
             {
                 case "User":
-                    if (String.IsNullOrEmpty(name.Trim()) || name.Trim().Length > 100)
+                    if (String.IsNullOrWhiteSpace(name) || name.Trim().Length > 100)
                     {
                         ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
                         return View("ErrorMessage");
                     }
                     return RedirectToAction("SearchUser", "User", new { name = name, page = 1 });
                 case "Group":
-                    if (String.IsNullOrEmpty(name.Trim()) || name.Trim().Length > 100)
+                    if (String.IsNullOrWhiteSpace(name) || name.Trim().Length > 100)
                     {
                         ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
                         return View("ErrorMessage");

@@ -25,14 +25,14 @@
                 {
                     //Hủy yêu cầu
                     <li>
-                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action-active' aria-hidden='true'></i><span class='action-to-target-text'>  Hủy yêu cầu tham gia</span>", "CancelJoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action-active' aria-hidden='true'></i><span class='action-to-target-text'>  Hủy yêu cầu tham gia</span>", "CancelJoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST" , UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
                 else
                 {
                     //Tham gia
                     <li>
-                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
 
@@ -40,14 +40,14 @@
                 {
                     //Hủy theo dõi
                     <li>
-                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action-active' aria-hidden='true'></i>  Hủy theo dõi</span>", "UnfollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action-active' aria-hidden='true'></i>  Hủy theo dõi</span>", "UnfollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
                 else
                 {
                     //Theo dõi
                     <li>
-                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
             }
@@ -55,7 +55,7 @@
             {
                 //Rời nhóm
                 <li>
-                    @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Rời nhóm</span>", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn rời nhóm này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Rời nhóm</span>", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn rời nhóm này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                 </li>
             }
 

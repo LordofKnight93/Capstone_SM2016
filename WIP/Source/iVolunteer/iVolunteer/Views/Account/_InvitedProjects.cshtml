@@ -40,8 +40,8 @@
                                 </table>
 
                             </div>
-                            @Ajax.ActionLink("Đồng ý", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
-                            @Ajax.ActionLink("Từ chối", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                            @Ajax.ActionLink("Đồng ý", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                            @Ajax.ActionLink("Từ chối", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                         </div>
 
                     </div>

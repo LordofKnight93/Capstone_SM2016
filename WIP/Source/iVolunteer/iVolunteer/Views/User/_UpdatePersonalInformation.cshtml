@@ -28,26 +28,24 @@
                             <div class="row">
                                 <div class="col-xs-4 register-label">
                                     @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
-                                    <label for="projectName">Họ và Tên</label>
+                                    <label for="realName">Họ và Tên</label>
                                 </div>
                                 <div class="col-xs-5 text-input">
-                                    @Html.DisplayFor(model => model.RealName, new { htmlAttributes = new { @id = "realName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                                    @Html.DisplayFor(model => model.RealName, new { htmlAttributes = new { @id = "realName", @class = "form-control" } })
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-xs-4 register-label">
-                                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                                    <label for="gender">Giới tính</label>
                                 </div>
-                                            <label for="rdRegisMale" style="padding-left: 0">
                                                 @(Model.Gender ? "Nam" : "Nữ" )
-                                            </label>
                             </div>
 
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
-                                            <label for="dateStart">Ngày sinh</label>
+                                            <label for="birthDay">Ngày sinh</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.DisplayFor(model => model.Birthday, new { htmlAttributes = new { @id = "birthDay", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date" } })
@@ -57,7 +55,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @*@Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })*@
-                                            <label for="dateEnd">Chứng minh nhân dân</label>
+                                            <label for="identifyID">Chứng minh nhân dân</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.DisplayFor(model => model.IdentifyID, new { htmlAttributes = new { @id = "identifyID", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
@@ -68,7 +66,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
-                                            <label for="projectName">Địa điểm</label>
+                                            <label for="Address">Địa chỉ</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @id = "address", @class = "form-control", @placeholder = "Địa điểm" } })
@@ -80,7 +78,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
-                                            <label for="projectName">Email liên lạc</label>
+                                            <label for="email">Email liên lạc</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Email" } })
@@ -92,7 +90,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
-                                            <label for="projectName">Điện thoại</label>
+                                            <label for="phone">Điện thoại</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Phone" } })
@@ -104,7 +102,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
-                                            <label for="projectShortDescription">Lĩnh vực quan tâm</label>
+                                            <label for="interest">Lĩnh vực quan tâm</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.TextAreaFor(model => model.Interest, new { @id = "interest", @class = "form-control", @rows = "4", @placeholder = "Lĩnh vực, chủ đề bạn quan tâm ...", @style = "resize: vertical; margin-bottom: 4px" })
@@ -115,7 +113,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
-                                            <label for="projectFullDescription">Kỹ năng</label>
+                                            <label for="skill">Kỹ năng</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.TextAreaFor(model => model.Skills, new { @id = "skill", @class = "form-control", @rows = "4", @placeholder = "Bạn có những kỹ năng gì ...", @style = "resize: vertical; margin-bottom: 4px" })
@@ -126,7 +124,7 @@
                                     <div class="row">
                                         <div class="col-xs-4 register-label">
                                             @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
-                                            <label for="projectFullDescription">Kinh nghiệm</label>
+                                            <label for="experience">Kinh nghiệm</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
                                             @Html.TextAreaFor(model => model.Experience, new { @id = "experience", @class = "form-control", @rows = "8", @placeholder = "Bạn có những nghiệm gì", @style = "resize: vertical; margin-bottom: 4px" })
