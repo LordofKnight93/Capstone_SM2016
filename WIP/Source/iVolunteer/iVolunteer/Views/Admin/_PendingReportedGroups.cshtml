@@ -4,14 +4,14 @@
     {
         <tbody id="@group.ID">
             <tr>
-                <th><a style="font-size: 1.1em" href="">@group.DisplayName</a></th>
+                <th><a style="font-size: 1.1em" href="@Url.Action("GroupHome","Group", new { groupID = group.ID })">@group.DisplayName</a></th>
                 <th>
                     <button role="@group.ID" id="deactivateGroup" style="margin-right: 5px" class="btn btn-warning btn-xs" href="@Url.Action("DeactivateGroup","Admin")">Đình chỉ</button>
                     <button role="@group.ID" id="ignoreGroup" style="margin-right: 0px" class="btn btn-default btn-xs" href="@Url.Action("IgnoreGroupReport","Admin")">Bỏ qua</button>
                 </th>
             </tr>
             <tr>
-                <td class="header">Người báo cáo</td>
+                <td class="header">Thành viên báo cáo</td>
                 <td class="header">Nội dung báo cáo</td>
             </tr>
             @foreach (var item in Model.Item1)
@@ -19,7 +19,7 @@
                 if (item.Destination.ID == group.ID)
                 {
                     <tr>
-                        <td class="col-md-4"><a href="">@item.Actor.DisplayName</a></td>
+                        <td class="col-md-4"><a href="@Url.Action("UserHome","User", new { userID = item.Actor.ID })">@item.Actor.DisplayName</a></td>
                         @if (@item.Detail != null)
                         {
                             <td class="col-md-8">@item.Reason : @item.Detail</td>
@@ -28,7 +28,6 @@
                         {
                             <td class="col-md-8">@item.Reason</td>
                         }
-
                     </tr>
                 }
             }

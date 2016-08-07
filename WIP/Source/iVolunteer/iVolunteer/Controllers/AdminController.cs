@@ -26,6 +26,12 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult Manage()
         {
+            if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             return View("AdminHome");
         }
         /// <summary>
@@ -34,9 +40,9 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayPendingReport()
         {
-            if (Session["UserID"] == null)
+            if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
             {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
+                ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
 
@@ -336,9 +342,9 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayBannedObjects()
         {
-            if (Session["UserID"] == null)
+            if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
             {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
+                ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
             try

@@ -422,13 +422,34 @@ namespace iVolunteer.Controllers
                     ViewBag.Message = Error.ACCESS_DENIED;
                     return PartialView("ErrorMessage");
                 }
-
                 string userID = Session["UserID"].ToString();
 
-                //delete sql relation
-                SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                relationDAO.Delelte_Request(userID, groupID);
+                using (var trans = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                        relationDAO.Delelte_Request(userID, groupID);
 
+                        //Delete Group's leaders join group request notification
+                        List<string> leaders = relationDAO.Get_Leaders(groupID);
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        var notifyID = userDAO.Get_JoinGroup_NotifyID(leaders[0], userID, groupID);
+                        if (notifyID != null)
+                        {
+                            foreach (var leader in leaders)
+                            {
+                                userDAO.Set_Notification_IsSeen(leader, notifyID);
+                            }
+                        }
+                        trans.Complete();
+                    }
+                    catch
+                    {
+                        trans.Dispose();
+                    }
+                }
                 return ActionToGroup(groupID);
             }
             catch
@@ -821,12 +842,33 @@ namespace iVolunteer.Controllers
                 }
 
                 string userID = Session["UserID"].ToString();
+                using (var trans = new TransactionScope())
+                {
+                    try
+                    {
+                        //delete sql relation
+                        //SQL＿関係を削除
+                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                        relationDAO.Delete_Join_Request(userID, projectID);
 
-                //delete sql relation
-                //SQL＿関係を削除
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                relationDAO.Delete_Join_Request(userID, projectID);
-
+                        //Delete Group's leaders join group request notification
+                        List<string> leaders = relationDAO.Get_Leaders(projectID);
+                        Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                        var notifyID = userDAO.Get_JoinProject_NotifyID(leaders[0], userID, projectID);
+                        if (notifyID != null)
+                        {
+                            foreach (var leader in leaders)
+                            {
+                                userDAO.Set_Notification_IsSeen(leader, notifyID);
+                            }
+                        }
+                        trans.Complete();
+                    }
+                    catch
+                    {
+                        trans.Dispose();
+                    }
+                }
                 return ActionToProject(projectID);
             }
             catch

@@ -76,6 +76,8 @@
     <script src="~/scripts/phucvt_custom.js"></script>
     <script src="~/scripts/jquery.validate.js"></script>
     @RenderSection("scripts", required: false)
+    <script type="text/javascript" src="~/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" href="~/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
     <script type="text/javascript">
         /****************************************************************  Script for Search Bar **************************************/
         $("#searchArea").keyup(function () {
@@ -188,6 +190,27 @@
             $('#popup').modal('show');
             console.log("show popup");
         }
+    </script>
+    @* ****************************** FANCY BOX ************************************ *@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*
+			 *  Simple image gallery. Uses default settings
+			 */
+
+            $('.fancybox').fancybox({
+                padding: 0,
+                openEffect: 'elastic',
+                openSpeed: 150,
+
+                closeEffect: 'elastic',
+                closeSpeed: 150,
+            });
+
+            /*
+			 *  Different effects
+			 */
+        });
     </script>
 </body>
 </html>

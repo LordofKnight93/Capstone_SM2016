@@ -1,4 +1,5 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
+﻿@using iVolunteer.Common
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
 
 @foreach (var item in Model)
 {
@@ -16,6 +17,14 @@
                     <span style="font-size: 0.8em; color: #b4b4b4"> @item.DateCreate.ToLocalTime()</span>
                 </div>
             </div>
+            <div class="col-md-2 col-sm-2">
+                @if (Session["UserID"] != null && (Session["UserID"].ToString().Equals(item.Creator.ID) || ViewBag.IsLeader == true))
+                {
+                    @Ajax.RawActionLink("<i class='glyphicon glyphicon-trash'></i>", "DeleteComment", "Project", new { postID = ViewBag.PostID, commentID = item.CommentID, projectID = ViewBag.ProjectID },
+                                                                                 new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.Replace },
+                                                                                 new { @style = "cursor: pointer; color: #cecece" })
+                }
+            </div>
         </div>
         <p>@item.Content</p>
         <div class="commentHorizontal"></div>
@@ -24,7 +33,7 @@
 @if (ViewBag.LoadMore == true)
 {
     <div class="loadAllCmt">
-        @Ajax.ActionLink("Hiện tất cả bình luận", "LoadOtherComment", "Project", new { postID = ViewBag.PostID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.PostID, @onclick = "loadMoreComment('" + ViewBag.PostID + "')"})
+        @Ajax.ActionLink("Hiện tất cả bình luận", "LoadOtherComment", "Project", new { postID = ViewBag.PostID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.PostID, @onclick = "loadMoreComment('" + ViewBag.PostID + "')"})
     </div>
 }
 

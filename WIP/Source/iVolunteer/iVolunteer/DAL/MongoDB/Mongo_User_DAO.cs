@@ -673,7 +673,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result1 = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.IsSeen == false && item.Type != Notify.FRIEND_REQUEST_ACCEPTED);
-                return result1.ToList();
+                return result1.OrderByDescending(n => n.DateNotice).ToList();
             }
             catch
             {
@@ -729,6 +729,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == requestor && item.Destination.ID == groupID && item.Type == Notify.JOIN_GROUP_REQUEST && item.IsSeen == false).ToList();
+                if (result.Count == 0) return null;
                 return result.ElementAt(0).NotifyID;
             }
             catch
@@ -748,6 +749,7 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == requestor && item.Destination.ID == projectID && item.Type == Notify.JOIN_PROJECT_REQUEST && item.IsSeen == false).ToList();
+                if (result.Count == 0) return null;
                 return result.ElementAt(0).NotifyID;
             }
             catch

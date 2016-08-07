@@ -170,17 +170,10 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    ViewBag.Message = Error.UNEXPECT_ERROR;
-                    return PartialView("ErrorMessage");
+                    return Json(Error.UNEXPECT_ERROR);
                 }
             }
-            //ViewBag.Message = "Bạn đã hủy báo cáo vi phạm thành công";
-            //return PartialView("ErrorMessage");
-
-            //return RedirectToAction("ActionToGroup", "Account", new { groupID = targetID });
-            var ctrl = new AccountController();
-            ctrl.ControllerContext = ControllerContext;
-            return ctrl.ActionToGroup(targetID);
+            return Json(true);
         }
         /// <summary>
         /// 報告リストを表示

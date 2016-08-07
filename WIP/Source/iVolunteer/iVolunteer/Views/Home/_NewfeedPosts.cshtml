@@ -36,7 +36,7 @@ else
                         </table>
                     </div>
                     <div class="col-sm-5 col-md-5" style="text-align: right">
-                        @{Html.RenderAction("ActionToPost", "Group", new { postID = @item.PostInfomation.PostID, groupID = item.PostInfomation.Destination.ID });}
+                        @*@{Html.RenderAction("ActionToPost", "Group", new { postID = @item.PostInfomation.PostID, groupID = item.PostInfomation.Destination.ID });}*@
                     </div>
                 </div>
                 <!-- Post Content -->
@@ -46,7 +46,9 @@ else
                             @if (@item.PostInfomation.ImgLink != "")
                             {
                                 <div class="postImageArea">
-                                    <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                    <a class="fancybox" href="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")">
+                                        <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                    </a>
                                 </div>
                             }
                             <p style="white-space: pre-line;">@item.PostInfomation.Content</p>
@@ -118,7 +120,9 @@ else
                                             @if (@item.PostInfomation.ImgLink != "")
                                             {
                                                 <div class="postImageArea">
-                                                    <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                                    <a class="fancybox" href="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")">
+                                                        <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                                    </a>
                                                 </div>
                                             }
                                             <p style="white-space: pre-line;">@item.PostInfomation.Content</p>

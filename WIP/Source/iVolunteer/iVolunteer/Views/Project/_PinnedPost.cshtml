@@ -1,7 +1,7 @@
 ﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post
 @if (Model != null)
 {
-    <div class="pinArea"><label>Pinned post</label></div>
+    <div class="pinArea"><label><i class="glyphicon glyphicon-pushpin"></i> Bài viết được ghim</label></div>
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
     <div class="row">
         <div class="col-sm-7 col-md-7">
@@ -35,7 +35,9 @@
                 @if (Model.PostInfomation.ImgLink != "")
                 {
                     <div class="postImageArea">
-                        <img class="postImage" src="@("/Images/Post/" + Model.PostInfomation.PostID + ".jpg")" />
+                        <a class="fancybox" href="@("/Images/Post/" + Model.PostInfomation.PostID + ".jpg")">
+                            <img class="postImage" src="@("/Images/Post/" + Model.PostInfomation.PostID + ".jpg")" />
+                        </a>
                     </div>
                 }
                 <p style="white-space: pre-line;">@Model.PostInfomation.Content</p>

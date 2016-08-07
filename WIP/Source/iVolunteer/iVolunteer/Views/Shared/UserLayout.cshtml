@@ -139,6 +139,8 @@
     @RenderSection("scripts", required: false)
     <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
+    <script type="text/javascript" src="~/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" href="~/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 
     @*  ------------------------- SEARCH BAR --------------------------- *@
     <script>
@@ -292,7 +294,7 @@
                     if (data != 0) $("#notification" + '@Session["UserID"]').text(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Error in get Friend Request Count");
+                    console.log("Error in get Notification Count");
                 }
             });
 
@@ -304,7 +306,7 @@
                     if (data != 0) $("#friendRequest" + '@Session["UserID"]').text(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("Error in get Friend Request Count");
+                    console.log("Error in get Friend Request Count");
                 }
             });
             ////////////////////////////////
@@ -326,6 +328,7 @@
                         };
                         for (var index = 0; index < data.length; index++) {
                             var request = data[index];
+
                             // 1. Leader Promotion in Group|Project item
                             if (request["Type"] == 14 || request["Type"] == 13) {
                                 var tem = "<div id='promotion" + request["NotifyID"] + "' class='row'>";
@@ -338,6 +341,9 @@
                                     tem += "        <div class='col-xs-8'>";
                                     tem += "            <div class='row'>";
                                     tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã được thăng chức trưởng nhóm</label>";
+                                    tem += "            </div>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='/Group/GroupHome?groupID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 }
                                 else {
                                     tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
@@ -345,10 +351,10 @@
                                     tem += "        <div class='col-xs-8'>";
                                     tem += "            <div class='row'>";
                                     tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã được thăng chức trưởng dự án</label>";
+                                    tem += "            </div>";
+                                    tem += "            <div class='row'>";
+                                    tem += "                <a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 }
-                                tem += "            </div>";
-                                tem += "            <div class='row'>";
-                                tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenPromotion" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
@@ -377,10 +383,10 @@
                                     tem += "        </div>";
                                     tem += "        <div class='col-xs-10'>";
                                     tem += "            <div class='row'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở nhóm</label>";
+                                    tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở nhóm</label>";
                                     tem += "            </div>";
                                     tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <a href='/Group/GroupHome?groupID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                     tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='newPostLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
                                     tem += "            </div>";
                                     tem += "        </div>";
@@ -405,10 +411,10 @@
                                     tem += "        </div>";
                                     tem += "        <div class='col-xs-10'>";
                                     tem += "            <div class='row'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở dự án</label>";
+                                    tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã viết bài ở dự án</label>";
                                     tem += "            </div>";
                                     tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                     tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='newPostLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
                                     tem += "            </div>";
                                     tem += "        </div>";
@@ -438,13 +444,13 @@
                                     tem += "        </div>";
                                     tem += "        <div class='col-xs-10'>";
                                     tem += "            <div class='row'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                    tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
                                     if ((request["Actors"].length - 1) != 0) {
                                         tem += "   <label class='noti-friend-intro' style='color: #337ab7; margin-left: -10px; margin-top: -5px; font-size: 0.8em'>+" + (request["Actors"].length - 1) + " người khác</label>";
                                     }
                                     tem += "            </div><div class='row'><div class='col-xs-12' style='padding: 0px 10px;'><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã bình luận bài viết của bạn ở nhóm</label></div></div>";
                                     tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8' style='padding: 0px;'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <a href='/Group/GroupHome?groupID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                     tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='postCmtedLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
                                     tem += "            </div>";
                                     tem += "        </div>";
@@ -469,10 +475,10 @@
                                     tem += "        </div>";
                                     tem += "        <div class='col-xs-10'>";
                                     tem += "            <div class='row'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: #337ab7; margin-left: -10px; margin-top: -5px; font-size: 0.8em'>+" + (request["Actors"].length - 1) + " người khác</label>";
+                                    tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a><label class='noti-friend-intro' style='color: #337ab7; margin-left: -10px; margin-top: -5px; font-size: 0.8em'>+" + (request["Actors"].length - 1) + " người khác</label>";
                                     tem += "            </div><div class='row'><div class='col-xs-12' style='padding: 0px 10px;'><label class='noti-friend-intro' style='color: gray; margin-left: -10px'>đã bình luận bài viết của bạn ở dự án</label></div></div>";
                                     tem += "            <div role='" + request["Target"]["ID"] + "' class='row'><div class='col-xs-8' style='padding: 0px;'>";
-                                    tem += "                <a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                    tem += "                <a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                     tem += "                <div role='" + request["Destination"]["ID"] + "' class='col-xs-4'><a href='' role='" + request["NotifyID"] + "' id='postCmtedLink" + request["NotifyID"] + "' style='font-size: 0.8em'>Chi tiết ...</a></div>";
                                     tem += "            </div>";
                                     tem += "        </div>";
@@ -504,7 +510,7 @@
                                 tem += "                <label class='noti-friend-intro' style='color: gray'>Nhiệm vụ của bạn có sự thay đổi!</label>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
-                                tem += "                <label class='noti-handler'>dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "                <label class='noti-handler'>dự án </label><a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
                                 tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-3' style='padding-top: 30px;'><a href='' role='" + request["NotifyID"] + "' id='taskModifiedLink" + request["NotifyID"] + "' style='margin-left:-20px; font-size: 0.8em'>Xem chi tiết ..</a></div>";
@@ -535,7 +541,7 @@
                                 tem += "                <label class='noti-friend-intro' style='color: gray'>Bạn được giao nhiệm vụ mới!</label>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
-                                tem += "                <label class='noti-handler'>dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "                <label class='noti-handler'>dự án </label><a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
                                 tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-3' style='padding-top: 30px;'><a href='' role='" + request["NotifyID"] + "' id='taskAssignmentLink" + request["NotifyID"] + "' style='margin-left:-20px; font-size: 0.8em'>Xem chi tiết ...</a></div>";
@@ -566,7 +572,7 @@
                                 tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng, bạn đã là thành viên</label>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
-                                tem += "                <label class='noti-handler'>Dự án </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "                <label class='noti-handler'>Dự án </label><a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenJoinRequestAccepted" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
@@ -597,7 +603,7 @@
                                 tem += "                <label class='noti-friend-intro' style='color: gray'>Chúc mừng! Bạn đã là thành viên</label>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
-                                tem += "                <label class='noti-handler'>nhóm </label><a href='' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "                <label class='noti-handler'>nhóm </label><a href='/Group/GroupHome?groupID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenJoinRequestAccepted" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
@@ -625,11 +631,11 @@
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-7'>";
                                 tem += "            <div class='row'>";
-                                tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
                                 tem += "                <label id='joinProjectRequestStatus" + request["NotifyID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào dự án</label>";
-                                tem += "            </div><div class='row'><a class='noti-friend-destination' href=''>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                tem += "            </div><div class='row'><a class='noti-friend-destination' href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                 tem += "        </div><div id='requestHandleArea" + request["NotifyID"] + "'>";
                                 tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
                                 tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
@@ -670,11 +676,11 @@
                                 tem += "        </div>";
                                 tem += "        <div class='col-xs-7'>";
                                 tem += "            <div class='row'>";
-                                tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                                tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "            <div class='row'>";
                                 tem += "                <label id='joinGroupRequestStatus" + request["NotifyID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào nhóm</label>";
-                                tem += "            </div><div class='row'><a class='noti-friend-destination' href=''>" + request["Destination"]["DisplayName"] + "</a></div>";
+                                tem += "            </div><div class='row'><a class='noti-friend-destination' href='/Group/GroupHome?groupID=" + request["Destination"]["ID"] + "'>" + request["Destination"]["DisplayName"] + "</a></div>";
                                 tem += "        </div><div id='requestHandleArea" + request["NotifyID"] + "'>";
                                 tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
                                 tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinGroupRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
@@ -737,7 +743,7 @@
                             tem += "        </div>";
                             tem += "        <div class='col-xs-7'>";
                             tem += "            <div class='row'>";
-                            tem += "                <a href='' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
+                            tem += "                <a href='/User/UserHome?userID=" + request["Actors"][0]["ID"] + "' class='noti-friend-name'>" + request["Actors"][0]["DisplayName"] + "</a>";
                             tem += "            </div>";
                             tem += "            <div class='row'>";
                             tem += "                <label class='noti-friend-intro' style='color: gray'>Đã đồng ý lời mời kết bạn.</label>";
@@ -777,7 +783,7 @@
                             tem += "        </div>";
                             tem += "        <div class='col-xs-7'>";
                             tem += "            <div class='row'>";
-                            tem += "                <a href='' class='noti-friend-name'>" + request["DisplayName"] + "</a>";
+                            tem += "                <a href='/User/UserHome?userID=" + request["UserID"] + "' class='noti-friend-name'>" + request["DisplayName"] + "</a>";
                             tem += "            </div>";
                             tem += "            <div class='row'>";
                             tem += "                <label id='friendRequestStatus" + request["UserID"] + "' class='noti-friend-intro' style='color: gray'>Đã gửi lời kết bạn</label>";
@@ -827,7 +833,7 @@
             $.connection.hub.start().done(function () {
 
             }).fail(function () {
-                alert("Could not connect to Notification Hub");
+                console.log("Could not connect to Notification Hub");
             });
         });
 
@@ -875,7 +881,7 @@
                 success: function (data, textstatus) {
                     if (data == true) {
                         $('#requestHandleArea' + notifyID).empty();
-                        $('#joinGroupRequestStatus' + notifyID).text('Từ đã từ chối kết nạp vào nhóm');
+                        $('#joinGroupRequestStatus' + notifyID).text('đã không được kết nạp vào nhóm');
                     }
                     else {
                         alert("Error in accept join Group Request");
@@ -930,7 +936,7 @@
                 success: function (data, textstatus) {
                     if (data == true) {
                         $('#requestHandleArea' + notifyID).empty();
-                        $('#joinProjectRequestStatus' + notifyID).text('Đã từ chối kết nạp vào dự án');
+                        $('#joinProjectRequestStatus' + notifyID).text('Đã không được kết nạp vào dự án.');
                     }
                     else {
                         alert("Error in deny join Group Request");
@@ -1415,6 +1421,20 @@
     </script>
     @*  ------------------------- REPORT --------------------------- *@
     <script type="text/javascript">
+        function cancelReport(selector) {
+            var url = $(selector).attr('href');
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    success: function (data) {
+                        if (data == true)
+                            location.reload();
+                    },
+                    error: function () {
+                        alert("not success in cancel report");
+                    }
+                });
+        }
         var dialog = $('<div style="display:none" class="loading" style="padding: 10px;"></div>').appendTo('body');
         var successDialog = $('<div style="display:none" class="reportloading"></div>').appendTo('body');
         $(function () {
@@ -1624,6 +1644,20 @@
             $("#postImageHandler").val("");
         }
         
+    </script>
+    @* ****************************** FANCY BOX ************************************ *@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.fancybox').fancybox({
+                padding: 0,
+                openEffect: 'elastic',
+                openSpeed: 150,
+
+                closeEffect: 'elastic',
+                closeSpeed: 150,
+            });
+
+        });
     </script>
 </body>
 </html>

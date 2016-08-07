@@ -38,7 +38,9 @@
                         @if (@item.PostInfomation.ImgLink != "")
                         {
                             <div class="postImageArea">
-                                <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                <a class="fancybox" href="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")">
+                                    <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                </a>
                             </div>
                         }
                         <p style="white-space: pre-line;">@item.PostInfomation.Content</p>

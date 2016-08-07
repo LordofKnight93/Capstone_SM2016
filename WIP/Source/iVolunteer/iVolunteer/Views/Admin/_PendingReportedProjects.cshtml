@@ -4,7 +4,7 @@
     {
         <tbody id="@project.ID">
             <tr>
-                <th><a style="font-size: 1.1em" href="">@project.DisplayName</a></th>
+                <th><a style="font-size: 1.1em" href="@Url.Action("ProjectHome","Project", new { projectID = project.ID })">@project.DisplayName</a></th>
                 <th>
                     <button role="@project.ID" id="deactivateProject" style="margin-right: 5px" class="btn btn-warning btn-xs" href="@Url.Action("DeactivateProject","Admin")">Đình chỉ</button>
                     <button role="@project.ID" id="ignoreProject" style="margin-right: 0px" class="btn btn-default btn-xs" href="@Url.Action("IgnoreProjectReport","Admin")">Bỏ qua</button>
@@ -19,7 +19,7 @@
                 if (item.Destination.ID == project.ID)
                 {
                     <tr>
-                        <td class="col-md-4"><a href="">@item.Actor.DisplayName</a></td>
+                        <td class="col-md-4"><a href="@Url.Action("UserHome","User", new { userID = item.Actor.ID })">@item.Actor.DisplayName</a></td>
                         @if (@item.Detail != null)
                         {
                             <td class="col-md-8">@item.Reason : @item.Detail</td>

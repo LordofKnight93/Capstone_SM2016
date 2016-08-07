@@ -2885,10 +2885,16 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="postID"></param>
         /// <returns></returns>
-        public PartialViewResult LoadOtherComment(string postID)
+        public PartialViewResult LoadOtherComment(string postID, string projectID)
         {
             try
             {
+                //check if user is leader (for delete usage)
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(Session["UserID"].ToString(), projectID))
+                    ViewBag.IsLeader = true;
+                else ViewBag.IsLeader = false;
+
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<Comment> commentList = postDAO.Get_Comments(postID, 5, 100);
                 ViewBag.PostID = postID;
@@ -2925,6 +2931,7 @@ namespace iVolunteer.Controllers
             SDLink creator = mongo_User_DAO.Get_SDLink(userID);
 
             //Add more mongo Comment information
+            comment.CommentID = ObjectId.GenerateNewId().ToString();
             comment.DateCreate = DateTime.Now.ToLocalTime();
             comment.Creator = creator;
 
@@ -2933,7 +2940,7 @@ namespace iVolunteer.Controllers
                 mongo_Post_DAO.Set_DateLastActivity(postID, comment.DateCreate);
                 mongo_Post_DAO.Add_Comment(postID, comment);
                 SendPostCommentedNotify(userID, postID, projectID);
-                return GetCommentList(postID);
+                return GetCommentList(postID, projectID);
             }
             catch
             {
@@ -2991,15 +2998,27 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="postID"></param>
         /// <returns></returns>
-        public PartialViewResult GetCommentList(string postID)
+        public PartialViewResult GetCommentList(string postID, string projectID)
         {
             try
             {
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<Comment> commentList = postDAO.Get_Comments(postID, 0, 5);
+
+                if(Session["User"] == null)
+                {
+                   return PartialView("_CommentList", commentList);
+                }
+                //check if user is leader (for delete usage)
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(Session["UserID"].ToString(), projectID))
+                    ViewBag.IsLeader = true;
+                else ViewBag.IsLeader = false;
+                
                 if (postDAO.Get_Cmt_Count(postID) > 5)
                     ViewBag.LoadMore = true;
                 ViewBag.PostID = postID;
+                ViewBag.ProjectID = projectID;
                 return PartialView("_CommentList", commentList);
             }
             catch
@@ -3339,7 +3358,7 @@ namespace iVolunteer.Controllers
         {
             if (Session["UserID"] == null)
             {
-                ViewBag.Message = Error.ACCESS_DENIED;
+                ViewBag.Message = "";
                 return PartialView("ErrorMessage");
             }
             string userID = Session["UserID"].ToString();
@@ -3555,6 +3574,27 @@ namespace iVolunteer.Controllers
             catch
             {
                 throw;
+            }
+        }
+        /// <summary>
+        /// コメントを削除
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="commentID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public ActionResult DeleteComment(string postID, string commentID, string projectID)
+        {
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                postDAO.Delete_Comment(postID, commentID);
+                return GetCommentList(postID, projectID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
             }
         }
     }

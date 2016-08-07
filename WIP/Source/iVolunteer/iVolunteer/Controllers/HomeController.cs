@@ -414,15 +414,21 @@ namespace iVolunteer.Controllers
             try
             {
                 int skip = times * 10;
-                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 SQL_AcGr_Relation_DAO grRelation = new SQL_AcGr_Relation_DAO();
                 SQL_AcPr_Relation_DAO prRelation = new SQL_AcPr_Relation_DAO();
-                //List<string> groups = grRelation.Get_Followed_Joined_Groups(userID);
-                //List<string> projects = prRelation.Get_Followed_Joined_Projects(userID);
+                List<string> groups = grRelation.Get_Joined_Groups(userID);
+                List<string> projects = prRelation.Get_Current_Projects(userID);
+                List<string> flGroups = grRelation.Get_Followed_Groups(userID);
+                List<string> flProjects = prRelation.Get_Followed_Projects(userID);
                 List<string> destinations = new List<string>();
-                //destinations.AddRange(groups);
-                //destinations.AddRange(projects);
-                List<Mongo_Post> posts = postDAO.Get_NewFeed_Post(destinations, skip, 10);
+                List<string> flDestinations = new List<string>();
+                destinations.AddRange(groups);
+                destinations.AddRange(projects);
+                flDestinations.AddRange(flGroups);
+                flDestinations.AddRange(flProjects);
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                //List<Mongo_Post> posts = postDAO.Get_NewFeed_Post(destinations, skip, 10);
+                List<Mongo_Post> posts = postDAO.Get_NewFeed_Post_All(destinations, flDestinations, skip, 10);
                 return PartialView("_NewfeedPosts", posts);
             }
             catch

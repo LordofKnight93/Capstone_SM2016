@@ -18,7 +18,7 @@
                         @foreach (var group in Model.Item1)
                         {
                             <tr id="@group.ID">
-                                <td class="col-md-6"><a href="">@group.DisplayName</a></td>
+                                <td class="col-md-6"><a href="@Url.Action("GroupHome","Group", new { groupID = group.ID })">@group.DisplayName</a></td>
                                 <td class="col-md-6">
                                     <button role="@group.ID" id="reactivateGroup" class="btn btn-success btn-xs" href="@Url.Action("ReactivateGroup","Admin")">Kích hoạt</button>
                                 </td>
@@ -39,7 +39,7 @@
                         @foreach (var project in Model.Item2)
                         {
                             <tr id="@project.ID">
-                                <td class="col-md-6"><a href="">@project.DisplayName</a></td>
+                                <td class="col-md-6"><a href="@Url.Action("ProjectHome","Project", new { projectID = project.ID })">@project.DisplayName</a></td>
                                 <td class="col-md-6">
                                     <button role="@project.ID" id="reactivateProject" class="btn btn-success btn-xs" href="@Url.Action("ReactivateProject","Admin")">Kích hoạt</button>
                                 </td>
@@ -60,7 +60,7 @@
                         @foreach (var user in Model.Item3)
                         {
                             <tr id="@user.ID">
-                                <td class="col-md-6"><a href="">@user.DisplayName</a></td>
+                                <td class="col-md-6"><a href="@Url.Action("UserHome","User", new { userID = user.ID })">@user.DisplayName</a></td>
                                 <td class="col-md-6">
                                     <button role="@user.ID" id="reactivateUser" class="btn btn-success btn-xs" href="@Url.Action("ReactivateUser","Admin")">Kích hoạt</button>
                                 </td>

@@ -6,12 +6,12 @@
     @{ Html.RenderPartial("_SlideQuotes", new ViewDataDictionary());}
     <div class="row">
         <div class="col-md-6">
-            <h4>Hoạt động nổi bật</h4>
+            <h4>Dự án nổi bật</h4>
         </div>
         @if (Session["UserID"] != null)
         {
             <div class="col-md-6" style="text-align: right; padding: 10px;">
-                @Ajax.ActionLink("TẠO HOẠT ĐỘNG MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
+                @Ajax.ActionLink("TẠO DƯ ÁN MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
             </div>
         }
         <div class="col-md-12">

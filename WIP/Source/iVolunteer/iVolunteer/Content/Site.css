@@ -4523,7 +4523,7 @@ img.postImage {
     font-size: 18px;
 }
 .pinArea {
-   
+   padding-left: 10px;
 }
 .pinArea label{
     font-weight: 400;

@@ -48,7 +48,8 @@
             {
                 //Hủy báo cáo
                 <li>
-                    @Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    <button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons md-mygreen">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>
+                    @*@Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })*@
                 </li>
             }
             else
