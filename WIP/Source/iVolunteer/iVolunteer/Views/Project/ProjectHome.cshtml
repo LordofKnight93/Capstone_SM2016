@@ -87,7 +87,24 @@
 
 
 @section scripts {
-    
+	<script type="text/javascript">
+			$('#taskdetail').on('hidden.bs.modal', function () {
+				$.ajax({
+					type: "POST",
+					url: "@Url.Action("DetailPlanRecord", "Plan")",
+					data: {
+						projectID: "@Model.ID"
+					},
+					success: function (response) {
+						$("#tabplanbudget").html(response);
+					}
+				});
+			});
+			function mainTaskDetail(MainTaskID) {
+				$("#maintaskdetail" + MainTaskID).trigger('click');
+				console.log("pass");
+			};
+	</script>   
 }
 
 

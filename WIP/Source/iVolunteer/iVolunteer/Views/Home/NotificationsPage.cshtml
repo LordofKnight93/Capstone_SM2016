@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-md-11">
                                 <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã viết bài ở nhóm</label><a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
-                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginNoti" }, new { @style = "color:#9BCABA" })
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-md-11">
                                 <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã bình luận <a href="">bài viết</a> của bạn ở nhóm </label><a href="@Url.Action("GroupHome","Group", new { groupID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
-                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                                @Ajax.ActionLink("Link to Post in Group", "ViewPost", "Group", new { notifyID = notify.NotifyID, postID = notify.Target.ID, groupID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginNoti" }, new { @style = "color:#9BCABA" })
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                             </div>
                             <div class="col-md-11">
                                 <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã viết bài ở dự án</label><a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
-                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginNoti" }, new { @style = "color:#9BCABA" })
 
 
                             </div>
@@ -116,7 +116,7 @@
                             </div>
                             <div class="col-md-11">
                                 <a class="noti-friend-name" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã bình luận <a href="">bài viết</a> của bạn ở dự án </label><a href="@Url.Action("ProjectHome","Project", new { projectID = notify.Destination.ID})">@notify.Destination.DisplayName</a>
-                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin" }, new { @style = "color:#9BCABA" })
+                                @Ajax.ActionLink("Link to Post in Project", "ViewPost", "Project", new { notifyID = notify.NotifyID, postID = notify.Target.ID, projectID = notify.Destination.ID }, new AjaxOptions { UpdateTargetId = "notifyPage", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginNoti" }, new { @style = "color:#9BCABA" })
 
 
                             </div>

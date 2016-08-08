@@ -1,114 +1,90 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
-
+@using iVolunteer.Common;
 <!-- Member -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="sub-container">
+<div class="row">
+    <div class="col-md-12">
+        <div class="sub-container" style="padding: 5px 15px 15px;">
 
-                <!-- Header -->
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h4>@Model.Count() thành viên</h4>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-    @if (Session["UserID"] != null)
-    {
-        <button class="btn btn-image" data-toggle="modal" data-target="#popup" title="@(ViewBag.IsLeader == true ? "Mời bạn bè tham gia" : "Đề xuất bạn bè")" style="border-color: #049f88">
-            <i class="material-icons">@Ajax.ActionLink("person_add", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-        </button>
-    }
-                    </div>
-
-                    <!-- Search bar -->
-                    <div class="col-sm-4">
-                        <form role="search">
-                            <div class="input-group txt-search">
-                                <input type="search" class="form-control" placeholder="Tìm kiếm" name="q" style="color: #000; border-color: #049f88;">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="submit" data-toggle="tooltip" data-placement="bottom" title="Tìm kiếm" style="border-color: #049f88"><i class="glyphicon glyphicon-search" style="color: #049f88"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="col-sm-12">
-                        <div class="divider-holizon"></div>
-                    </div>
+            <!-- Header -->
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 style="color: #049f88">THÀNH VIÊN</h4>
+                    <p style="margin: -9px 0 0 0; font-size: 16px;">@Model.Count() thành viên</p>
+                </div>
+                <div class="col-sm-3" style="text-align: right; line-height: 60px;">
+                    @if (Session["UserID"] != null)
+                    {
+                        @*<button class="btn btn-image" data-toggle="modal" data-target="#popup" title="@(ViewBag.IsLeader == true ? "Mời bạn bè tham gia" : "Đề xuất bạn bè")" style="border-color: #049f88">
+                                <i class="material-icons">@Ajax.ActionLink("person_add", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                            </button>*@
+                        @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Đề xuất bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
+                    }
                 </div>
 
-                <!-- Content -->
-                <div class="row">
-                    @foreach (var item in Model)
-                    {
-                        <div id="@item.UserID">
-                            <!-- Member -->
-                            <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
-                                <div class="member-container">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <img src="@item.Get_AvatarLink()" height="70" width="70">
-                                        </div>
+                <div class="col-sm-12">
+                    <div class="divider-holizon"></div>
+                </div>
+            </div>
 
-                                        @if (item.IsActivate)
-                                        {
-                                            <div class="col-xs-5">
-                                                <div class="row">
-                                                    <label class="member-name">
-                                                        <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
-                                                    </label>
-                                                </div>
-                                                <div class="row" style="margin-top: -7px">
-                                                    <label class="member-sumerise">
-                                                        @Html.DisplayFor(modelItem => item.Address)
-                                                    </label>
-                                                </div>
-                                                <div class="row" style="margin-top: -7px">
-                                                    <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</label>
-                                                </div>
-                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="col-xs-5">
-                                                                <div class="row">
-                                                                    <label class="member-name">
-                                                                        @Html.DisplayFor(modelItem => item.DisplayName)
-                                                                    </label>
-                                                                </div>
-                                                                <div class="row" style="margin-top: -7px">
-                                                                    <label class="member-sumerise">
-                                                                    </label>
-                                                                </div>
-                                                                <div class="row" style="margin-top: -7px">
-                                                                </div>
-                                                            </div>
-                                                        }
-                                        @if (ViewBag.IsLeader == true)
-                                        {
-                                            <div class="divider-vertical-member"></div>
-                                            <div class="col-xs-4">
-                                                <div class="row" style="text-align: center">
-                                                    <label class="member-position" style="font-size: 14px">
-                                                    </label>
-                                                </div>
-                                                <div class="row" style="margin-top: -7px; text-align: center">
-                                                    <label class="member-department">
-                                                        @Ajax.ActionLink("Thăng chức", "SetLeader", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng dự án ?" })
-                                                    </label>
-                                                </div>
-                                                <div class="row" style="margin-top: -7px; text-align: center">
-                                                    <label class="member-department">
-                                                        @Ajax.ActionLink("Trục xuất", "ExpelMember", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        }
+            <!-- Content -->
+            <div class="row" style="padding-left: 10px; padding-right: 10px;">
+                @foreach (var item in Model)
+                {
+                    <div id="@item.UserID">
+                        <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
+                            <div class="card-member">
+                                <div class="profile-avatar">
+                                    <img src="@item.Get_AvatarLink()">
+                                </div>
+                                <div class="interaction-button">
+                                    <div id="@item.UserID">
+                                        @{ Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.UserID });}
                                     </div>
                                 </div>
+                                <div class="user-infor">
+                                    @if (item.IsActivate)
+                                    {
+                                        <div class="user-name">
+                                            <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                        </div>
+                                        <div class="detail-infor">
+                                            <p class="address-info">@Html.DisplayFor(modelItem => item.Address)</p>
+                                            <p class="friends-count">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</p>
+                                        </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="user-name">
+                                                        <label class="member-name">
+                                                            @Html.DisplayFor(modelItem => item.DisplayName)
+                                                        </label>
+                                                    </div>
+                                                    <div class="detail-infor">
+                                                        <p class="address-info">Người dùng đang bị tạm khóa</p>
+                                                    </div>
+                                                }
+
+                                </div>
+                                @if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="project-action-to-user">
+                                        <ul class="project-action-to-user-list">
+                                            <li>
+                                                @*@Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "SetLeader", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" })*@
+                                                @Ajax.RawActionLink("<i class='fa fa-sort-amount-asc fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "SetLeader", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" }, new { @type = "button", @class = "btn", @style = "-ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);", data_toggle = "tooltip", data_placement = "bottom", @title = "Thăng chức" })
+                                            </li>
+                                            <li>
+                                                @*@Ajax.ActionLink("Trục xuất", "ExpelMember", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })*@
+                                                @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-18 fa-cus-green' aria-hidden='true'></i>", "ExpelMember", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Trục xuất" })
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
                             </div>
                         </div>
-                                                        }
-                </div>
+                    </div>
+                                                }
             </div>
         </div>
     </div>
+</div>

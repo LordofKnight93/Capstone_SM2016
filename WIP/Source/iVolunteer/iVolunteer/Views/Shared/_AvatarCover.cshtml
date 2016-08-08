@@ -6,7 +6,7 @@
         @if (ViewBag.CanChange == "true")
         {
             <div class="div-change-cover">
-                @Ajax.ActionLink("Thay đổi ảnh bìa", "ChangeCover", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "change-cover" })
+                @Ajax.ActionLink("Thay đổi ảnh bìa", "ChangeCover", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @class = "change-cover" })
             </div>
             <img class="cover-img" src=@Model.Get_CoverLink() height="250px" style="object-fit: cover;">
             <div class="col-md-3 card-ava">
@@ -14,7 +14,7 @@
                     <div class="col-sm-12">
                         <div class="div-avatar">
                             <div class="div-change-avatar">
-                                @Ajax.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "change-avatar" })
+                                @Ajax.ActionLink("Thay đổi ảnh đại diện", "ChangeAvatar", Model.Handler, new { id = Model.ID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @class = "change-avatar" })
                             </div>
                             <img class="avatar-img" src=@Model.Get_AvatarLink()>
                         </div>

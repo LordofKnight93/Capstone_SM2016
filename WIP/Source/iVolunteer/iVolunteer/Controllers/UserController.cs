@@ -307,7 +307,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        [ChildActionOnly]
+        //[ChildActionOnly]
         public ActionResult OrganizedProjects(string userID)
         {
             // check if parameter valid
@@ -339,7 +339,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        [ChildActionOnly]
+        //[ChildActionOnly]
         public ActionResult SponsoredProjects(string userID)
         {
             // check if parameter valid
@@ -371,7 +371,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        [ChildActionOnly]
+        //[ChildActionOnly]
         public ActionResult ParticipatedProjects(string userID)
         {
             // check if parameter valid

@@ -141,6 +141,9 @@
                         {
                             bgiframe: true,
                             autoOpen: true,
+							create: function (event, ui) {
+                                $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
+                            },
                             height: 380,
                             width: 740,
                             modal: true

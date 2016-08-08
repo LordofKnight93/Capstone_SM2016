@@ -183,7 +183,6 @@ namespace iVolunteer.Controllers
 
                     // create DAO instance
                     Mongo_Budget_DAO mongo_DAO = new Mongo_Budget_DAO();
-                    SQL_Budget_DAO sql_DAO = new SQL_Budget_DAO();
 
                     //create project id
                     Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
@@ -193,11 +192,6 @@ namespace iVolunteer.Controllers
                     Mongo_Budget mongo_Budget = new Mongo_Budget(budgetInfo);
                     mongo_Budget.BudgetRecordInformation.BudgetRecordID = mongo_Budget._id.ToString();
                     mongo_Budget.BudgetRecordInformation.Project = project;
-
-                    //Create sql Budget
-                    SQL_Budget sql_Budget = new SQL_Budget();
-                    sql_Budget.BudgetID = mongo_Budget._id.ToString();
-                    sql_Budget.ProjectID = mongo_Budget.BudgetRecordInformation.Project.ID;
 
                     List<BudgetRecordInformation> currentBudgetRecordList = mongo_DAO.Get_BudgetAllRecord(projectID);
                     for (int i = 0; i < currentBudgetRecordList.Count(); i++)
@@ -224,7 +218,6 @@ namespace iVolunteer.Controllers
                         try
                         {
                             //write data to db
-                            sql_DAO.Add_Budget(sql_Budget);
                             mongo_DAO.Add_Budget(mongo_Budget);
                             transaction.Complete();
                         }

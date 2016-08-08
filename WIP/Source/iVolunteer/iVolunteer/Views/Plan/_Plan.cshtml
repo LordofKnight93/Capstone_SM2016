@@ -35,17 +35,17 @@
                     @if (ViewBag.IsLeader == true)
                     {
                     <!-- Add Phase -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card-panel card-grey">
-                                <!--<label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>-->
-                                @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
-                                <div id="addPlanPhaseForm">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card-panel card-grey">
+                                    <!--<label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>-->
+                                    @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                    <div id="addPlanPhaseForm">
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     }
 
                 </div>
@@ -53,20 +53,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#taskdetail').on('hidden.bs.modal', function () {
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("DetailPlanRecord", "Plan")",
-                data: {
-                    projectID: "@ViewBag.ProjectID"
-                },
-                success: function (response) {
-                    $("#tabplanbudget").html(response);
-                }
-            });
-        });
-    });
-</script>

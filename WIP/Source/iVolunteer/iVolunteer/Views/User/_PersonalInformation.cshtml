@@ -1,5 +1,5 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PersonalInformation
-
+@using iVolunteer.Common;
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
 
     <div class="row">
@@ -10,16 +10,25 @@
                 <div class="col-sm-5">
                     <div class="row" style="text-align: center">
                         <div class="col-xs-12">
-                            <h4>
-                                Thông tin cá nhân
-                                @if (ViewBag.IsMyHome == true)
-                                {
-                                    <button class="btn btn-image" title="Chỉnh sửa">
-                                        <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                                    </button>
-                                }
-                            </h4>
-                            <div class="divider-holizon"></div>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <h4>
+                                        Thông tin cá nhân
+                                    </h4>
+                                </div>
+                                <div class="col-xs-3">
+                                    @if (ViewBag.IsMyHome == true)
+                                    {
+                                        @*<button class="btn btn-image" title="Chỉnh sửa">
+                                            <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                                        </button>*@
+                                        @Ajax.RawActionLink("<i class='material-icons md-20 md-mygreen'>edit</i>", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#user-tab')" }, new { @title = "Chỉnh sửa", @style = "display: inline;" })
+                                    }
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="divider-holizon"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -61,15 +70,15 @@
                                     </td>
                                     <td>@Html.DisplayFor(model => model.Birthday)</td>
                                 </tr>
-@if (ViewBag.IsMyHome == true)
-{
-                                <tr>
-                                    <td style="text-align: center">
-                                        <object type="image/svg+xml" data="~/images/icons/identifyID.svg" width="20" height="20"></object>
-                                    </td>
-                                    <td>@Html.DisplayFor(model => model.IdentifyID)</td>
-                                </tr>
-}
+                                @if (ViewBag.IsMyHome == true)
+                                {
+                                    <tr>
+                                        <td style="text-align: center">
+                                            <object type="image/svg+xml" data="~/images/icons/identifyID.svg" width="20" height="20"></object>
+                                        </td>
+                                        <td>@Html.DisplayFor(model => model.IdentifyID)</td>
+                                    </tr>
+                                }
                                 <tr>
                                     <td style="text-align: center">
                                         <object type="image/svg+xml" data="~/images/icons/house.svg" width="20" height="20"></object>
@@ -97,14 +106,25 @@
                 <div class="col-sm-7">
                     <div class="row" style="text-align: center">
                         <div class="col-xs-12">
-                            <h4>Thông tin tình nguyện
-                            @if (ViewBag.IsMyHome == true)
-                            {
-                                <button class="btn btn-image" title="Chỉnh sửa">
-                                    <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                                </button>
-                            }</h4>
-                            <div class="divider-holizon"></div>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <h4>
+                                        Thông tin tình nguyện
+                                    </h4>
+                                </div>
+                                <div class="col-xs-3">
+                                    @if (ViewBag.IsMyHome == true)
+                                    {
+                                        @*<button class="btn btn-image" title="Chỉnh sửa">
+                                            <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
+                                        </button>*@
+                                        @Ajax.RawActionLink("<i class='material-icons md-20 md-mygreen'>edit</i>", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#user-tab')" }, new { @title = "Chỉnh sửa", @style = "display: inline;" })
+                                    }
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="divider-holizon"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -149,12 +169,12 @@
         <div class="col-sm-12">
             <ul class="nav sub-nav-tabs">
                 <li class="active"  data-toggle="tab">
-                    @Ajax.ActionLink("SỰ KIỆN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                    @Ajax.ActionLink("SỰ KIỆN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#sub-content-panel')" })
                 </li>
                 @if (ViewBag.IsMyHome == true)
                 {
                     <li data-toggle="tab">
-                        @Ajax.ActionLink("LỜI MỜI THAM GIA", "InvitedProjects", "Account", null, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace })
+                        @Ajax.ActionLink("LỜI MỜI THAM GIA", "InvitedProjects", "Account", null, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#sub-content-panel')" })
                     </li>
                 }
             </ul>

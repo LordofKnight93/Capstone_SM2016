@@ -11,7 +11,7 @@
         @if (Session["UserID"] != null)
         {
             <div class="col-md-6" style="text-align: right; padding: 10px;">
-                @Ajax.ActionLink("TẠO DƯ ÁN MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
+                @Ajax.ActionLink("TẠO DỰ ÁN MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer", @data_container = "body", @data_toggle = "modal", @data_target = "#popup" })
             </div>
         }
         <div class="col-md-12">
@@ -87,7 +87,7 @@
         </div>
     </div>*@
 
-    <div class="col-md-3 col-sm-4 col-xs-6" style="padding: 5px;">
+    <div class="col-md-3 col-sm-4 col-xs-6" style="padding: 5px; cursor: pointer;" onclick="linkToProject(event, '@item.ProjectID')">
         <div class="card">
             <div class="card-image">
                 <img src="@item.Get_CoverLink()" height="350px" style="object-fit: cover">
@@ -101,7 +101,7 @@
                         <div class="info">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <p>@Html.DisplayFor(modelItem => item.ProjectShortDescription)</p>
+                                    <p class="overflow-paragraph project-des" title="@item.ProjectShortDescription">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -109,23 +109,23 @@
                                     <ul class="list-project-info info-detail">
                                         <li>
                                             <i class="material-icons md-18" data-toggle="tooltip" title="Địa điểm" data-placement="left">place</i>
-                                            <span>@Html.DisplayFor(modelItem => item.Location)</span>
+                                            <span title="@item.Location">@Html.DisplayFor(modelItem => item.Location)</span>
                                         </li>
                                         <li>
                                             <i class="fa fa-tags md-18" data-toggle="tooltip" title="Lĩnh vực" data-placement="left"></i>
-                                            <span>@Html.DisplayFor(modelItem => item.TagsString)</span>
+                                            <span title="@item.TagsString">@Html.DisplayFor(modelItem => item.TagsString)</span>
                                         </li>
                                         <li>
                                             <i class="material-icons md-18" data-toggle="tooltip" title="Thời gian" data-placement="left">access_time</i>
-                                            <span>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</span>
+                                            <span title="@(Html.DisplayFor(modelItem => item.DateStart) + " - " + Html.DisplayFor(modelItem => item.DateEnd))">@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</span>
                                         </li>
                                         <li>
                                             <i class="material-icons md-18" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
-                                            <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                            <span title="@item.Email">@Html.DisplayFor(modelItem => item.Email)</span>
                                         </li>
                                         <li>
                                             <i class="material-icons md-18" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
-                                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                            <span title="@item.Phone">@Html.DisplayFor(modelItem => item.Phone)</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -148,3 +148,11 @@
     </div>
     }
 </div>
+@section scripts {
+    <script>
+        function linkToProject(event,projectID) {
+            window.location.href = '/Project/ProjectHome?projectID=' + projectID;
+            //$('#linkToProject' + projectID).trigger('click');
+        }
+    </script>
+}

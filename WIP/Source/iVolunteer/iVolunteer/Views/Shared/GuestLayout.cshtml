@@ -42,7 +42,7 @@
                     </li>
                     <li>
                         <div class="btn-group navbar-btn">
-                            @Ajax.ActionLink("Đăng nhập hoặc đăng ký", "Login", "Home", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup" }, new { @class = "btn btn-login" })
+                            @Ajax.ActionLink("Đăng nhập hoặc đăng ký", "Login", "Home", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @class = "btn btn-transparent" })
                         </div>
                     </li>
                 </ul>
@@ -73,144 +73,10 @@
     
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/scripts/phucvt_custom.js"></script>
+    <script src="~/scripts/iVolunteer-1.0.js"></script>
     <script src="~/scripts/jquery.validate.js"></script>
     @RenderSection("scripts", required: false)
     <script type="text/javascript" src="~/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
     <link rel="stylesheet" href="~/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-    <script type="text/javascript">
-        /****************************************************************  Script for Search Bar **************************************/
-        $("#searchArea").keyup(function () {
-            delay(function () {
-                $("#srchGrVal").html($("#searchArea").val());
-                $("#srchPrVal").html($("#searchArea").val());
-                $("#srchUsVal").html($("#searchArea").val());
-
-                var searchAreaWidth = $('#searchArea').width() + 35;
-                $('#listSearchBar').width(searchAreaWidth);
-
-                var searchItemWidth = $('#searchArea').width() - 10;
-                $("#srchGrVal").css('max-width', searchItemWidth + 'px');
-                $("#srchPrVal").css('max-width', searchItemWidth + 'px');
-                $("#srchUsVal").css('max-width', searchItemWidth + 'px');
-
-                $(".dropdown-content").show();
-
-            }, 100);
-
-        });
-
-        $('div.search-dropdown').mouseleave(function () {
-            $(".dropdown-content").hide();
-        });
-
-        if ($("#searchArea").val().length < 1) {
-            $(".dropdown-content").hide();
-        }
-        var delay = (function () {
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('.dropdown-content').length) {
-                if ($('.dropdown-content').is(":visible")) {
-                    $('.dropdown-content').hide();
-                }
-            }
-        });
-        var $listItems = $('li.searchItem');
-
-        function search(selector) {
-            var name = $("#searchArea").val();
-            var option = $(selector).attr('role');
-            window.location.href = "/Home/Search?name=" + name + "&option=" + option;
-        }
-        var $current;
-        $('#searchArea').keydown(function (e) {
-            var key = e.keyCode,
-                $selected = $listItems.filter('.selected');
-
-
-            if (key != 40 && key != 38 && key != 13) return;
-
-            $listItems.removeClass('selected');
-
-            if (key == 40) // Down key
-            {
-                if (!$selected.length || $selected.is(':last-child')) {
-                    $current = $listItems.eq(0);
-                } else {
-                    $current = $selected.next();
-                }
-            } else if (key == 38) // Up key
-            {
-                if (!$selected.length || $selected.is(':first-child')) {
-                    $current = $listItems.last();
-                } else {
-                    $current = $selected.prev();
-                }
-            } else if (key == 13) {
-                search($current);
-            }
-            $current.addClass('selected');
-        });
-
-        //Show Symbol loading before ajax loading
-        function OnBegin(id) {
-            var loadingHtml = "";
-            loadingHtml += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">';
-            loadingHtml += '<div class="progress"><div class="indeterminate"></div></div>';
-            loadingHtml += '</div';
-            $(id).html(loadingHtml);
-        }
-
-        //On begin popup
-        function OnBeginPopup() {
-            console.log("on begin");
-            var loadingPopup = "";
-            loadingPopup += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0; text-align: center; height: 150px; line-height: 150px;">';
-            loadingPopup += '<div class="preloader-wrapper active">';
-            loadingPopup += '<div class="spinner-layer spinner-green-only">';
-            loadingPopup += '<div class="circle-clipper left">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div><div class="gap-patch">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div><div class="circle-clipper">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div>';
-            loadingPopup += '</div>';
-            loadingPopup += '</div>';
-            loadingPopup += '</div>';
-            $('#popup-content').html(loadingPopup);
-            console.log("load html loading");
-            $('#popup').modal('show');
-            console.log("show popup");
-        }
-    </script>
-    @* ****************************** FANCY BOX ************************************ *@
-    <script type="text/javascript">
-        $(document).ready(function () {
-            /*
-			 *  Simple image gallery. Uses default settings
-			 */
-
-            $('.fancybox').fancybox({
-                padding: 0,
-                openEffect: 'elastic',
-                openSpeed: 150,
-
-                closeEffect: 'elastic',
-                closeSpeed: 150,
-            });
-
-            /*
-			 *  Different effects
-			 */
-        });
-    </script>
 </body>
 </html>

@@ -35,7 +35,7 @@
         <div class="col-sm-12">
             @if (dateGap >= 0)
             {
-                <span id="main-task-duedate" class="badge is-complete">@Html.DisplayFor(Model=> Model.Duedate)</span>
+                <span id="main-task-duedate" class="badge is-complete">@Html.DisplayFor(Model => Model.Duedate)</span>
             }
             else
             {
@@ -53,8 +53,8 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <label id="main-task-description" style="font-weight: normal">@Model.Description</label>
-            <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@Model.Description</textarea>
+            <label id="main-task-description" style="font-weight: normal">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</label>
+            <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))</textarea>
         </div>
     </div>
 </div>
@@ -136,6 +136,7 @@
                         },
                         success: function (response) {
                             $("#mainTaskDetail").html(response);
+                            editSuccess();
                         }
                     });
                 }
@@ -154,7 +155,7 @@
                 $('#cancle-edit-description').hide();
                 $('#main-task-description').show();
                 $('#textarea-maintask-description').hide();
-                $('#textarea-maintask-description').val('@Model.Description');
+                $('#textarea-maintask-description').val('@MvcHtmlString.Create(Model.Description.Replace(Environment.NewLine, "<br />"))');
             });
 
             //update main task description
@@ -170,6 +171,7 @@
                         },
                         success: function (response) {
                             $("#mainTaskDetail").html(response);
+                            editSuccess();
                         }
                     });
                 }
@@ -204,6 +206,7 @@
                         },
                         success: function (response) {
                             $("#mainTaskDetail").html(response);
+                            editSuccess();
                         }
                     });
                 }
@@ -229,6 +232,7 @@
                     success: function (response) {
                         $("#commentList").html(response);
                         $("#txt-comment").val('');
+                        editSuccess();
                     }
                 });
             }

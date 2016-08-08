@@ -3169,14 +3169,30 @@ namespace iVolunteer.Controllers
         /// <param name="planPhaseID"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public string ProjectMembersToAssign(string planPhaseID, string name)
+        // Get Member to Assign
+        public string ProjectMembersToAssign(string sourceID, string target, string name)
         {
-            //Mongo_Finance_DAO financeDAO = new Mongo_Finance_DAO();
-            //var projectID = financeDAO.Get_ProjectID(financeID);
-            Mongo_Plan_DAO planDao = new Mongo_Plan_DAO();
-            var projectID = planDao.Get_ProjectID(planPhaseID);
+            string projectID = "";
+            if (target.Equals("plan"))
+            {
+                Mongo_Plan_DAO planDao = new Mongo_Plan_DAO();
+                projectID = planDao.Get_ProjectID(sourceID);
+            }
+
+            if (target.Equals("fund"))
+            {
+                Mongo_Fund_DAO fundDAO = new Mongo_Fund_DAO();
+                projectID = fundDAO.Get_ProjectID(sourceID);
+            }
+
+            if (target.Equals("finance"))
+            {
+                Mongo_Finance_DAO financeDAO = new Mongo_Finance_DAO();
+                projectID = financeDAO.Get_ProjectID(sourceID);
+            }
+
             // check if parameter valid
-            if (String.IsNullOrWhiteSpace(projectID))
+            if (String.IsNullOrEmpty(projectID))
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return null;
@@ -3184,7 +3200,6 @@ namespace iVolunteer.Controllers
 
             try
             {
-
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 var listID = relationDAO.Get_AddPaticipants(projectID);
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();

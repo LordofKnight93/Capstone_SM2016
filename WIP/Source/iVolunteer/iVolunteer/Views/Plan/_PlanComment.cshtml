@@ -10,7 +10,7 @@
                 {
                     <div class="delete-comment">
                         @Ajax.ActionLink("delete", "DeleteComment", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID, cmtID = item.CommentID },
-                                                                                 new AjaxOptions { UpdateTargetId = "commentList", InsertionMode = InsertionMode.Replace },
+                                                                                 new AjaxOptions { UpdateTargetId = "commentList", InsertionMode = InsertionMode.Replace, OnSuccess = "deleteSuccess" },
                                                                                  new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer; " })
                     </div>
                 }
@@ -41,7 +41,3 @@
         </div>
     </li>
 }
-
-<script type="text/javascript">
-
-</script>

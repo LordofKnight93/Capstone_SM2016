@@ -41,6 +41,12 @@
   width: 1.28571429em;
   text-align: center;
 }
+.fa-cus-14 {
+    font-size: 14px;
+}
+.fa-cus-16 {
+    font-size: 16px;
+}
 .fa-cus-18 {
     font-size: 18px;
 }
@@ -59,6 +65,13 @@
 .fa-cus-green {
     color: #049f88;
 }
+.fa-cus-gray{
+    color: #A1A1A1;
+}
+.fa-cus-red {
+    color: #f44336;
+}
+fa-cus-
 .fa-ul {
   padding-left: 0;
   margin-left: 2.14285714em;

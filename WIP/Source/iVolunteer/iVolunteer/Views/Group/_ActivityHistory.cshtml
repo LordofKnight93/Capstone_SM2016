@@ -10,9 +10,18 @@
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
             <ul class="nav sub-nav-tabs">
-                <li class="active" data-type="organize"><a data-toggle="tab" href="#organize">DỰ ÁN TỔ CHỨC</a></li>
+                @*<li class="active" data-type="organize"><a data-toggle="tab" href="#organize">DỰ ÁN TỔ CHỨC</a></li>
                 <li data-type="sponsor"><a data-toggle="tab" href="#sponsor">DỰ ÁN ỦNG HỘ</a></li>
-                <li data-type="participate"><a data-toggle="tab" href="#participate">DỰ ÁN THAM GIA</a></li>
+                <li data-type="participate"><a data-toggle="tab" href="#participate">DỰ ÁN THAM GIA</a></li>*@
+                <li class="active" data-toggle="tab">
+                    @Ajax.ActionLink("DỰ ÁN TỔ CHỨC", "OrganizedProjects", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#content-panel')" })
+                </li>
+                <li data-toggle="tab">
+                    @Ajax.ActionLink("DỰ ÁN ỦNG HỘ", "SponsoredProjects", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#content-panel')" })
+                </li>
+                <li data-toggle="tab">
+                    @Ajax.ActionLink("DỰ ÁN THAM GIA", "ParticipatedProjects", "Group", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#content-panel')" })
+                </li>
             </ul>
         </div>
     </div>
@@ -21,10 +30,10 @@
         @{ Html.RenderAction("OrganizedProjects", "Group", new { groupID = ViewBag.GroupID });
         }
 
-        @{ Html.RenderAction("SponsoredProjects", "Group", new { groupID = ViewBag.GroupID });
+        @*@{ Html.RenderAction("SponsoredProjects", "Group", new { groupID = ViewBag.GroupID });
         }
         @{ 
            Html.RenderAction("ParticipatedProjects", "Group", new { groupID = ViewBag.GroupID });
-        }
+        }*@
     </div>
 </div>

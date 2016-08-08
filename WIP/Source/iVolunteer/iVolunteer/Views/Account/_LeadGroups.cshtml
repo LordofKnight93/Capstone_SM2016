@@ -1,39 +1,60 @@
 ﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
 
-<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
-    <!-- List Groups -->
-    @foreach (var item in Model)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
-                    </div>
-                    <div class="col-sm-10">
-                        <div class="row">
-                            <a href="@Url.Action("GroupHome","Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
-                        </div>
-                        <div class="row">
-                            <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
-                        </div>
-                        <div class="row">
-                            <table style="font-size: 14px;" width="60%">
-                                <tr>
-                                    <td style="color: #049f88;">THÀNH VIÊN</td>
-                                    <td>@Html.DisplayFor(modelItem => item.MemberCount)</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- Interaction Button -->
-                        <div class="row" style="margin-top: 10px" id="@item.GroupID">
-                            @{ Html.RenderAction("ActionToProject", "Group", new { groupID = item.GroupID, projectID = ViewBag.ProjectID });}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-11">
+                    <h4 id="main-task-title" style="font-weight: bold">Nhóm đã tham gia</h4>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="divider-holizon"></div>
+        </div>
+        <!-- List Groups -->
+        <div class="col-md-12">
+            @foreach (var item in Model)
+            {
+                <div class="row" style="padding: 10px;">
+                    <div class="col-sm-12">
+                        <div class="card-group">
+                            <div class="group-ava">
+                                <img src="@item.Get_AvatarLink()" />
+                            </div>
+                            <div class="group-infor">
+                                <div class="group-name">
+                                    <a href="@Url.Action("GroupHome", "Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
+                                </div>
+                                <div class="group-detail-infor">
+                                    <div class="group-des">
+                                        <label class="overflow-paragraph" style="font-weight: normal" title="@Html.DisplayFor(modelItem => item.GroupDescription)">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
+                                    </div>
+                                    <ul class="group-contact">
+                                        <li>
+                                            <i class="material-icons md-18">email</i>
+                                            <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                        </li>
+                                        <li>
+                                            <i class="material-icons md-18">phone</i>
+                                            <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="group-count">
+                                <h2 class="number-of-group-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.MemberCount)</h2>
+                                <label class="group-member">Thành viên</label>
+                            </div>
+                            <div class="action-to-group-of-user">
+                                @{ Html.RenderAction("ActionToProject", "Group", new { groupID = item.GroupID, projectID = ViewBag.ProjectID });}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                                    }
         </div>
-                    <div class="divider-holizon"></div>
-                                }
 
+    </div>
 </div>

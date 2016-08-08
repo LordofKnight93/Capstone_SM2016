@@ -33,24 +33,31 @@
                 {
                     <div class="delete-sub-task">
                         @Ajax.ActionLink("delete", "DeleteSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID, subTaskID = item.SubTaskID },
-                                                                        new AjaxOptions { UpdateTargetId = "subtaskList", InsertionMode = InsertionMode.Replace },
+                                                                        new AjaxOptions { UpdateTargetId = "subtaskList", InsertionMode = InsertionMode.Replace, OnSuccess = "deleteSuccess" },
                                                                         new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer; " })
                     </div>
                 }
                 <div class="row">
                     <div class="col-sm-12">
                         @if (item.Priolity == 1)
-                    {
-                            <div class="priolity low"></div>
+                        {
+                            <div class="priolity low" id="@("priolity" + item.SubTaskID)"></div>
                         }
                         else if (item.Priolity == 2)
                         {
-                            <div class="priolity medium"></div>
+                            <div class="priolity medium" id="@("priolity" + item.SubTaskID)"></div>
                         }
                         else
                         {
-                            <div class="priolity high"></div>
+                            <div class="priolity high" id="@("priolity" + item.SubTaskID)"></div>
                         }
+                        <select class="slc-task-status" style="display: none;" id="@("slcpriolity" + item.SubTaskID)">
+                            <option value="0">--- Ưu tiên ---</option>
+                            <option value="1">THẤP</option>
+                            <option value="2">VỪA</option>
+                            <option value="3">CAO</option>
+                        </select>
+                        <i id="@("priolityButton" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer">cancel</i>
                     </div>
                     <div class="col-sm-12">
                         <div class="row">
@@ -82,7 +89,7 @@
                                     <input class="txt-edit-subtask-content" id="@txtContent" value="@item.Content" style="display: none;" />
                                     <i id="@btnContentClose" class="material-icons" style="display: none; cursor: pointer">cancel</i>
                                 }
-                                
+
                             </div>
                         </div>
                     </div>
@@ -164,9 +171,42 @@
                                                 },
                                                 success: function (response) {
                                                     $("#subtaskList").html(response);
+                                                    editSuccess();
                                                 }
                                             });
                                         }
+                                    });
+
+                                    /*************************************************** Update Sub Task Priolity **********************************/
+                                    $("#priolity" + '@item.SubTaskID').click(function () {
+                                        $("#priolity" + '@item.SubTaskID').hide();
+                                        $("#slcpriolity" + '@item.SubTaskID').show();
+                                        $("#priolityButton" + '@item.SubTaskID').show();
+                                    });
+
+                                    //Hide textfield subtask content
+                                    $("#priolityButton" + '@item.SubTaskID').click(function () {
+                                        $("#priolity" + '@item.SubTaskID').show();
+                                        $("#slcpriolity" + '@item.SubTaskID').hide();
+                                        $("#priolityButton" + '@item.SubTaskID').hide();
+                                    });
+
+                                    //Update to DB
+                                    $("#slcpriolity" + '@item.SubTaskID').on('change', function (e) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@Url.Action("UpdateSubTaskPriolity", "Plan")",
+                                                data: {
+                                                    planPhaseID: "@ViewBag.PlanPhaseID",
+                                                    mainTaskID: "@ViewBag.MainTaskID",
+                                                    subTaskID: "@item.SubTaskID",
+                                                    slcPriolity: "" + $("#slcpriolity" + '@item.SubTaskID').val()
+                                                },
+                                                success: function (response) {
+                                                    $("#subtaskList").html(response);
+                                                    editSuccess();
+                                                }
+                                            });
                                     });
 
                                     /*************************************************** Update Sub Task Deadline **********************************/
@@ -200,6 +240,7 @@
                                                 },
                                                 success: function (response) {
                                                     $("#subtaskList").html(response);
+                                                    editSuccess();
                                                 }
                                             });
                                         }
@@ -222,16 +263,17 @@
                                         $("#" + '@btnAssignClose').hide();
                                     });
 
-                                    @{ string url = "/Project/ProjectMembersToAssign?planPhaseID=" + @ViewBag.PlanPhaseID; }
                                     // Search Member
                                     $("#" + '@txtAssign').autocomplete({
                                         source: function (request, response) {
 
                                             $.ajax({
-                                                url: "@url",
+                                                url: "@Url.Action("ProjectMembersToAssign","Project")",
                                                 dataType: "json",
                                                 type: "POST",
                                                 data: {
+                                                    sourceID: '@ViewBag.PlanPhaseID',
+                                                    target: 'plan',
                                                     name: request.term
                                                 },
                                                 success: function (data) {
@@ -262,6 +304,7 @@
                                                 },
                                                 success: function (response) {
                                                     $("#subtaskList").html(response);
+                                                    editSuccess();
                                                 }
                                             });
                                             return false;
@@ -271,7 +314,7 @@
                                 });
                             </script>
                         }
-                        @if(ViewBag.IsLeader == true || Session["UserID"].ToString().Equals(item.AssignPeople.ID) && item.IsDone != 3)
+                        @if (ViewBag.IsLeader == true || Session["UserID"].ToString().Equals(item.AssignPeople.ID) && item.IsDone != 3)
                         {
                             <script type="text/javascript">
                                 $(document).ready(function () {
@@ -307,6 +350,7 @@
                                             },
                                             success: function (response) {
                                                 $("#subtaskList").html(response);
+                                                editSuccess();
                                             }
                                         });
                                     });
@@ -333,13 +377,14 @@
                                             },
                                             success: function (response) {
                                                 $("#subtaskList").html(response);
+                                                editSuccess();
                                             }
                                         });
                                     });
                                 });
                             </script>
-                        }
-                        @if(ViewBag.IsLeader == false && item.IsDone == 3)
+    }
+                        @if (ViewBag.IsLeader == false && item.IsDone == 3)
                         {
                             <script type="text/javascript">
                                 $(document).ready(function () {

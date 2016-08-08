@@ -23,7 +23,7 @@
             {
                 //Hủy kết bạn
                 <li>
-                    @Ajax.RawActionLink("<i class='material-icons md-mygreen'>done</i><span class='action-to-target-text'>  Hủy kết bạn</span>", "DeleteFriend", "Account", new { friendID = ViewBag.OtherID }, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    @Ajax.RawActionLink("<i class='material-icons md-mygreen md-18'>done</i><span class='action-to-target-text'>  Hủy kết bạn</span>", "DeleteFriend", "Account", new { friendID = ViewBag.OtherID }, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn hủy kết bạn với người này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                 </li>
             }
             else
@@ -32,14 +32,14 @@
                 {
                     //Hủy yêu cầu
                     <li>
-                        @Ajax.RawActionLink("<i class='material-icons md-mygreen'>person_add</i><span class='action-to-target-text'>  Hủy yêu cầu kết bạn</span>", "CancelFriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='material-icons md-mygreen md-18'>person_add</i><span class='action-to-target-text'>  Hủy yêu cầu kết bạn</span>", "CancelFriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
                 else
                 {
                     //Kết bạn
                     <li>
-                        @Ajax.RawActionLink("<i class='material-icons'>person_add</i><span class='action-to-target-text'>  Kết bạn</span>", "FriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                        @Ajax.RawActionLink("<i class='material-icons md-18'>person_add</i><span class='action-to-target-text'>  Kết bạn</span>", "FriendRequest", "Account", new { otherID = ViewBag.OtherID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                     </li>
                 }
             }
@@ -48,7 +48,7 @@
             {
                 //Hủy báo cáo
                 <li>
-                    <button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons md-mygreen">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>
+                    <button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons md-mygreen md-18">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>
                     @*@Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })*@
                 </li>
             }
@@ -56,7 +56,7 @@
             {
                 //Báo cáo
                 <li>
-                    <button class="btn btn-default action-to-target-link" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
+                    <button class="btn btn-default action-to-target-link" onclick="reportObject(this)" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
                     @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
                 </li> 
             }

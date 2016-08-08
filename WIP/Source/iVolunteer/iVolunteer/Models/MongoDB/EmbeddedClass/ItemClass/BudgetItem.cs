@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -13,9 +14,13 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
     {
         public ObjectId BudgetItemID { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập nội dung.")]
+        [DisplayName("Nội dung:")]
         public string Content { get; set; }
+        [DisplayName("Đơn giá:")]
         public double UnitPrice { get; set; }
+        [DisplayName("Số lượng:")]
         public int Quatity { get; set; }
+        [DisplayName("Đơn vị:")]
         public string Unit { get; set; }
         public double Cost { get; set; }
 

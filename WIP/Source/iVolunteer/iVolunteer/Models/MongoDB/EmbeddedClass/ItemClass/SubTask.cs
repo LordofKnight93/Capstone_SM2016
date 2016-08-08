@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -15,11 +16,16 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
     {
         public ObjectId SubTaskID { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập nội dung công việc.")]
+        [DisplayName("Nội dung:")]
         public string Content { get; set; }
+        [DisplayName("Người thực hiện:")]
         public SDLink AssignPeople { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
+        [DisplayName("Hạn cuối:")]
         public DateTime Deadline { get; set; }
+        [DisplayName("Ưu tiên:")]
         public int Priolity { get; set; }
+        [DisplayName("Trạng thái")]
         public int IsDone { get; set; }
         public SubTask()
         {

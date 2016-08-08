@@ -248,6 +248,7 @@
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\iVolunteer-1.0.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
@@ -583,6 +584,7 @@
     <Content Include="Views\Project\_ActionToPost.cshtml" />
     <Content Include="Views\Project\_PinnedPost.cshtml" />
     <Content Include="Views\Home\_NewfeedPosts.cshtml" />
+    <Content Include="Views\Plan\_PlanError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

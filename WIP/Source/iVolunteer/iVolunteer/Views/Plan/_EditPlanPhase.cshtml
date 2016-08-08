@@ -3,7 +3,7 @@
 @using (Ajax.BeginForm("EditPlanPhase", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "updatePlanPhaseBox" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>SỬA THÔNG TIN CHO GIAI ĐOẠN</h4>
         <hr />

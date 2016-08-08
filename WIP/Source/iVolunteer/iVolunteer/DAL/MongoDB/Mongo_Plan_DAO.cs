@@ -650,6 +650,34 @@ namespace iVolunteer.DAL.MongoDB
         }
 
         /// <summary>
+        /// Update Sub Task Priolity
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <param name="subTaskID"></param>
+        /// <param name="priolity"></param>
+        /// <returns></returns>
+        public bool Update_SubTaskPriolity(string planPhaseID, string mainTaskID, string subTaskID, string priolity)
+        {
+            try
+            {
+                List<SubTask> subtasklist = Get_SubTaskList(planPhaseID, mainTaskID);
+                int i = subtasklist.FindIndex(st => st.SubTaskID == ObjectId.Parse(subTaskID));
+
+                var plan_filter = Builders<Mongo_Plan>.Filter.And(
+                                                    Builders<Mongo_Plan>.Filter.Eq(pl => pl.PlanPhaseInformation.PlanPhaseID, planPhaseID),
+                                                    Builders<Mongo_Plan>.Filter.ElemMatch(pl => pl.MainTask, it => it.MainTaskID == ObjectId.Parse(mainTaskID)));
+                var update = Builders<Mongo_Plan>.Update.Set(pl => pl.MainTask.ElementAt(-1).Subtask.ElementAt(i).Priolity, Int32.Parse(priolity));
+                var result = collection.UpdateOne(plan_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Update Sub Task Deadline
         /// </summary>
         /// <param name="planPhaseID"></param>

@@ -120,6 +120,7 @@ namespace iVolunteer.Common
         public const string SUBTASKNAME_EXIST = "Công việc này đã tồn tại.";
         public const string MAINTASKNAME_EXIST = "Công việc chính này đã tồn tại.";
         public const string PLANPHASE_EXIST = "Giai đoạn này đã tồn tại.";
+        public const string PLANPHASE_NAME_NULL = "Vui lòng nhập tên giai đoạn.";
         public const string DEADLINE_INVALID_TODAY = "Hạn cuối phải là một ngày trong tương lai.";
         public const string DEADLINE_INVALID_MAINTASK = "Hạn cuối công việc này phải trước hạn cuối của công việc chính.";
         public const string DUEDATE_INVALID_TODAY = "Hạn cuối phải là một ngày trong tương lai.";

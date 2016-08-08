@@ -77,18 +77,18 @@
                     }
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle user-dropbox" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="line-height: 40px ;padding: 2px 10px 1.5px 15px">
-                            <img src=@avtlink height="32" width="32" style="border: 1px solid #fff; border-radius: 2px">
+                            <img src=@avtlink height="32" width="32" style="border: 1px solid #fff; border-radius: 2px; object-fit: cover">
                             <span style="color: #fff; line-height: 45px">@displayName</span>
                             <span class="caret" style="color: #fff;"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li>@Ajax.ActionLink("Tạo sự kiện mới", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
+                            <li>@Ajax.ActionLink("Tạo sự kiện mới", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { })</li>
                             <li role="separator" class="divider"></li>
-                            <li>@Ajax.ActionLink("Tạo nhóm mới", "CreateGroup", "Group", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
+                            <li>@Ajax.ActionLink("Tạo nhóm mới", "CreateGroup", "Group", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { })</li>
                             <li role="separator" class="divider"></li>
                             @*<li class="dropdown-header">NGƯỜI DÙNG</li>*@
                             <li><a href="@Url.Action("UserHome", "User", new { userID = userID })">Hồ sơ cá nhân</a></li>
-                            <li>@Ajax.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup" }, new { @data_toggle = "modal", @data_target = "#popup" })</li>
+                            <li>@Ajax.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { })</li>
                             <li><a href="@Url.Action("LogOut","Home")">Đăng xuất</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="guide.html">Trợ giúp</a></li>
@@ -127,6 +127,8 @@
             </div>
         </div>
     </div>
+	<!-- Snackbar Notify -->
+    <div class="snackbar" id="snackbar">dfsdfdsgdf</div>
     
     <!--SCRIPT-->
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
@@ -135,95 +137,15 @@
     <script src="~/scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
-    <script src="~/scripts/phucvt_custom.js"></script>
+    <script src="~/scripts/iVolunteer-1.0.js"></script>
     @RenderSection("scripts", required: false)
     <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript" src="~/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
     <link rel="stylesheet" href="~/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 
-    @*  ------------------------- SEARCH BAR --------------------------- *@
+    @*  ------------------------- LOAD MORE COMMENT --------------------------- *@
     <script>
-        /***************************** Script for search bar ******************************************/
-        $("#searchArea").keyup(function () {
-            delay(function () {
-                $("#srchGrVal").html($("#searchArea").val());
-                $("#srchPrVal").html($("#searchArea").val());
-                $("#srchUsVal").html($("#searchArea").val());
-
-                var searchAreaWidth = $('#searchArea').width() + 35;
-                $('#listSearchBar').width(searchAreaWidth);
-
-                var searchItemWidth = $('#searchArea').width() - 10;
-                $("#srchGrVal").css('max-width', searchItemWidth + 'px');
-                $("#srchPrVal").css('max-width', searchItemWidth + 'px');
-                $("#srchUsVal").css('max-width', searchItemWidth + 'px');
-
-                $(".dropdown-content").show();
-
-            }, 100);
-
-        });
-
-        $('div.search-dropdown').mouseleave(function () {
-            $(".dropdown-content").hide();
-        });
-
-        if ($("#searchArea").val().length < 1) {
-            $(".dropdown-content").hide();
-        }
-        var delay = (function () {
-            var timer = 0;
-            return function (callback, ms) {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })();
-
-        $(document).click(function (event) {
-            if (!$(event.target).closest('.dropdown-content').length) {
-                if ($('.dropdown-content').is(":visible")) {
-                    $('.dropdown-content').hide();
-                }
-            }
-        });
-        var $listItems = $('li.searchItem');
-
-        function search(selector) {
-            var name = $("#searchArea").val();
-            var option = $(selector).attr('role');
-            window.location.href = "/Home/Search?name=" + name + "&option=" + option;
-        }
-        var $current;
-        $('#searchArea').keydown(function (e) {
-            var key = e.keyCode,
-                $selected = $listItems.filter('.selected');
-
-
-            if (key != 40 && key != 38 && key != 13) return;
-
-            $listItems.removeClass('selected');
-
-            if (key == 40) // Down key
-            {
-                if (!$selected.length || $selected.is(':last-child')) {
-                    $current = $listItems.eq(0);
-                } else {
-                    $current = $selected.next();
-                }
-            } else if (key == 38) // Up key
-            {
-                if (!$selected.length || $selected.is(':first-child')) {
-                    $current = $listItems.last();
-                } else {
-                    $current = $selected.prev();
-                }
-            } else if (key == 13) {
-                search($current);
-            }
-            $current.addClass('selected');
-        });
-
         /**************************************************************** Load More coment ***************************************/
         function loadMoreComment(postID) {
             $("#loadMoreComment" + postID).remove();
@@ -1385,42 +1307,73 @@
             }
         })
 
-        //Show Symbol loading before ajax loading
-        function OnBegin(id) {
-            var loadingHtml = "";
-            loadingHtml += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">';
-            loadingHtml += '<div class="progress"><div class="indeterminate"></div></div>';
-            loadingHtml += '</div';
-            $(id).html(loadingHtml);
-        }
-        function OnBegin() {
-            var loadingHtml = '<div class="progress2"><div class="indeterminate"></div></div>';
-            $("#notifyPage").html(loadingHtml);
-        }
-        
-        //On begin popup
-        function OnBeginPopup() {
-            console.log("on begin");
-            var loadingPopup = "";
-            loadingPopup += '<div class="preloader-wrapper small active">';
-            loadingPopup += '<div class="spinner-layer spinner-green-only">';
-            loadingPopup += '<div class="circle-clipper left">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div><div class="gap-patch">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div><div class="circle-clipper">';
-            loadingPopup += '<div class="circle"></div>';
-            loadingPopup += '</div>';
-            loadingPopup += '</div>';
-            loadingPopup += '</div>';
-            $('#popup-content').html(loadingPopup);
-            console.log("load html loading");
-            $('#popup').modal('show');
-            console.log("show popup");
-        }
     </script>
     @*  ------------------------- REPORT --------------------------- *@
     <script type="text/javascript">
+        var dialog = $('<div style="display:none" class="loading"></div>').appendTo('body');
+        var successDialog = $('<div style="display:none" class="reportloading"></div>').appendTo('body');
+        function reportObject(selector) {
+            var url = $(selector).attr('href');
+            dialog.dialog({
+                title: 'Lý do báo cáo',
+                create: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
+                },
+                width: 400,
+                resizable: false,
+                close: function (event, ui) {
+                    dialog.remove();
+                },
+                modal: true
+            });
+            dialog.load(url, function (responseText, textStatus, XMLHttpRequest) {
+                dialog.removeClass('loading');
+                $('#submitReport').submit(function () {
+                    $.ajax({
+                        url: this.action,
+                        type: this.method,
+                        data: $(this).serialize(),
+                        success: function (data) {
+                            if (data.status == true) {
+                                successDialog.dialog({
+                                    title: 'Thông báo',
+                                    create: function (event, ui) {
+                                        $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
+                                    },
+                                    width: 300,
+                                    resizable: false,
+                                    close: function (event, ui) {
+                                        successDialog.remove();
+                                        location.reload();
+                                    },
+                                    modal: true
+                                });
+                                successDialog.append(data.message);
+                                dialog.remove();
+                            }
+                            else {
+                                successDialog.dialog({
+                                    title: 'Thông báo',
+                                    create: function (event, ui) {
+                                        $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
+                                    },
+                                    width: 300,
+                                    resizable: false,
+                                    close: function (event, ui) {
+                                        successDialog.remove();
+                                        successDialog.empty();
+                                    },
+                                    modal: true
+                                });
+                                successDialog.append(data.message);
+                            }
+                        }
+                    });
+                    return false;
+                });
+            });
+            return false;
+        };
         function cancelReport(selector) {
             var url = $(selector).attr('href');
                 $.ajax({
@@ -1435,63 +1388,6 @@
                     }
                 });
         }
-        var dialog = $('<div style="display:none" class="loading" style="padding: 10px;"></div>').appendTo('body');
-        var successDialog = $('<div style="display:none" class="reportloading"></div>').appendTo('body');
-        $(function () {
-            $('button#displayReport').click(function () {
-                var url = this.getAttribute('href');
-                dialog.dialog({
-                    title: 'Lý do báo cáo',
-                    width: 400,
-                    resizable: false,
-                    close: function (event, ui) {
-                        dialog.remove();
-                    },
-                    modal: true
-                });
-                dialog.load(url, function (responseText, textStatus, XMLHttpRequest) {
-                    dialog.removeClass('loading');
-                    $('#submitReport').submit(function () {
-                        $.ajax({
-                            url: this.action,
-                            type: this.method,
-                            data: $(this).serialize(),
-                            success: function (data) {
-                                if (data.status == true) {
-                                    successDialog.dialog({
-                                        title: 'Thông báo',
-                                        width: 300,
-                                        resizable: false,
-                                        close: function (event, ui) {
-                                            successDialog.remove();
-                                            location.reload();
-                                        },
-                                        modal: true
-                                    });
-                                    successDialog.append(data.message);
-                                    dialog.remove();
-                                }
-                                else {
-                                    successDialog.dialog({
-                                        title: 'Thông báo',
-                                        width: 300,
-                                        resizable: false,
-                                        close: function (event, ui) {
-                                            successDialog.remove();
-                                            successDialog.empty();
-                                        },
-                                        modal: true
-                                    });
-                                    successDialog.append(data.message);
-                                }
-                            }
-                        });
-                        return false;
-                    });
-                });
-                return false;
-            });
-        });
     </script>
     @*  ------------------------- POST in GROUP ----------------(groupHome)----------- *@
     <script type="text/javascript">
@@ -1644,20 +1540,6 @@
             $("#postImageHandler").val("");
         }
         
-    </script>
-    @* ****************************** FANCY BOX ************************************ *@
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.fancybox').fancybox({
-                padding: 0,
-                openEffect: 'elastic',
-                openSpeed: 150,
-
-                closeEffect: 'elastic',
-                closeSpeed: 150,
-            });
-
-        });
     </script>
 </body>
 </html>
