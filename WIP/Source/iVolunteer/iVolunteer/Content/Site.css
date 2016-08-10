@@ -5306,3 +5306,34 @@ transform: scaleX(-1);
     text-align: left;
     color: #000;
 }
+/******************************************* For Album *****************************************/
+
+.list-photo {
+    padding: 0;
+}
+.list-photo li {
+    padding: 3px;
+    list-style: none;
+    width: 19%;
+    display: inline-block;
+    margin: 0.13525%;
+}
+
+.list-photo li a {
+    
+}
+
+.list-photo li a img {
+    object-fit: cover;
+    width: 100%;
+    border-radius: 2px;
+}
+.card-panel-album {
+    transition: box-shadow .25s;
+    padding: 20px;
+    margin: 0.5rem 0 1rem 0;
+    border-radius: 2px;
+    background-color: #fff;
+    margin-right: 2px;
+    margin-left: 2px;
+}

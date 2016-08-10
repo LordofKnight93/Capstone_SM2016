@@ -1,0 +1,36 @@
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AlbumInformation
+@using (Ajax.BeginForm("CreateAlbum", "Group", new { targetID = ViewBag.TargetID, targetType = 1 }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace, HttpMethod = "POST", OnSuccess = "onpopupclose('#popup')" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+{
+                                    <!-- Album Name -->
+    <div class="row">
+        <div class="col-xs-4 register-label">
+            <label for="albumName">Tên bộ ảnh:</label>
+        </div>
+        <div class="col-xs-5 text-input">
+            @Html.EditorFor(model => model.AlbumName, new { htmlAttributes = new { @id = "albumName", @class = "form-control", @placeholder = "Tên bộ ảnh..." } })
+            @Html.ValidationMessageFor(model => model.AlbumName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+                                    <!-- Album Description -->
+    <div class="row">
+        <div class="col-xs-4 register-label">
+            <label for="albumDescription">Mô tả: </label>
+        </div>
+        <div class="col-xs-5 text-input">
+            @Html.TextAreaFor(model => model.AlbumDescription, new { @id = "albumDescription", @class = "form-control", @rows = "2", @placeholder = "Mô tả ngắn gọn về bộ ảnh ...", @style = "resize: vertical; margin-bottom: 4px" })
+            @Html.ValidationMessageFor(model => model.AlbumDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row" style="margin-right: 10%">
+        <div class="col-xs-2 text-input">
+            <button type="submit" class="btn btn-register">TẠO ALBUM</button>
+        </div>
+    </div>
+            // Error Message
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+            <label style="color:red;">@ViewBag.Message</label>
+        </div>
+    </div>
+}

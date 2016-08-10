@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -147,6 +152,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -154,6 +163,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -185,12 +198,52 @@
     <Content Include="Client Scripts\MvcFoolproofJQueryValidation.min.js" />
     <Content Include="Client Scripts\MvcFoolproofValidation.js" />
     <Content Include="Client Scripts\MvcFoolproofValidation.min.js" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.min.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-video.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-video.min.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery.min.css" />
+    <Content Include="Content\blueimp-gallery2\img\error.png" />
+    <Content Include="Content\blueimp-gallery2\img\loading.gif" />
+    <Content Include="Content\blueimp-gallery2\img\play-pause.png" />
+    <Content Include="Content\blueimp-gallery2\img\video-play.png" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
+    <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
+    <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\material-icons.css" />
     <Content Include="fonts\MaterialIcons-Regular.svg" />
@@ -245,13 +298,59 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.woff2" />
     <Content Include="fonts\FontAwesome.otf" />
-    <None Include="scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Content\blueimp-gallery2\img\error.svg" />
+    <Content Include="Content\blueimp-gallery2\img\play-pause.svg" />
+    <Content Include="Content\blueimp-gallery2\img\video-play.svg" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.js" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.min.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\iVolunteer-1.0.js" />
-    <Content Include="scripts\jquery-1.10.2.js" />
-    <Content Include="scripts\jquery-1.10.2.min.js" />
+    <Content Include="scripts\jquery-2.1.4.min.map" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
+    <None Include="scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="scripts\jquery-2.1.4.js" />
+    <Content Include="scripts\jquery-2.1.4.min.js" />
+    <Content Include="scripts\jquery-ui-1.11.4.js" />
+    <Content Include="scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\canvas-to-blob.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\cors\jquery.postmessage-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\cors\jquery.xdr-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-angular.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-audio.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-image.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-jquery-ui.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-process.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-ui.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-validate.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-video.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.iframe-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\load-image.all.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\tmpl.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\vendor\jquery.ui.widget.js" />
     <Content Include="scripts\jquery.signalR-2.2.0.js" />
     <Content Include="scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.js" />
@@ -263,14 +362,19 @@
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="scripts\phucvt_custom.js" />
     <Content Include="Images\logo_lite.png" />
+    <Content Include="scripts\respond.js" />
+    <Content Include="scripts\respond.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\Constant.cs" />
     <Compile Include="Common\HelperExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\BudgetController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -287,6 +391,7 @@
     <Compile Include="DAL\MongoDB\Mongo_Plan_DAO.cs" />
     <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcIm_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_Budget_DAO.cs" />
@@ -309,6 +414,8 @@
     <Compile Include="DAL\SQL\SQL_Project_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
     <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
+    <Compile Include="Helper\FilesHelper.cs" />
+    <Compile Include="Helper\ImageHandler.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
@@ -431,7 +538,6 @@
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\GuestLayout.cshtml" />
-    <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_AvatarCover.cshtml" />
     <Content Include="Views\Shared\_ImageUpload.cshtml" />
     <Content Include="Views\Account\_NavigationPanel.cshtml" />
@@ -585,6 +691,26 @@
     <Content Include="Views\Project\_PinnedPost.cshtml" />
     <Content Include="Views\Home\_NewfeedPosts.cshtml" />
     <Content Include="Views\Plan\_PlanError.cshtml" />
+    <Content Include="Views\Group\_AddImage.cshtml" />
+    <Content Include="Views\Group\_AlbumAddImage.cshtml" />
+    <Content Include="Views\Group\_AlbumCommentArea.cshtml" />
+    <Content Include="Views\Group\_AlbumCommentList.cshtml" />
+    <Content Include="Views\Group\_AlbumCreate.cshtml" />
+    <Content Include="Views\Group\_AlbumEditImage.cshtml" />
+    <Content Include="Views\Group\_AlbumLikeStatus.cshtml" />
+    <Content Include="Views\Group\_AlbumList.cshtml" />
+    <Content Include="Views\Group\_AlbumShowImage.cshtml" />
+    <Content Include="Views\Group\_AlbumWriteComment.cshtml" />
+    <Content Include="Views\Project\_AddImage.cshtml" />
+    <Content Include="Views\Project\_AlbumAddImage.cshtml" />
+    <Content Include="Views\Project\_AlbumCommentArea.cshtml" />
+    <Content Include="Views\Project\_AlbumCommentList.cshtml" />
+    <Content Include="Views\Project\_AlbumCreate.cshtml" />
+    <Content Include="Views\Project\_AlbumEditImage.cshtml" />
+    <Content Include="Views\Project\_AlbumLikeStatus.cshtml" />
+    <Content Include="Views\Project\_AlbumList.cshtml" />
+    <Content Include="Views\Project\_AlbumShowImage.cshtml" />
+    <Content Include="Views\Project\_AlbumWriteComment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -594,6 +720,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\Album\somefiles\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

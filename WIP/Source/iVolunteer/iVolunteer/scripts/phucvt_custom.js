@@ -270,3 +270,6 @@ function registerformback() {
         display: "none"
     });
 }
+function onpopupclose(id) {
+    $(id).modal('toggle');
+}

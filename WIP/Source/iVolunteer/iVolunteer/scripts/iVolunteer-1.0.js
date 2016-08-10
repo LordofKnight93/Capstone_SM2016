@@ -445,3 +445,7 @@ function reloadCurrentPage() {
     location.reload();
     changeSuccess();
 }
+
+function onpopupclose(id) {
+    $(id).modal('toggle');
+}

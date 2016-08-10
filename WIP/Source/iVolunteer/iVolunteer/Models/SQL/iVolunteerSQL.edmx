@@ -646,7 +646,7 @@
             <PropertyRef Name="UserID" />
             <PropertyRef Name="Relation" />
           </Key>
-          <Property Name="ImageID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Relation" Type="Int32" Nullable="false" />
           <NavigationProperty Name="SQL_Account" Relationship="Self.FK_SQL_AcIm_Relation_SQL_Account" FromRole="SQL_AcIm_Relation" ToRole="SQL_Account" />
@@ -727,7 +727,7 @@
           <Key>
             <PropertyRef Name="ImageID" />
           </Key>
-          <Property Name="ImageID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AlbumID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="SQL_AcIm_Relation" Relationship="Self.FK_SQL_AcIm_Relation_SQL_Image" FromRole="SQL_Image" ToRole="SQL_AcIm_Relation" />
           <NavigationProperty Name="SQL_Album" Relationship="Self.FK_SQL_Image_SQL_Album" FromRole="SQL_Image" ToRole="SQL_Album" />

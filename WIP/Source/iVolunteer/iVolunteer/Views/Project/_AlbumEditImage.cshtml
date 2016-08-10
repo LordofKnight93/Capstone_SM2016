@@ -1,0 +1,53 @@
+﻿@using System.Web.Optimization
+@{
+    ViewBag.Title = "Edit";
+}
+<link href="/Content/jQuery.FileUpload/css/jquery.fileupload.css" rel="stylesheet" />
+<link href="/Content/jQuery.FileUpload/css/jquery.fileupload-ui.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery-video.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css" rel="stylesheet" />
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li>
+            @Ajax.ActionLink("Danh Sách Ảnh", "AlbumShowImage", "Project", new { albumID = ViewBag.AlbumID, targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+        </li>
+        <li>
+            @Ajax.ActionLink("Danh Sách Bộ Ảnh", "GetAlbumList", "Project", new { groupID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+        </li>
+    </ul>
+</div>
+<div class="card-panel-album">
+    <h4>Chỉnh Sửa Bộ Ảnh</h4>
+
+    @Html.Partial("_AddImage", new { albumID = ViewBag.AlbumID })
+</div>
+<script>
+    var $form = null;
+    $(function () {
+
+        $form = $('#fileupload').fileupload({
+            dataType: 'json'
+        });
+
+    });
+    $('#fileupload').addClass('fileupload-processing');
+
+
+
+    $.ajax({
+         type: 'GET',
+        contentType: "application/json; charset=utf-8",
+        url: '/Album/GetFileList',
+        success: function (data) {
+            $('#fileupload').fileupload('option', 'done').call($('#fileupload'), $.Event('done'), { result: { files: data.files } })
+            $('#fileupload').removeClass('fileupload-processing');
+        }
+    }
+ );
+</script>
+
+
+
+
+

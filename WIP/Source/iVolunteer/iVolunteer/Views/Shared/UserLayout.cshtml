@@ -12,6 +12,7 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
+
 </head>
 <body>
     @{
@@ -129,15 +130,32 @@
     </div>
 	<!-- Snackbar Notify -->
     <div class="snackbar" id="snackbar">dfsdfdsgdf</div>
-    
-    <!--SCRIPT-->
-    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    <!--SCRIPT ALBUM-->
+    <script src="~/Scripts/jquery-2.1.4.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
     <script src="~/scripts/jquery.validate.unobtrusive.js"></script>
     <script src="~/scripts/iVolunteer-1.0.js"></script>
+    <!-- Image Support Script -->
+    <script src="/scripts/jQuery.FileUpload/vendor/jquery.ui.widget.js"></script>
+    <script src="/scripts/jQuery.FileUpload/tmpl.min.js"></script>
+    <script src="/scripts/jQuery.FileUpload/load-image.all.min.js"></script>
+    <script src="/scripts/jQuery.FileUpload/canvas-to-blob.min.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.iframe-transport.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-process.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-image.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-audio.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-video.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-validate.js"></script>
+    <script src="/scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
+    <script src="/scripts/blueimp-gallery2/js/blueimp-gallery.js"></script>
+    <script src="/scripts/blueimp-gallery2/js/blueimp-gallery-video.js"></script>
+    <script src="/scripts/blueimp-gallery2/js/blueimp-gallery-indicator.js"></script>
+    <script src="/scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js"></script>
+
+   
     @RenderSection("scripts", required: false)
     <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
     <script src="~/signalr/hubs"></script>

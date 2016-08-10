@@ -1,0 +1,141 @@
+﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Album
+@using iVolunteer.Helpers
+@using System.Web.Optimization
+
+<!-- blueimp File Upload & Gallery styles -->
+<link href="/Content/jQuery.FileUpload/css/jquery.fileupload.css" rel="stylesheet" />
+<link href="/Content/jQuery.FileUpload/css/jquery.fileupload-ui.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery-video.css" rel="stylesheet" />
+<link href="/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css" rel="stylesheet" />
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li>
+            @Ajax.ActionLink("Danh Sách Bộ Ảnh", "GetAlbumList", "Group", new {groupID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+        </li>
+        <li>
+            @Ajax.ActionLink("Chỉnh Sửa Bộ Ảnh", "AlbumEditImage", "Group", new { groupID = Model.AlbumInformation.TargetID,albumID = Model._id }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+        </li>
+    </ul>
+</div>
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+<div class="card-panel" id="list-image" style="margin: 0.5rem 0 1rem 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <h4><strong> Bộ Ảnh : @Model.AlbumInformation.AlbumName</strong></h4>
+            <h5>Mô tả : @Model.AlbumInformation.AlbumDescription</h5>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <div id="links" class="link">
+        @if (Model.ImageList != null && Model.ImageList.Count > 0)
+        {
+            <ul class="list-photo">
+                @foreach (var item in Model.ImageList)
+                {
+                    <li>
+                        <a href="@item.ImageInformation.ImageUrl" title="@item.ImageInformation.ImageName" data-description="This is a image." data-gallery=""><img src="@item.ImageInformation.ImageUrl" alt="@item.ImageInformation.ImageName"></a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Chưa có ảnh nào trong bộ ảnh này.</p>
+        }
+        <!--Your files goes here-->
+    </div>
+
+    <div class="divider-holizon"></div>
+    <!-- Interaction Panel -->
+    <div class="row">
+        <!-- Interaction Button -->
+        <div id="@("likeArea" + Model.AlbumInformation.AlbumID)" class="col-md-6 col-sm-6" style="padding: 0px 35px">
+            @{Html.RenderAction("AlbumIsLiked", "Group", new { albumID = Model.AlbumInformation.AlbumID });}
+        </div>
+        <!-- Interaction Counter -->
+        <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
+            <div class="row">
+                <ul class="list-interaction">
+                    <li>
+                        <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
+                        @if (Model.CommentList.Count != 0)
+                        {
+                            <span style="color: #cecece">@Model.CommentList.Count</span>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="@("commentArea" + Model.AlbumInformation.AlbumID)">
+        @{Html.RenderAction("AlbumShowCommentArea", "Group", new { albumID = Model.AlbumInformation.AlbumID, groupID = ViewBag.GroupID });}
+    </div>
+</div>
+<script>
+
+    document.getElementById('links').onclick = function (event) {
+        event = event || window.event;
+        var target = event.target || event.srcElement,
+            link = target.src ? target.parentNode : target,
+            options = { index: link, event: event },
+            links = this.getElementsByTagName('a');
+        blueimp.Gallery(links, options);
+
+    };
+</script>
+<script>
+    var $form = null;
+    $(function () {
+
+        $form = $('#fileupload').fileupload({
+            dataType: 'json'
+        });
+
+    });
+    $('#fileupload').addClass('fileupload-processing');
+
+</script>
+
+<script>
+    var $form = null;
+    $(function () {
+
+        $form = $('#fileupload').fileupload({
+            dataType: 'json'
+        });
+
+    });
+    $('#fileupload').addClass('fileupload-processing');
+
+
+
+    $.ajax({
+         type: 'GET',
+        contentType: "application/json; charset=utf-8",
+        url: '/Album/GetFileList',
+        success: function (data) {
+            $('#fileupload').fileupload('option', 'done').call($('#fileupload'), $.Event('done'), { result: { files: data.files } })
+            $('#fileupload').removeClass('fileupload-processing');
+        }
+    }
+ );
+</script>
+
+
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery.js"></script>
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery-video.js"></script>
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery-indicator.js"></script>
+<script src="/scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js"></script>
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery.js"></script>
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery-video.js"></script>
+<script src="/scripts/blueimp-gallery2/js/blueimp-gallery-indicator.js"></script>
+<script src="/scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js"></script>

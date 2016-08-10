@@ -1,0 +1,18 @@
+﻿<!-- Comment -->
+@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment
+@using (Ajax.BeginForm("AlbumAddComment", "Project", new { albumID = ViewBag.AlbumID, projectID = ViewBag.ProjectID }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "commentList" + ViewBag.AlbumID, }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    <div class="row">
+        <div class="col-md-1 col-sm-1">
+            <object type="image/jpg" data="@("/Images/User/Avatar/" + Session["UserID"].ToString() + ".jpg")" width="40" height="40" style="border-radius:5px"></object>
+        </div>
+        <div class="col-md-10 col-sm-10">
+            @Html.TextBoxFor(model => model.Content, new { @id = "comment" + ViewBag.AlbumID, @class = "write-comment-txt", @rows = "4", @placeholder = "Bình luận...", @style = "resize: vertical; margin-bottom: 4px" })
+            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-1 col-sm-1">
+            <button class="btn btn-comment" onclick="isCommentBlank(event, '@ViewBag.AlbumID')" type="submit"><i style='font-size:1.1em; margin-left: -5px; padding-top:5px; opacity: .25;' class='glyphicon glyphicon-send'></i></button>
+        </div>
+    </div>
+}
+

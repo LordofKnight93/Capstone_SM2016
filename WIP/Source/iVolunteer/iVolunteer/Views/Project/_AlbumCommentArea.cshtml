@@ -1,0 +1,11 @@
+﻿@if (Session["UserID"] != null)
+{
+    Html.RenderAction("AlbumShowAddCommentArea", "Group", new { albumID = ViewBag.AlbumID, projectID = ViewBag.ProjectID });
+}
+<div id="@("commentList" + ViewBag.AlbumID)" class="commentList">
+    <div class="col-md-12 col-sm-12" style="padding-left: 7%;">
+        @Ajax.ActionLink("Xem bình luận khác", "AlbumGetCommentList", "Group", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.AlbumID, InsertionMode = InsertionMode.Replace }, new { @id = "showComment" + ViewBag.AlbumID, @style = "color:#9BCABA" })
+    </div>
+</div>
+
+

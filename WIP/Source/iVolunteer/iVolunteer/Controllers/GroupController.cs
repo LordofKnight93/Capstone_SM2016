@@ -18,6 +18,7 @@ using System.IO;
 using Microsoft.AspNet.SignalR;
 using iVolunteer.Hubs;
 using MongoDB.Bson;
+using iVolunteer.Helpers;
 
 namespace iVolunteer.Controllers
 {
@@ -416,8 +417,10 @@ namespace iVolunteer.Controllers
         /// 写真アルバムセクション画面を表示
         /// </summary>
         /// <returns></returns>
-        public ActionResult GroupGallery()
+        public ActionResult GroupGallery(string groupID)
         {
+            ViewBag.InSection = "GroupGallery";
+            ViewBag.GroupID = groupID;
             return PartialView("_GroupGallery");
         }
         /// <summary>
@@ -2371,6 +2374,343 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// ///album/////
+        /// </summary>
+        /// <param name="albumID"></param>
+        /// <returns></returns>
+
+        public ActionResult AlbumAddImage(string albumID)
+        {
+            ViewBag.AlbumID = albumID;
+            Session["Album"] = albumID;
+            return PartialView("_AlbumAddImage");
+        }
+        public ActionResult AlbumEditImage(string albumID, string targetID)
+        {
+            ViewBag.targetID = targetID;
+            ViewBag.AlbumID = albumID;
+            Session["Album"] = albumID;
+            return PartialView("_AlbumEditImage");
+        }
+        public ActionResult AlbumShowImage(string albumID, string targetID)
+        {
+            string userID = Session["UserID"].ToString();
+            ImageInformation mongo_Image = new ImageInformation();
+            Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+            var model = mongo_Album_DAO.Get_Image_By_AlbumID(albumID);
+            ViewBag.AlbumID = albumID;
+            ViewBag.GroupID = targetID;
+            Session["Album"] = albumID;
+            return PartialView("_AlbumShowImage", model);
+        }
+        public PartialViewResult GetAlbumList(string groupID)
+        {
+            ViewBag.targetID = groupID;
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                List<Mongo_Album> albumList = albumDAO.Get_Private_Album_By_TargetID(groupID, 0, 50);
+                Random rd = new Random();
+                int rand = rd.Next(0, int.MaxValue);
+                ViewBag.rd = rand;
+                return PartialView("_AlbumList", albumList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        [HttpGet]
+        public ActionResult CreateAlbum(string targetID)
+        {
+            ViewBag.TargetID = targetID;
+            return PartialView("_AlbumCreate");
+        }
+        [HttpPost]
+        public ActionResult CreateAlbum(AlbumInformation albumInfo, string targetID, int targetType)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.TargetID = targetID;
+                return PartialView("_AlbumCreate", albumInfo);
+            };
+            //create album creator
+            string userID = Session["UserID"].ToString();
+            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            SDLink creator = userDAO.Get_SDLink(userID);
+            albumInfo.DateCreate = DateTime.Now;
+            albumInfo.DateLastActivity = DateTime.Now;
+            //Create mongo Album
+            Mongo_Album mongo_Album = new Mongo_Album(albumInfo);
+            mongo_Album.AlbumInformation = albumInfo;
+            mongo_Album.AlbumInformation.AlbumID = mongo_Album._id.ToString();
+            mongo_Album.AlbumInformation.Creator = creator;
+            //Create sql Album
+            SQL_Album sql_Album = new SQL_Album();
+            sql_Album.AlbumID = mongo_Album._id.ToString();
+            if (targetType == 1)
+            {
+                sql_Album.GroupID = targetID;
+            }
+            else if (targetType == 2)
+            {
+                sql_Album.ProjectID = targetID;
+            }
+            //start transaction
+            try
+            {
+                using (var transaction = new TransactionScope())
+                {
+                    try
+                    {
+                        // create DAO instance
+                        Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+                        SQL_Album_DAO sql_Album_DAO = new SQL_Album_DAO();
+                        SQL_AcAl_Relation_DAO sql_User_Album_DAO = new SQL_AcAl_Relation_DAO();
+                        //write data to db
+                        sql_Album_DAO.Add_Album(sql_Album);
+                        sql_User_Album_DAO.Add_Creator(userID, sql_Album.AlbumID);
+                        mongo_Album_DAO.Add_Album(mongo_Album);
+                        transaction.Complete();
+                    }
+                    catch
+                    {
+                        transaction.Dispose();
+                        return PartialView("ErrorMessage");
+                    }
+                }
+                ViewBag.AlbumID = sql_Album.AlbumID;
+                Session["Album"] = sql_Album.AlbumID;
+                return GetAlbumList(targetID);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.ToString();
+                return PartialView("ErrorMessage");
+                throw;
+            }
+        }
+        public ActionResult DeleteAlbum(string albumID, string targetID)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+
+
+            using (TransactionScope trans = new TransactionScope())
+            {
+                try
+                {
+                    Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                    SQL_AcAl_Relation_DAO relation = new SQL_AcAl_Relation_DAO();
+                    SQL_AcIm_Relation_DAO relationIm = new SQL_AcIm_Relation_DAO();
+                    SQL_Album_DAO sqlAlbum = new SQL_Album_DAO();
+                    //Delete all relation related to this Album
+                    relationIm.Delete_all_relations_Im(albumID);
+                    relation.Delete_relation_Al(userID, albumID, AcAlRelation.CREATOR_RELATION);
+                    sqlAlbum.Delete_Image(albumID);
+                    sqlAlbum.Delete_Album(albumID);
+                    //Delete mongo
+                    albumDAO.Delete_Album(albumID);
+                    trans.Complete();
+                }
+                catch
+                {
+                    trans.Dispose();
+                    throw;
+                }
+            }
+            return GetAlbumList(targetID);
+        }
+        ////////Comment In ALbum////////////////
+        public PartialViewResult AlbumShowCommentArea(string albumID, string groupID)
+        {
+            ViewBag.GroupID = groupID;
+            ViewBag.AlbumID = albumID;
+            return PartialView("_AlbumCommentArea");
+        }
+        /// <summary>
+        /// コメント記載部分を表示
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public PartialViewResult AlbumShowAddCommentArea(string albumID, string groupID)
+        {
+            ViewBag.GroupID = groupID;
+            ViewBag.AlbumID = albumID;
+            return PartialView("_AlbumWriteComment");
+        }
+        /// <summary>
+        /// コメントを記載
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="albumID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public ActionResult AlbumAddComment(Comment comment, string albumID, string groupID)
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Message = "Nhap sai";
+                return View("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+
+            //Add more mongo Comment information
+            comment.DateCreate = DateTime.Now.ToLocalTime();
+            comment.Creator = creator;
+
+            try
+            {
+                mongo_Album_DAO.Set_DateLastActivity(albumID, comment.DateCreate);
+                mongo_Album_DAO.Add_Comment(albumID, comment);
+
+                return AlbumGetCommentList(albumID);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public PartialViewResult AlbumGetCommentList(string albumID)
+        {
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                List<Comment> commentList = albumDAO.Get_Comments(albumID, 0, 5);
+                if (albumDAO.Get_Cmt_Count(albumID) > 5)
+                    ViewBag.LoadMore = true;
+                ViewBag.AlbumID = albumID;
+                return PartialView("_AlbumCommentList", commentList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// 残りのコメントを取得
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public PartialViewResult AlbumLoadOtherComment(string albumID)
+        {
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                List<Comment> commentList = albumDAO.Get_Comments(albumID, 5, 100);
+                ViewBag.AlbumID = albumID;
+                ViewBag.LoadMore = false;
+                return PartialView("_AlbumCommentList", commentList);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// ポストをライク
+        /// </summary>
+        /// <param name="albumID"></param>
+        /// <returns></returns>
+        public ActionResult LikeAlbum(string albumID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Newfeed", "Home");
+            }
+            string userID = Session["UserID"].ToString();
+            Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+            Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+
+            SDLink creator = mongo_User_DAO.Get_SDLink(userID);
+            //If User has liked this Post 
+            if (mongo_Album_DAO.Is_User_Liked(userID, albumID)) return DislikeAlbum(albumID);
+            try
+            {
+                mongo_Album_DAO.Set_DateLastActivity(albumID, DateTime.Now.ToLocalTime());
+                mongo_Album_DAO.Add_LikerList(albumID, creator);
+
+                ViewBag.postID = albumID;
+                return AlbumIsLiked(albumID);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// ポストをライクしたかを判定
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public PartialViewResult AlbumIsLiked(string albumID)
+        {
+            int likeCount = 0;
+            if (Session["UserID"] == null)
+            {
+                return PartialView("_LikeStatus");
+            }
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                likeCount = albumDAO.Get_Album_By_ID(albumID).LikeCount;
+                if (albumDAO.Is_User_Liked(userID, albumID))
+                {
+                    ViewBag.IsLiked = true;
+                }
+                else
+                {
+                    ViewBag.IsLiked = false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            ViewBag.LikeCount = likeCount;
+            ViewBag.PostID = albumID;
+            return PartialView("_AlbumLikeStatus");
+        }
+        /// <summary>
+        /// ポストをディスライク
+        /// </summary>
+        /// <param name="postID"></param>
+        /// <returns></returns>
+        public ActionResult DislikeAlbum(string albumID)
+        {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Newfeed", "Home");
+            }
+            Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+            try
+            {
+                mongo_Album_DAO.Set_DateLastActivity(albumID, DateTime.Now.ToLocalTime());
+                mongo_Album_DAO.Delete_LikerList(albumID, Session["UserID"].ToString());
+
+                ViewBag.AlbumID = albumID;
+                return AlbumIsLiked(albumID);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

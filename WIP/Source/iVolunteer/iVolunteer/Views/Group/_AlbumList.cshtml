@@ -1,0 +1,93 @@
+﻿@using System.Web.Optimization
+@using iVolunteer.Common;
+@model List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Album>
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jqueryui")
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+
+            <!-- Header -->
+            <div class="row" style="margin-bottom: 15px">
+                <div class="col-md-12" style="margin-top: -20px">
+                    
+                    <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
+                </div>
+            </div>
+            <div class="row">
+
+                <!-- Album 1 -->
+                <div class="col-md-3 col-sm-4">
+                    <div class="photo-album-container">
+                        <div class="photo-album">
+                            @if (item.ImageList.Count != 0 )
+                            {
+                                Random rd = new Random();
+                                int random = rd.Next(0, item.ImageList.Count);
+                                <img src="@item.ImageList.ElementAt(random).ImageInformation.ImageUrl">
+                            }
+                            else
+                            {
+                                <img src="~/Images/my-avata.jpg">
+                            }
+                            <!-- Avata -->
+                            
+                            <div class="album-interaction" onclick="location.href'@Url.Action("DeleteAlbum", "Album", new { albumID = item._id.ToString(),targetID = ViewBag.targetID })'"></div>
+                            <div class="interaction-bar">
+
+                                <!-- Album info -->
+                                <div class="metadata">
+                                    <h4 class="album-title" style="font-weight: bold"><strong>@item.AlbumInformation.AlbumName</strong></h4>
+                                    <span class="album-photo-count" style="font-size: 12px; font-weight: normal"><span class='glyphicon glyphicon-picture'></span> <strong>@item.AlbumInformation.ImageCount</strong></span>
+                                </div>
+
+                                <!-- Interaction Bar -->
+                                <div class="actions-tool">
+                                    <div class="row" style="margin-left: 0; margin-right: 0">
+
+                                        <div class="col-xs-9">
+                                            <ul class="list-album-interaction">
+                                                <li>
+                                                    <i class="glyphicon glyphicon-heart"></i>
+                                                    <span><strong>@item.AlbumInformation.LikeCount</strong></span>
+                                                </li>
+                                                <li>
+                                                    <i class="glyphicon glyphicon-comment"></i>
+                                                    <span><strong>@item.AlbumInformation.CommentCount</strong></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-xs-3" style="text-align: right">
+                                            @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeleteAlbum", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID  }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            @Ajax.ActionLink("Show Image", "AlbumShowImage", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                        </li>
+                        <li>
+                            @Ajax.ActionLink( "Add Image", "AlbumAddImage", "Group", new { albumID = item._id.ToString(),targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { } )
+                        </li>
+                        <li>
+                            @Ajax.ActionLink("Edit Album", "AlbumEditImage", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                        </li>
+                        <li>
+                            @Ajax.ActionLink("Delete Album", "DeleteAlbum", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+}

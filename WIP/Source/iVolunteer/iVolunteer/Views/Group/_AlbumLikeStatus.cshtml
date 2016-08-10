@@ -1,0 +1,31 @@
+﻿@using iVolunteer.Common
+
+@if (ViewBag.IsLiked == true)
+{
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-heart'></span>", "DislikeAlbum", "Group", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.AlbumID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color: rgb(225, 115, 115); font-size: 1.1em" })
+   
+if (ViewBag.LikeCount != 0)
+{
+    <span style="color: #cecece; font-size: 0.8em">@ViewBag.LikeCount</span>
+}
+else
+{
+    <span style="color: #cecece; font-size: 0.8em"></span>
+}
+}
+else
+{
+    @Ajax.RawActionLink("<span class='glyphicon glyphicon-heart'></span>", "LikeAlbum", "Group", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "likeArea" + ViewBag.AlbumID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn-card", @style = "color:gray; font-size: 1.1em" })
+if (ViewBag.LikeCount != 0)
+{
+    <span style="color: #cecece; font-size: 0.8em">@ViewBag.LikeCount</span>
+}
+else
+{
+    <span style="color: #cecece; font-size: 0.8em"></span>
+}
+    
+}
+
+
+
