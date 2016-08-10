@@ -16,7 +16,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public string UserID { get; set; }
         public string RealName { get; set; }
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime Birthday { get; set; }
         public string IdentifyID { get; set; }
         [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng!")]

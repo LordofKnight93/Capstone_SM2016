@@ -27,24 +27,26 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     public class ProjectInformation
     {
         public string ProjectID { get; set; }
-        [Required(ErrorMessage ="Vui lòng nhập tên sự kiện!")]
+        [Required(ErrorMessage ="Vui lòng nhập tên dự án!")]
         public string ProjectName { get; set; }
         public DateTime DateCreate { get; set; }
-        [Required(ErrorMessage ="Vui lòng nhập thời gian bắt đầu!")]
+        [Required(ErrorMessage ="Vui lòng nhập ngày bắt đầu!")]
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateStart { get; set; }
-        [Required(ErrorMessage ="Vui lòng nhập thời gian kết thúc!")]
+        [Required(ErrorMessage ="Vui lòng nhập ngày kết thúc!")]
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [GreaterThanOrEqualTo("DateStart",ErrorMessage ="Ngày kết thúc không thế sớm hơn ngày bắt đầu!")]
+        [GreaterThanOrEqualTo("DateStart",ErrorMessage ="Ngày kết thúc không thể sớm hơn ngày bắt đầu!")]
         [DateEnd(ErrorMessage = "Ngày kết thúc không thể sớm hơn hôm nay!")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateEnd { get; set; }
         [MaxLength(100, ErrorMessage = "Độ dài không quá 100 ký tự!")]
+        [Required(ErrorMessage = "Vui lòng nhập mô tả!")]
         public string ProjectShortDescription { get; set; }
         public string ProjectFullDescription { get; set; }
+        [Required(ErrorMessage ="Vui lòng nhập địa điểm!")]
         public string Location { get; set; }
         public int MemberCount { get; set; }
         public int FollowerCount { get; set; }

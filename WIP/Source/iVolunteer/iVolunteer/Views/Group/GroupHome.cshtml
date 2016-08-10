@@ -57,7 +57,7 @@
                     @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
                 </li>
                 <li class="col-md-2" data-toggle="tab">
-                    @Ajax.ActionLink("Hoạt động", "ActivityHistory", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
+                    @Ajax.ActionLink("Dự án", "ActivityHistory", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
                 </li>
             </ul>
             <div id="panelContent" class="tab-content clearfix">

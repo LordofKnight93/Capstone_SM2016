@@ -60,10 +60,10 @@
                                             @if (ViewBag.IsLeader == true)
                                             {
                                                 <li>
-                                                    @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "AcceptGroupSponsorRequest", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
+                                                    @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "AcceptGroupSponsorRequest", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
                                                 </li>
                                                 <li>
-                                                    @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "DeclineGroupSponsorRequest", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
+                                                    @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "DeclineGroupSponsorRequest", "Project", new { requestID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
                                                 </li>
                                             }
                                         </ul>

@@ -14,7 +14,7 @@
                 <div class="col-sm-3" style="text-align: right; line-height: 60px;">
                     @if (ViewBag.IsLeader == true)
                     {
-                        @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Đề xuất bạn bè</span>", "FriendNotInGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
+                        @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Thêm bạn bè</span>", "FriendNotInGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
                     }
                 </div>
 

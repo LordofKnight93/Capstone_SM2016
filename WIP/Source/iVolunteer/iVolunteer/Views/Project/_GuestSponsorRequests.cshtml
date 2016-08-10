@@ -39,10 +39,10 @@
                                     <div class="project-action-to-user">
                                         <ul class="project-action-to-user-list">
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-check fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "AcceptGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
+                                                @Ajax.RawActionLink("<i class='fa fa-check fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "AcceptGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
                                             </li>
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DeclineGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
+                                                @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DeclineGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
                                             </li>
                                         </ul>
                                     </div>

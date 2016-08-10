@@ -744,5 +744,29 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
+        /// <summary>
+        /// check if a group organize a project
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        public bool Is_Organized(string groupID, string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_GrPr_Relation.FirstOrDefault(rl => rl.GroupID == groupID
+                                                                   && rl.ProjectID == projectID
+                                                                   && rl.Relation == GrPrRelation.ORGANIZE_RELATION
+                                                                   && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

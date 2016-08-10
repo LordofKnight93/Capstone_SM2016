@@ -1693,6 +1693,7 @@ namespace iVolunteer.Controllers
         /// <param name="projectID"></param>
         /// <param name="memberID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RepresentJoinRequest(string groupID, string projectID, string[] memberID)
         {
             try
@@ -1790,6 +1791,7 @@ namespace iVolunteer.Controllers
         /// <param name="projectID"></param>
         /// <param name="memberID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RepresentSponsorRequest(string groupID, string projectID, string[] memberID)
         {
             try
@@ -1848,6 +1850,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult ProjectResign(string groupID, string projectID)
         {
             try
@@ -2280,6 +2283,89 @@ namespace iVolunteer.Controllers
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 postDAO.Delete_Comment(postID, commentID);
                 return GetCommentList(postID, groupID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        /// <summary>
+        /// represent group to send join request to a project
+        /// グループの代表としてプロジェクトへ参加要求をキャンセル
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CancelRepresentJoinRequest(string groupID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO acGrDAO = new SQL_AcGr_Relation_DAO();
+
+                if (acGrDAO.Is_Leader(userID, groupID))
+                {
+                    SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
+                    grPrDAO.Delete_Join_Request(groupID, projectID);
+
+                    return ActionToProject(groupID, projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// represnt group to send sponsor request to sa project
+        /// グループの代表としてプロジェクトに寄付要求をキャンセル
+        /// </summary>
+        /// <param name="groupID"></param>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CancelRepresentSponsorRequest(string groupID, string projectID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcGr_Relation_DAO acGrDAO = new SQL_AcGr_Relation_DAO();
+
+                if (acGrDAO.Is_Leader(userID, groupID))
+                {
+                    SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
+                    grPrDAO.Delete_Sponsor_Request(groupID, projectID);
+
+                    return ActionToProject(groupID, projectID);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
             }
             catch
             {

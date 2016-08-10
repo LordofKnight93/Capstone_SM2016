@@ -27,23 +27,32 @@
                         <li>
                             @Ajax.ActionLink("NHÓM ỦNG HỘ", "SponsoredGroups", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+@if (ViewBag.IsLeader == true)
+{
                         <li>
                             @Ajax.ActionLink("NHÓM MUỐN ỦNG HỘ", "GroupSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+}
                         <li class="divider"></li>
                         <li>
                             @Ajax.ActionLink("CÁ NHÂN ỦNG HỘ", "SponsoredUsers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+@if (ViewBag.IsLeader == true)
+{
                         <li>
                             @Ajax.ActionLink("CÁ NHÂN MUỐN ỦNG HỘ", "UserSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+}
                         <li class="divider"></li>
                         <li>
                             @Ajax.ActionLink("NGƯỜI NGOÀI ỦNG HỘ", "SponsoredGuests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+@if (ViewBag.IsLeader == true)
+{
                         <li>
                             @Ajax.ActionLink("NGƯỜI NGOÀI MUỐN ỦNG HỘ", "GuestSponsorRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+}
                     </ul>
                 </li>
                 <li class="dropdown" data-toggle="tab">
@@ -52,9 +61,12 @@
                         <li>
                             @Ajax.ActionLink("NHÓM THAM GIA", "JoinedGroups", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+@if (ViewBag.IsLeader == true)
+{
                         <li>
                             @Ajax.ActionLink("NHÓM MUỐN THAM GIA", "GroupJoinRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+
                         <li class="divider"></li>
                         <li>
                             @Ajax.ActionLink("CÁ NHÂN MUỐN THAM GIA", "UserJoinRequests", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
@@ -62,13 +74,14 @@
                         <li>
                             @Ajax.ActionLink("CÁ NHÂN ĐƯỢC ĐỀ XUẤT", "SuggestedUsers", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
+}
                     </ul>
                 </li>
                 <li class="dropdown active" data-toggle="tab">
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle">Thành viên <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            @Ajax.ActionLink("QUẢN LÝ", "ProjectLeaders", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
+                            @Ajax.ActionLink("TRƯỞNG DỰ ÁN", "ProjectLeaders", "Project", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#tabprojectmember')" })
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -85,7 +98,7 @@
 
         <!-- Plan -->
         <div id="tabprojectmember" class="tab-pane fade in active">
-            @{ Html.RenderAction("ProjectMembers", "Project", new { projectID = ViewBag.ProjectID });}
+            @{ Html.RenderAction("OrganizedGroups", "Project", new { projectID = ViewBag.ProjectID });}
         </div>
 
     </div>

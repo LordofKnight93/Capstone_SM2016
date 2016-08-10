@@ -58,7 +58,7 @@
                 {
                     <li>
                         @*//Roi su kien*@
-                        @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Rời sự kiện</span>", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia sự kiện này nữa ? " }, new { @class = "btn btn-default action-to-target-link", @type = "button", @id = "project-resign" })
+                        @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Rời dự án</span>", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia dự án này nữa ? " }, new { @class = "btn btn-default action-to-target-link", @type = "button", @id = "project-resign" })
                     </li>
                 }
 

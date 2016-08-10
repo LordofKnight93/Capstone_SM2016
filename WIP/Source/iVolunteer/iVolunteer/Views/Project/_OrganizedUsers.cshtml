@@ -70,7 +70,7 @@
                                     <div class="project-action-to-user">
                                         <ul class="project-action-to-user-list">
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DismissOrganizedUser", "Project", new { organizerID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Xóa" })
+                                                @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DismissOrganizedUser", "Project", new { organizerID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Xóa" })
                                             </li>
                                         </ul>
                                     </div>

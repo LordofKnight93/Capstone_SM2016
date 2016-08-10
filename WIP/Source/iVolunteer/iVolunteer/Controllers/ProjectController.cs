@@ -918,6 +918,7 @@ namespace iVolunteer.Controllers
         /// <param name="memberID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult SetLeader(string memberID, string projectID)
         {
             try
@@ -989,6 +990,7 @@ namespace iVolunteer.Controllers
         /// <param name="leaderID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult SetMember(string leaderID, string projectID)
         {
             try
@@ -1027,6 +1029,7 @@ namespace iVolunteer.Controllers
         /// <param name="memberID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult ExpelMember(string memberID, string projectID)
         {
             try
@@ -1042,6 +1045,12 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
+                    if (relationDAO.Is_Organizer(userID, projectID))
+                    {
+                        string alert = "Cá nhân đồng tổ chức, không thế trục xuất!";
+                        return JavaScript("alert('" + alert + "')");
+                    }
+
                     using (var transaction = new TransactionScope())
                     {
                         try
@@ -1084,6 +1093,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptUserJoinRequest(string requestID, string projectID)
         {
             try
@@ -1153,6 +1163,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptUserSponsorRequest(string requestID, string projectID)
         {
             try
@@ -1208,6 +1219,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineUserJoinRequest(string requestID, string projectID)
         {
             try
@@ -1245,6 +1257,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineUserSponsorRequest(string requestID, string projectID)
         {
             try
@@ -1282,6 +1295,7 @@ namespace iVolunteer.Controllers
         /// <param name="sponsorID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissSponsoredUser(string sponsorID, string projectID)
         {
             try
@@ -1461,6 +1475,7 @@ namespace iVolunteer.Controllers
         /// <param name="sponsorID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissSponsoredGuest(string sponsorID, string projectID)
         {
             try
@@ -1499,6 +1514,7 @@ namespace iVolunteer.Controllers
         /// <param name="sponsorID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptGuestSponsorRequest(string sponsorID, string projectID)
         {
             try
@@ -1539,6 +1555,7 @@ namespace iVolunteer.Controllers
         /// <param name="sponsorID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineGuestSponsorRequest(string sponsorID, string projectID)
         {
             try
@@ -1619,6 +1636,7 @@ namespace iVolunteer.Controllers
         /// <param name="friendID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult InviteUsers(string[] friendID, string projectID)
         {
             try
@@ -1658,6 +1676,7 @@ namespace iVolunteer.Controllers
         /// <param name="suggestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult InviteUser(string suggestID, string projectID)
         {
             try
@@ -1709,6 +1728,7 @@ namespace iVolunteer.Controllers
         /// <param name="suggestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineSuggestedUser(string suggestID, string projectID)
         {
             try
@@ -1917,6 +1937,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptGroupJoinRequest(string requestID, string projectID)
         {
             try
@@ -1978,6 +1999,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AcceptGroupSponsorRequest(string requestID, string projectID)
         {
             try
@@ -2037,6 +2059,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineGroupJoinRequest(string requestID, string projectID)
         {
             try
@@ -2073,6 +2096,7 @@ namespace iVolunteer.Controllers
         /// <param name="requestID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DeclineGroupSponsorRequest(string requestID, string projectID)
         {
             try
@@ -2109,6 +2133,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissOrganizedGroup(string groupID, string projectID)
         {
             // check if parameter valid
@@ -2144,6 +2169,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissSponsoredGroup(string groupID, string projectID)
         {
             // check if parameter valid
@@ -2179,6 +2205,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissJoinedGroup(string groupID, string projectID)
         {
             // check if parameter valid
@@ -2199,6 +2226,11 @@ namespace iVolunteer.Controllers
                 }
 
                 SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
+                if (grPrDAO.Is_Organized(groupID, projectID))
+                {
+                    string alert = "Nhóm đồng tổ chức, không thế xóa!";
+                    return JavaScript("alert('" + alert + "')");
+                }
                 grPrDAO.Delete_Joined_Group(groupID, projectID);
                 return null;
             }
@@ -2214,6 +2246,7 @@ namespace iVolunteer.Controllers
         /// <param name="organizerID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DismissOrganizedUser(string organizerID, string projectID)
         {
             try
@@ -2347,6 +2380,7 @@ namespace iVolunteer.Controllers
         /// <param name="memberID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AddOrganizedUsers(string[] memberID, string projectID)
         {
             try
@@ -2403,6 +2437,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AddOrganizedGroups(string[] groupID, string projectID)
         {
             try
@@ -2535,6 +2570,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult EndProject(string projectID)
         {
             if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
@@ -3302,6 +3338,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult StartRecruiting(string projectID)
         {
             if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)
@@ -3338,6 +3375,7 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult StopRecruiting(string projectID)
         {
             if (String.IsNullOrWhiteSpace(projectID) || Session["UserID"] == null)

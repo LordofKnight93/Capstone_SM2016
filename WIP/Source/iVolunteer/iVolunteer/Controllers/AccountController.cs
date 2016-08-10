@@ -1153,8 +1153,8 @@ namespace iVolunteer.Controllers
                             else
                             {
                                 transaction.Dispose();
-                                ViewBag.Message = "Nhóm trưởng không thể rời nhóm chỉ có 1 nhóm trưởng.";
-                                return PartialView("ErrorMessage");
+                                string alert =  "Trưởng nhóm không thể rời nhóm có 1 trrưởng nhóm.";
+                                return JavaScript("alert('" + alert + "')");
                             }
                         }
                         else
@@ -1219,13 +1219,12 @@ namespace iVolunteer.Controllers
                                 userDAO.Out_Project(userID);
                                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                                 projectDAO.Members_Out(projectID, 1);
-                                
                             }
                             else
                             {
                                 transaction.Dispose();
-                                ViewBag.Message = "Quản lý không thể rời hoạt động chỉ có 1 Quản lý.";
-                                return PartialView("ErrorMessage");
+                                string alert = "Trưởng dự án không thể rời dự án chỉ có 1 trưởng dự án.";
+                                return JavaScript("alert('" + alert + "')");
                             }
                         }
                         else
@@ -1499,6 +1498,7 @@ namespace iVolunteer.Controllers
         /// <param name="friendID"></param>
         /// <param name="projectID"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult SuggestFriends(string[] friendID, string projectID)
         {
             try

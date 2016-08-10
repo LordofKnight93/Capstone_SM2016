@@ -32,6 +32,7 @@
                                 </div>
                                 <div class="col-xs-5 text-input">
                                     @Html.DisplayFor(model => model.RealName, new { htmlAttributes = new { @id = "realName", @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.RealName)
                                 </div>
                             </div>
 
@@ -40,6 +41,7 @@
                                     <label for="gender">Giới tính</label>
                                 </div>
                                                 @(Model.Gender ? "Nam" : "Nữ" )
+                                @Html.HiddenFor(model => model.Gender)
                             </div>
 
                                     <div class="row">
@@ -48,7 +50,8 @@
                                             <label for="birthDay">Ngày sinh</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
-                                            @Html.DisplayFor(model => model.Birthday, new { htmlAttributes = new { @id = "birthDay", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date" } })
+                                            @Html.DisplayFor(model => model.Birthday, new { htmlAttributes = new { @id = "birthDay", @class = "form-control", @type = "date" } })
+                                            @Html.HiddenFor(model => model.Birthday)
                                         </div>
                                     </div>
 
@@ -58,7 +61,8 @@
                                             <label for="identifyID">Chứng minh nhân dân</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
-                                            @Html.DisplayFor(model => model.IdentifyID, new { htmlAttributes = new { @id = "identifyID", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
+                                            @Html.DisplayFor(model => model.IdentifyID, new { htmlAttributes = new { @id = "identifyID", @class = "form-control" } })
+                                            @Html.HiddenFor(model => model.IdentifyID)
                                         </div>
                                     </div>
 

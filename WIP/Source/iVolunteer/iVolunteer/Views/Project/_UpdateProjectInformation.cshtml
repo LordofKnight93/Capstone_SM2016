@@ -55,7 +55,7 @@
                                             <label for="dateEnd">Ngày kết thúc:</label>
                                         </div>
                                         <div class="col-xs-5 text-input">
-                                            @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
+                                            @Html.EditorFor(model => model.DateEnd,"{0:yyyy-MM-dd}", new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date"} })
                                             @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
                                         </div>
                                     </div>

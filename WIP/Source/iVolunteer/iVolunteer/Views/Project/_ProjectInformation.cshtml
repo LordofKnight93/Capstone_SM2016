@@ -64,13 +64,13 @@
     {
         if (ViewBag.IsLeader == true)
         {
-                @Ajax.ActionLink("Kết thúc hoạt động", "EndProject", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc hoạt động, bạn sẽ không thể mở lại hoạt động nay sau khi đã kết thúc ?" }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Kết thúc hoạt động", "EndProject", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc hoạt động, bạn sẽ không thể mở lại hoạt động nay sau khi đã kết thúc ?" }, new { @type = "button", @class = "btn btn-default" })
         }
         if (Model.IsRecruit)
         {
             if (ViewBag.IsLeader == true)
             {
-                @Ajax.ActionLink("Kết thúc tuyển thành viên", "StopRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc tuyển thành viên ?" }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Kết thúc tuyển thành viên", "StopRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc tuyển thành viên ?" }, new { @type = "button", @class = "btn btn-default" })
             }
             else
             {
@@ -81,11 +81,11 @@
         {
             if (ViewBag.IsLeader == true)
             {
-                @Ajax.ActionLink("Bắt đầu tuyển thành viên", "StartRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                @Ajax.ActionLink("Bắt đầu tuyển thành viên", "StartRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
             }
             else
             {
-                <button type="button">Đã kết thúc đợt tuyển thành viên</button>
+                <button type="button">Đã kết thúc tuyển thành viên</button>
             }
         }
     }

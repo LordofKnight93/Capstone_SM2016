@@ -84,6 +84,5 @@ namespace iVolunteer.Common
             if (date1 > date2) return false;
             else return true;
         }
-
     }
 }

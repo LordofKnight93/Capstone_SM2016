@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Transactions;
 using System.Web.Mvc;
@@ -26,6 +27,39 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult FrontPage()
         {
+            if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
+            {
+                HttpCookie cookie = Request.Cookies["Cookie"];
+                string email = Request.Cookies["Cookie"].Values["Email"];
+                //decrypt here
+                string passwod = Request.Cookies["Cookie"].Values["Password"];
+                //decrypt here
+                SQL_Account account = null;
+                try
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                    account = accountDAO.Get_Account_By_Email(email);
+                    if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                       && account.IsConfirm == Status.IS_CONFIRMED)
+                    {
+                        Session["UserID"] = account.UserID;
+                        Session["DisplayName"] = account.DisplayName;
+                        Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                    }
+                    else
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie");
+                        myCookie.Expires = DateTime.Now.AddDays(-1d);
+                        Response.Cookies.Add(myCookie);
+                        return RedirectToAction("FrontPage", "Home");
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
             try
             {
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
@@ -255,6 +289,7 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
             return PartialView("_Login");
         }
         /// <summary>
@@ -300,6 +335,16 @@ namespace iVolunteer.Controllers
                 return PartialView("_Login", loginModel);
             }
             // code save cookie wil be added here later
+            if (loginModel.IsRemember)
+            {
+                HttpCookie cookie = new HttpCookie("Cookie");
+                //need encrypt
+                cookie.Values.Add("Email", loginModel.Email);
+                //need encrypt
+                cookie.Values.Add("Password", loginModel.Password);
+                cookie.Expires = DateTime.Now.AddDays(15);
+                Response.Cookies.Add(cookie);
+            }
 
             //set session information
             Session["UserID"] = account.UserID;
@@ -320,6 +365,9 @@ namespace iVolunteer.Controllers
         public ActionResult LogOut()
         {
             Session.Abandon();
+            HttpCookie myCookie = new HttpCookie("Cookie");
+            myCookie.Expires = DateTime.Now.AddDays(-1d);
+            Response.Cookies.Add(myCookie);
             return RedirectToAction("FrontPage", "Home");
         }
         /// <summary>
