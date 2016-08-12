@@ -65,7 +65,7 @@
                                     <!-- Button -->
                             <div class="row" style="margin-top: 60px">
                                 <div class="col-xs-2 col-xs-offset-7 text-input">
-                                    @Ajax.ActionLink("Hủy", "GroupInformation", "Group", new { projectID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                    @Ajax.ActionLink("Hủy", "GroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                                 </div>
                                 <div class="col-xs-2 text-input">
                                     <button type="submit" class="btn btn-register">CẬP NHẬT</button>
