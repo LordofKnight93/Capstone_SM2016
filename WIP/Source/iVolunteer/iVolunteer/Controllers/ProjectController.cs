@@ -1048,7 +1048,7 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
-                    if (relationDAO.Is_Organizer(userID, projectID))
+                    if (relationDAO.Is_Organizer(memberID, projectID))
                     {
                         string alert = "Cá nhân đồng tổ chức, không thế trục xuất!";
                         return JavaScript("alert('" + alert + "')");
@@ -1061,7 +1061,7 @@ namespace iVolunteer.Controllers
                             if (relationDAO.Delete_Member(memberID, projectID))
                             {
                                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                                userDAO.Out_Group(memberID);
+                                userDAO.Out_Project(memberID);
                                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                                 projectDAO.Members_Out(projectID, 1);
                             }
