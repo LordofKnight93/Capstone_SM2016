@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 
 namespace iVolunteer.Hubs
 {
@@ -23,12 +24,14 @@ namespace iVolunteer.Hubs
             SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
             try
             {
-                bool isConnected = connDAO.Is_Connected(connectionID);
-                if (isConnected == false)
-                {
-                    connDAO.Add_Connection(userID, connectionID);
-                }
-                else return;
+                //bool isConnected = connDAO.Is_Connected(connectionID);
+                //if (isConnected == false)
+                //{
+                //    connDAO.Add_Connection(userID, connectionID);
+                //}
+                //else return;
+                connDAO.Add_Connection(userID, connectionID);
+
             }
             catch
             {
@@ -59,9 +62,9 @@ namespace iVolunteer.Hubs
             }
             return base.OnDisconnected(stopCalled);
         }
-        public void SendMessage(string userID, string friendID, string content, string displayTime)
+        public void SendMessage(string userID, string friendID, string content, string displayTime, string messageID)
         {
-            Clients.Others.getMessage(userID, friendID, content, displayTime);
+            Clients.Others.getMessage(userID, friendID, content, displayTime, messageID);
         }
         public void GetFriendList(string userID)
         {
@@ -71,7 +74,7 @@ namespace iVolunteer.Hubs
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
                 List<SDLink> friendList = userDAO.Get_FriendList(userID);
                 SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
-                List<bool> statusList = connDAO.Get_Online_Status(userID);
+                List<ChatFriend> statusList = connDAO.Get_Online_Status(friendList, userID);
 
                 Clients.Caller.receiveFriendList(JsonConvert.SerializeObject(friendList), JsonConvert.SerializeObject(statusList));
             }

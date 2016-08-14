@@ -20,6 +20,8 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
         public DateTime DateLastActivity { get; set; }
         public List<MessageItem> ItemList { get; set; }
         public List<SDLink> Senders { get; set; }
+        public UnreadItem UnreadItem { get; set; }
+
         public Mongo_Message()
         {
             this._id = ObjectId.GenerateNewId();
@@ -27,10 +29,19 @@ namespace iVolunteer.Models.MongoDB.CollectionClass
             this.DateLastActivity = new DateTime();
             this.ItemList = new List<MessageItem>();
             this.Senders = new List<SDLink>();
+            this.UnreadItem = new UnreadItem();
         }
-
     }
-
+    public class UnreadItem
+    {
+        public string UnreadUser { get; set; }
+        public int UnreadMessage { get; set; }
+        public UnreadItem()
+        {
+            this.UnreadUser = "";
+            this.UnreadMessage = 0;
+        }
+    }
     public class MessageItem
     {
         public ObjectId _id { get; set; }

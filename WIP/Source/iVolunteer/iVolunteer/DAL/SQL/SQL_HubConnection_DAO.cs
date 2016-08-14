@@ -4,7 +4,9 @@ using System.Linq;
 using System.Web;
 using iVolunteer.Models.SQL;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
+using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.DAL.MongoDB;
+using iVolunteer.Models.MongoDB.CollectionClass;
 
 namespace iVolunteer.DAL.SQL
 {
@@ -17,7 +19,7 @@ namespace iVolunteer.DAL.SQL
             relation.ConnectionID = connectionID;
             try
             {
-                using(iVolunteerEntities dbEntitties = new iVolunteerEntities())
+                using (iVolunteerEntities dbEntitties = new iVolunteerEntities())
                 {
                     dbEntitties.SQL_HubConnection.Add(relation);
                     dbEntitties.SaveChanges();
@@ -36,7 +38,7 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_HubConnection.FirstOrDefault(rl => rl.ConnectionID == connectionID);
-                    return result != null ;
+                    return result != null;
                 }
             }
             catch
@@ -91,30 +93,45 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        public List<bool> Get_Online_Status(string userID)
+        public List<ChatFriend> Get_Online_Status(List<SDLink> friends, string userID)
         {
-            List<bool> statusList = new List<bool>();
+            //List<bool> statusList = new List<bool>();
+            List<ChatFriend> chatFriend = new List<ChatFriend>();
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
+            Mongo_Message_DAO messDAO = new Mongo_Message_DAO();
+            //int no = 0;
             try
             {
-                List<SDLink> friends = new List<SDLink>();
-                friends = userDAO.Get_FriendList(userID);
                 int index = 0;
-                foreach(var item in friends)
+                foreach (var item in friends)
                 {
-                    if (Is_Friend_Online(item.ID) == true)
+                    UnreadItem unread = messDAO.Get_UnreadMss(userID, item.ID);
+                    //The two have talked before
+                    if (unread != null)
                     {
-                        statusList.Add(true);
+                        if (Is_Friend_Online(item.ID) == true)
+                        {
+                            chatFriend.Add(new ChatFriend(item, true, unread));
+                        }
+                        else
+                            chatFriend.Add(new ChatFriend(item, false, unread));
                     }
-                    else statusList.Add(false);
+                    //The two haven't had any conversation before
+                    else
+                    {
+                        if (Is_Friend_Online(item.ID) == true)
+                            chatFriend.Add(new ChatFriend(item, true, new UnreadItem()));
+                        else
+                            chatFriend.Add(new ChatFriend(item, false, new UnreadItem()));
+                    }
                     index++;
                 }
-                return statusList;
+                return chatFriend;
             }
             catch
             {
                 throw;
             }
-        } 
+        }
     }
 }

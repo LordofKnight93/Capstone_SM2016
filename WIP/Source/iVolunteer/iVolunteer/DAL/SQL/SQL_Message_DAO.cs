@@ -89,5 +89,20 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        public List<string> Get_MessageIDs(string userID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntites = new iVolunteerEntities())
+                {
+                    var result = dbEntites.SQL_Message.Where(ms => ms.UserID == userID).Select(rl => rl.MessageID).ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

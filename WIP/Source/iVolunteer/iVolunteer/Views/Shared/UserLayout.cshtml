@@ -1470,6 +1470,11 @@
                 event.preventDefault();
             }
         }
+        function isChatBlank(event) {
+            if ($("#comment" + postID).val() == null || $("#comment" + postID).val().trim() == "") {
+                event.preventDefault();
+            }
+        }
 
         function ldMrePstNf(event) {
             $("#loadMorePostNewfeedLink").remove();

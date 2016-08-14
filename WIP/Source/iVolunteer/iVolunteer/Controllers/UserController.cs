@@ -557,19 +557,51 @@ namespace iVolunteer.Controllers
             }
         }
         /// <summary>
+        /// Add unread message
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="friendID"></param>
+        /// <returns></returns>
+        public ActionResult AddUnreadMsage(string userID, string friendID, int no, string messageID)
+        {
+            try
+            {
+                //SQL_Message_DAO messageDAO = new SQL_Message_DAO();
+                Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
+                //get messageID
+                //string messageID = messageDAO.Get_MessageID(userID, friendID);
+                mgMessageDAO.Set_UnreadMess(messageID, no);
+                return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+                throw;
+            }
+        }
+        /// <summary>
         /// メッセージを作成
         /// </summary>
         /// <param name="messageID"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public JsonResult CreateMessage(string messageID, string content)
+        public JsonResult CreateMessage(string friendID, string messageID, string content)
         {
             string userID = Session["UserID"].ToString();
             try
             {
                 Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
-                DateTime time = mgMessageDAO.Add_Message_Item(messageID, userID, content);
-
+                DateTime time = new DateTime();
+                //If friend is offline --> Add unread message
+                SQL_HubConnection_DAO Dao = new SQL_HubConnection_DAO();
+                if (!Dao.Is_Friend_Online(friendID))
+                {
+                    time = mgMessageDAO.Add_Message_Item_Unread(messageID, userID, content, friendID);
+                }
+                else
+                {
+                    time = mgMessageDAO.Add_Message_Item(messageID, userID, content, friendID);
+                }
                 //FormatTime before showing;
                 var displayTime = Format_Time(time);
 
@@ -822,6 +854,53 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        public ActionResult GetCurrentChatFriends()
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                //Get messageIDs
+                SQL_Message_DAO mess = new SQL_Message_DAO();
+                List<string> messageIDs = mess.Get_MessageIDs(userID);
+
+                Mongo_Message_DAO messDAO = new Mongo_Message_DAO();
+                List<SDLink> friends = messDAO.Get_Recent_Chat_Users(messageIDs, userID);
+                SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
+                List<ChatFriend> chatFriend = connDAO.Get_Online_Status(friends, userID);
+
+                return PartialView("_ChatFriendList", chatFriend);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public ActionResult GetFriendList()
+        {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            string userID = Session["UserID"].ToString();
+            try
+            {
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                List<SDLink> friends = userDAO.Get_FriendList(userID);
+                SQL_HubConnection_DAO connDAO = new SQL_HubConnection_DAO();
+                List<ChatFriend> chatFriend = connDAO.Get_Online_Status(friends, userID);
+                return PartialView("_ChatFriendList", chatFriend);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

@@ -440,6 +440,7 @@
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\ChatFriend.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\FinanceItem.cs" />
     <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\InsideDonator.cs" />
@@ -711,6 +712,7 @@
     <Content Include="Views\Project\_AlbumList.cshtml" />
     <Content Include="Views\Project\_AlbumShowImage.cshtml" />
     <Content Include="Views\Project\_AlbumWriteComment.cshtml" />
+    <Content Include="Views\User\_ChatFriendList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
