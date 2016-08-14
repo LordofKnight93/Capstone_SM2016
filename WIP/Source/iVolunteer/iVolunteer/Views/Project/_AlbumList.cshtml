@@ -15,7 +15,7 @@
             <!-- Header -->
             <div class="row" style="margin-bottom: 15px">
                 <div class="col-md-12" style="margin-top: -20px">
-                    
+
                     <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="col-md-3 col-sm-4">
                     <div class="photo-album-container">
                         <div class="photo-album">
-                            @if (item.ImageList.Count != 0 )
+                            @if (item.ImageList.Count != 0)
                             {
                                 Random rd = new Random();
                                 int random = rd.Next(0, item.ImageList.Count);
@@ -36,7 +36,7 @@
                                 <img src="~/Images/my-avata.jpg">
                             }
                             <!-- Avata -->
-                            
+
                             <div class="album-interaction" onclick="location.href'@Url.Action("DeleteAlbum", "Album", new { albumID = item._id.ToString(),targetID = ViewBag.targetID })'"></div>
                             <div class="interaction-bar">
 
@@ -62,29 +62,40 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <div class="col-xs-3" style="text-align: right">
-                                            @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeleteAlbum", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID  }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
-                                        </div>
+                                        @if (ViewBag.Role == "Leader" || item.AlbumInformation.Creator.ID == ViewBag.UserID)
+                                        {
+                                            <div class="col-xs-3" style="text-align: right">
+                                                @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeleteAlbum", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                   
+
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
                             @Ajax.ActionLink("Show Image", "AlbumShowImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
                         </li>
-                        <li>
-                            @Ajax.ActionLink( "Add Image", "AlbumAddImage", "Project", new { albumID = item._id.ToString(),targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { } )
-                        </li>
-                        <li>
-                            @Ajax.ActionLink("Edit Album", "AlbumEditImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
-                        </li>
-                        <li>
-                            @Ajax.ActionLink("Delete Album", "DeleteAlbum", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                        @if (item.AlbumInformation.Creator.ID == ViewBag.UserID)
+                        {
+                            <li>
+                                @Ajax.ActionLink("Add Image", "AlbumAddImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                            </li>
+                            <li>
+                                @Ajax.ActionLink("Edit Album", "AlbumEditImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                            </li>
+                        }
+                        @if (ViewBag.Role == "Leader" || item.AlbumInformation.Creator.ID == ViewBag.UserID)
+                        {
+                            <li>
+                                @Ajax.ActionLink("Delete Album", "DeleteAlbum", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

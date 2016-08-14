@@ -69,6 +69,11 @@ a::-moz-focus-inner {
     border: none;
     border-bottom: 2px solid #fff;
 }*/
+#list-image #links a img {
+    float: left;
+    width: 25%;
+    height: auto;
+}
 
 
 /* Custom Grid View */

@@ -57,7 +57,6 @@ namespace iVolunteer.Controllers
         //    Session["Album"] = albumID;
         //    return View("ShowAlbum", model);
         //}
-
         //[HttpGet]
         //public ActionResult CreateAlbum(string targetID)
         //{

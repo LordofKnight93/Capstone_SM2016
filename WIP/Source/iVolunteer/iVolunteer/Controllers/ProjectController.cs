@@ -3680,6 +3680,12 @@ namespace iVolunteer.Controllers
         }
         public PartialViewResult GetAlbumList(string projectID)
         {
+            string userID = Session["UserID"].ToString();
+            //Leader will be able to Post in Public Section(in next View returned)
+            SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+            if (relation.Is_Leader(userID, projectID)) ViewBag.Role = "Leader";
+            else ViewBag.Role = "Member";
+            ViewBag.UserID = userID;
             ViewBag.targetID = projectID;
             try
             {
@@ -3779,13 +3785,24 @@ namespace iVolunteer.Controllers
             {
                 try
                 {
+
                     Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
                     SQL_AcAl_Relation_DAO relation = new SQL_AcAl_Relation_DAO();
                     SQL_AcIm_Relation_DAO relationIm = new SQL_AcIm_Relation_DAO();
+                    SQL_AcPr_Relation_DAO relaPr = new SQL_AcPr_Relation_DAO();
                     SQL_Album_DAO sqlAlbum = new SQL_Album_DAO();
+                    int type;
+                    if (relaPr.Is_Leader(userID, targetID) || relation.Is_Creator(userID, albumID))
+                    {
+                        type = 1;
+                    }
+                    else
+                    {
+                        return GetAlbumList(targetID);
+                    }
                     //Delete all relation related to this Album
                     relationIm.Delete_all_relations_Im(albumID);
-                    relation.Delete_relation_Al(userID, albumID, AcAlRelation.CREATOR_RELATION);
+                    relation.Delete_relation_Al(albumID, type);
                     sqlAlbum.Delete_Image(albumID);
                     sqlAlbum.Delete_Album(albumID);
                     //Delete mongo
@@ -3918,7 +3935,7 @@ namespace iVolunteer.Controllers
                 mongo_Album_DAO.Set_DateLastActivity(albumID, DateTime.Now.ToLocalTime());
                 mongo_Album_DAO.Add_LikerList(albumID, creator);
 
-                ViewBag.postID = albumID;
+                ViewBag.albumID = albumID;
                 return AlbumIsLiked(albumID);
             }
             catch
@@ -3957,7 +3974,7 @@ namespace iVolunteer.Controllers
                 throw;
             }
             ViewBag.LikeCount = likeCount;
-            ViewBag.PostID = albumID;
+            ViewBag.AlbumID = albumID;
             return PartialView("_AlbumLikeStatus");
         }
         /// <summary>

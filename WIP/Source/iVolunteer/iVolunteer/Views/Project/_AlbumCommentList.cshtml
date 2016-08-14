@@ -23,7 +23,7 @@
 @if (ViewBag.LoadMore == true)
 {
     <div class="loadAllCmt">
-        @Ajax.ActionLink("Hiện tất cả bình luận", "LoadOtherComment", "Project", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.AlbumID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.AlbumID, @onclick = "loadMoreComment('" + ViewBag.AlbumID + "')" })
+        @Ajax.ActionLink("Hiện tất cả bình luận", "AlbumLoadOtherComment", "Project", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.AlbumID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.AlbumID, @onclick = "loadMoreComment('" + ViewBag.AlbumID + "')" })
     </div>
 }
 <script>

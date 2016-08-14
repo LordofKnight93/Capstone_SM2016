@@ -196,14 +196,14 @@
 
         console: window.console && typeof window.console.log === 'function' ?
             window.console :
-            {log: function () {}},
+            { log: function () { } },
 
         // Detect touch, transition, transform and background-size support:
         support: (function (element) {
             var support = {
-                    touch: window.ontouchstart !== undefined ||
-                        (window.DocumentTouch && document instanceof DocumentTouch)
-                },
+                touch: window.ontouchstart !== undefined ||
+                    (window.DocumentTouch && document instanceof DocumentTouch)
+            },
                 transitions = {
                     webkitTransition: {
                         end: 'webkitTransitionEnd',
@@ -440,8 +440,9 @@
                 .removeClass(options.singleClass)
                 .removeClass(options.leftEdgeClass)
                 .removeClass(options.rightEdgeClass);
+
             if (options.hidePageScrollbars) {
-                document.body.style.overflow = this.bodyOverflowStyle;
+                document.body.style.overflow = 'auto';
             }
             if (this.options.clearSlides) {
                 this.resetSlides();
@@ -805,35 +806,35 @@
 
         onkeydown: function (event) {
             switch (event.which || event.keyCode) {
-            case 13: // Return
-                if (this.options.toggleControlsOnReturn) {
-                    this.preventDefault(event);
-                    this.toggleControls();
-                }
-                break;
-            case 27: // Esc
-                if (this.options.closeOnEscape) {
-                    this.close();
-                }
-                break;
-            case 32: // Space
-                if (this.options.toggleSlideshowOnSpace) {
-                    this.preventDefault(event);
-                    this.toggleSlideshow();
-                }
-                break;
-            case 37: // Left
-                if (this.options.enableKeyboardNavigation) {
-                    this.preventDefault(event);
-                    this.prev();
-                }
-                break;
-            case 39: // Right
-                if (this.options.enableKeyboardNavigation) {
-                    this.preventDefault(event);
-                    this.next();
-                }
-                break;
+                case 13: // Return
+                    if (this.options.toggleControlsOnReturn) {
+                        this.preventDefault(event);
+                        this.toggleControls();
+                    }
+                    break;
+                case 27: // Esc
+                    if (this.options.closeOnEscape) {
+                        this.close();
+                    }
+                    break;
+                case 32: // Space
+                    if (this.options.toggleSlideshowOnSpace) {
+                        this.preventDefault(event);
+                        this.toggleSlideshow();
+                    }
+                    break;
+                case 37: // Left
+                    if (this.options.enableKeyboardNavigation) {
+                        this.preventDefault(event);
+                        this.prev();
+                    }
+                    break;
+                case 39: // Right
+                    if (this.options.enableKeyboardNavigation) {
+                        this.preventDefault(event);
+                        this.next();
+                    }
+                    break;
             }
         },
 
@@ -1162,7 +1163,7 @@
                             .test(prop)) {
                         try {
                             return $.parseJSON(prop);
-                        } catch (ignore) {}
+                        } catch (ignore) { }
                     }
                     return prop;
                 }
@@ -1190,7 +1191,7 @@
                     if (this.list[i] === index ||
                             this.getItemProperty(this.list[i], urlProperty) ===
                                 this.getItemProperty(index, urlProperty)) {
-                        index  = i;
+                        index = i;
                         break;
                     }
                 }

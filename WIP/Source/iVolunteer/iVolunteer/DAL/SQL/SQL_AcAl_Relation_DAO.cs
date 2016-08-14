@@ -29,14 +29,14 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
-        public bool Delete_relation_Al(string userID, string albumID, int type)
+        public bool Delete_relation_Al(string albumID, int type)
         {
             try
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_AcAl_Relation.FirstOrDefault(rl => rl.UserID == userID
-                                                                   && rl.AlbumID == albumID
+                    var result = dbEntities.SQL_AcAl_Relation.FirstOrDefault(rl =>
+                                                                    rl.AlbumID == albumID
                                                                    && rl.Relation == AcAlRelation.CREATOR_RELATION);
                     if (result != null)
                     {
