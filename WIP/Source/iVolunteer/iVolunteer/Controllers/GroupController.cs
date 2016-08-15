@@ -2382,18 +2382,49 @@ namespace iVolunteer.Controllers
         /// <param name="albumID"></param>
         /// <returns></returns>
 
-        public ActionResult AlbumAddImage(string albumID)
+        public int checkRoleAlbum(string albumID, string targetID)
+        {
+            int role;
+            string userID = Session["UserID"].ToString();
+            SQL_AcAl_Relation_DAO relation = new SQL_AcAl_Relation_DAO();
+            SQL_AcGr_Relation_DAO relaGr = new SQL_AcGr_Relation_DAO();
+            if (relation.Is_Creator(userID, albumID) || relaGr.Is_Leader(userID, targetID))
+            {
+                role = 1;
+            }
+            else
+            {
+                role = 0;
+            }
+            return role;
+        }
+        public ActionResult AlbumAddImage(string albumID, string targetID)
         {
             ViewBag.AlbumID = albumID;
             Session["Album"] = albumID;
-            return PartialView("_AlbumAddImage");
+            if (checkRoleAlbum(albumID, targetID) == 1)
+            {
+                return PartialView("_AlbumAddImage");
+            }
+            else
+            {
+                return GetAlbumList(targetID);
+            }
+
         }
         public ActionResult AlbumEditImage(string albumID, string targetID)
         {
             ViewBag.targetID = targetID;
             ViewBag.AlbumID = albumID;
             Session["Album"] = albumID;
-            return PartialView("_AlbumEditImage");
+            if (checkRoleAlbum(albumID, targetID) == 1)
+            {
+                return PartialView("_AlbumEditImage");
+            }
+            else
+            {
+                return GetAlbumList(targetID);
+            }
         }
         public ActionResult AlbumShowImage(string albumID, string targetID)
         {
@@ -2529,7 +2560,7 @@ namespace iVolunteer.Controllers
                     SQL_Album_DAO sqlAlbum = new SQL_Album_DAO();
                     SQL_AcPr_Relation_DAO relaPr = new SQL_AcPr_Relation_DAO();
                     int type;
-                    if (relaPr.Is_Leader(userID, targetID) || relation.Is_Creator(userID, albumID))
+                    if (checkRoleAlbum(albumID,targetID)==1)
                     {
                         type = 1;
                     }

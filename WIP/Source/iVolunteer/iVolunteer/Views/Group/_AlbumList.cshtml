@@ -2,27 +2,27 @@
 @using iVolunteer.Common;
 @model List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Album>
 @*@Styles.Render("~/Content/css")
-@Scripts.Render("~/bundles/modernizr")
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/jqueryui")*@
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryui")*@
 @if (Model != null)
 {
-    foreach (var item in Model)
-    {
-        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
 
-            <!-- Header -->
-            <div class="row" style="margin-bottom: 15px">
-                <div class="col-md-12" style="margin-top: -15px">
-                    <h4>Danh sách Album ảnh</h4>
-                    <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
-                </div>
+    <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+
+        <!-- Header -->
+        <div class="row" style="margin-bottom: 15px">
+            <div class="col-md-12" style="margin-top: -15px">
+                <h4>Danh sách Album ảnh</h4>
+                <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
             </div>
+        </div>
 
-            <div class="row">
-
-                <!-- Album 1 -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+            <!-- Album 1 -->
                 <div class="col-md-4 col-sm-6">
                     <div class="photo-album-container" onclick="showAlbumImage('@item._id.ToString()', '@ViewBag.targetID')">
                         <div class="photo-album">
@@ -78,7 +78,8 @@
                     </div>
 
                 </div>
-                @*<div class="navbar-collapse collapse">
+            }
+            @*<div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
                             @Ajax.ActionLink("Show Image", "AlbumShowImage", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
@@ -100,7 +101,7 @@
                         }
                     </ul>
                 </div>*@
-            </div>
         </div>
-    }
+    </div>
+
 }
