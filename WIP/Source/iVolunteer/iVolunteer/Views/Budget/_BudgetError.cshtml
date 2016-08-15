@@ -1,7 +1,3 @@
-﻿<div class="row">
-    <div class="col-sm-12">
-        <h4>@ViewBag.Message</h4>
-        @{ Html.RenderAction("DetailBudgetRecord", "Budget", new { projectID = ViewBag.ProjectID });}
-
-    </div>
+﻿<div>
+    <span class="text-danger" id="error-text">@ViewBag.Message</span>
 </div>

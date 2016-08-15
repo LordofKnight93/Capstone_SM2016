@@ -98,9 +98,9 @@
                             {
                                 <td style="text-align: center">
                                     <!--<a><i class="material-icons md-20">edit</i></a>-->
-                                    @Ajax.ActionLink("edit", "EditBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "dialog-edit-budget-item", InsertionMode = InsertionMode.Replace, OnSuccess = "openDialog" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    @Ajax.ActionLink("edit", "EditBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "dialog-div", InsertionMode = InsertionMode.Replace, OnSuccess = "openDialog('Sửa thông tin')" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
                                     @*<a class="btn btn-image" data-toggle="tooltip" title="Xóa" onclick="location.href ='@Url.Action("DeleteBudgetItem","Budget", new { BudgetRecordID = ViewBag.BudgetRecordID, itemContent = item.Content.ToString()})'"><i class="material-icons md-20">delete</i></a>*@
-                                    @Ajax.ActionLink("delete", "DeleteBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "budgetItemDetails" + ViewBag.BudgetRecordID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn muốn xóa " + item.Content + " ?" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    @Ajax.ActionLink("delete", "DeleteBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace, Confirm = "Bạn muốn xóa " + item.Content + " ?" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
                                 </td>
                             }
                         </tr>
@@ -120,86 +120,6 @@
                     </tr>
                 </tbody>
             </table>
-            @*<div class="popover-markup">
-                <div class="head hide">
-
-                </div>
-                <div class="content hide">
-                    <div style="width: 300px" id="editEachFieldBudgetItem">
-
-                    </div>
-                </div>
-            </div>*@
-
-            <div id="dialog-edit-budget-item" title="Sửa thông tin">
-
-            </div>
-
-            <script>
-                function openDialog() {
-                    $("#dialog-edit-budget-item").dialog(
-                        {
-                            bgiframe: true,
-                            autoOpen: true,
-							create: function (event, ui) {
-                                $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
-                            },
-                            height: 380,
-                            width: 740,
-                            modal: true
-                        }
-                    );
-                };
-                //function openPopover() {
-                //    //open popup over
-                //    $('.material-icons.md-20.trigger').popover({
-                //        html: true,
-                //        autoOpen: true,
-                //        container: $('#budgetRecordDetails'),
-                //        placement: 'top',
-                //        title: '<span class="text-info"><strong>Sửa thông tin</strong></span>',
-                //        content: function () {
-                //            return '<div id="edit-budget-item-info"></div>';
-                //        },
-                //        viewport: {
-                //            selector: 'body',
-                //            padding: 10
-                //        }
-                //    });
-                //}
-
-                //$('#txt-edit-budget-item-content').popover({
-                //    html: true,
-                //    container: $('#budgetRecordDetails'),
-                //    placement: 'top',
-                //    title: '<span class="text-info"><strong>Sửa thông tin</strong></span>',
-                //    content: function () {
-                //        return '<div id="edit-budget-item-info"></div>';
-                //    },
-                //    viewport: {
-                //        selector: 'body',
-                //        padding: 10
-                //    }
-                //})
-
-                //$('btn.btn-image.clearform').click(function (e) {
-                //    $('[data-toggle=popover]').each(function () {
-                //        // hide any open popovers when the anywhere else in the body is clicked
-                //        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                //            $(this).popover('hide');
-                //        }
-                //    });
-                //});
-
-                //$('body').on('click', function (e) {
-                //    $('[data-toggle=popover]').each(function () {
-                //        // hide any open popovers when the anywhere else in the body is clicked
-                //        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                //            $(this).popover('hide');
-                //        }
-                //    });
-                //});
-            </script>
         </div>
     </div>
 

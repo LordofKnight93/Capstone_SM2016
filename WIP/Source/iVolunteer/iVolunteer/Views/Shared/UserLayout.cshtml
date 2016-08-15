@@ -6,15 +6,18 @@
     <title>@ViewBag.Title</title>
     <link rel="icon" href="~/Images/logo_lite.png" type="image/x-icon" sizes="16x16">
     @*<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.9.2/themes/blitzer/jquery-ui.css" rel="Stylesheet" type="text/css" />*@
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+    @*<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />*@
     <link href="/Content/jQuery.FileUpload/css/jquery.fileupload.css" rel="stylesheet" />
     <link href="/Content/jQuery.FileUpload/css/jquery.fileupload-ui.css" rel="stylesheet" />
     <link href="/Content/blueimp-gallery2/css/blueimp-gallery.css" rel="stylesheet" />
     <link href="/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css" rel="stylesheet" />
+    <link href="~/Content/justifiedGallery.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/font-awesome.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    @*<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>*@
+    <link href="~/Content/font-family.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 
 </head>
@@ -120,6 +123,19 @@
         </div>
     </div>
 
+    <!-- Modal normal -->
+    <div id="popup-normal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row" id="popup-content-normal">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Task Detail Form -->
     <div id="taskdetail" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
@@ -134,8 +150,14 @@
     </div>
 	<!-- Snackbar Notify -->
     <div class="snackbar" id="snackbar">dfsdfdsgdf</div>
+
+    <!-- Div for Dialog -->
+    <div id="dialog-div"></div>
+
     <!--SCRIPT ALBUM-->
     <script src="~/Scripts/jquery-2.1.4.min.js"></script>
+    <script src="~/scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/scripts/jquery.justifiedGallery.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/scripts/jquery.validate.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
@@ -152,9 +174,9 @@
     <script src="/scripts/jQuery.FileUpload/jquery.fileupload-image.js"></script>
     <script src="/scripts/jQuery.FileUpload/jquery.fileupload-validate.js"></script>
     <script src="/scripts/jQuery.FileUpload/jquery.fileupload-ui.js"></script>
-    <script src="/scripts/blueimp-gallery2/js/blueimp-gallery-indicator.js"></script>
     <script src="/scripts/blueimp-gallery2/js/blueimp-gallery.js"></script>
     <script src="/scripts/blueimp-gallery2/js/jquery.blueimp-gallery.js"></script>
+    <script src="~/scripts/blueimp-gallery2/js/blueimp-gallery-indicator.min.js"></script>
 
    
     @RenderSection("scripts", required: false)
@@ -162,6 +184,17 @@
     <script src="~/signalr/hubs"></script>
     <script type="text/javascript" src="~/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
     <link rel="stylesheet" href="~/fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+
+    @* ----------------------------------------- Heart beat Session -----------------------------------------------*@
+    <script language="javascript" type="text/javascript">
+        function heartBeat() {
+            $.get("/Shared/KeepAlive.ashx", function (data) { });
+        }
+
+        $(function () {
+            setInterval("heartBeat()", 1000 * 30); // 30s gửi request một lần
+        });
+    </script>
 
     @*  ------------------------- LOAD MORE COMMENT --------------------------- *@
     <script>

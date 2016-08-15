@@ -78,3 +78,25 @@
     </div>
 
 </div>
+
+@section scripts {
+    <script type="text/javascript">
+        /************************************ Script for Album ******************************************************/
+        function showAlbumImage(albumID, targetID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AlbumShowImage", "Group")",
+                data: {
+                    albumID: albumID,
+                    targetID: targetID
+                },
+                beforeSend: function () {
+                    OnBegin('#albumList');
+                },
+                success: function (response) {
+                    $("#albumList").html(response);
+                }
+            });
+        };
+    </script>
+}

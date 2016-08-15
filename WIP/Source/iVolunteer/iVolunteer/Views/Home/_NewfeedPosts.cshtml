@@ -25,13 +25,13 @@ else
                                 {
                                     <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
                                             <td class="td">
-                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="glyphicon glyphicon-pencil icon-flipped"></i>
+                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="fa fa-caret-right fa-cus-14 fa-cus-gray" style="margin: 0 10px;"></i>
                                                 <a href="@Url.Action("GroupHome","Group", new { groupID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a>
                                             </td>
                                 }
                             </tr>
                             <tr>
-                                <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime()</td>
+                                <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")</td>
                             </tr>
                         </table>
                     </div>
@@ -102,13 +102,13 @@ else
                                                 {
                                                     <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
                                                             <td class="td">
-                                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="glyphicon glyphicon-pencil icon-flipped"></i>
+                                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="fa fa-caret-right fa-cus-14 fa-cus-gray" style="margin: 0 10px;"></i>
                                                                 <a href="@Url.Action("ProjectHome","Project", new { projectID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a>
                                                             </td>
                                                 }
                                             </tr>
                                             <tr>
-                                                <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime()</td>
+                                                <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")</td>
                                             </tr>
                                         </table>
                                     </div>

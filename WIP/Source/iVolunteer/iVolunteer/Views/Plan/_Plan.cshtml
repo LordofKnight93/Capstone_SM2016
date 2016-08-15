@@ -4,7 +4,6 @@
             <div class="row">
 
                 <!-- On this day task -->
-                @*@{Html.Partial("_ProjectPlanThisdayTask");}*@
                 <div class="col-sm-5" id="testplantarget">
 
                     <!-- Task Count -->
@@ -25,7 +24,7 @@
                 </div>
 
                 <!-- Project All Plan -->
-                <div class="col-sm-7">
+                <div class="col-sm-7" id="planPhaseAll">
 
                     <!-- Phase -->
                     <div id="updatePlanPhaseBox">
@@ -39,7 +38,7 @@
                             <div class="col-sm-12">
                                 <div class="card-panel card-grey">
                                     <!--<label style="font-weight: bold; color: #049f88;">THÊM GIAI ĐOẠN ...</label>-->
-                                    @Ajax.ActionLink("THÊM  GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                    @Ajax.ActionLink("THÊM GIAI ĐOẠN ...", "AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addPlanPhaseForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                                     <div id="addPlanPhaseForm">
 
                                     </div>
@@ -47,6 +46,20 @@
                             </div>
                         </div>
                     }
+
+                    <div class="row">
+                        <div class="col-sm-12" style="margin-top: 10px;margin-bottom: 7px;">
+                            <div id="showphasecompleted">
+                                @Ajax.ActionLink("HIỆN THỊ GIAI ĐOẠN ĐÃ HOÀN THÀNH...", "DetailPlanPhaseIsCompleted", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "planPhaseIsCompleted", InsertionMode = InsertionMode.Replace, OnSuccess = "replaceButtonHidePhaseCompleted()" }, new { @style = "color: #000; font-weight: bold; font-size: small; background-color: #eff0f2; padding: 5px; cursor: pointer" })
+                            </div>
+                            <div id="hidephasecompleted" style="display: none">
+                                <a style="color: #000; font-weight: bold; font-size: small; background-color: #eff0f2; padding: 5px; cursor: pointer" onclick="replaceButtonShowPhaseCompleted()">ẨN CÁC GIAI ĐOẠN ĐÃ HOÀN THÀNH</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="planPhaseIsCompleted">
+                    </div>
 
                 </div>
             </div>

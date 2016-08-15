@@ -1,64 +1,55 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.TeamFoundDonator
 
-@using (Ajax.BeginForm("AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID, isLeader = ViewBag.IsLeader }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+@using (Ajax.BeginForm("AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Cá nhân/ tổ chức ủng hộ hoặc quỹ nhóm ..." } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Information, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.Information, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Information, new { htmlAttributes = new { @class = "form-control", @placeholder = "Thông tin ..." } })
                 @Html.ValidationMessageFor(model => model.Information, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số tiền ..." } })
                 @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ReceiveDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @Html.EditorFor(model => model.ReceiveDate, new { htmlAttributes = new { @class = "form-control", @type = "date"} })
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.ReceiveDate, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày nhận tiền ...", @onfocus = "(this.type='date')", @onblur = "(this.type='text')" } })
                 @Html.ValidationMessageFor(model => model.ReceiveDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Method, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
                 @Html.DropDownListFor(model => model.Method, new SelectListItem[] {
                                                                     new SelectListItem() {Text = "TIỀN MẶT", Value = "1" },
-                                                                    new SelectListItem() {Text = "CHUYỂN KHOẢN", Value = "2" } }, 
+                                                                    new SelectListItem() {Text = "CHUYỂN KHOẢN", Value = "2" } },
                                                                     new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Method, "", new { @class = "text-danger" })
             </div>
+
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsReceived, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-8">
-                @*<div class="checkbox">
-                    @Html.EditorFor(model => model.IsReceived)
-                    @Html.ValidationMessageFor(model => model.IsReceived, "", new { @class = "text-danger" })
-                </div>*@
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="checkbox">
                     @Html.CheckBoxFor(model => model.IsReceived)
-                    @Html.ValidationMessageFor(model => model.IsReceived, "", new { @class = "text-danger" })
                     @Html.LabelFor(model => model.IsReceived)
                 </div>
             </div>

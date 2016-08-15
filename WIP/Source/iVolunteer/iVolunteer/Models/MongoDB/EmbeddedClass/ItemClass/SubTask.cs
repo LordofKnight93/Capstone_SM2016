@@ -22,6 +22,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         public SDLink AssignPeople { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
         [DisplayName("Hạn cuối:")]
+		[Required(ErrorMessage = "Vui lòng nhập hạn cuối.")]
         public DateTime Deadline { get; set; }
         [DisplayName("Ưu tiên:")]
         public int Priolity { get; set; }

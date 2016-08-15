@@ -1,0 +1,57 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PlanPhaseInformation>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="row" id="@("completed-phase" + item.PlanPhaseID)">
+            <div class="col-sm-12">
+                <div class="card-panel card-grey" style="margin-bottom: 10px;">
+                    <div class="plan-phase-panel">
+                        <!-- Interaction button -->
+                        @if (ViewBag.IsLeader == true)
+                        {
+                            <div class="btn-plan-phase-delete">
+                                @Ajax.ActionLink("autorenew", "ReWorkPlanPhase", "Plan", new { planPhaseID = @item.PlanPhaseID }, new AjaxOptions { UpdateTargetId = "updatePlanPhaseBox", InsertionMode = InsertionMode.Replace, OnSuccess = "removeReWorkPhase('"+ @item.PlanPhaseID + "')" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                            </div>
+                        }
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <div class="row">
+                                    <!-- Info -->
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                 <label id="@("phase-name-" + item.PlanPhaseID)" class="txt-complete">@item.Name.ToUpper()</label>
+                                            </div>
+                                            <div class="col-xs-12">
+                                                    <label class="txt-complete" id="@("phase-time-" + item.PlanPhaseID)" style="font-size: 14px; color: #049f88;">@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top: -5px">
+                                <div class="divider-holizon"></div>
+                            </div>
+                        </div>
+                        <!-- Detail -->
+                        <div class="row">
+                            <div class="col-sm-12" id="@("planPhaseMainTask" + item.PlanPhaseID)">
+                                <div class="row">
+                                    <div class="col-sm-12" id="@("phasecompletedmaintastlist" + item.PlanPhaseID)" style="padding-left: 5px; padding-right: 5px">
+                                        @{ Html.RenderAction("PhaseCompletedMainTaskList", "Plan", new { planPhaseID = @item.PlanPhaseID });}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                                                }
+                                            }

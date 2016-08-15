@@ -53,18 +53,14 @@
                                             <h2 class="number-of-group-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.MemberCount)</h2>
                                             <label class="group-member">Thành viên</label>
                                         </div>
-                                        <div class="action-to-group">
-                                            <input type="checkbox" name="groupID" value="@item.GroupID" id="@item.GroupID" />
-                                            @*<div class="checkbox">
-                                                    <input name="groupID" type="checkbox" value="@item.GroupID" id="@item.GroupID">
-                                                    <label for="@item.GroupID" style="margin-left: -5px;">
-                                                        Chọn
-                                                    </label>
-                                                </div>*@
+                                        <div class="action-to-group" style="width: 60px;">
+                                            <div class="checkbox">
+                                                <input name="groupID" type="checkbox" value="@item.GroupID" id="@("checkbox-" + item.GroupID)">
+                                                <label for="@("checkbox-" + item.GroupID)" style="margin-left: -5px;">
+                                                    Chọn
+                                                </label>
+                                            </div>
                                         </div>
-                                        @*<div class="action-to-group-of-user">
-                                                @{ Html.RenderAction("ActionToGroup", "Account", new { groupID = item.GroupID });}
-                                            </div>*@
                                     </div>
                                 </div>
                             </div>

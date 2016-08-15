@@ -1,0 +1,85 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.MainTask
+@{
+    string idMainTaskName = "idMainTaskName" + Model.MainTaskID;
+    DateTime date = DateTime.Today;
+    TimeSpan span = Model.Duedate - date;
+    int dateGap = span.Days;
+
+    string userID = Session["UserID"].ToString();
+    string displayName = Session["DisplayName"].ToString();
+    string role = Session["Role"].ToString();
+    string avtlink = "/Images/User/Avatar/" + userID + ".jpg";
+}
+<!-- Header -->
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-11">
+                <h4 class="txt-complete" id="main-task-title" style="font-weight: bold">@Model.Name</h4>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+</div>
+
+<div class="col-md-12" style="padding: 20px">
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="txt-complete">Ngày hết hạn</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+                @if (dateGap >= 0)
+                {
+                    <span id="main-task-duedate" class="badge is-complete txt-complete">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+                else
+                {
+                    <span id="main-task-duedate" class="badge is-due-past txt-complete">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 10px;">
+            <label class="txt-complete">Mô tả</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+                <p class="txt-complete" id="main-task-description" style="font-weight: normal; white-space: pre-line;">@Model.Description</p>
+        </div>
+    </div>
+</div>
+
+
+<!-- Detail -->
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="fa fa-check-square-o fa-cus-20 fa-cus-gray"></span> Danh sách công việc</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <ol class="list-task" id="subtaskList">
+        @{ Html.RenderAction("PhaseCompletedListSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+    </ol>
+</div>
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="fa fa-comment-o fa-cus-20 fa-cus-gray"></span> Bình luận</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <ol class="comment-list" id="commentList">
+                @{ Html.RenderAction("PhaseCompletedListComment", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+            </ol>
+        </div>
+    </div>
+</div>
+

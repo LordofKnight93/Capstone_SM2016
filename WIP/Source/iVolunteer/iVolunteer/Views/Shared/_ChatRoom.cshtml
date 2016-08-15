@@ -5,7 +5,7 @@
     <div class="col-md-3">
         @{Html.RenderAction("NavigationPanel", "Account");}
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" style="padding: 0 5px;">
         <div class="wrapper">
             <div class="chatContainter">
                 <div class="left">
@@ -169,12 +169,12 @@
                     boxHtml += "<span id='boxStatus" + userID + "' class='boxOfflineStatus'>Offline</span>";
                 }
                 boxHtml += "</div>";
-                boxHtml += "<div class='nano has-scrollbar' style='height:520px'>";
-                boxHtml += "<div id='scroll" + userID + "' class='nano-content pad-all' tabindex='0' style='right: -17px;'>";
+                boxHtml += "<div class='nano has-scrollbar' style='height: calc(100vh - 210px); border-bottom: 1px solid #ddd;'>";
+                boxHtml += "<div id='scroll" + userID + "' class='nano-content pad-all' tabindex='0' style='right: -17px; outline: none;'>";
                 boxHtml += "<ul id='chatLine" + userID + "' class='list-unstyled media-block'></ul>";
                 boxHtml += "</div></div>";
                 boxHtml += "<div class='write'>";
-                boxHtml += "<input type='text' id='textArea" + userID + "' placeholder='Viết tin nhắn...'><span style='font-size:1.8em; padding-top: 5px; padding-left: 30px; opacity: .25;' class='glyphicon glyphicon-send fa-5x'></span>";
+                boxHtml += "<input type='text' id='textArea" + userID + "' placeholder='Viết tin nhắn...'><span class='fa fa-paper-plane-o fa-cus-22'></span>";
                 boxHtml += "</div></div>";
                 /////////////////////////////////////////////////////////
 

@@ -213,12 +213,15 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-family.css" />
+    <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
+    <Content Include="Content\justifiedGallery.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -329,6 +332,7 @@
     <Content Include="scripts\bootstrap.min.js" />
     <Content Include="scripts\iVolunteer-1.0.js" />
     <Content Include="scripts\jquery-2.1.4.min.map" />
+    <Content Include="Views\Shared\KeepAlive.ashx" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
     <None Include="scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="scripts\jquery-2.1.4.js" />
@@ -351,6 +355,7 @@
     <Content Include="scripts\jQuery.FileUpload\load-image.all.min.js" />
     <Content Include="scripts\jQuery.FileUpload\tmpl.min.js" />
     <Content Include="scripts\jQuery.FileUpload\vendor\jquery.ui.widget.js" />
+    <Content Include="scripts\jquery.justifiedGallery.js" />
     <Content Include="scripts\jquery.signalR-2.2.0.js" />
     <Content Include="scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.js" />
@@ -418,6 +423,9 @@
     <Compile Include="Helper\ImageHandler.cs" />
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\NotificationHub.cs" />
+    <Compile Include="Views\Shared\KeepAlive.ashx.cs">
+      <DependentUpon>KeepAlive.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Finance.cs" />
@@ -713,6 +721,11 @@
     <Content Include="Views\Project\_AlbumShowImage.cshtml" />
     <Content Include="Views\Project\_AlbumWriteComment.cshtml" />
     <Content Include="Views\User\_ChatFriendList.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompleted.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedComment.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedMainTaskDetail.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedMainTaskList.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedSubTaskList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

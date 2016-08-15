@@ -3,8 +3,8 @@
 @if (Model != null)
 {
     <div role="tabpanel" id="friendListTab" class="tab-pane fade in active">
-        <div class="nano has-scrollbar" style="height:530px;">
-            <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+        <div class="nano has-scrollbar" style="height: calc(100vh - 170px);">
+            <div class="nano-content pad-all" tabindex="0" style="right: -17px; outline: none">
                 <ul class="people" id="friendList" style="padding-left: 0px;">
                     @foreach (var friend in Model)
                     {

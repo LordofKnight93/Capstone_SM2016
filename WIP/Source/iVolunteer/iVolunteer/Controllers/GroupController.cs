@@ -2397,9 +2397,16 @@ namespace iVolunteer.Controllers
         }
         public ActionResult AlbumShowImage(string albumID, string targetID)
         {
-            string userID = Session["UserID"].ToString();
-            ImageInformation mongo_Image = new ImageInformation();
             Mongo_Album_DAO mongo_Album_DAO = new Mongo_Album_DAO();
+            if (Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                string groupID = mongo_Album_DAO.Get_TargetID(albumID);
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
+                else ViewBag.Role = "Member";
+            }
+            ImageInformation mongo_Image = new ImageInformation();
             var model = mongo_Album_DAO.Get_Image_By_AlbumID(albumID);
             ViewBag.AlbumID = albumID;
             ViewBag.GroupID = targetID;
@@ -2408,12 +2415,15 @@ namespace iVolunteer.Controllers
         }
         public PartialViewResult GetAlbumList(string groupID)
         {
-            string userID = Session["UserID"].ToString();
-            //Leader will be able to Post in Public Section(in next View returned)
-            SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
-            if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
-            else ViewBag.Role = "Member";
-            ViewBag.UserID = userID;
+            if(Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                //Leader will be able to Post in Public Section(in next View returned)
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
+                else ViewBag.Role = "Member";
+                ViewBag.UserID = userID;
+            }
             ViewBag.targetID = groupID;
             try
             {

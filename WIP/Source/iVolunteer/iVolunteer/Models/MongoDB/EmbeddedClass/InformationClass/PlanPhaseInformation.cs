@@ -16,11 +16,14 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         public string Name { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
+		[Required(ErrorMessage = "Vui lòng nhập ngày bắt đầu.")]
         public DateTime StartTime { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
+		[Required(ErrorMessage = "Vui lòng nhập ngày kết thúc.")]
         public DateTime EndTime { get; set; }
         public string Description { get; set; }
+		public bool IsComplete { get; set; }
         public PlanPhaseInformation()
         {
             this.PlanPhaseID = "";
@@ -29,6 +32,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.StartTime = new DateTime();
             this.EndTime = new DateTime();
             this.Description = "";
+			this.IsComplete = false;
         }
     }
 }

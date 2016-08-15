@@ -1,6 +1,6 @@
 ﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.SubTask
 @{ string idupdate = "#addSubTaskForm" + ViewBag.MainTaskID; }
-@using (Ajax.BeginForm("AddSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "VadidateSubTask();", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+@using (Ajax.BeginForm("AddSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
 
@@ -47,7 +47,7 @@
 
         <div class="row" style="margin-top: 20px;">
             <div class="col-md-offset-7 col-md-4" style="text-align: right;">
-                <a class="btn btn-image" id="clearform">
+                <a class="btn btn-image" id="clearform" onclick="clearForm('#addSubTaskForm')">
                     HỦY
                 </a>
                 <input type="submit" value="THÊM" class="btn btn-default" />
@@ -56,11 +56,52 @@
     </div>
 }
 <script type="text/javascript">
-    function VadidateSubTask() {
-        $("form").removeData("validator");
-        $("form").removeData("unobtrusiveValidation");
-        $.validator.unobtrusive.parse("form");
-    }
+    $(document).ready(function () {
+        console.log("pass add sub task");
+        // Search Member
+        $("#assign").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    url: "@Url.Action("ProjectMembersToAssign","Project")",
+                    dataType: "json",
+                type: "POST",
+                data: {
+                    sourceID: '@ViewBag.PlanPhaseID',
+                    target: 'plan',
+                    name: request.term
+                },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return {
+                            label: item.DisplayName,
+                            value: item.UserID
+                        }
+                    }))
+                },
+                error: function () {
+                    alert("Error");
+                }
+            });
+    },
+        select: function (event, ui) {
+            $("#txtUserID").val(ui.item.value);
+            $("#assign").val(ui.item.label);
+            return false;
+        }
+    });
+
+    $('#Content').keypress(function () {
+        $('[data-valmsg-for="Content"]').hide();
+        $('#error-content').hide();
+    });
+
+    $('#subtaskDeadline').focus(function () {
+        $('[data-valmsg-for="Deadline"]').hide();
+        $('#error-deadline').hide();
+    });
+
+    });
     function Complete(result) {
         var isError = $('span.field-validation-error', result.responseText).length > 0;
         var errorContent = $('#error-content', result.responseText).length > 0;
@@ -77,53 +118,4 @@
             addSuccess();
         }
     }
-    $(document).ready(function () {
-        // Search Member
-        $("#assign").autocomplete({
-            source: function (request, response) {
-
-                $.ajax({
-                    url: "@Url.Action("ProjectMembersToAssign","Project")",
-                    dataType: "json",
-                    type: "POST",
-                    data: {
-                        sourceID: '@ViewBag.PlanPhaseID',
-                        target: 'plan',
-                        name: request.term
-                    },
-                    success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.DisplayName,
-                                value: item.UserID
-                            }
-                        }))
-                    },
-                    error: function () {
-                        alert("Error");
-                    }
-                });
-            },
-            select: function (event, ui) {
-                $("#txtUserID").val(ui.item.value);
-                $("#assign").val(ui.item.label);
-                return false;
-            }
-        });
-
-        $("#clearform").click(function () {
-            $("#addSubTaskForm").empty();
-        });
-
-        $('#Content').keypress(function () {
-            $('[data-valmsg-for="Content"]').hide();
-            $('#error-content').hide();
-        });
-
-        $('#subtaskDeadline').focus(function () {
-            $('[data-valmsg-for="Deadline"]').hide();
-            $('#error-deadline').hide();
-        });
-
-    });
 </script>

@@ -1,11 +1,11 @@
 ﻿@using System.Web.Optimization
 @using iVolunteer.Common;
 @model List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Album>
-@Styles.Render("~/Content/css")
+@*@Styles.Render("~/Content/css")
 @Scripts.Render("~/bundles/modernizr")
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqueryui")*@
 @if (Model != null)
 {
     foreach (var item in Model)
@@ -14,16 +14,17 @@
 
             <!-- Header -->
             <div class="row" style="margin-bottom: 15px">
-                <div class="col-md-12" style="margin-top: -20px">
-
+                <div class="col-md-12" style="margin-top: -15px">
+                    <h4>Danh sách Album ảnh</h4>
                     <div class="divider-holizon" style="margin-top: -8px; opacity: 0.8"></div>
                 </div>
             </div>
+
             <div class="row">
 
                 <!-- Album 1 -->
-                <div class="col-md-3 col-sm-4">
-                    <div class="photo-album-container">
+                <div class="col-md-4 col-sm-6">
+                    <div class="photo-album-container" onclick="showAlbumImage('@item._id.ToString()', '@ViewBag.targetID')">
                         <div class="photo-album">
                             @if (item.ImageList.Count != 0)
                             {
@@ -43,29 +44,31 @@
                                 <!-- Album info -->
                                 <div class="metadata">
                                     <h4 class="album-title" style="font-weight: bold"><strong>@item.AlbumInformation.AlbumName</strong></h4>
-                                    <span class="album-photo-count" style="font-size: 12px; font-weight: normal"><span class='glyphicon glyphicon-picture'></span> <strong>@item.AlbumInformation.ImageCount</strong></span>
+                                    <span class="album-photo-count" style="font-size: 12px; font-weight: normal">@item.AlbumInformation.ImageCount ảnh</span>
                                 </div>
 
                                 <!-- Interaction Bar -->
                                 <div class="actions-tool">
                                     <div class="row" style="margin-left: 0; margin-right: 0">
 
-                                        <div class="col-xs-9">
+                                        <div class="col-xs-6">
                                             <ul class="list-album-interaction">
                                                 <li>
-                                                    <i class="glyphicon glyphicon-heart"></i>
+                                                    <i class="fa fa-heart fa-cus-18 fa-cus-red"></i>
                                                     <span><strong>@item.AlbumInformation.LikeCount</strong></span>
                                                 </li>
                                                 <li>
-                                                    <i class="glyphicon glyphicon-comment"></i>
+                                                    <i class="fa fa-comment-o fa-cus-18"></i>
                                                     <span><strong>@item.AlbumInformation.CommentCount</strong></span>
                                                 </li>
                                             </ul>
                                         </div>
                                         @if (ViewBag.Role == "Leader" || item.AlbumInformation.Creator.ID == ViewBag.UserID)
                                         {
-                                            <div class="col-xs-3" style="text-align: right">
-                                                @Ajax.RawActionLink("<span class='glyphicon glyphicon-trash'></span>", "DeleteAlbum", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
+                                            <div class="col-xs-6" style="text-align: right; padding-left: 0">
+                                                @Ajax.RawActionLink("<i class='fa fa-plus fa-cus-18 fa-cus-white'></i>", "AlbumAddImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#albumList')" }, new { @class = "btn-card" })
+                                                @Ajax.RawActionLink("<i class='fa fa-pencil fa-cus-18 fa-cus-white'></i>", "AlbumEditImage", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#albumList')" }, new { @class = "btn-card" })
+                                                @Ajax.RawActionLink("<span class='fa fa-trash-o fa-cus-18 fa-cus-white'></span>", "DeleteAlbum", "Project", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace, Confirm = "Bạn có muốn xóa Album này?" }, new { @class = "btn-card" })
                                             </div>
                                         }
                                     </div>
@@ -75,7 +78,7 @@
                     </div>
 
                 </div>
-                <div class="navbar-collapse collapse">
+                @*<div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>
                             @Ajax.ActionLink("Show Image", "AlbumShowImage", "Group", new { albumID = item._id.ToString(), targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
@@ -96,7 +99,7 @@
                             </li>
                         }
                     </ul>
-                </div>
+                </div>*@
             </div>
         </div>
     }

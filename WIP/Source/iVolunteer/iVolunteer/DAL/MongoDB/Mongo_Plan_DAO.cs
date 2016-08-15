@@ -85,7 +85,7 @@ namespace iVolunteer.DAL.MongoDB
                 int count = 0;
                 for (int i = 0; i < result.Count(); i++)
                 {
-                    for(int j=0; i< result[i].MainTask.Count(); j++)
+                    for (int j = 0; i < result[i].MainTask.Count(); j++)
                     {
                         if (result[i].MainTask[j].MainTaskID == ObjectId.Parse(mainTaskID))
                         {
@@ -134,6 +134,34 @@ namespace iVolunteer.DAL.MongoDB
             try
             {
                 var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID)
+                   .Select(pl => pl.PlanPhaseInformation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<PlanPhaseInformation> Get_PlanPhaseIsNotComplete(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false)
+                   .Select(pl => pl.PlanPhaseInformation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public List<PlanPhaseInformation> Get_PlanPhaseIsCompleted(string projectID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == true)
                    .Select(pl => pl.PlanPhaseInformation).ToList();
                 return result;
             }
@@ -276,6 +304,21 @@ namespace iVolunteer.DAL.MongoDB
             {
                 var filter = Builders<Mongo_Plan>.Filter.Eq(pl => pl.PlanPhaseInformation.PlanPhaseID, planPhaseID);
                 var update = Builders<Mongo_Plan>.Update.Set(pl => pl.PlanPhaseInformation.Name, newName);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool Update_PlanPhaseIsComplete(string planPhaseID, bool isComplete)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Plan>.Filter.Eq(pl => pl.PlanPhaseInformation.PlanPhaseID, planPhaseID);
+                var update = Builders<Mongo_Plan>.Update.Set(pl => pl.PlanPhaseInformation.IsComplete, isComplete);
                 var result = collection.UpdateOne(filter, update);
                 return result.IsAcknowledged;
             }
@@ -447,6 +490,21 @@ namespace iVolunteer.DAL.MongoDB
             return result.ElementAt(0);
         }
 
+        public string Get_AssignPeople(string planPhaseID, string mainTaskID, string subTaskID)
+        {
+            try
+            {
+                List<SubTask> subtasklist = Get_SubTaskList(planPhaseID, mainTaskID);
+                int i = subtasklist.FindIndex(st => st.SubTaskID == ObjectId.Parse(subTaskID));
+                string assignPeopleID = subtasklist[i].AssignPeople.ID;
+                return assignPeopleID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// Get Task Count
         /// </summary>
@@ -475,7 +533,7 @@ namespace iVolunteer.DAL.MongoDB
                     {
                         doing += 1;
                     }
-                    else if(result[i].Subtask[j].IsDone == 3)
+                    else if (result[i].Subtask[j].IsDone == 3)
                     {
                         done += 1;
                     }
@@ -521,9 +579,9 @@ namespace iVolunteer.DAL.MongoDB
         /// <returns></returns>
         public List<SubTask> Get_SubTaskListThisDay(string projectID, DateTime date)
         {
-            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID).SelectMany(mt => mt.MainTask).ToList();
+            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
             List<SubTask> subtask = new List<SubTask>();
-            for(int i = 0; i<result.Count(); i++)
+            for (int i = 0; i < result.Count(); i++)
             {
                 subtask.AddRange(result[i].Subtask.Where(mt => mt.Deadline >= date).ToList());
             }
@@ -539,7 +597,7 @@ namespace iVolunteer.DAL.MongoDB
         /// <returns></returns>
         public List<SubTask> Get_SubTaskOfUser(string projectID, string userID)
         {
-            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID).SelectMany(mt => mt.MainTask).ToList();
+            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
             List<SubTask> subtask = new List<SubTask>();
             for (int i = 0; i < result.Count(); i++)
             {
@@ -604,11 +662,11 @@ namespace iVolunteer.DAL.MongoDB
                                                     Builders<Mongo_Plan>.Filter.Eq(pl => pl.PlanPhaseInformation.PlanPhaseID, planPhaseID),
                                                     Builders<Mongo_Plan>.Filter.ElemMatch(pl => pl.MainTask, it => it.MainTaskID == ObjectId.Parse(mainTaskID)));
                 var update = Builders<Mongo_Plan>.Update.Set(pl => pl.MainTask.ElementAt(-1).Subtask.ElementAt(i).IsDone, Int32.Parse(status));
-                if(taskstatus != SubTaskIsDone.DONE && Int32.Parse(status) == SubTaskIsDone.DONE)
+                if (taskstatus != SubTaskIsDone.DONE && Int32.Parse(status) == SubTaskIsDone.DONE)
                 {
                     update = update.Inc(pl => pl.MainTask.ElementAt(-1).TaskDoneCount, 1);
                 }
-                else if(taskstatus == SubTaskIsDone.DONE && Int32.Parse(status) != SubTaskIsDone.DONE)
+                else if (taskstatus == SubTaskIsDone.DONE && Int32.Parse(status) != SubTaskIsDone.DONE)
                 {
                     update = update.Inc(pl => pl.MainTask.ElementAt(-1).TaskDoneCount, -1);
                 }

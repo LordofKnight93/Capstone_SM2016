@@ -24,6 +24,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         [DisplayName("Ngày nhận")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
+		[Required(ErrorMessage = "Vui lòng nhập ngày nhận.")]
         public DateTime ReceiveDate { get; set; }
         [DisplayName("Phương thức")]
         public int Method { get; set; }

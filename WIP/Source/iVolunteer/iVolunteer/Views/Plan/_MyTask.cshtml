@@ -25,192 +25,137 @@
                     <div class="panel-body" style="padding: 5px">
                         <div id="taskOnThisDay">
                             <ol class="list-task">
-                                @foreach (var item in Model)
+                                @if (Model.Count != 0)
                                 {
-                                    string taskid = "subtask" + @item.SubTaskID;
-                                    DateTime date = DateTime.Today;
-                                    TimeSpan span = item.Deadline - date;
-                                    int dateGap = span.Days;
-                                    int hourGap = span.Hours;
+                                    foreach (var item in Model)
+                                    {
+                                        string taskid = "subtask" + @item.SubTaskID;
+                                        DateTime date = DateTime.Today;
+                                        TimeSpan span = item.Deadline - date;
+                                        int dateGap = span.Days;
+                                        int hourGap = span.Hours;
 
-                                    //id for task content
-                                    string lbMyTaskContent = "lbMyTaskContent-" + item.SubTaskID;
+                                        <li>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        @if (item.Priolity == 1)
+                                                        {
+                                                            <div class="priolity low"></div>
+                                                        }
+                                                        else if (item.Priolity == 2)
+                                                        {
+                                                            <div class="priolity medium"></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="priolity high"></div>
+                                                        }
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                @if (item.IsDone == 3)
+                                                                {
+                                                                    <div class="checkbox">
+                                                                        <input id="@("cbxMyTaskStatus-" + item.SubTaskID)" type="checkbox" checked disabled>
+                                                                        <label for="@("cbxMyTaskStatus-" + item.SubTaskID)">
 
-                                    //id for check box task status
-                                    string cbxMyTaskStatus = "cbxMyTaskStatus" + item.SubTaskID;
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="checkbox">
+                                                                        <input id="@("cbxMyTaskStatus-" + item.SubTaskID)" type="checkbox" onclick="cbsEditSubTaskStatusUser('@ViewBag.ProjectID', '@item.SubTaskID')">
+                                                                        <label for="@("cbxMyTaskStatus-" + item.SubTaskID)">
 
-                                    //id for change task status
-                                    string liCurrentStatus = "liCurrentStatus-" + item.SubTaskID;
-                                    string liChooseNewStatus = "liChooseNewStatus-" + item.SubTaskID;
-                                    string slcNewStatus = "slcNewStatus" + item.SubTaskID;
-
-                                    <li>
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    @if (item.Priolity == 1)
-                                                    {
-                                                        <div class="priolity low"></div>
-                                                    }
-                                                    else if (item.Priolity == 2)
-                                                    {
-                                                        <div class="priolity medium"></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="priolity high"></div>
-                                                    }
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-sm-2">
-                                                            @if (item.IsDone == 3)
-                                                            {
-                                                                <div class="checkbox">
-                                                                    <input id="@cbxMyTaskStatus" type="checkbox" checked>
-                                                                    <label for="@cbxMyTaskStatus">
-
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <div class="col-sm-10" style="padding-left: 0; padding-top: 10px;">
+                                                                @if (item.IsDone == 3)
+                                                                {
+                                                                    <label id="@("lbMyTaskContent-" + item.SubTaskID)" style="font-weight: normal; text-decoration: line-through">
+                                                                        @item.Content
                                                                     </label>
-                                                                </div>
-                                                            }
-                                                            else
-                                                            {
-                                                                <div class="checkbox">
-                                                                    <input id="@cbxMyTaskStatus" type="checkbox">
-                                                                    <label for="@cbxMyTaskStatus">
-
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label id="@("lbMyTaskContent-" + item.SubTaskID)" style="font-weight: normal;">
+                                                                        @item.Content
                                                                     </label>
-                                                                </div>
-                                                            }
-                                                        </div>
-                                                        <div class="col-sm-10" style="padding-left: 0; padding-top: 10px;">
-                                                            <label id="@lbMyTaskContent" style="font-weight: normal">
-                                                                @item.Content
-                                                            </label>
+                                                                }
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <ul class="list-task-infor">
-                                                        <li id="@liCurrentStatus">
-                                                            @if (item.IsDone == 1)
-                                                            {
-                                                                <span class="badge is-unread-notification">ĐANG CHỜ</span>
-                                                            }
-                                                            else if (item.IsDone == 2)
-                                                            {
-                                                                <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
-                                                            }
-                                                            else if (item.IsDone == 3)
-                                                            {
-                                                                <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="badge is-due-past">THỰC HIỆN LẠI</span>
-                                                            }
-                                                        </li>
-                                                        <li id="@liChooseNewStatus" style="display: none">
-                                                            <select id="@slcNewStatus">
-                                                                <option value="1">ĐANG CHỜ</option>
-                                                                <option value="2">ĐANG THỰC HIỆN</option>
-                                                                <option value="3">ĐÃ HOÀN THÀNH</option>
-                                                                <option value="4">THỰC HIỆN LẠI</option>
-                                                            </select>
-                                                        </li>
-                                                        <li>
-                                                            @if (dateGap >= 1)
-                                                            {
-                                                                <i class="material-icons md-18 md-mygreen">access_time</i>
-                                                                <span class="pending">@dateGap ngày</span>
-                                                            }
-                                                            else if (dateGap < -1)
-                                                            {
-                                                                <i class="material-icons md-18 md-myred">access_time</i>
-                                                                <span class="overdue">@dateGap ngày</span>
-                                                            }
-                                                            else if (dateGap < 1 && dateGap >= 0)
-                                                            {
-                                                                <i class="material-icons md-18 md-mygreen">access_time</i>
-                                                                <span class="pending">@hourGap giờ</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <i class="material-icons md-18 md-myred">access_time</i>
-                                                                <span class="overdue">@hourGap giờ</span>
-                                                            }
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                    <div class="col-sm-12">
+                                                        <ul class="list-task-infor">
+                                                            <li id="@("liCurrentStatus-" + item.SubTaskID)">
+                                                                @if (item.IsDone == 1)
+                                                                {
+                                                                    <span class="badge is-unread-notification" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">ĐANG CHỜ</span>
+                                                                }
+                                                                else if (item.IsDone == 2)
+                                                                {
+                                                                    <span class="badge is-due-past" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">ĐANG THỰC HIỆN</span>
+                                                                }
+                                                                else if (item.IsDone == 3)
+                                                                {
+                                                                    <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="badge is-due-past" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">THỰC HIỆN LẠI</span>
+                                                                }
+                                                            </li>
+                                                            <li id="@("liChooseNewStatus-" + item.SubTaskID)" style="display: none">
+                                                                <select id="@("slcNewStatus-" + item.SubTaskID)" onchange="saveSubTaskStatusUser('@ViewBag.ProjectID','@item.SubTaskID')">
+                                                                    <option value="0">-- Trạng thái --</option>
+                                                                    <option value="2">ĐANG THỰC HIỆN</option>
+                                                                    <option value="3">ĐÃ HOÀN THÀNH</option>
+                                                                </select>
+                                                                <i id="@("btn-cancel-edit-subtask-status-user" + item.SubTaskID)" class="material-icons" onclick="cancelEditSubTaskStatusUser('@item.SubTaskID')">cancel</i>
+                                                            </li>
+                                                            <li>
+                                                                @if (item.IsDone != 3)
+                                                                {
+                                                                    if (dateGap >= 1)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                        <span class="pending">@dateGap ngày</span>
+                                                                    }
+                                                                    else if (dateGap < -1)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                                                        <span class="overdue">@dateGap ngày</span>
+                                                                    }
+                                                                    else if (dateGap < 1 && dateGap >= 0)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                        <span class="pending">@hourGap giờ</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                                                        <span class="overdue">@hourGap giờ</span>
+                                                                    }
+                                                                }
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Script Change Infor -->
-
-                                        <script type="text/javascript">
-                                            $(document).ready(function () {
-
-                                                /************************************ Change Sub Task Status ****************************************/
-
-                                                //when hover task status
-                                                $("#" + '@liCurrentStatus').hover(function () {
-                                                    $("#" + '@liCurrentStatus').hide();
-                                                    $("#" + '@liChooseNewStatus').css('display', 'inline');
-                                                });
-
-                                                $("#" + '@liChooseNewStatus').mouseleave(function () {
-                                                    $("#" + '@liCurrentStatus').css('display', 'inline');
-                                                    $("#" + '@liChooseNewStatus').hide();
-                                                });
-
-                                                $("#" + '@slcNewStatus').on('change', function () {
-
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        url: "@Url.Action("ChangeTaskStatusInMyTask", "Plan")",
-                                                        data: {
-                                                            projectID: "@ViewBag.ProjectID",
-                                                            subTaskID: "@item.SubTaskID",
-                                                            slcStatus: "" + $("#" + '@slcNewStatus').val()
-                                                        },
-                                                        success: function (response) {
-                                                            $("#myTask").html(response);
-                                                            $("#my-task").addClass('in');
-                                                            editSuccess();
-                                                        }
-                                                    });
-                                                });
-
-                                                //By Checkbox
-
-                                                $("#" + '@cbxMyTaskStatus').click(function () {
-                                                    var newStatus = "";
-                                                    if ($("#" + '@cbxMyTaskStatus').is(':checked')) {
-                                                        newStatus = "3";
-                                                    }
-                                                    else {
-                                                        newStatus = "2";
-                                                    }
-
-                                                    $.ajax({
-                                                        type: "POST",
-                                                        url: "@Url.Action("ChangeTaskStatusInMyTask", "Plan")",
-                                                        data: {
-                                                            projectID: "@ViewBag.ProjectID",
-                                                            subTaskID: "@item.SubTaskID",
-                                                            slcStatus: "" + newStatus
-                                                        },
-                                                        success: function (response) {
-                                                            $("#myTask").html(response);
-                                                            $("#my-task").addClass('in');
-                                                            editSuccess();
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                        </script>
-
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        <label>Bạn chưa có công việc nào để thực hiện.</label>
                                     </li>
                                 }
                             </ol>
@@ -223,4 +168,3 @@
         </div>
     </div>
 </div>
-

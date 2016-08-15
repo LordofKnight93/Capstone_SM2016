@@ -174,6 +174,45 @@ namespace iVolunteer.DAL.MongoDB
             }
         }
 
+		public TeamFoundDonator Get_TeamFoundDonator(string fundID, string teamFoundDonatorID)
+        {
+            var result = collection.AsQueryable().Where(fu => fu._id == ObjectId.Parse(fundID)).SelectMany(tfd => tfd.TeamFoundDonator).Where(tfd => tfd.TeamFoundDonatorID == ObjectId.Parse(teamFoundDonatorID)).ToList();
+            return result.ElementAt(0);
+        }
+
+        public bool Update_TeamFoundDonatorInfor(string fundID, string teamFoundDonatorID, TeamFoundDonator donator)
+        {
+            try
+            {
+                double Amount = 0;
+                List<TeamFoundDonator> list = Get_TeamFoundDonatorList(fundID);
+                for (int i = 0; i < list.Count(); i++)
+                {
+                    if (list[i].TeamFoundDonatorID.ToString().Equals(teamFoundDonatorID))
+                    {
+                        Amount = list[i].Amount;
+                        break;
+                    }
+                }
+                var filter = Builders<Mongo_Fund>.Filter.And(
+                                                    Builders<Mongo_Fund>.Filter.Eq(fu => fu._id, ObjectId.Parse(fundID)),
+                                                    Builders<Mongo_Fund>.Filter.ElemMatch(fu => fu.TeamFoundDonator, tfd => tfd.TeamFoundDonatorID == ObjectId.Parse(teamFoundDonatorID)));
+                var update = Builders<Mongo_Fund>.Update.Set(fu => fu.TeamFoundDonator[-1].Name, donator.Name)
+                                                        .Set(fu => fu.TeamFoundDonator[-1].Information, donator.Information)
+                                                        .Set(fu => fu.TeamFoundDonator[-1].Amount, donator.Amount)
+                                                        .Set(fu => fu.TeamFoundDonator[-1].ReceiveDate, donator.ReceiveDate)
+                                                        .Set(fu => fu.TeamFoundDonator[-1].Method, donator.Method)
+                                                        .Set(fu => fu.TeamFoundDonator[-1].IsReceived, true)
+                                                         .Inc(fu => fu.PendingMoney, -Amount + donator.Amount)
+                                                         .Inc(fu => fu.ReceivedMoney, -Amount + donator.Amount);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         //Set is receice money
         public bool Update_IsReceiveMoney(string fundID, string teamFoundDonatorID)
         {
@@ -192,7 +231,7 @@ namespace iVolunteer.DAL.MongoDB
                 var filter = Builders<Mongo_Fund>.Filter.And(
                                                     Builders<Mongo_Fund>.Filter.Eq(fu => fu._id, ObjectId.Parse(fundID)),
                                                     Builders<Mongo_Fund>.Filter.ElemMatch(fu => fu.TeamFoundDonator, tfd => tfd.TeamFoundDonatorID == ObjectId.Parse(teamFoundDonatorID)));
-                var update = Builders<Mongo_Fund>.Update.Set(bg => bg.TeamFoundDonator[-1].IsReceived, true)
+                var update = Builders<Mongo_Fund>.Update.Set(fu => fu.TeamFoundDonator[-1].IsReceived, true)
                                                          .Inc(fu => fu.PendingMoney, -Amount)
                                                          .Inc(fu => fu.ReceivedMoney, Amount);
                 var result = collection.UpdateOne(filter, update);

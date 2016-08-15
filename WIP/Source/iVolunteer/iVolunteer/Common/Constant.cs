@@ -120,12 +120,18 @@ namespace iVolunteer.Common
         public const string SUBTASKNAME_EXIST = "Công việc này đã tồn tại.";
         public const string MAINTASKNAME_EXIST = "Công việc chính này đã tồn tại.";
         public const string PLANPHASE_EXIST = "Giai đoạn này đã tồn tại.";
-        public const string PLANPHASE_NAME_NULL = "Vui lòng nhập tên giai đoạn.";
         public const string DEADLINE_INVALID_TODAY = "Hạn cuối phải là một ngày trong tương lai.";
         public const string DEADLINE_INVALID_MAINTASK = "Hạn cuối công việc này phải trước hạn cuối của công việc chính.";
         public const string DUEDATE_INVALID_TODAY = "Hạn cuối phải là một ngày trong tương lai.";
-        public const string DUEDATE_INVALID_PLANPHASE = "Hạn cuối phải trước khi giai đoạn kết thúc.";
+        public const string DUEDATE_INVALID_START_PLANPHASE = "Hạn cuối phải sau khi giai đoạn bắt đầu.";
+        public const string DUEDATE_INVALID_END_PLANPHASE = "Hạn cuối phải trước khi giai đoạn kết thúc.";
+        public const string PLANPHASE_NAME_NULL = "Vui lòng nhập tên giai đoạn.";
         public const string PLANPHASE_TIME_INVALID = "Thời gian bắt đầu phải trước thời gian kết thúc.";
+        public const string PLANPHASE_START_TIME_INVALID = "Thời gian bắt đầu giai đoạn phải sau khi dự án khởi động.";
+        public const string PROJECT_START_TIME = "Thời gian dự án khởi động là: ";
+        public const string PLANPHASE_END_TIME_INVALID = "Thời gian kết thúc giai đoạn phải trước khi dự án kết thúc.";
+        public const string PROJECT_END_TIME = "Thời gian dự án kết thúc là: ";
+        public const string MAINTASK_NAME_NULL = "Vui lòng nhập trên công việc.";
 
         //Error for Budget
         public const string BUDGETRECORD_EXIST = "Đầu này đã tồn tại.";

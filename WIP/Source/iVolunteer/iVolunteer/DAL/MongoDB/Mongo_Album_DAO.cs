@@ -109,6 +109,19 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        public string Get_TargetID(string albumID)
+        {
+            try
+            {
+                var result = collection.AsQueryable().FirstOrDefault(al => al.AlbumInformation.AlbumID == albumID);
+                return result.AlbumInformation.TargetID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public List<Mongo_Album> Get_Private_Album_By_TargetID(string targetID, int skip, int number)
         {
             try

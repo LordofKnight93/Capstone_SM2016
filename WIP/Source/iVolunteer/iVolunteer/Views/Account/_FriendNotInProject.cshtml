@@ -79,10 +79,9 @@
                                     <div class="project-action-to-user">
                                         <ul class="project-action-to-user-list">
                                             <li>
-                                                @*<input type="checkbox" name="friendID" value="@item.UserID" id="@item.UserID" />*@
                                                 <div class="checkbox">
-                                                    <input name="friendID" type="checkbox" value="@item.UserID" id="@item.UserID">
-                                                    <label for="@item.UserID" style="margin-left: -5px;">
+                                                    <input name="friendID" type="checkbox" value="@item.UserID" id="@("checkbox-" + item.UserID)">
+                                                    <label for="@("checkbox-" + item.UserID)" style="margin-left: -5px;">
                                                         Chọn
                                                     </label>
                                                 </div>

@@ -52,8 +52,6 @@
     <div class="row">
         <div class="col-md-12">
             <div id="teamFoundDonatorDetails">
-                @*@{ Html.RenderAction("DetailInsideDonator", "Budget", new { fundID = Model._id.ToString(), userRole = ViewBag.UserRole });}*@
-                @*@{ Html.RenderAction("DetailOutsideDonator", "Budget", new { fundID = Model._id.ToString() });}*@
                 @{ Html.RenderAction("DetailTeamFoundDonator", "Budget", new { fundID = Model._id.ToString() });}
             </div>
         </div>

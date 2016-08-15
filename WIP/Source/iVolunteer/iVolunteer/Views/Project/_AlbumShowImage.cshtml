@@ -1,22 +1,23 @@
 ﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Album
 @using iVolunteer.Helpers
 @using System.Web.Optimization
+@using iVolunteer.Common
 
 <!-- blueimp File Upload & Gallery styles -->
 
-<div class="navbar-collapse collapse">
+@*<div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
         @if (ViewBag.UserID == Model.AlbumInformation.Creator.ID)
         {
             <li>
-                @Ajax.ActionLink("Danh Sách Bộ Ảnh", "GetAlbumList", "Project", new { projectID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                @Ajax.ActionLink("Danh Sách Album", "GetAlbumList", "Project", new { projectID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
             </li>
             <li>
-                @Ajax.ActionLink("Chỉnh Sửa Bộ Ảnh", "AlbumEditImage", "Project", new { projectID = Model.AlbumInformation.TargetID, albumID = Model._id }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
+                @Ajax.ActionLink("Chỉnh Sửa Album", "AlbumEditImage", "Project", new { projectID = Model.AlbumInformation.TargetID, albumID = Model._id }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
             </li>
         }
     </ul>
-</div>
+</div>*@
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
     <div class="slides"></div>
     <h3 class="title"></h3>
@@ -29,6 +30,23 @@
 <div class="card-panel" id="list-image" style="margin: 0.5rem 0 1rem 0;">
     <div class="row">
         <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4" style="margin-bottom: 10px;">
+                    @Ajax.RawActionLink("<i class='fa fa-angle-left fa-cus-18'></i><span> Quay về danh sách Album</span>", "GetAlbumList", "Project", new { projectID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { @style = "color: #1E88E5" })
+                </div>
+                @if (Session["UserID"] == null)
+                {
+
+                }
+                else if (ViewBag.Role == "Leader" || Model.AlbumInformation.Creator.ID == Session["UserID"].ToString())
+                {
+                    <div class="col-md-8" style="text-align: right">
+                        @Ajax.RawActionLink("<i class='fa fa-plus fa-cus-18'></i><span> Thêm ảnh</span>", "AlbumAddImage", "Project", new { albumID = Model._id.ToString(), targetID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
+                        @Ajax.RawActionLink("<i class='fa fa-pencil fa-cus-18'></i><span> Sửa album</span>", "AlbumEditImage", "Project", new { albumID = Model._id.ToString(), targetID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace }, new { @class = "btn-card" })
+                        @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-18'></i><span> Xóa album</span>", "DeleteAlbum", "Project", new { albumID = Model._id.ToString(), targetID = Model.AlbumInformation.TargetID }, new AjaxOptions { UpdateTargetId = "albumList", InsertionMode = InsertionMode.Replace, Confirm = "Bạn có muốn xóa Album này?" }, new { @class = "btn-card" })
+                    </div>
+                }
+            </div>
             <h4><strong> Bộ Ảnh : @Model.AlbumInformation.AlbumName</strong></h4>
             <h5>Mô tả : @Model.AlbumInformation.AlbumDescription</h5>
             <div class="divider-holizon"></div>
@@ -37,20 +55,15 @@
     <div id="links" class="link">
         @if (Model.ImageList != null && Model.ImageList.Count > 0)
         {
-            <ul class="list-photo">
-                @foreach (var item in Model.ImageList)
+                foreach (var item in Model.ImageList)
                 {
-                    <li>
-                        <a href="@item.ImageInformation.ImageUrl" title="@item.ImageInformation.ImageName" data-description="This is a image." data-gallery=""><img src="@item.ImageInformation.ImageUrl" alt="@item.ImageInformation.ImageName"></a>
-                    </li>
+                     <a href="@item.ImageInformation.ImageUrl" title="@item.ImageInformation.ImageName" data-description="This is a image." style="border: 3px solid #eae9d4; border-radius: 2px;"><img src="@item.ImageInformation.ImageUrl" alt="@item.ImageInformation.ImageName"></a>
                 }
-            </ul>
         }
         else
         {
-            <p>No files</p>
+            <div style="margin: 20px 0; text-align: center"><p>Không có ảnh nào trong album</p></div>
         }
-        <!--Your files goes here-->
     </div>
 
     <div class="divider-holizon"></div>
@@ -127,6 +140,18 @@
         }
     }
  );
+</script>
+<script>
+    $(document).ready(function () {
+        console.log("album show");
+        $('#links').justifiedGallery({
+            rowHeight: 250,
+            maxRowHeight: 250,
+            lastRow: 'nojustify',
+            randomize: true,
+            margins: 10
+        });
+    });
 </script>
 
 

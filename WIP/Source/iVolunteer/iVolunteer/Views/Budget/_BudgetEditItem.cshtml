@@ -43,7 +43,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="LƯU LẠI" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -83,8 +83,9 @@
             $("#dialog-edit-budget-item").html(result.responseText);
         } else {
             // no error => we hide validation errors and update the result container
+			$('#dialog-edit-budget-item').empty();
             $('#dialog-edit-budget-item').dialog('close');
-            $("#budgetItemDetails" + '@ViewBag.BudgetRecordID').html(result.responseText);
+            $("#tabplanbudget").html(result.responseText);
         }
     };
 </script>

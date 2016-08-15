@@ -1,4 +1,4 @@
-﻿
+﻿@using iVolunteer.Common
 @using System.Web.Optimization
 @{
     ViewBag.Title = "Image";
@@ -10,7 +10,7 @@
 <link href="/Content/blueimp-gallery2/css/blueimp-gallery.css" rel="stylesheet" />
 <link href="/Content/blueimp-gallery2/css/blueimp-gallery-video.css" rel="stylesheet" />
 <link href="/Content/blueimp-gallery2/css/blueimp-gallery-indicator.css" rel="stylesheet" />
-<div class="navbar-collapse collapse">
+@*<div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
         <li>
             @Ajax.ActionLink("Danh Sách Ảnh", "AlbumShowImage", "Group", new { albumID = ViewBag.AlbumID, targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
@@ -19,8 +19,20 @@
             @Ajax.ActionLink("Danh Sách Bộ Ảnh", "GetAlbumList", "Group", new { groupID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET" }, new { })
         </li>
     </ul>
-</div>
+</div>*@
 <div class="card-panel-album">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <div class="row">
+                <div class="col-md-4" style="margin-bottom: 10px;">
+                    @Ajax.RawActionLink("<i class='fa fa-angle-left fa-cus-18'></i><span> Quay về danh sách ảnh</span>", "AlbumShowImage", "Group", new { albumID = ViewBag.AlbumID, targetID = ViewBag.targetID }, new AjaxOptions { UpdateTargetId = "albumList", HttpMethod = "GET", OnBegin = "OnBegin('#albumList')" }, new { @style = "color: #1E88E5" })
+                </div>
+            </div>
+            <h4><strong> Thêm ảnh</strong></h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+
     @Html.Partial("_AddImage", new { albumID = ViewBag.AlbumID })
 </div>
 <script>

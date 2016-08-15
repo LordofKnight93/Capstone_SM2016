@@ -25,103 +25,112 @@
                     <div class="panel-body">
                         <div id="taskOnThisDay">
                             <ol class="list-task">
-                                @foreach (var item in Model)
+                                @if (Model.Count != 0)
                                 {
-                                    string taskid = "subtask" + @item.SubTaskID;
-                                    DateTime date = DateTime.Today;
-                                    TimeSpan span = item.Deadline - date;
-                                    int dateGap = span.Days;
-                                    int hourGap = span.Hours;
-                                    <li>
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    @if (item.Priolity == 1)
-                                                    {
-                                                        <div class="priolity low"></div>
-                                                    }
-                                                    else if (item.Priolity == 2)
-                                                    {
-                                                        <div class="priolity medium"></div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="priolity high"></div>
-                                                    }
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    @if (item.IsDone == 3)
-                                                    {
-                                                        <div class="checkbox">
-                                                            <input id="@taskid" type="checkbox" checked disabled>
-                                                            <label for="@taskid" style="opacity: 1;">
-                                                                @item.Content
-                                                            </label>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="checkbox">
-                                                            <input id="@taskid" type="checkbox" disabled>
-                                                            <label for="@taskid" style="opacity: 1;">
-                                                                @item.Content
-                                                            </label>
-                                                        </div>
-                                                    }
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <ul class="list-task-infor">
-                                                        <li>
-                                                            @if (item.IsDone == 1)
-                                                            {
-                                                                <span class="badge is-unread-notification">ĐANG CHỜ</span>
-                                                            }
-                                                            else if (item.IsDone == 2)
-                                                            {
-                                                                <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
-                                                            }
-                                                            else if (item.IsDone == 3)
-                                                            {
-                                                                <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="badge is-due-past">THỰC HIỆN LẠI</span>
-                                                            }
-                                                        </li>
-                                                        <li>
-                                                            @if (dateGap >= 1)
-                                                            {
-                                                                <i class="material-icons md-18 md-mygreen">access_time</i>
-                                                                <span class="pending">@dateGap ngày</span>
-                                                            }
-                                                            else if (dateGap < -1)
-                                                            {
-                                                                <i class="material-icons md-18 md-myred">access_time</i>
-                                                                <span class="overdue">@dateGap ngày</span>
-                                                            }
-                                                            else if (dateGap < 1 && dateGap >= 0)
-                                                            {
-                                                                <i class="material-icons md-18 md-mygreen">access_time</i>
-                                                                <span class="pending">@hourGap giờ</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <i class="material-icons md-18 md-myred">access_time</i>
-                                                                <span class="overdue">@hourGap giờ</span>
-                                                            }
-                                                        </li>
-                                                    </ul>
-                                                    <ul class="list-task-infor">
-                                                        <li>
-                                                            <i class="material-icons md-18 md-mygray">perm_identity</i>
-                                                            <span class="assign-people">@item.AssignPeople.DisplayName</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                    foreach (var item in Model)
+                                    {
+                                        string taskid = "subtask" + @item.SubTaskID;
+                                        DateTime date = DateTime.Today;
+                                        TimeSpan span = item.Deadline - date;
+                                        int dateGap = span.Days;
+                                        int hourGap = span.Hours;
+                                        <li>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        @if (item.Priolity == 1)
+                                                        {
+                                                            <div class="priolity low"></div>
+                                                        }
+                                                        else if (item.Priolity == 2)
+                                                        {
+                                                            <div class="priolity medium"></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="priolity high"></div>
+                                                        }
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        @if (item.IsDone == 3)
+                                                        {
+                                                            <div class="checkbox">
+                                                                <input id="@taskid" type="checkbox" checked disabled>
+                                                                <label for="@taskid" style="opacity: 1; text-decoration: line-through">
+                                                                    @item.Content
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="checkbox">
+                                                                <input id="@taskid" type="checkbox" disabled>
+                                                                <label for="@taskid" style="opacity: 1;">
+                                                                    @item.Content
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <ul class="list-task-infor">
+                                                            <li>
+                                                                @if (item.IsDone == 1)
+                                                                {
+                                                                    <span class="badge is-unread-notification">ĐANG CHỜ</span>
+                                                                }
+                                                                else if (item.IsDone == 2)
+                                                                {
+                                                                    <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
+                                                                }
+                                                                else if (item.IsDone == 3)
+                                                                {
+                                                                    <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="badge is-due-past">THỰC HIỆN LẠI</span>
+                                                                }
+                                                            </li>
+                                                            <li>
+                                                                @if (dateGap >= 1)
+                                                                {
+                                                                    <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                    <span class="pending">@dateGap ngày</span>
+                                                                }
+                                                                else if (dateGap < -1)
+                                                                {
+                                                                    <i class="material-icons md-18 md-myred">access_time</i>
+                                                                    <span class="overdue">@dateGap ngày</span>
+                                                                }
+                                                                else if (dateGap < 1 && dateGap >= 0)
+                                                                {
+                                                                    <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                    <span class="pending">@hourGap giờ</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="material-icons md-18 md-myred">access_time</i>
+                                                                    <span class="overdue">@hourGap giờ</span>
+                                                                }
+                                                            </li>
+                                                        </ul>
+                                                        <ul class="list-task-infor">
+                                                            <li>
+                                                                <i class="material-icons md-18 md-mygray">perm_identity</i>
+                                                                <span class="assign-people">@item.AssignPeople.DisplayName</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
 
+                                                </div>
                                             </div>
-                                        </div>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        <label>Hôm nay không có công việc nào.</label>
                                     </li>
                                 }
                             </ol>
@@ -134,4 +143,3 @@
         </div>
     </div>
 </div>
-

@@ -25,10 +25,6 @@
                         <div class="card-panel sub-card-panel">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    @*<lable>@Html.DisplayFor(modelItem => item.Name)</lable>*@
-                                    @*@Ajax.ActionLink(@item.Name, "MainTaskDetail", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
-                                        new AjaxOptions { UpdateTargetId = "mainTaskDetail", InsertionMode = InsertionMode.Replace, OnComplete = "ShowModal()" },
-                                        new { @id="openMainTaskModal", @data_target= "#taskdetail", @style = "color: #000; cursor: pointer" })*@
                                     @Ajax.ActionLink(@item.Name, "MainTaskDetail", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
                                                                                            new AjaxOptions { UpdateTargetId = "mainTaskDetail", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#mainTaskDetail','#taskdetail')" },
                                                                                            new { @id = "maintaskdetail" + item.MainTaskID, @style = "color: #000; cursor: pointer" })
@@ -81,9 +77,8 @@
         string idupdate = "addMainTaskForm" + ViewBag.PlanPhaseID;
         <li>
             <div class="row">
-                <div class="col-sm-12" style="margin-top: 25px;">
-                    <!--<label style="font-weight: bold; color: #049f88;">THÊM CÔNG VIỆC ...</label>-->
-                    @Ajax.ActionLink("THÊM  CÔNG VIỆC ...", "AddMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                <div class="col-sm-12" style="margin-top: 15px; margin-left: -10px;">
+                    @Ajax.ActionLink("THÊM  CÔNG VIỆC ...", "AddMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @style = "color: #000;font-weight: bold;cursor: pointer;font-size: small;background-color: #fff;padding: 5px;" })
                 </div>
                 <div class="col-sm-12" id="@idupdate">
 
@@ -92,13 +87,3 @@
         </li>
     }
 </ol>
-
-<script>
-    function AddAttr() {
-        $('#openMainTaskModal').attr('data-toggle', 'modal');
-    }
-    function ShowModal() {
-
-        $('#taskdetail').modal('show');
-    }
-</script>

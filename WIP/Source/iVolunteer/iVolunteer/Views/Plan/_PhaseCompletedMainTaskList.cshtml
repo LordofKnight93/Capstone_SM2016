@@ -1,0 +1,67 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.MainTask>
+
+<ol class="main-list-task">
+    @if (Model.Count != 0)
+    {
+        foreach (var item in Model)
+        {
+            DateTime date = DateTime.Today;
+            TimeSpan span = item.Duedate - date;
+            int dateGap = span.Days;
+
+            string mainTaskLiID = "maintask" + item.MainTaskID;
+            <!-- Main Task 1 -->
+            <li id="@mainTaskLiID">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card-panel sub-card-panel">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @Ajax.ActionLink(@item.Name, "PhaseCompletedMainTaskDetail", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
+                                                                                           new AjaxOptions { UpdateTargetId = "popup-content-normal", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#popup-content-normal','#popup-normal')" },
+                                                                                           new { @id = "maintaskdetail" + item.MainTaskID, @style = "color: #000; cursor: pointer", @class="txt-complete" })
+                                </div>
+                                <div class="col-sm-12">
+                                    <ul class="main-list-task-infor">
+                                        <li>
+                                            <span class="fa fa-check-square-o fa-cus-gray txt-complete" aria-hidden="true"></span>
+                                            <span class="task-count txt-complete">@item.TaskDoneCount/@item.SubTaskCount</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-comment-o fa-cus-gray txt-complete" aria-hidden="true"></i>
+                                            <span class="task-count txt-complete">@Html.DisplayFor(modelItem => item.CommentCount)</span>
+                                        </li>
+                                        @if (dateGap >= 0)
+                                        {
+                                            <li>
+                                                <span class="fa fa-clock-o fa-cus-gray txt-complete" aria-hidden="true"></span>
+                                                <span class="task-count txt-complete">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <span class="fa fa-clock-o fa-cus-red txt-complete" aria-hidden="true"></span>
+                                                <span class="task-count txt-complete" style="color: red">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+    }
+    else
+    {
+        <li>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 10px;">
+                    <label>Giai đoạn này chưa có công việc nào!</label>
+                </div>
+            </div>
+        </li>
+    }
+</ol>

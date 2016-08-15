@@ -80,9 +80,123 @@ namespace iVolunteer.Controllers
                 Mongo_Plan_DAO mongo_DAO = new Mongo_Plan_DAO();
 
                 List<PlanPhaseInformation> result = new List<PlanPhaseInformation>();
-                result = mongo_DAO.Get_PlanPhaseOfAProject(projectID);
+                result = mongo_DAO.Get_PlanPhaseIsNotComplete(projectID);
 
                 return PartialView("_PlanPhase", result);
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// 詳細完成段階を取得
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        //Get Detail Plan Phase is Completed
+        public ActionResult DetailPlanPhaseIsCompleted(string projectID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(projectID) || Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                SQL_Plan_DAO sql_DAO = new SQL_Plan_DAO();
+                Mongo_Plan_DAO mongo_DAO = new Mongo_Plan_DAO();
+
+                List<PlanPhaseInformation> result = new List<PlanPhaseInformation>();
+                result = mongo_DAO.Get_PlanPhaseIsCompleted(projectID);
+
+                return PartialView("_PhaseCompleted", result);
+
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public ActionResult PhaseCompletedMainTaskList(string planPhaseID)
+        {
+            try
+            {
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                string projectID = mongoDAO.Get_ProjectID(planPhaseID);
+
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                ViewBag.PlanPhaseID = planPhaseID;
+
+                List<MainTask> result = new List<MainTask>();
+                result = mongoDAO.Get_MainTaskList(planPhaseID);
+
+                return PartialView("_PhaseCompletedMainTaskList", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
+        public ActionResult PhaseCompletedMainTaskDetail(string planPhaseID, string mainTaskID)
+        {
+            // check if parameter valid
+            if (String.IsNullOrEmpty(planPhaseID) || Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
+            try
+            {
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                string projectID = mongoDAO.Get_ProjectID(planPhaseID);
+
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                ViewBag.PlanPhaseID = planPhaseID;
+                ViewBag.MainTaskID = mainTaskID;
+
+                MainTask result = mongoDAO.Get_MainTaskDetail(planPhaseID, mainTaskID);
+
+                return PartialView("_PhaseCompletedMainTaskDetail", result);
 
             }
             catch
@@ -179,14 +293,9 @@ namespace iVolunteer.Controllers
                     mongo_Plan.PlanPhaseInformation.PlanPhaseID = mongo_Plan._id.ToString();
                     mongo_Plan.PlanPhaseInformation.Project = project;
 
-                    //Create sql Budget
-                    SQL_Plan sql_Plan = new SQL_Plan();
-                    sql_Plan.PlanID = mongo_Plan._id.ToString();
-                    sql_Plan.ProjectID = mongo_Plan.PlanPhaseInformation.Project.ID;
-
                     // create DAO instance
                     Mongo_Plan_DAO mongo_Plan_DAO = new Mongo_Plan_DAO();
-                    SQL_Plan_DAO sql_Plan_DAO = new SQL_Plan_DAO();
+                    Mongo_Project_DAO mongo_ProjectDAO = new Mongo_Project_DAO();
 
                     //start validate
                     List<PlanPhaseInformation> currentPhaseList = mongo_Plan_DAO.Get_PlanPhaseOfAProject(projectID);
@@ -201,7 +310,19 @@ namespace iVolunteer.Controllers
 
                     if (mongo_Plan.PlanPhaseInformation.StartTime > mongo_Plan.PlanPhaseInformation.EndTime)
                     {
-                        errTime = Error.PLANPHASE_TIME_INVALID + Environment.NewLine;
+                        errTime += Error.PLANPHASE_TIME_INVALID + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (mongo_ProjectDAO.Get_ProjectInformation(projectID).DateStart > mongo_Plan.PlanPhaseInformation.StartTime)
+                    {
+                        errTime += Error.PLANPHASE_START_TIME_INVALID + Error.PROJECT_START_TIME + mongo_ProjectDAO.Get_ProjectInformation(projectID).DateStart.ToString("dd/MM/yyyy") + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (mongo_Plan.PlanPhaseInformation.EndTime > mongo_ProjectDAO.Get_ProjectInformation(projectID).DateEnd)
+                    {
+                        errTime += Error.PLANPHASE_END_TIME_INVALID + Error.PROJECT_END_TIME + mongo_ProjectDAO.Get_ProjectInformation(projectID).DateEnd.ToString("dd/MM/yyyy") + Environment.NewLine;
                         isValid = false;
                     }
 
@@ -220,7 +341,6 @@ namespace iVolunteer.Controllers
                         try
                         {
                             //write data to db
-                            sql_Plan_DAO.Add_Plan(sql_Plan);
                             mongo_Plan_DAO.Add_Plan(mongo_Plan);
                             transaction.Complete();
                         }
@@ -292,7 +412,7 @@ namespace iVolunteer.Controllers
                         }
                     }
 
-                    return RedirectToAction("DetailPlanPhase", "Plan", new { projectID = thisprojectID});
+                    return RedirectToAction("DetailPlanPhase", "Plan", new { projectID = thisprojectID });
                 }
                 else
                 {
@@ -307,6 +427,128 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
+        public ActionResult CompletePlanPhase(string planPhaseID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string thisprojectID = "";
+
+                //get project id
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                thisprojectID = mongoDAO.Get_ProjectID(planPhaseID);
+
+                // Check is leader or not
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, thisprojectID))
+                {
+
+                    //start transaction 
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            mongoDAO.Update_PlanPhaseIsComplete(planPhaseID, true);
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return RedirectToAction("DetailPlanPhase", "Plan", new { projectID = thisprojectID });
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.ToString();
+                return PartialView("ErrorMessage");
+                throw;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <returns></returns>
+        public ActionResult ReWorkPlanPhase(string planPhaseID)
+        {
+            try
+            {
+                //check permission
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+                string thisprojectID = "";
+
+                //get project id
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                thisprojectID = mongoDAO.Get_ProjectID(planPhaseID);
+
+                // Check is leader or not
+                string userID = Session["UserID"].ToString();
+
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+
+                if (relationDAO.Is_Leader(userID, thisprojectID))
+                {
+
+                    //start transaction 
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            mongoDAO.Update_PlanPhaseIsComplete(planPhaseID, false);
+                            transaction.Complete();
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
+
+                    return RedirectToAction("DetailPlanPhase", "Plan", new { projectID = thisprojectID });
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Message = e.ToString();
+                return PartialView("ErrorMessage");
+                throw;
+            }
+        }
+
         /// <summary>
         /// 段階を変更画面を表示
         /// </summary>
@@ -352,7 +594,7 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
-            
+
         }
         /// <summary>
         /// 段階を変更
@@ -384,7 +626,7 @@ namespace iVolunteer.Controllers
 
                 ViewBag.IsLeader = relationDAO.Is_Leader(userID, thisprojectID);
 
-                if(relationDAO.Is_Leader(userID, thisprojectID))
+                if (relationDAO.Is_Leader(userID, thisprojectID))
                 {
                     if (!ModelState.IsValid) return PartialView("_EditPlanPhase", newinfo);
 
@@ -565,6 +807,7 @@ namespace iVolunteer.Controllers
                 }
 
                 //get project id
+                Mongo_Project_DAO mongo_ProjectDAO = new Mongo_Project_DAO();
                 Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
                 string thisprojectID = mongoDAO.Get_ProjectID(planPhaseID);
 
@@ -576,6 +819,40 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, thisprojectID))
                 {
+                    //Variable for validate
+                    string err = "";
+                    bool isValid = true;
+
+                    //Parse date
+                    DateTime startTime = DateTime.Parse(txtStartTime);
+                    DateTime endTime = DateTime.Parse(txtEndTime);
+
+                    if (startTime > endTime)
+                    {
+                        err += Error.PLANPHASE_TIME_INVALID + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (mongo_ProjectDAO.Get_ProjectInformation(thisprojectID).DateStart > startTime)
+                    {
+                        err += Error.PLANPHASE_START_TIME_INVALID + Error.PROJECT_START_TIME + mongo_ProjectDAO.Get_ProjectInformation(thisprojectID).DateStart.ToString("dd/MM/yyyy") + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (endTime > mongo_ProjectDAO.Get_ProjectInformation(thisprojectID).DateEnd)
+                    {
+                        err += Error.PLANPHASE_END_TIME_INVALID + Error.PROJECT_END_TIME + mongo_ProjectDAO.Get_ProjectInformation(thisprojectID).DateEnd.ToString("dd/MM/yyyy") + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (!isValid)
+                    {
+                        ViewBag.Message = err;
+                        ViewBag.ProjectID = thisprojectID;
+
+                        return PartialView("_PlanError");
+                    }
+
                     using (var transaction = new TransactionScope())
                     {
                         try
@@ -616,7 +893,6 @@ namespace iVolunteer.Controllers
         //Get Main Task Detail
         public ActionResult MainTaskDetail(string planPhaseID, string mainTaskID)
         {
-
             // check if parameter valid
             if (String.IsNullOrEmpty(planPhaseID) || Session["UserID"] == null)
             {
@@ -755,7 +1031,15 @@ namespace iVolunteer.Controllers
                     //Check Duedate with phase end time
                     if (!ValidationHelper.IsValidDeadlineTwoDate(task.Duedate, mongo_Plan_DAO.Get_PlanPhase_By_PlanID(planPhaseID).EndTime))
                     {
-                        errDuedate = Error.DUEDATE_INVALID_PLANPHASE + Environment.NewLine;
+                        errDuedate += Error.DUEDATE_INVALID_END_PLANPHASE + " Giai đoạn kết thúc ngày: " + mongo_Plan_DAO.Get_PlanPhase_By_PlanID(planPhaseID).EndTime.ToString("dd/MM/yyy hh:mm") + Environment.NewLine;
+                        isValid = false;
+                    }
+                    else
+
+                    //Check Duedate with phase start time
+                    if (!ValidationHelper.IsValidDeadlineTwoDate(mongo_Plan_DAO.Get_PlanPhase_By_PlanID(planPhaseID).StartTime, task.Duedate))
+                    {
+                        errDuedate += Error.DUEDATE_INVALID_START_PLANPHASE + " Giai đoạn bắt đầu ngày: " + mongo_Plan_DAO.Get_PlanPhase_By_PlanID(planPhaseID).StartTime.ToString("dd/MM/yyy hh:mm") + Environment.NewLine;
                         isValid = false;
                     }
 
@@ -873,8 +1157,6 @@ namespace iVolunteer.Controllers
         //Update Main Task Name
         public ActionResult UpdateMainTaskName(string planPhaseID, string mainTaskID, string txtMainTaskContent)
         {
-            if (!ModelState.IsValid) return View();
-
             //start transaction
             try
             {
@@ -897,6 +1179,35 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, thisprojectID))
                 {
+                    //variable for validate
+                    string err = "";
+                    bool isValid = true;
+
+                    if (txtMainTaskContent.Equals(""))
+                    {
+                        err = Error.MAINTASK_NAME_NULL + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    //start validate
+                    List<MainTask> currentMainTaskList = mongoDAO.Get_MainTaskList(planPhaseID);
+                    for (int i = 0; i < currentMainTaskList.Count(); i++)
+                    {
+                        if (currentMainTaskList[i].Name.Equals(txtMainTaskContent) && !currentMainTaskList[i].MainTaskID.ToString().Equals(mainTaskID))
+                        {
+                            err = Error.MAINTASKNAME_EXIST + Environment.NewLine;
+                            isValid = false;
+                        }
+                    }
+
+                    if (!isValid)
+                    {
+                        ViewBag.PlanPhaseID = planPhaseID;
+                        ViewBag.MainTaskID = mainTaskID;
+                        ViewBag.Message = err;
+                        return PartialView("_PlanError");
+                    }
+
                     using (var transaction = new TransactionScope())
                     {
                         try
@@ -1032,6 +1343,46 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, thisprojectID))
                 {
+                    //variable for validate
+                    string err = "";
+                    bool isValid = true;
+
+                    //start validate
+
+                    //Parse duedate
+                    DateTime duedate = DateTime.Parse(txtMainTaskDuedate);
+
+                    // Duedate 
+                    if (!ValidationHelper.IsValidDeadlineWithToday(duedate))
+                    {
+                        err = Error.DUEDATE_INVALID_TODAY + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    //Check Duedate with phase end time
+                    if (!ValidationHelper.IsValidDeadlineTwoDate(duedate, mongoDAO.Get_PlanPhase_By_PlanID(planPhaseID).EndTime))
+                    {
+                        err += Error.DUEDATE_INVALID_END_PLANPHASE + " Giai đoạn kết thúc ngày: " + mongoDAO.Get_PlanPhase_By_PlanID(planPhaseID).EndTime.ToString("dd/MM/yyy hh:mm") + Environment.NewLine;
+                        isValid = false;
+                    }
+                    else
+
+                    //Check Duedate with phase start time
+                    if (!ValidationHelper.IsValidDeadlineTwoDate(mongoDAO.Get_PlanPhase_By_PlanID(planPhaseID).StartTime, duedate))
+                    {
+                        err += Error.DUEDATE_INVALID_START_PLANPHASE + " Giai đoạn bắt đầu ngày: " + mongoDAO.Get_PlanPhase_By_PlanID(planPhaseID).StartTime.ToString("dd/MM/yyy hh:mm") + Environment.NewLine;
+                        isValid = false;
+                    }
+
+                    if (!isValid)
+                    {
+                        ViewBag.Message = err;
+                        ViewBag.PlanPhaseID = planPhaseID;
+                        ViewBag.MainTaskID = mainTaskID;
+
+                        return PartialView("_PlanError");
+                    }
+
                     using (var transaction = new TransactionScope())
                     {
                         try
@@ -1126,7 +1477,8 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("_ProjectPlan");
+                return PartialView("ErrorMessage");
+                throw;
             }
         }
         /// <summary>
@@ -1136,7 +1488,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         // View List Task of Day
         public ActionResult ListTaskOfThisDay(string projectID)
-        { 
+        {
             try
             {
                 if (Session["UserID"] != null)
@@ -1155,7 +1507,8 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("_ProjectPlan");
+                return PartialView("ErrorMessage");
+                throw;
             }
         }
         /// <summary>
@@ -1185,7 +1538,8 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("_ProjectPlan");
+                return PartialView("ErrorMessage");
+                throw;
             }
         }
         /// <summary>
@@ -1226,7 +1580,7 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
- 
+
         }
         /// <summary>
         /// サーブタスクを追加
@@ -1579,9 +1933,12 @@ namespace iVolunteer.Controllers
                 // Check is leader or not
                 string userID = Session["UserID"].ToString();
 
+                //Check task is current user's or not
+                string currentAssignPeople = mongoDAO.Get_AssignPeople(planPhaseID, mainTaskID, subTaskID);
+
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
 
-                if (relationDAO.Is_Leader(userID, thisprojectID))
+                if (relationDAO.Is_Leader(userID, thisprojectID) || userID.Equals(currentAssignPeople))
                 {
                     using (var transaction = new TransactionScope())
                     {
@@ -1837,7 +2194,8 @@ namespace iVolunteer.Controllers
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
-                return View("_ProjectPlan");
+                return PartialView("ErrorMessage");
+                throw;
             }
         }
         /// <summary>
@@ -1928,6 +2286,64 @@ namespace iVolunteer.Controllers
             catch (Exception e)
             {
                 ViewBag.Message = e.ToString();
+                return PartialView("ErrorMessage");
+                throw;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
+        public ActionResult PhaseCompletedListSubTask(string planPhaseID, string mainTaskID)
+        {
+            try
+            {
+                ViewBag.PlanPhaseID = planPhaseID;
+                ViewBag.MainTaskID = mainTaskID;
+
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                string projectID = mongoDAO.Get_ProjectID(planPhaseID);
+
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                    ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
+                }
+
+                List<SubTask> result = mongoDAO.Get_SubTaskList(planPhaseID, mainTaskID);
+
+                return PartialView("_PhaseCompletedSubTaskList", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+                throw;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planPhaseID"></param>
+        /// <param name="mainTaskID"></param>
+        /// <returns></returns>
+        public ActionResult PhaseCompletedListComment(string planPhaseID, string mainTaskID)
+        {
+            ViewBag.PlanPhaseID = planPhaseID;
+            ViewBag.MainTaskID = mainTaskID;
+            try
+            {
+                Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
+                List<Comment> result = mongoDAO.Get_CommentList(planPhaseID, mainTaskID);
+
+                return PartialView("_PhaseCompletedComment", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
                 throw;
             }

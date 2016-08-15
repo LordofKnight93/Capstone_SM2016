@@ -60,7 +60,7 @@
                 <div class="col-sm-12">
                     <div class="sub-container">
                         <!--<h4 id="btnAddBudgetRecord" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  ĐẦU MỤC ...</h4>-->
-                        @Ajax.ActionLink("THÊM  ĐẦU MỤC ...", "AddBudgetRecordForm", "Budget", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addBudgetRecordForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                        @Ajax.ActionLink("THÊM  ĐẦU MỤC ...", "AddBudgetRecordForm", "Budget", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "addBudgetRecordForm", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#addBudgetRecordForm')" }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                         <div id="addBudgetRecordForm">
                             @*@{ Html.RenderPartial("_ProjectBudgetAddRecord");  }*@
                         </div>

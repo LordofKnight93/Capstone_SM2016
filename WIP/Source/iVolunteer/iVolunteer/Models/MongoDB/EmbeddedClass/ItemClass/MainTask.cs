@@ -23,6 +23,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm:ss}", ApplyFormatInEditMode = true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
         [DisplayName("Thời hạn:")]
+		[Required(ErrorMessage = "Vui lòng nhập thời hạn.")]
         public DateTime Duedate { get; set; }
         public int TaskDoneCount { get; set; }
         public int SubTaskCount { get; set; }

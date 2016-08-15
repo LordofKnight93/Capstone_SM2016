@@ -291,7 +291,7 @@ namespace iVolunteer.Controllers
                         }
                     }
 
-                    return RedirectToAction("DetailBudgetRecord", "Budget", new { projectID = projectID });
+                    return RedirectToAction("BudgetAllView", "Budget", new { projectID = projectID });
                 }
                 else
                 {
@@ -453,6 +453,23 @@ namespace iVolunteer.Controllers
 
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
+					//variable for validate
+                    string err = "";
+                    bool isValid = true;
+
+                    if (txtRecordName.Equals(""))
+                    {
+                        err = "Vui lòng nhập tên đầu mục";
+                        isValid = false;
+                    }
+
+                    if (!isValid)
+                    {
+                        ViewBag.BudgetRecordID = budgetRecordID;
+                        ViewBag.Message = err;
+                        return PartialView("_BudgetError");
+                    }
+					
                     using (var transaction = new TransactionScope())
                     {
                         try
@@ -468,7 +485,7 @@ namespace iVolunteer.Controllers
                             return PartialView("ErrorMessage");
                         }
                     }
-                    return RedirectToAction("DetailBudgetRecord", "Budget", new { projectID = projectID });
+                    return RedirectToAction("BudgetAllView", "Budget", new { projectID = projectID });
                 }
                 else
                 {
@@ -631,7 +648,7 @@ namespace iVolunteer.Controllers
                             return PartialView("ErrorMessage");
                         }
                     }
-                    return RedirectToAction("DetailBudgetItem", "Budget", new { budgetRecordID = budgetRecordID });
+                    return RedirectToAction("BudgetAllView", "Budget", new { projectID = projectID });
                 }
                 else
                 {
@@ -695,7 +712,7 @@ namespace iVolunteer.Controllers
                         }
                     }
 
-                    return RedirectToAction("DetailBudgetItem", "Budget", new { budgetRecordID = budgetRecordID });
+                    return RedirectToAction("BudgetAllView", "Budget", new { projectID = projectID });
                 }
                 else
                 {
@@ -845,7 +862,7 @@ namespace iVolunteer.Controllers
                             return PartialView("ErrorMessage");
                         }
                     }
-                    return RedirectToAction("DetailBudgetItem", "Budget", new { budgetRecordID = budgetRecordID });
+                    return RedirectToAction("BudgetAllView", "Budget", new { projectID  = projectID });
                 }
                 else
                 {
@@ -1316,6 +1333,7 @@ namespace iVolunteer.Controllers
 
                 //variable for validate form
                 string errDate = "";
+				string errPayer = "";
                 bool isValid = true;
 
                 //Get Project ID
@@ -1342,10 +1360,17 @@ namespace iVolunteer.Controllers
                         isValid = false;
                     }
 
+					if (txtUserID.Equals(""))
+                    {
+                        errPayer = "Vui lòng chọn người thanh toán.";
+                        isValid = false;
+                    }
+					
                     if (!isValid)
                     {
                         ViewBag.FinanceID = financeID;
                         ViewBag.MessagePayDate = errDate;
+						ViewBag.MessagePayer = errPayer;
                         return PartialView("_FinanceAddItem", itemInfo);
                     }
 

@@ -63,7 +63,7 @@
         } else {
             // no error => we hide validation errors and update the result container
             $("#add-item-test-" + '@ViewBag.BudgetRecordID').empty();
-            $("#budgetItemDetails" + '@ViewBag.BudgetRecordID').html(result.responseText);
+            $("#tabplanbudget").html(result.responseText);
         }
     };
 </script>
