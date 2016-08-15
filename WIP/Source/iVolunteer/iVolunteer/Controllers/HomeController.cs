@@ -356,7 +356,7 @@ namespace iVolunteer.Controllers
             //if (account.IsAdmin)
             //    return RedirectToAction("Manage", "Admin");
             //else
-            //    return RedirectToAction("Newfeed","Home");
+            //    return RedirectToAction("Newfeed", "Home");
         }
         /// <summary>
         /// ログアウトする

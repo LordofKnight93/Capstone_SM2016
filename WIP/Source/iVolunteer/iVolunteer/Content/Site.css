@@ -4804,6 +4804,11 @@ img.postImage {
     font-size: 20px;
     text-align: center;
 }
+.success-message {
+    color: #428bca;
+    font-size: 20px;
+    text-align: center;
+}
 
 .text-danger {
     white-space: pre-line;

@@ -3044,7 +3044,7 @@ namespace iVolunteer.Controllers
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<Comment> commentList = postDAO.Get_Comments(postID, 0, 5);
 
-                if(Session["User"] == null)
+                if(Session["UserID"] == null)
                 {
                    return PartialView("_CommentList", commentList);
                 }

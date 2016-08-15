@@ -1,12 +1,26 @@
 ﻿@{
     ViewBag.Title = "iVolunteer";
 }
-<div class="row">
-    <div class="col-md-3">
-        @{Html.RenderAction("NavigationPanel", "Account");}
+@if (ViewBag.IsActivated == true)
+{
+    <div class="row">
+        <div class="col-md-12" style="margin: 20px auto">
+            <div class="success-message">
+                <h5>@ViewBag.Message</h5>
+            </div>
+        </div>
     </div>
-    <div class="col-md-9" id="newfeedPostsArea">
-        @{Html.RenderAction("LoadNewfeedPosts","Home");}
+}
+else
+{
+    <div class="row">
+        <div class="col-md-3">
+            @{Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+        <div class="col-md-9" id="newfeedPostsArea">
+            @{Html.RenderAction("LoadNewfeedPosts", "Home");}
+        </div>
+
     </div>
-    
-</div>
+
+}

@@ -43,7 +43,40 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return View("ErrorMessage");
             }
-            return RedirectToAction("Login", "Home");
+            //return RedirectToAction("Login", "Home");
+            ViewBag.Message = "Tải khoản của bạn đã được kích hoạt thành công. Hãy nhấn vào 'Đăng nhập hoặc đăng kí' để tham gia ngay cộng đồng iVolunteer";
+            ViewBag.IsActivated = true;
+            //return View("AccountActivated");
+            return RedirectToAction("Newfeed", "Home");
+        }
+        /// <summary>
+        /// アカウントの確認メールを放送
+        /// </summary>
+        /// <param name="displayName"></param>
+        /// <param name="email"></param>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public ActionResult SendActivationEmail(string displayName, string email, string userID)
+        {
+
+            MailMessage message = new MailMessage();
+            SmtpClient client = new SmtpClient();
+            client.Host = "smtp.gmail.com";
+            client.Port = 587;
+            message.From = new MailAddress("ivolunteer.noreply@gmail.com");
+            message.To.Add(email);
+            message.Subject = "Xác nhận Email đăng kí tại cộng đồng ivolunteervn.com";
+            message.Body = string.Format("Xin chào {0}, <br /> Cảm ơn bạn đã đăng kí thành viên cộng đồng iVolunteer, bạn hãy nhấn <a href = \"{1}\" title = \"Activate your account\">vào đây</a> để hoàn tất đăng kí!", displayName, Url.Action("Confirm", "Account", new { userID = userID }, Request.Url.Scheme));
+
+            message.IsBodyHtml = true;
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = true;
+            client.Credentials = new System.Net.NetworkCredential("ivolunteer.noreply@gmail.com", "iv0lunt##r");
+            client.Send(message);
+            ViewBag.Message = "Gửi Email xác nhận tài khoản thành công. Mời bạn truy cập Email và làm theo hướng dẫn";
+            ViewBag.IsActivated = false;
+            return View("AccountActivated");
+
         }
         /// <summary>
         /// child action, create left navigation panel
@@ -1357,34 +1390,7 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
-        /// <summary>
-        /// アカウントの確認メールを放送
-        /// </summary>
-        /// <param name="displayName"></param>
-        /// <param name="email"></param>
-        /// <param name="userID"></param>
-        /// <returns></returns>
-        public ActionResult SendActivationEmail(string displayName, string email, string userID)
-        {
-
-            MailMessage message = new MailMessage();
-            SmtpClient client = new SmtpClient();
-            client.Host = "smtp.gmail.com";
-            client.Port = 587;
-            message.From = new MailAddress("ivolunteer.noreply@gmail.com");
-            message.To.Add(email);
-            message.Subject = "Verify your email used on ivolunteer.com.vn";
-            message.Body = string.Format("Hi {0}, <br /> Thank you for your registration, please click <a href = \"{1}\" title = \"Activate your account\">here</a> to complete your registration!", displayName, Url.Action("Confirm", "Account", new { userID = userID }, Request.Url.Scheme));
-
-            message.IsBodyHtml = true;
-            client.EnableSsl = true;
-            client.UseDefaultCredentials = true;
-            client.Credentials = new System.Net.NetworkCredential("ivolunteer.noreply@gmail.com", "iv0lunt##r");
-            client.Send(message);
-            ViewBag.Message = "Gửi Email xác nhận tài khoản thành công. Mời bạn truy cập Email và làm theo hướng dẫn";
-            return View("ErrorMessage");
-
-        }
+        
         /// <summary>
         /// パスワードの忘れメールを放送
         /// </summary>

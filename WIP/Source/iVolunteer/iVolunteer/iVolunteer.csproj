@@ -726,6 +726,7 @@
     <Content Include="Views\Plan\_PhaseCompletedMainTaskDetail.cshtml" />
     <Content Include="Views\Plan\_PhaseCompletedMainTaskList.cshtml" />
     <Content Include="Views\Plan\_PhaseCompletedSubTaskList.cshtml" />
+    <Content Include="Views\Shared\AccountActivated.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
