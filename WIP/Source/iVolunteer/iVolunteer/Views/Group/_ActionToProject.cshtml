@@ -11,10 +11,13 @@
         }
         else
         {
-            <li>
-                @*//Đại diện nhóm tham gia*@
-                @Ajax.RawActionLink("<i class='material-icons'>group_add</i><span class='action-to-target-text'>  Đại diện nhóm tham gia</span> ", "MemberNotInProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
-            </li>
+            if (ViewBag.IsRecruting == true)
+            {
+                <li>
+                    @*//Đại diện nhóm tham gia*@
+                    @Ajax.RawActionLink("<i class='material-icons'>group_add</i><span class='action-to-target-text'>  Đại diện nhóm tham gia</span> ", "MemberNotInProject", "Group", new { groupID = ViewBag.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
         }
     }
     else

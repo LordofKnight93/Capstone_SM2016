@@ -179,5 +179,78 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        /// <summary>
+        /// a project start recruiting member
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Start_Recruting(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID);
+                    if (result != null)
+                    {
+                        result.IsRecruiting = Status.IS_RECRUITING;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// a project stop recruiting member
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns></returns>
+        public bool Stop_Recruting(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID);
+                    if (result != null)
+                    {
+                        result.IsRecruiting = Status.IS_NOT_RECRUITING;
+                        dbEntities.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Check if a project is recruiting or not
+        /// </summary>
+        /// <param name="projectID"></param>
+        /// <returns>return value compare with Constant</returns>
+        public bool IsRecruiting(string projectID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    SQL_Project project = dbEntities.SQL_Project.FirstOrDefault(g => g.ProjectID == projectID);
+                    return project.IsRecruiting;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -43,9 +43,9 @@
     <NavigationProperty Name="SQL_Message" Relationship="Self.FK_Message_Account" FromRole="SQL_Account" ToRole="SQL_Message" />
     <NavigationProperty Name="SQL_AcIm_Relation" Relationship="Self.FK_SQL_AcIm_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcIm_Relation" />
     <NavigationProperty Name="SQL_AcPo_Relation" Relationship="Self.FK_SQL_AcPo_Relation_SQL_Account" FromRole="SQL_Account" ToRole="SQL_AcPo_Relation" />
+    <NavigationProperty Name="SQL_HubConnection" Relationship="Self.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_Account" ToRole="SQL_HubConnection" />
     <NavigationProperty Name="SQL_AcGr_Relation" Relationship="Self.FK_User_Group_Account" FromRole="SQL_Account" ToRole="SQL_AcGr_Relation" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_Account" FromRole="SQL_Account" ToRole="SQL_AcPr_Relation" />
-    <NavigationProperty Name="SQL_HubConnection" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_Account" ToRole="SQL_HubConnection" />
   </EntityType>
   <EntityType Name="SQL_AcGr_Relation">
     <Key>
@@ -134,14 +134,13 @@
     <NavigationProperty Name="SQL_Group" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Group" FromRole="SQL_GrPr_Relation" ToRole="SQL_Group" />
     <NavigationProperty Name="SQL_Project" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Project" FromRole="SQL_GrPr_Relation" ToRole="SQL_Project" />
   </EntityType>
-  <EntityType Name="SQL_GuestPr_Relation">
+  <EntityType Name="SQL_HubConnection">
     <Key>
-      <PropertyRef Name="SponsorID" />
+      <PropertyRef Name="ConnectionID" />
     </Key>
-    <Property Name="SponsorID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Status" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="SQL_Project" Relationship="Self.FK_SQL_GuestPr_Relation_SQL_Project" FromRole="SQL_GuestPr_Relation" ToRole="SQL_Project" />
+    <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ConnectionID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="SQL_Account" Relationship="Self.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_HubConnection" ToRole="SQL_Account" />
   </EntityType>
   <EntityType Name="SQL_Image">
     <Key>
@@ -189,15 +188,15 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsRecruiting" Type="Boolean" Nullable="false" />
     <Property Name="InProgress" Type="Boolean" Nullable="false" />
     <Property Name="IsActivate" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_ProjectSD" FromRole="SQL_Project" ToRole="SQL_AcPr_Relation" />
     <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Album" />
     <NavigationProperty Name="SQL_GrPr_Relation" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GrPr_Relation" />
-    <NavigationProperty Name="SQL_GuestPr_Relation" Relationship="Self.FK_SQL_GuestPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GuestPr_Relation" />
     <NavigationProperty Name="SQL_Plan" Relationship="Self.FK_Plan_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Plan" />
     <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Post" />
-    <NavigationProperty Name="SQL_Budget" Relationship="iVolunteerModel.FK_Budget_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Budget" />
+    <NavigationProperty Name="SQL_Budget" Relationship="iVolunteerModel.FK_SQL_Budget_SQL_Project" FromRole="SQL_Project" ToRole="SQL_Budget" />
   </EntityType>
   <Association Name="FK_User_Friend_Account">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
@@ -279,6 +278,18 @@
         <PropertyRef Name="UserID" />
       </Principal>
       <Dependent Role="SQL_AcPo_Relation">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SQL_HubConnection_SQL_Account">
+    <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
+    <End Role="SQL_HubConnection" Type="Self.SQL_HubConnection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Account">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SQL_HubConnection">
         <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
@@ -427,18 +438,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_SQL_GuestPr_Relation_SQL_Project">
-    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
-    <End Role="SQL_GuestPr_Relation" Type="Self.SQL_GuestPr_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Project">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="SQL_GuestPr_Relation">
-        <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Plan_ProjectSD">
     <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
     <End Role="SQL_Plan" Type="Self.SQL_Plan" Multiplicity="*" />
@@ -474,7 +473,7 @@
     <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" />
     <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" />
-    <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" />
+    <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" />
     <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" />
     <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" />
     <EntitySet Name="SQL_Plan" EntityType="Self.SQL_Plan" />
@@ -507,6 +506,10 @@
     <AssociationSet Name="FK_SQL_AcPo_Relation_SQL_Account" Association="Self.FK_SQL_AcPo_Relation_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
       <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="Self.FK_SQL_HubConnection_SQL_Account">
+      <End Role="SQL_Account" EntitySet="SQL_Account" />
+      <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
     </AssociationSet>
     <AssociationSet Name="FK_User_Group_Account" Association="Self.FK_User_Group_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -556,10 +559,6 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
     </AssociationSet>
-    <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
-      <End Role="SQL_Project" EntitySet="SQL_Project" />
-      <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
-    </AssociationSet>
     <AssociationSet Name="FK_Plan_ProjectSD" Association="Self.FK_Plan_ProjectSD">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Plan" EntitySet="SQL_Plan" />
@@ -568,46 +567,21 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
-    <EntitySet Name="SQL_HubConnection" EntityType="iVolunteerModel.SQL_HubConnection" />
-    <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="iVolunteerModel.FK_SQL_HubConnection_SQL_Account">
-      <End Role="SQL_Account" EntitySet="SQL_Account" />
-      <End Role="SQL_HubConnection" EntitySet="SQL_HubConnection" />
-    </AssociationSet>
     <EntitySet Name="SQL_Budget" EntityType="iVolunteerModel.SQL_Budget" />
-    <AssociationSet Name="FK_Budget_ProjectSD" Association="iVolunteerModel.FK_Budget_ProjectSD">
+    <AssociationSet Name="FK_SQL_Budget_SQL_Project" Association="iVolunteerModel.FK_SQL_Budget_SQL_Project">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Budget" EntitySet="SQL_Budget" />
     </AssociationSet>
   </EntityContainer>
-  <EntityType Name="SQL_HubConnection">
-    <Key>
-      <PropertyRef Name="ConnectionID" />
-    </Key>
-    <Property Name="UserID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <Property Name="ConnectionID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="SQL_Account" Relationship="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" FromRole="SQL_HubConnection" ToRole="SQL_Account" />
-  </EntityType>
-  <Association Name="FK_SQL_HubConnection_SQL_Account">
-    <End Type="iVolunteerModel.SQL_Account" Role="SQL_Account" Multiplicity="1" />
-    <End Type="iVolunteerModel.SQL_HubConnection" Role="SQL_HubConnection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Account">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="SQL_HubConnection">
-        <PropertyRef Name="UserID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="SQL_Budget">
     <Key>
       <PropertyRef Name="BudgetID" />
     </Key>
     <Property Name="BudgetID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
     <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="SQL_Project" Relationship="iVolunteerModel.FK_Budget_ProjectSD" FromRole="SQL_Budget" ToRole="SQL_Project" />
+    <NavigationProperty Name="SQL_Project" Relationship="iVolunteerModel.FK_SQL_Budget_SQL_Project" FromRole="SQL_Budget" ToRole="SQL_Project" />
   </EntityType>
-  <Association Name="FK_Budget_ProjectSD">
+  <Association Name="FK_SQL_Budget_SQL_Project">
     <End Type="iVolunteerModel.SQL_Project" Role="SQL_Project" Multiplicity="1" />
     <End Type="iVolunteerModel.SQL_Budget" Role="SQL_Budget" Multiplicity="*" />
     <ReferentialConstraint>

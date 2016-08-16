@@ -345,17 +345,11 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                if (relationDAO.Is_Joined(userID, groupID) || relationDAO.Is_Leader(userID, groupID))
-                    ViewBag.IsJoined = true;
 
-                if (relationDAO.Is_Requested(userID, groupID))
-                    ViewBag.IsRequested = true;
-
-                if (relationDAO.Is_Follower(userID, groupID))
-                    ViewBag.IsFollowing = true;
-
-                if (relationDAO.Is_Reported(userID, groupID))
-                    ViewBag.IsReported = true;
+                ViewBag.IsJoined = relationDAO.Is_Joined(userID, groupID);
+                ViewBag.IsRequested = relationDAO.Is_Requested(userID, groupID);
+                ViewBag.IsFollowing = relationDAO.Is_Follower(userID, groupID);
+                ViewBag.IsReported = relationDAO.Is_Reported(userID, groupID);
 
                 return PartialView("_ActionToGroup");
 
@@ -542,18 +536,12 @@ namespace iVolunteer.Controllers
 
                 //check if is friend
                 //すでに友達関係かを判定
-                if (relationDAO.Is_Friend(userID, otherID))
-                {
-                    ViewBag.IsFriend = true;
-                }
+                ViewBag.IsFriend = relationDAO.Is_Friend(userID, otherID);
                 //check if user send request
                 //すでに友達申請をしたかを判定
-                if (relationDAO.Is_Requested(userID, otherID))
-                {
-                    ViewBag.IsRequested = true;
-                }
-                if (relationDAO.Is_Reported(userID, otherID))
-                    ViewBag.IsReported = true;
+                ViewBag.IsRequested = relationDAO.Is_Requested(userID, otherID);
+
+                ViewBag.IsReported = relationDAO.Is_Reported(userID, otherID);
 
                 return PartialView("_ActionToOtherUser");
             }
@@ -738,6 +726,8 @@ namespace iVolunteer.Controllers
                 }
                 else ViewBag.Ongoing = true;
 
+                ViewBag.IsRecruiting = projectDAO.IsRecruiting(projectID);
+
                 if (Session["UserID"] == null)
                 {
 
@@ -757,23 +747,13 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                if (relationDAO.Is_Joined(userID, projectID))
-                    ViewBag.IsJoined = true;
 
-                if (relationDAO.Is_Join_Requested(userID, projectID))
-                    ViewBag.IsJoinRequested = true;
-
-                if (relationDAO.Is_Sponsor(userID, projectID))
-                    ViewBag.IsSponsored = true;
-
-                if (relationDAO.Is_Sponsor_Requested(userID, projectID))
-                    ViewBag.IsSponsorRequested = true;
-
-                if (relationDAO.Is_Follower(userID, projectID))
-                    ViewBag.IsFollowing = true;
-
-                if (relationDAO.Is_Reported(userID, projectID))
-                    ViewBag.IsReported = true;
+                ViewBag.IsJoined = relationDAO.Is_Joined(userID, projectID);
+                ViewBag.IsJoinRequested = relationDAO.Is_Join_Requested(userID, projectID);
+                ViewBag.IsSponsored = relationDAO.Is_Sponsor(userID, projectID);
+                ViewBag.IsSponsorRequested = relationDAO.Is_Sponsor_Requested(userID, projectID);
+                ViewBag.IsFollowing = relationDAO.Is_Follower(userID, projectID);
+                ViewBag.IsReported = relationDAO.Is_Reported(userID, projectID);
 
                 return PartialView("_ActionToProject");
 
@@ -1691,6 +1671,8 @@ namespace iVolunteer.Controllers
                 if(!ModelState.IsValid) return PartialView("_ChangePassword");
 
                 string userID = Session["UserID"].ToString();
+                //hash old password
+                changePasswordModel.OldPassword = HashHelper.Hash(changePasswordModel.OldPassword);
 
                 SQL_Account_DAO accountDAO = new SQL_Account_DAO();
                 if(!accountDAO.Is_Password_Match(userID, changePasswordModel.OldPassword))
@@ -1704,6 +1686,8 @@ namespace iVolunteer.Controllers
                     ViewBag.Message = "Mật khẩu mới phải khác mật khẩu cũ!";
                     return PartialView("_ChangePassword");
                 }
+                //hash new password
+                changePasswordModel.NewPassword = HashHelper.Hash(changePasswordModel.NewPassword);
 
                 accountDAO.Set_Password(userID, changePasswordModel.NewPassword);
 

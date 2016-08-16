@@ -104,6 +104,40 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult GroupHome(string groupID)
         {
+            // get cookie code block
+            if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
+            {
+                HttpCookie cookie = Request.Cookies["Cookie"];
+                string email = Request.Cookies["Cookie"].Values["Email"];
+                //decrypt here
+                string passwod = Request.Cookies["Cookie"].Values["Password"];
+                //decrypt here
+                SQL_Account account = null;
+                try
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                    account = accountDAO.Get_Account_By_Email(email);
+                    if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                       && account.IsConfirm == Status.IS_CONFIRMED
+                                       && account.Password == passwod)
+                    {
+                        Session["UserID"] = account.UserID;
+                        Session["DisplayName"] = account.DisplayName;
+                        Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                    }
+                    else
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie");
+                        myCookie.Expires = DateTime.Now.AddDays(-1d);
+                        Response.Cookies.Add(myCookie);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
             SDLink result = null;
             try
             {
@@ -117,7 +151,7 @@ namespace iVolunteer.Controllers
                 if (Session["UserID"] != null)
                 {
                     SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    if (Session["UserID"].ToString() == "Admin")
+                    if (Session["Role"].ToString() == "Admin")
                         ViewBag.IsAdmin = true;
                     else
                     {
@@ -800,10 +834,10 @@ namespace iVolunteer.Controllers
 
             try
             {
-                // get joined group list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                // get organized project list
+                SQL_GrPr_Relation_DAO relationDAO = new SQL_GrPr_Relation_DAO();
                 var listID = relationDAO.Get_Organized_Projects(groupID);
-                // get joined group Info
+                // get organized group Info
                 Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
                 var result = groupDAO.Get_ProjectsInformation(listID);
 
@@ -832,10 +866,10 @@ namespace iVolunteer.Controllers
 
             try
             {
-                // get joined group list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                // get sponsored group list
+                SQL_GrPr_Relation_DAO relationDAO = new SQL_GrPr_Relation_DAO();
                 var listID = relationDAO.Get_Sponsored_Projects(groupID);
-                // get joined group Info
+                // get sponsored group Info
                 Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
                 var result = groupDAO.Get_ProjectsInformation(listID);
 
@@ -865,7 +899,7 @@ namespace iVolunteer.Controllers
             try
             {
                 // get joined group list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                SQL_GrPr_Relation_DAO relationDAO = new SQL_GrPr_Relation_DAO();
                 var listID = relationDAO.Get_Participated_Projects(groupID);
                 // get joined group Info
                 Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
@@ -1634,6 +1668,9 @@ namespace iVolunteer.Controllers
         {
             try
             {
+                SQL_Project_DAO projectDAO = new SQL_Project_DAO();
+                ViewBag.IsRecruiting = projectDAO.IsRecruiting(projectID);
+
                 SQL_GrPr_Relation_DAO relationDAO = new SQL_GrPr_Relation_DAO();
 
                 ViewBag.IsJoined = relationDAO.Is_Joined(groupID, projectID);

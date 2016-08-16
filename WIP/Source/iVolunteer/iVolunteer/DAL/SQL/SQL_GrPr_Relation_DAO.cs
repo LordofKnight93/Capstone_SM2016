@@ -768,5 +768,30 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+
+        /// <summary>
+        /// get group participated active projects
+        /// </summary>
+        /// <param name="groupID"></param>
+        public List<string> Get_Participated_Projects(string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_GrPr_Relation.Where(rl => rl.GroupID == groupID
+                                                                   && rl.Relation == GrPrRelation.MEMBER_RELATION
+                                                                   && rl.Status == Status.ACCEPTED
+                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Project.InProgress == Status.ENDED)
+                                                             .Select(rl => rl.ProjectID).Distinct().ToList();
+                    return result;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@
 }
 
 <div class="row">
-    @if (Session["UserID"] != null)
+    @if (Session["Role"] != null && Session["Role"].ToString() == "User")
     {
         <div class="col-md-3" style="margin: 0 0 1rem 0;; margin-right: -10px">
             @{ Html.RenderAction("NavigationPanel", "Account");}
@@ -28,7 +28,7 @@
         @*-------------------Navigation Bar----------------*@
         <div id="exTab1">
             <ul class="nav nav-tabs">
-                @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsAdmin == null)
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false)
                 {
                     <li class="col-md-2 active" data-toggle="tab">
                         <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->

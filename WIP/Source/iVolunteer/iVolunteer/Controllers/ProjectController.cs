@@ -62,6 +62,7 @@ namespace iVolunteer.Controllers
             projectInfo.DateCreate = DateTime.Now;
             projectInfo.MemberCount = 1;
             projectInfo.InProgress = Status.ONGOING;
+            projectInfo.IsRecruit = Status.IS_RECRUITING;
             projectInfo.IsActivate = Status.IS_ACTIVATE;
             projectInfo.IsRecruit = Status.IS_RECRUITING;
 
@@ -140,6 +141,40 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult ProjectHome(string projectID)
         {
+            // get cookie code block
+            if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
+            {
+                HttpCookie cookie = Request.Cookies["Cookie"];
+                string email = Request.Cookies["Cookie"].Values["Email"];
+                //decrypt here
+                string passwod = Request.Cookies["Cookie"].Values["Password"];
+                //decrypt here
+                SQL_Account account = null;
+                try
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                    account = accountDAO.Get_Account_By_Email(email);
+                    if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                       && account.IsConfirm == Status.IS_CONFIRMED
+                                       && account.Password == passwod)
+                    {
+                        Session["UserID"] = account.UserID;
+                        Session["DisplayName"] = account.DisplayName;
+                        Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                    }
+                    else
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie");
+                        myCookie.Expires = DateTime.Now.AddDays(-1d);
+                        Response.Cookies.Add(myCookie);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
             SDLink result = null;
             try
             {
@@ -153,7 +188,7 @@ namespace iVolunteer.Controllers
                 if (Session["UserID"] != null)
                 {
                     SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                    if (Session["UserID"].ToString() == "Admin")
+                    if (Session["Role"].ToString() == "Admin")
                         ViewBag.IsAdmin = true;
                     else
                     {
@@ -443,6 +478,7 @@ namespace iVolunteer.Controllers
                 if (Session["UserID"] != null)
                 {
                     string userID = Session["UserID"].ToString();
+                    ViewBag.IsJoined = relationDAO.Is_Joined(userID, projectID); 
                     ViewBag.IsLeader = relationDAO.Is_Leader(userID, projectID);
                 }
                 ViewBag.ProjectID = projectID;
@@ -2596,7 +2632,7 @@ namespace iVolunteer.Controllers
                             sqlDAO.Close(projectID);
                             Mongo_Project_DAO mongoDAO = new Mongo_Project_DAO();
                             mongoDAO.Close(projectID);
-                            mongoDAO.Stop_Recruit(projectID);
+                            mongoDAO.Stop_Recruiting(projectID);
 
                             transaction.Complete();
                         }
@@ -3356,10 +3392,26 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
-                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                    projectDAO.Start_Recruit(projectID);
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            SQL_Project_DAO sqlDAO = new SQL_Project_DAO();
+                            sqlDAO.Start_Recruting(projectID);
 
-                    return ProjectInformation(projectID);
+                            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                            projectDAO.Start_Recruiting(projectID);
+
+                            transaction.Complete();
+                            return ProjectInformation(projectID);
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
                 }
                 else
                 {
@@ -3393,10 +3445,26 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
-                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                    projectDAO.Stop_Recruit(projectID);
+                    using (var transaction = new TransactionScope())
+                    {
+                        try
+                        {
+                            SQL_Project_DAO sqlDAO = new SQL_Project_DAO();
+                            sqlDAO.Stop_Recruting(projectID);
 
-                    return ProjectInformation(projectID);
+                            Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                            projectDAO.Stop_Recruiting(projectID);
+
+                            transaction.Complete();
+                            return ProjectInformation(projectID);
+                        }
+                        catch
+                        {
+                            transaction.Dispose();
+                            ViewBag.Message = Error.UNEXPECT_ERROR;
+                            return PartialView("ErrorMessage");
+                        }
+                    }
                 }
                 else
                 {

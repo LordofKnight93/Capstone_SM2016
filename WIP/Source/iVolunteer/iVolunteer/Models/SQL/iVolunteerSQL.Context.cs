@@ -35,13 +35,12 @@ namespace iVolunteer.Models.SQL
         public virtual DbSet<SQL_Album> SQL_Album { get; set; }
         public virtual DbSet<SQL_Group> SQL_Group { get; set; }
         public virtual DbSet<SQL_GrPr_Relation> SQL_GrPr_Relation { get; set; }
-        public virtual DbSet<SQL_GuestPr_Relation> SQL_GuestPr_Relation { get; set; }
+        public virtual DbSet<SQL_HubConnection> SQL_HubConnection { get; set; }
         public virtual DbSet<SQL_Image> SQL_Image { get; set; }
         public virtual DbSet<SQL_Message> SQL_Message { get; set; }
         public virtual DbSet<SQL_Plan> SQL_Plan { get; set; }
         public virtual DbSet<SQL_Post> SQL_Post { get; set; }
         public virtual DbSet<SQL_Project> SQL_Project { get; set; }
-        public virtual DbSet<SQL_HubConnection> SQL_HubConnection { get; set; }
         public virtual DbSet<SQL_Budget> SQL_Budget { get; set; }
     }
 }

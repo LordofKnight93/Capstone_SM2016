@@ -53,7 +53,7 @@ namespace iVolunteer.Models.ViewModel
         [Required(ErrorMessage = "Vui lòng nhập ngày sinh!")]
         [DisplayName("Ngày sinh")]
         [DataType(DataType.Date, ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Birthday(ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
         public DateTime Birthday { get; set; }
 

@@ -164,7 +164,7 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Start_Recruit(string projectID)
+        public bool Start_Recruiting(string projectID)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace iVolunteer.DAL.MongoDB
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        public bool Stop_Recruit(string projectID)
+        public bool Stop_Recruiting(string projectID)
         {
             try
             {

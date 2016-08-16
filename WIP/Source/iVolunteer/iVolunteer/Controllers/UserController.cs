@@ -29,6 +29,40 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult UserHome(string userID)
         {
+            // get cookie code block
+            if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
+            {
+                HttpCookie cookie = Request.Cookies["Cookie"];
+                string email = Request.Cookies["Cookie"].Values["Email"];
+                //decrypt here
+                string passwod = Request.Cookies["Cookie"].Values["Password"];
+                //decrypt here
+                SQL_Account account = null;
+                try
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                    account = accountDAO.Get_Account_By_Email(email);
+                    if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                       && account.IsConfirm == Status.IS_CONFIRMED
+                                       && account.Password == passwod)
+                    {
+                        Session["UserID"] = account.UserID;
+                        Session["DisplayName"] = account.DisplayName;
+                        Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                    }
+                    else
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie");
+                        myCookie.Expires = DateTime.Now.AddDays(-1d);
+                        Response.Cookies.Add(myCookie);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
             SDLink result = null;
             try
             {

@@ -12,11 +12,12 @@
                     <p style="margin: -9px 0 0 0; font-size: 16px;">@Model.Count() thành viên</p>
                 </div>
                 <div class="col-sm-3" style="text-align: right; line-height: 60px;">
-                    @if (Session["UserID"] != null)
+                    @if (ViewBag.IsJoined == true)
                     {
-                        @*<button class="btn btn-image" data-toggle="modal" data-target="#popup" title="@(ViewBag.IsLeader == true ? "Mời bạn bè tham gia" : "Đề xuất bạn bè")" style="border-color: #049f88">
-                                <i class="material-icons">@Ajax.ActionLink("person_add", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                            </button>*@
+                        if (ViewBag.IsLeader == true)
+                        {
+                            @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Mời bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
+                        }
                         @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Đề xuất bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
                     }
                 </div>

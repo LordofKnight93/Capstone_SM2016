@@ -27,6 +27,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult FrontPage()
         {
+            // get cookie code block
             if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
             {
                 HttpCookie cookie = Request.Cookies["Cookie"];
@@ -40,7 +41,8 @@ namespace iVolunteer.Controllers
                     SQL_Account_DAO accountDAO = new SQL_Account_DAO();
                     account = accountDAO.Get_Account_By_Email(email);
                     if (account != null && account.IsActivate == Status.IS_ACTIVATE
-                                       && account.IsConfirm == Status.IS_CONFIRMED)
+                                       && account.IsConfirm == Status.IS_CONFIRMED
+                                       && account.Password == passwod)
                     {
                         Session["UserID"] = account.UserID;
                         Session["DisplayName"] = account.DisplayName;
@@ -51,7 +53,6 @@ namespace iVolunteer.Controllers
                         HttpCookie myCookie = new HttpCookie("Cookie");
                         myCookie.Expires = DateTime.Now.AddDays(-1d);
                         Response.Cookies.Add(myCookie);
-                        return RedirectToAction("FrontPage", "Home");
                     }
                 }
                 catch
@@ -63,7 +64,7 @@ namespace iVolunteer.Controllers
             try
             {
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                var result = projectDAO.FrontPage_Project(0, 10);
+                var result = projectDAO.FrontPage_Project(0, 8);
                 return View("FrontPage", result);
             }
             catch
@@ -127,9 +128,44 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult Newfeed()
         {
+
             if (Session["UserID"] == null)
             {
-                return FrontPage();
+                // get cookie code block
+                if (Request.Cookies["Cookie"] != null)
+                {
+                    HttpCookie cookie = Request.Cookies["Cookie"];
+                    string email = Request.Cookies["Cookie"].Values["Email"];
+                    //decrypt here
+                    string passwod = Request.Cookies["Cookie"].Values["Password"];
+                    //decrypt here
+                    SQL_Account account = null;
+                    try
+                    {
+                        SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                        account = accountDAO.Get_Account_By_Email(email);
+                        if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                           && account.IsConfirm == Status.IS_CONFIRMED
+                                           && account.Password == passwod)
+                        {
+                            Session["UserID"] = account.UserID;
+                            Session["DisplayName"] = account.DisplayName;
+                            Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                        }
+                        else
+                        {
+                            HttpCookie myCookie = new HttpCookie("Cookie");
+                            myCookie.Expires = DateTime.Now.AddDays(-1d);
+                            Response.Cookies.Add(myCookie);
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                else
+                    return RedirectToAction("FrontPage","Home");
             }
             if (Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("Newfeed");
@@ -233,7 +269,8 @@ namespace iVolunteer.Controllers
                     return View("Register", registerModel);
                 }
 
-                //encrypt password here
+                //hash password here
+                registerModel.Password = HashHelper.Hash(registerModel.Password);
                 
                 //create account in MongoDB
                 Mongo_User user = new Mongo_User(registerModel);
@@ -289,6 +326,38 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            // get cookie code block
+            if (Session["UserID"] == null && Request.Cookies["Cookie"] != null)
+            {
+                HttpCookie cookie = Request.Cookies["Cookie"];
+                string email = Request.Cookies["Cookie"].Values["Email"];
+                string passwod = Request.Cookies["Cookie"].Values["Password"];
+                SQL_Account account = null;
+                try
+                {
+                    SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+                    account = accountDAO.Get_Account_By_Email(email);
+                    if (account != null && account.IsActivate == Status.IS_ACTIVATE
+                                       && account.IsConfirm == Status.IS_CONFIRMED
+                                       && account.Password == passwod)
+                    {
+                        Session["UserID"] = account.UserID;
+                        Session["DisplayName"] = account.DisplayName;
+                        Session["Role"] = account.IsAdmin ? "Admin" : "User";
+                    }
+                    else
+                    {
+                        HttpCookie myCookie = new HttpCookie("Cookie");
+                        myCookie.Expires = DateTime.Now.AddDays(-1d);
+                        Response.Cookies.Add(myCookie);
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+
             if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
             return PartialView("_Login");
         }
@@ -305,6 +374,7 @@ namespace iVolunteer.Controllers
             SQL_Account account = null;
             try
             {
+
                 SQL_Account_DAO accountDAO = new SQL_Account_DAO();
                 account = accountDAO.Get_Account_By_Email(loginModel.Email);
             }
@@ -329,6 +399,9 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.EMAIL_NOT_CONFIRM;
                 return PartialView("_Login", loginModel);
             }
+            //hash password
+            loginModel.Password = HashHelper.Hash(loginModel.Password);
+
             if (account.Password != loginModel.Password)
             {
                 ViewBag.Message = Error.WRONG_PASSWORD;
@@ -337,13 +410,22 @@ namespace iVolunteer.Controllers
             // code save cookie wil be added here later
             if (loginModel.IsRemember)
             {
-                HttpCookie cookie = new HttpCookie("Cookie");
-                //need encrypt
-                cookie.Values.Add("Email", loginModel.Email);
-                //need encrypt
-                cookie.Values.Add("Password", loginModel.Password);
-                cookie.Expires = DateTime.Now.AddDays(15);
-                Response.Cookies.Add(cookie);
+                if (account.IsAdmin == Role.IS_USER)
+                {
+                    HttpCookie cookie = new HttpCookie("Cookie");
+                    //need encrypt
+                    cookie.Values.Add("Email", account.Email);
+                    //need encrypt
+                    cookie.Values.Add("Password", account.Password);
+                    cookie.Expires = DateTime.Now.AddDays(15);
+                    Response.Cookies.Add(cookie);
+                }
+                else
+                {
+                    HttpCookie myCookie = new HttpCookie("Cookie");
+                    myCookie.Expires = DateTime.Now.AddDays(-1d);
+                    Response.Cookies.Add(myCookie);
+                }
             }
 
             //set session information
@@ -437,13 +519,11 @@ namespace iVolunteer.Controllers
                     ViewBag.Message = "Email này chưa đăng ký!";
                     return PartialView("_ForgotPassword");
                 }
-                //get password
-                string password = accountDAO.Get_Account_By_Email(email).Password;
-                //encrypt here
+                //reset password
 
                 //sent mail here
 
-                ViewBag.Message = "Mật khẩu đã được gửi vào hòm thư!";
+                ViewBag.Message = "Mật khẩu mới đã được gửi vào hòm thư!";
                 return PartialView("_ForgotPassword");
             }
             catch

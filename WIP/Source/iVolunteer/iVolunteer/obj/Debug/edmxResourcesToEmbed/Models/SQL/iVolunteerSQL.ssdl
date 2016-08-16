@@ -51,7 +51,7 @@
       <PropertyRef Name="UserID" />
       <PropertyRef Name="Relation" />
     </Key>
-    <Property Name="ImageID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ImageID" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="Relation" Type="int" Nullable="false" />
   </EntityType>
@@ -110,14 +110,6 @@
     <Property Name="Relation" Type="int" Nullable="false" />
     <Property Name="Status" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="SQL_GuestPr_Relation">
-    <Key>
-      <PropertyRef Name="SponsorID" />
-    </Key>
-    <Property Name="SponsorID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
-    <Property Name="Status" Type="bit" Nullable="false" />
-  </EntityType>
   <EntityType Name="SQL_HubConnection">
     <Key>
       <PropertyRef Name="ConnectionID" />
@@ -129,7 +121,7 @@
     <Key>
       <PropertyRef Name="ImageID" />
     </Key>
-    <Property Name="ImageID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="ImageID" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="AlbumID" Type="varchar" MaxLength="24" Nullable="false" />
   </EntityType>
   <EntityType Name="SQL_Message">
@@ -164,6 +156,7 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="IsRecruiting" Type="bit" Nullable="false" />
     <Property Name="InProgress" Type="bit" Nullable="false" />
     <Property Name="IsActivate" Type="bit" Nullable="false" />
   </EntityType>
@@ -187,18 +180,6 @@
         <PropertyRef Name="ProjectID" />
       </Principal>
       <Dependent Role="SQL_Album">
-        <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Budget_ProjectSD">
-    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
-    <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Project">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="SQL_Budget">
         <PropertyRef Name="ProjectID" />
       </Dependent>
     </ReferentialConstraint>
@@ -323,6 +304,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SQL_Budget_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Budget">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_SQL_GrPr_Relation_SQL_Group">
     <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="1" />
     <End Role="SQL_GrPr_Relation" Type="Self.SQL_GrPr_Relation" Multiplicity="*" />
@@ -343,18 +336,6 @@
         <PropertyRef Name="ProjectID" />
       </Principal>
       <Dependent Role="SQL_GrPr_Relation">
-        <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_SQL_GuestPr_Relation_SQL_Project">
-    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
-    <End Role="SQL_GuestPr_Relation" Type="Self.SQL_GuestPr_Relation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Project">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="SQL_GuestPr_Relation">
         <PropertyRef Name="ProjectID" />
       </Dependent>
     </ReferentialConstraint>
@@ -467,7 +448,6 @@
     <EntitySet Name="SQL_Budget" EntityType="Self.SQL_Budget" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="SQL_GuestPr_Relation" EntityType="Self.SQL_GuestPr_Relation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Image" EntityType="Self.SQL_Image" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SQL_Message" EntityType="Self.SQL_Message" Schema="dbo" store:Type="Tables" />
@@ -481,10 +461,6 @@
     <AssociationSet Name="FK_AlbumSD_ProjectSD" Association="Self.FK_AlbumSD_ProjectSD">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Album" EntitySet="SQL_Album" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Budget_ProjectSD" Association="Self.FK_Budget_ProjectSD">
-      <End Role="SQL_Project" EntitySet="SQL_Project" />
-      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
     </AssociationSet>
     <AssociationSet Name="FK_Message_Account" Association="Self.FK_Message_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />
@@ -526,6 +502,10 @@
       <End Role="SQL_Post" EntitySet="SQL_Post" />
       <End Role="SQL_AcPo_Relation" EntitySet="SQL_AcPo_Relation" />
     </AssociationSet>
+    <AssociationSet Name="FK_SQL_Budget_SQL_Project" Association="Self.FK_SQL_Budget_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
+    </AssociationSet>
     <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Group" Association="Self.FK_SQL_GrPr_Relation_SQL_Group">
       <End Role="SQL_Group" EntitySet="SQL_Group" />
       <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
@@ -533,10 +513,6 @@
     <AssociationSet Name="FK_SQL_GrPr_Relation_SQL_Project" Association="Self.FK_SQL_GrPr_Relation_SQL_Project">
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_GrPr_Relation" EntitySet="SQL_GrPr_Relation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_SQL_GuestPr_Relation_SQL_Project" Association="Self.FK_SQL_GuestPr_Relation_SQL_Project">
-      <End Role="SQL_Project" EntitySet="SQL_Project" />
-      <End Role="SQL_GuestPr_Relation" EntitySet="SQL_GuestPr_Relation" />
     </AssociationSet>
     <AssociationSet Name="FK_SQL_HubConnection_SQL_Account" Association="Self.FK_SQL_HubConnection_SQL_Account">
       <End Role="SQL_Account" EntitySet="SQL_Account" />

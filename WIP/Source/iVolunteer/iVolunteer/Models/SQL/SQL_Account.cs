@@ -23,9 +23,9 @@ namespace iVolunteer.Models.SQL
             this.SQL_Message = new HashSet<SQL_Message>();
             this.SQL_AcIm_Relation = new HashSet<SQL_AcIm_Relation>();
             this.SQL_AcPo_Relation = new HashSet<SQL_AcPo_Relation>();
+            this.SQL_HubConnection = new HashSet<SQL_HubConnection>();
             this.SQL_AcGr_Relation = new HashSet<SQL_AcGr_Relation>();
             this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
-            this.SQL_HubConnection = new HashSet<SQL_HubConnection>();
         }
     
         public string UserID { get; set; }
@@ -51,10 +51,10 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_HubConnection> SQL_HubConnection { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcGr_Relation> SQL_AcGr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_HubConnection> SQL_HubConnection { get; set; }
     }
 }

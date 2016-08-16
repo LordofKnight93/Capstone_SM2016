@@ -101,12 +101,11 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="SQL_GuestPr_Relation">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_GuestPr_Relation">
-        <MappingFragment StoreEntitySet="SQL_GuestPr_Relation">
-          <ScalarProperty Name="SponsorID" ColumnName="SponsorID" />
-          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
+    <EntitySetMapping Name="SQL_HubConnection">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_HubConnection">
+        <MappingFragment StoreEntitySet="SQL_HubConnection">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -151,16 +150,9 @@
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Project">
         <MappingFragment StoreEntitySet="SQL_Project">
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="IsRecruiting" ColumnName="IsRecruiting" />
           <ScalarProperty Name="InProgress" ColumnName="InProgress" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_HubConnection">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_HubConnection">
-        <MappingFragment StoreEntitySet="SQL_HubConnection">
-          <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
