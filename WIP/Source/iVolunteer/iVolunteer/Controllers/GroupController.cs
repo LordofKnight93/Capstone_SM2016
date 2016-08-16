@@ -453,6 +453,15 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult GroupGallery(string groupID)
         {
+            if (Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                //Leader will be able to Post in Public Section(in next View returned)
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) { ViewBag.Role = "Leader"; }
+                else
+                    ViewBag.Role = "Member";
+            }
             ViewBag.InSection = "GroupGallery";
             ViewBag.GroupID = groupID;
             return PartialView("_GroupGallery");
@@ -2666,6 +2675,7 @@ namespace iVolunteer.Controllers
             SDLink creator = mongo_User_DAO.Get_SDLink(userID);
 
             //Add more mongo Comment information
+            comment.CommentID = ObjectId.GenerateNewId().ToString();
             comment.DateCreate = DateTime.Now.ToLocalTime();
             comment.Creator = creator;
 
@@ -2715,6 +2725,20 @@ namespace iVolunteer.Controllers
             catch
             {
                 throw;
+            }
+        }
+        public ActionResult AlbumDeleteComment(string albumID, string commentID, string groupID)
+        {
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                albumDAO.Delete_Comment(albumID,commentID);
+                return AlbumGetCommentList(albumID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
             }
         }
         /// <summary>

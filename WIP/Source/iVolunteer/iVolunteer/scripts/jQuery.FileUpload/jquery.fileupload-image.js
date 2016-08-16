@@ -116,7 +116,7 @@
         options: {
             // The regular expression for the types of images to load:
             // matched against the file type:
-            loadImageFileTypes: /^image\/(gif|jpeg|png|svg\+xml)$/,
+            loadImageFileTypes: /^image\/(bmp|jpeg|png|svg\+xml)$/,
             // The maximum file size of images to load:
             loadImageMaxFileSize: 10000000, // 10MB
             // The maximum width of resized images:
@@ -167,9 +167,9 @@
                             function (img) {
                                 if (img.src) {
                                     data.img = img;
-                                }
+                }
                                 dfd.resolveWith(that, [data]);
-                            },
+                },
                             options
                         )) {
                     return data;
@@ -186,7 +186,7 @@
                 if (options.disabled || !(data.canvas || data.img)) {
                     return data;
                 }
-                options = $.extend({canvas: true}, options);
+                options = $.extend({ canvas: true }, options);
                 var that = this,
                     dfd = $.Deferred(),
                     img = (options.canvas && data.canvas) || data.img,
@@ -289,7 +289,7 @@
                         // Resized images always have a head size of 20 bytes,
                         // including the JPEG marker and a minimal JFIF header:
                         this._blobSlice.call(file, 20)
-                    ], {type: file.type});
+                    ], { type: file.type });
                 blob.name = file.name;
                 data.files[data.index] = blob;
                 return data;

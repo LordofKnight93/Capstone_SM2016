@@ -74,6 +74,7 @@ namespace iVolunteer.Controllers
             //create sql project
             SQL_Project sql_Project = new SQL_Project();
             sql_Project.ProjectID = mongo_Project.ProjectInformation.ProjectID;
+            sql_Project.IsRecruiting = Status.IS_RECRUITING;
             sql_Project.InProgress = Status.ONGOING;
             sql_Project.IsActivate = true;
 
@@ -886,6 +887,14 @@ namespace iVolunteer.Controllers
 
         public ActionResult ProjectGallery(string projectID)
         {
+            if (Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
+                else
+                    ViewBag.Role = "Member";
+            }
             ViewBag.InSection = "GroupGallery";
             ViewBag.ProjectID = projectID;
             return PartialView("_ProjectGallery");
@@ -3969,6 +3978,7 @@ namespace iVolunteer.Controllers
             SDLink creator = mongo_User_DAO.Get_SDLink(userID);
 
             //Add more mongo Comment information
+            comment.CommentID = ObjectId.GenerateNewId().ToString();
             comment.DateCreate = DateTime.Now.ToLocalTime();
             comment.Creator = creator;
 
@@ -3982,6 +3992,20 @@ namespace iVolunteer.Controllers
             catch
             {
                 throw;
+            }
+        }
+        public ActionResult AlbumDeleteComment(string albumID, string commentID, string groupID)
+        {
+            try
+            {
+                Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
+                albumDAO.Delete_Comment(albumID, commentID);
+                return AlbumGetCommentList(albumID);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
             }
         }
         public PartialViewResult AlbumGetCommentList(string albumID)

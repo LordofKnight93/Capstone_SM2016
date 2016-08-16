@@ -37,7 +37,7 @@ namespace iVolunteer.Helpers
 
         public void DeleteFiles(String pathToDelete)
         {
-         
+
             string path = HostingEnvironment.MapPath(pathToDelete);
 
             System.Diagnostics.Debug.WriteLine(path);
@@ -59,7 +59,7 @@ namespace iVolunteer.Helpers
             System.Diagnostics.Debug.WriteLine("DeleteFile");
             //    var req = HttpContext.Current;
             System.Diagnostics.Debug.WriteLine(file);
- 
+
             String fullPath = Path.Combine(StorageRoot, file);
             System.Diagnostics.Debug.WriteLine(fullPath);
             System.Diagnostics.Debug.WriteLine(System.IO.File.Exists(fullPath));
@@ -94,12 +94,12 @@ namespace iVolunteer.Helpers
                 foreach (FileInfo file in dir.GetFiles())
                 {
                     Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
-                    if (albumDAO.Check_Image_By_Name(file.Name,albumID) == true)
+                    if (albumDAO.Check_Image_By_Name(file.Name, albumID) == true)
                     {
                         int SizeInt = unchecked((int)file.Length);
                         r.Add(UploadResult(file.Name, SizeInt, file.FullName));
                     }
-   
+
                 }
 
             }
@@ -111,7 +111,7 @@ namespace iVolunteer.Helpers
         public void UploadAndShowResults(HttpContextBase ContentBase, List<ImageInformation> resultList)
         {
             var httpRequest = ContentBase.Request;
-          
+
             System.Diagnostics.Debug.WriteLine(Directory.Exists(tempPath));
 
             String fullPath = Path.Combine(StorageRoot);
@@ -145,7 +145,7 @@ namespace iVolunteer.Helpers
         {
 
             var request = requestContext.Request;
-            
+
 
             for (int i = 0; i < request.Files.Count; i++)
             {
@@ -154,28 +154,30 @@ namespace iVolunteer.Helpers
 
                 String pathOnServer = Path.Combine(StorageRoot);
                 // Path.GetExtension()
-               
+
                 var guidImageName = string.Format("{0}{1}", Guid.NewGuid().ToString("N"), extension);
                 string[] arrayImageID = guidImageName.Split('.');
                 var fullPath = Path.Combine(pathOnServer, guidImageName);
                 //
-               /* int fileSize = file.ContentLength;
-                if (fileSize > (maxFileSize*1024))
-                {
-                    PanelError.Visible = true;
-                    lblError.Text = "Filesize of image is too large. Maximum file size permitted is " + maxFileSize + "KB";
-                    return;
-                }*/
-                file.SaveAs(fullPath);            
-                
+                /* int fileSize = file.ContentLength;
+                 if (fileSize > (maxFileSize*1024))
+                 {
+                     PanelError.Visible = true;
+                     lblError.Text = "Filesize of image is too large. Maximum file size permitted is " + maxFileSize + "KB";
+                     return;
+                 }*/
+
+                file.SaveAs(fullPath);
                 //Create thumb
                 string[] imageArray = file.FileName.Split('.');
+
                 if (imageArray.Length != 0)
                 {
                     String extansion = imageArray[imageArray.Length - 1];
-                    if (extansion != "jpg" && extansion != "png") //Do not create thumb if file is not an image
+
+                    if (extansion != "jpeg" && extansion != "jpg" && extansion != "png" && extansion != "bmp" && extansion != "BMP" && extansion != "JPG" && extansion != "PNG") //Do not create thumb if file is not an image
                     {
-                        
+
                     }
                     else
                     {
@@ -185,7 +187,23 @@ namespace iVolunteer.Helpers
                         using (MemoryStream stream = new MemoryStream(System.IO.File.ReadAllBytes(fullPath)))
                         {
                             var thumbnail = new WebImage(stream).Resize(80, 80);
-                            thumbnail.Save(ThumbfullPath2, "jpg");
+                            if (extansion == "jpeg")
+                            {
+                                thumbnail.Save(ThumbfullPath2, "jpeg");
+                            }
+                            else
+                            if (extansion == "png" || extansion == "PNG")
+                            {
+                                thumbnail.Save(ThumbfullPath2, "png");
+                            }
+                            else if (extansion == "bmp" || extansion == "BMP")
+                            {
+                                thumbnail.Save(ThumbfullPath2, "bmp");
+                            }
+                            else
+                            {
+                                thumbnail.Save(ThumbfullPath2, "jpg");
+                            }
                         }
                     }
                 }
@@ -237,7 +255,7 @@ namespace iVolunteer.Helpers
                             //write data to db
                             sql_Album_DAO.Add_Image(sql_Image);
                             sql_User_Image_DAO.Add_Creator(userID, sql_Image.ImageID);
-                            mongo_Album_DAO.Add_Image(albumID,mongo_Image);
+                            mongo_Album_DAO.Add_Image(albumID, mongo_Image);
                             transaction.Complete();
                         }
                         catch
@@ -269,7 +287,7 @@ namespace iVolunteer.Helpers
             ImageHandler handler = new ImageHandler();
 
             var ImageBit = ImageHandler.LoadImage(fullName);
-            handler.Save(ImageBit, 80, 80, 10, ThumbfullPath);
+            handler.Save(ImageBit, 100, 100, 20, ThumbfullPath);
             using (var fs = new FileStream(fullName, FileMode.Append, FileAccess.Write))
             {
                 var buffer = new byte[1024];
@@ -285,13 +303,13 @@ namespace iVolunteer.Helpers
             }
             statuses.Add(UploadResult(file.FileName, file.ContentLength, file.FileName));
         }
-        public ImageInformation UploadResult(String FileName,int fileSize,String FileFullPath)
+        public ImageInformation UploadResult(String FileName, int fileSize, String FileFullPath)
         {
 
             String getType = System.Web.MimeMapping.GetMimeMapping(FileFullPath);
             var result = new ImageInformation()
             {
-                ImageName= FileName,
+                ImageName = FileName,
                 ImageSize = fileSize,
                 ImageType = getType,
                 ImageUrl = UrlBase + FileName,
@@ -302,13 +320,13 @@ namespace iVolunteer.Helpers
             return result;
         }
 
-        public String CheckThumb(String type,String FileName)
+        public String CheckThumb(String type, String FileName)
         {
             var splited = type.Split('/');
             if (splited.Length == 2)
             {
                 string extansion = splited[1];
-                if(extansion.Equals("jpeg") || extansion.Equals("jpg") || extansion.Equals("png") || extansion.Equals("gif"))
+                if (extansion.Equals("jpeg") || extansion.Equals("jpg") || extansion.Equals("png") || extansion.Equals("bmp"))
                 {
                     String thumbnailUrl = UrlBase + "/thumbs/" + FileName;
                     return thumbnailUrl;
@@ -324,7 +342,7 @@ namespace iVolunteer.Helpers
                     {
                         return "/Content/Free-file-icons/48px/zip.png";
                     }
-                    String thumbnailUrl = "/Content/Free-file-icons/48px/"+ extansion +".png";
+                    String thumbnailUrl = "/Content/Free-file-icons/48px/" + extansion + ".png";
                     return thumbnailUrl;
                 }
             }
@@ -332,7 +350,7 @@ namespace iVolunteer.Helpers
             {
                 return UrlBase + "/thumbs/" + FileName + ".100x100.jpg";
             }
-           
+
         }
         public List<String> FilesList()
         {
@@ -355,7 +373,7 @@ namespace iVolunteer.Helpers
     }
     public class ImageInformation
     {
-        public string ImageID { get; set;}
+        public string ImageID { get; set; }
         public string ImageName { get; set; }
         public SDLink Creator { get; set; }
         public SDLink Album { get; set; }
@@ -394,4 +412,3 @@ namespace iVolunteer.Helpers
     }
 }
 
-    

@@ -210,6 +210,22 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public bool Delete_Comment(string albumID, string cmtID)
+        {
+            try
+            {
+                var album_filter = Builders<Mongo_Album>.Filter.Eq(p => p._id, new ObjectId(albumID));
+                var cmt_filter = Builders<Comment>.Filter.Eq(cmt => cmt.CommentID, cmtID);
+                var update = Builders<Mongo_Album>.Update.PullFilter(p => p.CommentList, cmt_filter)
+                                                        .Inc(p => p.AlbumInformation.CommentCount, -1); ;
+                var result = collection.UpdateOne(album_filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public List<Comment> Get_Comments(string albumID, int skip, int number)
         {
             try

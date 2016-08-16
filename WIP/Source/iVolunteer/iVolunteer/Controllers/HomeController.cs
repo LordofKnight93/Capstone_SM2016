@@ -167,7 +167,7 @@ namespace iVolunteer.Controllers
                 else
                     return RedirectToAction("FrontPage","Home");
             }
-            if (Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
+            if (Session["Role"] != null && Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("Newfeed");
         }
         public ActionResult LoadNewfeedPosts()
