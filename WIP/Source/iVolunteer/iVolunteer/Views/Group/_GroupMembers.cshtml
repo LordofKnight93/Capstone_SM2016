@@ -27,7 +27,7 @@
             <div class="row" style="padding-left: 10px; padding-right: 10px;">
                 @foreach (var item in Model)
                 {
-                    <div id="@item.UserID">
+                    <div id="@("member" + item.UserID)">
                         <!-- Member -->
                         <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
                             <div class="card-member">
@@ -68,10 +68,10 @@
                                     <div class="project-action-to-user">
                                         <ul class="project-action-to-user-list">
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-sort-amount-asc fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "SetLeader", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" }, new { @type = "button", @class = "btn", @style = "-ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);", data_toggle = "tooltip", data_placement = "bottom", @title = "Thăng chức" })
+                                                @Ajax.RawActionLink("<i class='fa fa-sort-amount-asc fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "SetLeader", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "member" + item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" }, new { @type = "button", @class = "btn", @style = "-ms-transform: rotate(180deg); -webkit-transform: rotate(180deg); transform: rotate(180deg);", data_toggle = "tooltip", data_placement = "bottom", @title = "Thăng chức" })
                                             </li>
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-18 fa-cus-green' aria-hidden='true'></i>", "ExpelMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Trục xuất" })
+                                                @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-18 fa-cus-green' aria-hidden='true'></i>", "ExpelMember", "Group", new { memberID = item.UserID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "member" + item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Trục xuất" })
                                             </li>
                                         </ul>
                                     </div>

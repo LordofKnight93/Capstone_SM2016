@@ -466,5 +466,89 @@ namespace iVolunteer.Controllers
             }
         }
 
+        public ActionResult DisplayAsviseAndFailureReport()
+        {
+            if (Session["UserID"] == null || !Session["Role"].ToString().Equals("Admin"))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            return View("AdviseAndFailureReport");
+        }
+
+        public ActionResult AllAdvise()
+        {
+            if(Session["UserID"] == null || !Session["Role"].ToString().Equals("Admin"))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            try
+            {
+                Mongo_FailureReport_DAO mongoDAO = new Mongo_FailureReport_DAO();
+                List<Mongo_FailureReport> result = mongoDAO.Get_Advise();
+                return PartialView("_AllAdvide", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult AllFailureReport()
+        {
+            if (Session["UserID"] == null || !Session["Role"].ToString().Equals("Admin"))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            try
+            {
+                Mongo_FailureReport_DAO mongoDAO = new Mongo_FailureReport_DAO();
+                List<Mongo_FailureReport> result = mongoDAO.Get_FailureReport();
+                return PartialView("_AllFailureReport", result);
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
+
+        public ActionResult DeleteAdviseOrFailureReport(string failureID, string target)
+        {
+            if (Session["UserID"] == null || !Session["Role"].ToString().Equals("Admin"))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+            try
+            {
+                if (Session["Role"].ToString().Equals("Admin"))
+                {
+                    Mongo_FailureReport_DAO mongoDAO = new Mongo_FailureReport_DAO();
+                    mongoDAO.Delete_FailureReport(failureID);
+                    if (target.Equals("Advise"))
+                    {
+                        return RedirectToAction("AllAdvise","Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("AllFailureReport", "Admin");
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return PartialView("ErrorMessage");
+                }
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+        }
     }
 }

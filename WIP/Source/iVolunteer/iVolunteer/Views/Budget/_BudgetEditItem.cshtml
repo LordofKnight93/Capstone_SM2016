@@ -52,7 +52,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#clearform").click(function () {
-            $("#dialog-edit-budget-item").empty();
+            $("#dialog-div").empty();
+            $("#dialog-div").dialog('close');
         });
 
         $('#Content').keypress(function () {
@@ -83,8 +84,8 @@
             $("#dialog-edit-budget-item").html(result.responseText);
         } else {
             // no error => we hide validation errors and update the result container
-			$('#dialog-edit-budget-item').empty();
-            $('#dialog-edit-budget-item').dialog('close');
+			$('#dialog-div').empty();
+            $('#dialog-div').dialog('close');
             $("#tabplanbudget").html(result.responseText);
         }
     };

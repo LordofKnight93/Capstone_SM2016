@@ -18,6 +18,9 @@ using System.IO;
 using Microsoft.AspNet.SignalR;
 using iVolunteer.Hubs;
 using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Net;
+using System.Web.Helpers;
 
 namespace iVolunteer.Controllers
 {
@@ -1699,6 +1702,98 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
+        }
+
+		[AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult UploadFile()
+        {
+            string _imgname = string.Empty;
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                var pic = System.Web.HttpContext.Current.Request.Files["MyImages"];
+                if (pic.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(pic.FileName);
+                    var _ext = Path.GetExtension(pic.FileName);
+
+                    _imgname = Guid.NewGuid().ToString();
+                    var _comPath = Server.MapPath("/Images/FailureReport/Screenshot_") + _imgname + _ext;
+                    _imgname = "Screenshot_" + _imgname + _ext;
+
+                    ViewBag.Msg = _comPath;
+                    var path = _comPath;
+
+                    // Saving Image in Original Mode
+                    pic.SaveAs(path);
+
+                    // resizing image
+                    MemoryStream ms = new MemoryStream();
+                    WebImage img = new WebImage(_comPath);
+
+                    if (img.Width > 2048)
+                    {
+                        int height = (int) (img.Height / (img.Width / 2048));
+                        img.Resize(2048, height);
+                    }
+                    else if(img.Height > 2048)
+                    {
+                        int width = (int) (img.Width / (img.Height / 2048));
+                        img.Resize(width, 2048);
+                    }
+                    img.Save(_comPath);
+                    // end resize
+                }
+            }
+            return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult AddFailureReport()
+        {
+            return PartialView("_SendFailureReport");
+        }    
+        [HttpPost]
+        public ActionResult AddFailureReport(Mongo_FailureReport info, string ScreenshotName)
+        {
+            try
+            {
+                Mongo_FailureReport_DAO mongoDAO = new Mongo_FailureReport_DAO();
+                Mongo_FailureReport newInfo = new Mongo_FailureReport(info);
+
+                //HttpPostedFileBase file = Request.Files["ScreenShot"];
+                //if (file != null)
+                //{
+                //    // write your code to save image
+                //    string uploadPath = Server.MapPath("/Images/FailureReport/" + newInfo._id.ToString() + ".jpg");
+                //    file.SaveAs(uploadPath);
+                //    newInfo.HaveScreenshot = true;
+                //}
+
+                if (Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
+                    SDLink sentPerson = mongo_User_DAO.Get_SDLink(userID);
+                    newInfo.SentPerson = sentPerson;
+                    newInfo.HaveScreenshot = ScreenshotName;
+                }
+                mongoDAO.Add_FailureReport(newInfo);
+                if(newInfo.Type == 1)
+                {
+                    ViewBag.Message = "Cám ơn bạn đã góp ý để iVolunteer ngày một hoàn thiện hơn.";
+                }
+                else
+                {
+                    ViewBag.Message = "Cám ơn bạn đã báo cáo vấn đề cho chúng tôi. Chúng tôi sẽ tìm tìm hiểu nguyên nhân và sửa chữa trong thời gian sớm nhất.";
+                }
+                return PartialView("_NotifyMessage");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
+            
         }        
     }
 }

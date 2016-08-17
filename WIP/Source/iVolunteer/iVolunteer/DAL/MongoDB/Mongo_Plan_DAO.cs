@@ -496,8 +496,7 @@ namespace iVolunteer.DAL.MongoDB
             {
                 List<SubTask> subtasklist = Get_SubTaskList(planPhaseID, mainTaskID);
                 int i = subtasklist.FindIndex(st => st.SubTaskID == ObjectId.Parse(subTaskID));
-                string assignPeopleID = subtasklist[i].AssignPeople.ID;
-                return assignPeopleID;
+                return subtasklist[i].AssignPeople.ID;
             }
             catch
             {
@@ -579,14 +578,20 @@ namespace iVolunteer.DAL.MongoDB
         /// <returns></returns>
         public List<SubTask> Get_SubTaskListThisDay(string projectID, DateTime date)
         {
-            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
-            List<SubTask> subtask = new List<SubTask>();
-            for (int i = 0; i < result.Count(); i++)
-            {
-                subtask.AddRange(result[i].Subtask.Where(mt => mt.Deadline >= date).ToList());
+            try {
+                var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
+                List<SubTask> subtask = new List<SubTask>();
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    subtask.AddRange(result[i].Subtask.Where(mt => mt.Deadline >= date).ToList());
+                }
+                subtask = subtask.OrderBy(st => st.Deadline).ToList();
+                return subtask;
             }
-            subtask = subtask.OrderBy(st => st.Deadline).ToList();
-            return subtask;
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -597,14 +602,20 @@ namespace iVolunteer.DAL.MongoDB
         /// <returns></returns>
         public List<SubTask> Get_SubTaskOfUser(string projectID, string userID)
         {
-            var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
-            List<SubTask> subtask = new List<SubTask>();
-            for (int i = 0; i < result.Count(); i++)
-            {
-                subtask.AddRange(result[i].Subtask.Where(mt => mt.AssignPeople.ID == userID).ToList());
+            try {
+                var result = collection.AsQueryable().Where(pl => pl.PlanPhaseInformation.Project.ID == projectID && pl.PlanPhaseInformation.IsComplete == false).SelectMany(mt => mt.MainTask).ToList();
+                List<SubTask> subtask = new List<SubTask>();
+                for (int i = 0; i < result.Count(); i++)
+                {
+                    subtask.AddRange(result[i].Subtask.Where(mt => mt.AssignPeople.ID == userID).ToList());
+                }
+                subtask = subtask.OrderBy(st => st.Deadline).ToList();
+                return subtask;
             }
-            subtask = subtask.OrderBy(st => st.Deadline).ToList();
-            return subtask;
+            catch
+            {
+                throw;
+            }
         }
 
         /// <summary>

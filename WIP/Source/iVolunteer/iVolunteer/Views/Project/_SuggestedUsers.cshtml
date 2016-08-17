@@ -21,7 +21,7 @@
             <div class="row" style="padding-left: 10px; padding-right: 10px;">
                 @foreach (var item in Model)
                 {
-                    <div id="@item.UserID">
+                    <div id="@("sugestedusers" + item.UserID)">
                         <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
                             <div class="card-member">
                                 <div class="profile-avatar">
@@ -60,11 +60,11 @@
                                     <ul class="project-action-to-user-list">
                                         <li>
                                             @*@Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "SetLeader", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" })*@
-                                            @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "InviteUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
+                                            @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "InviteUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "sugestedusers" + item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
                                         </li>
                                         <li>
                                             @*@Ajax.ActionLink("Trục xuất", "ExpelMember", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })*@
-                                            @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-red' aria-hidden='true'></i>", "DeclineSuggestedUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
+                                            @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-red' aria-hidden='true'></i>", "DeclineSuggestedUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "sugestedusers" + item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
                                         </li>
                                     </ul>
                                 </div>

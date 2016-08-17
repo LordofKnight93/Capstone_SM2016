@@ -1,0 +1,48 @@
+﻿@model List<iVolunteer.Models.MongoDB.CollectionClass.Mongo_FailureReport>
+
+@if (Model.Count() != 0)
+{
+    <div class="component">
+        <h2>Danh sách sự cố được báo cáo</h2>
+        <table class="table-report">
+            <colgroup>
+                <col width="15%" />
+                <col width="10%" />
+                <col width="40%" />
+                <col width="15%" />
+                <col width="10%" />
+                <col width="10%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Ngày gửi</th>
+                    <th>Nơi bị báo cáo sự cố</th>
+                    <th>Mô tả sự cố</th>
+                    <th>Người báo cáo</th>
+                    <th>Đính kèm</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="border-bottom: 1px solid #CFD8DC;">
+                        <td>@item.SendDate</td>
+                        <td>@item.Place</td>
+                        <td>@item.Content</td>
+                        <td>@item.SentPerson.DisplayName</td>
+                        <td style="text-align: center">
+                            @if (item.HaveScreenshot != "")
+                            {
+                                <a class="fancybox" href="@("/Images/FailureReport/" + item.HaveScreenshot)">
+                                    <i class="fa fa-paperclip fa-cus-green fa-cus-18"></i>
+                                </a>
+                            }
+                        </td>
+                        <td style="text-align: center">@Ajax.ActionLink("delete", "DeleteAdviseOrFailureReport", "Admin", new { failureID = item._id.ToString(), target = "Failure" }, new AjaxOptions { UpdateTargetId = "adviseandfailurereport", InsertionMode = InsertionMode.Replace, Confirm = "Bạn muốn xóa " + item.Content + " ?" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -211,28 +211,28 @@
                                     if (dateGap > 0)
                                     {
                                         <i class="material-icons md-18 md-mygreen2">access_time</i>
-                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@item.Deadline.Date.ToString("HH:mm dd/MM/yyy")</span>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@Html.DisplayFor(modelItem => item.Deadline)</span>
                                     }
                                     else
                                     {
                                         <i class="material-icons md-18 md-myred">access_time</i>
-                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@item.Deadline.Date.ToString("HH:mm dd/MM/yyy")</span>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@Html.DisplayFor(modelItem => item.Deadline)</span>
                                     }
-                                    <input class="txt-edit-subtask-deadline" id="@("txtDeadline-" + item.SubTaskID)" type="datetime-local" value="@item.Deadline.Date.ToString("yyyy-MM-ddThh:mm")" style="display: none;" />
+                                    <input class="txt-edit-subtask-deadline" id="@("txtDeadline-" + item.SubTaskID)" value="@item.Deadline" style="display: none;" />
                                     <i id="@("btn-save-subtask-deadline" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="saveSubTaskDeadline('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">save</i>
-                                    <i id="@("btnDeadlineClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskDeadline('@item.SubTaskID','@item.Deadline.Date.ToString("yyyy-MM-ddThh:mm")')">cancel</i>
+                                    <i id="@("btnDeadlineClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskDeadline('@item.SubTaskID','@item.Deadline')">cancel</i>
                                 }
                                 else
                                 {
                                     if (dateGap > 0)
                                     {
                                         <i class="material-icons md-18 md-mygreen2">access_time</i>
-                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete">@item.Deadline.Date.ToString("HH:mm dd/MM/yyy")</span>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete">@Html.DisplayFor(modelItem => item.Deadline)</span>
                                     }
                                     else
                                     {
                                         <i class="material-icons md-18 md-myred">access_time</i>
-                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past">@item.Deadline.Date.ToString("HH:mm dd/MM/yyy")</span>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past">@Html.DisplayFor(modelItem => item.Deadline)</span>
                                     }
                                 }
                             </li>
@@ -240,13 +240,20 @@
                                 <i class="material-icons md-18 md-mygray">perm_identity</i>
                                 @if (ViewBag.IsLeader == true && item.IsDone != 3)
                                 {
-                                    <span id="@("stAssign-" + item.SubTaskID)" class="assign-people" onclick="openEditSubTaskAssign('@item.SubTaskID')">@item.AssignPeople.DisplayName</span>
+                                    if (item.AssignPeople.DisplayName.Equals(""))
+                                    {
+                                        <span id="@("stAssign-" + item.SubTaskID)" class="assign-people" onclick="openEditSubTaskAssign('@item.SubTaskID')">Chưa được giao</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="@("stAssign-" + item.SubTaskID)" class="assign-people" onclick="openEditSubTaskAssign('@item.SubTaskID')">@item.AssignPeople.DisplayName</span>
+                                    }
                                     <input class="txt-edit-subtask-assign" id="@("txtAssign-" + item.SubTaskID)" value="@item.AssignPeople.DisplayName" style="display: none;" onkeypress="pickMemberToAssign('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')" />
                                     <input id="@("txtAssignID-" + item.SubTaskID)" value="@item.AssignPeople.ID" type="hidden" />
                                     <i id="@("btn-save-subtask-assign" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="saveSubTaskAssign('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">save</i>
                                     <i id="@("btnAssignClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskAssign('@item.SubTaskID', '@item.AssignPeople.ID')">cancel</i>
                                 }
-                                else
+                                else 
                                 {
                                     <span id="@("stAssign-" + item.SubTaskID)" class="assign-people">@item.AssignPeople.DisplayName</span>
                                 }
@@ -257,6 +264,14 @@
                 </div>
             </div>
         </li>
+        <script type="text/javascript">
+            $("#txtDeadline-" + '@item.SubTaskID').datetimepicker({
+                sideBySide: true,
+                widgetPositioning: {
+                    vertical: 'bottom'
+                }
+            });
+        </script>
     }
 }
 else

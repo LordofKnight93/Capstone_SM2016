@@ -99,7 +99,7 @@
                             {
                                 <div class="row">
                                     <div class="col-sm-12" style="margin-top: 15px">
-                                        @Ajax.ActionLink("THÊM NỘI DUNG ...", "AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID }, new AjaxOptions { UpdateTargetId = "addTeamFoundDonatorForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                        @Ajax.ActionLink("THÊM NỘI DUNG ...", "AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID }, new AjaxOptions { UpdateTargetId = "addTeamFoundDonatorForm", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#addTeamFoundDonatorForm')" }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                                         <div class="row">
                                             <div class="col-sm-12" id="addTeamFoundDonatorForm">
 

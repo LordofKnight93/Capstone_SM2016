@@ -19,6 +19,7 @@ using Microsoft.AspNet.SignalR;
 using iVolunteer.Hubs;
 using MongoDB.Bson;
 using iVolunteer.Helpers;
+using System.Web.Helpers;
 
 namespace iVolunteer.Controllers
 {
@@ -230,15 +231,46 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult UploadAvatar(string id)
         {
-            HttpPostedFileBase file = Request.Files["Image"];
-            if (file != null)
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {
-                // write your code to save image
-                string uploadPath = Server.MapPath("/Images/Group/Avatar/" + id + ".jpg");
-                file.SaveAs(uploadPath);
-                return RedirectToAction("GroupHome", "Group", new { groupID = id });
+
+                var pic = System.Web.HttpContext.Current.Request.Files["Image"];
+                if (pic.ContentLength > 0)
+                {
+                    var _comPath = Server.MapPath("/Images/Group/Avatar/" + id + ".jpg");
+
+
+
+                    ViewBag.Msg = _comPath;
+                    var path = _comPath;
+
+                    // Saving Image in Original Mode
+                    pic.SaveAs(path);
+
+                    // resizing image
+                    MemoryStream ms = new MemoryStream();
+                    WebImage img = new WebImage(_comPath);
+
+                    if (img.Width > 2048)
+                    {
+                        int height = (int)(img.Height / (img.Width / 2048));
+                        img.Resize(2048, height);
+                    }
+                    else if (img.Height > 2048)
+                    {
+                        int width = (int)(img.Width / (img.Height / 2048));
+                        img.Resize(width, 2048);
+                    }
+                    img.Save(_comPath);
+                    // end resize
+                }
+                else
+                {
+                    ViewBag.Message = "Upload không thành công.Vui lòng thử lại.";
+                    return PartialView("_ImageUpload");
+                }
             }
-            else return PartialView("_ImageUpload");
+            return JavaScript("location.reload(true)");
         }
         /// <summary>
         /// カバー変更画面を表示
@@ -263,15 +295,46 @@ namespace iVolunteer.Controllers
         [HttpPost]
         public ActionResult UploadCover(string id)
         {
-            HttpPostedFileBase file = Request.Files["Image"];
-            if (file != null)
+            if (System.Web.HttpContext.Current.Request.Files.AllKeys.Any())
             {
-                // write your code to save image
-                string uploadPath = Server.MapPath("/Images/Group/Cover/" + id + ".jpg");
-                file.SaveAs(uploadPath);
-                return RedirectToAction("GroupHome", "Group", new { groupID = id });
+
+                var pic = System.Web.HttpContext.Current.Request.Files["Image"];
+                if (pic.ContentLength > 0)
+                {
+                    var _comPath = Server.MapPath("/Images/Group/Cover/" + id + ".jpg");
+
+
+
+                    ViewBag.Msg = _comPath;
+                    var path = _comPath;
+
+                    // Saving Image in Original Mode
+                    pic.SaveAs(path);
+
+                    // resizing image
+                    MemoryStream ms = new MemoryStream();
+                    WebImage img = new WebImage(_comPath);
+
+                    if (img.Width > 2048)
+                    {
+                        int height = (int)(img.Height / (img.Width / 2048));
+                        img.Resize(2048, height);
+                    }
+                    else if (img.Height > 2048)
+                    {
+                        int width = (int)(img.Width / (img.Height / 2048));
+                        img.Resize(width, 2048);
+                    }
+                    img.Save(_comPath);
+                    // end resize
+                }
+                else
+                {
+                    ViewBag.Message = "Upload không thành công.Vui lòng thử lại.";
+                    return PartialView("_ImageUpload");
+                }
             }
-            else return PartialView("_ImageUpload");
+			return JavaScript("location.reload(true)");
         }
         /// <summary>
         /// グループの情報画面を表示

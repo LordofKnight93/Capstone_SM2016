@@ -601,6 +601,11 @@ namespace iVolunteer.Controllers
                 {
                     if (!ModelState.IsValid)
                     {
+                        if (this.ModelState["UnitPrice"].Errors.Count == 1 && this.ModelState["UnitPrice"].Errors[0].ErrorMessage.Contains("is not valid for"))
+                        {
+                            this.ModelState["UnitPrice"].Errors.Clear();
+                            this.ModelState["UnitPrice"].Errors.Add("Đơn giá bạn nhập không hợp lệ.");
+                        }						
                         ViewBag.BudgetRecordID = budgetRecordID;
 
                         return PartialView("_BudgetAddItem", itemInfo);
@@ -1348,6 +1353,11 @@ namespace iVolunteer.Controllers
                 {
                     if (!ModelState.IsValid)
                     {
+                        if (this.ModelState["Amount"].Errors.Count == 1 && this.ModelState["Amount"].Errors[0].ErrorMessage.Contains("is not valid for"))
+                        {
+                            this.ModelState["Amount"].Errors.Clear();
+                            this.ModelState["Amount"].Errors.Add("Số tiền bạn nhập không hợp lệ.");
+                        }
                         ViewBag.FinanceID = financeID;
                         return PartialView("_FinanceAddItem", itemInfo);
                     };
@@ -1641,6 +1651,11 @@ namespace iVolunteer.Controllers
                 {
                     if (!ModelState.IsValid)
                     {
+                        if (this.ModelState["Amount"].Errors.Count == 1 && this.ModelState["Amount"].Errors[0].ErrorMessage.Contains("is not valid for"))
+                        {
+                            this.ModelState["Amount"].Errors.Clear();
+                            this.ModelState["Amount"].Errors.Add("Số tiền bạn nhập không hợp lệ.");
+                        }
                         ViewBag.FundID = fundID;
                         return PartialView("_FundAddTeamFoundDonator", donator); 
                     };

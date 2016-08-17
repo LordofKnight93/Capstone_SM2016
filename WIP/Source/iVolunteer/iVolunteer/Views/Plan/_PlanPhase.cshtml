@@ -45,9 +45,9 @@
                                                 @if (ViewBag.IsLeader == true)
                                                 {
                                                     <label id="@("phase-time-" + item.PlanPhaseID)" style="font-size: 14px; color: #049f88;" onclick="phaseTimeLabel('@item.PlanPhaseID')">@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)</label>
-                                                    <input class="txt-edit-phase-time" id="@("txt-phase-start-" + item.PlanPhaseID)" style="display: none;" onfocus="(this.type='date')" onblur="(this.type='text')" value="@item.StartTime.ToString("yyyy-MM-dd")" placeholder="Ngày bắt đầu ..." />
+                                                    <input class="txt-edit-phase-time" id="@("txt-phase-start-" + item.PlanPhaseID)" style="display: none;"  value="@item.StartTime.ToString("yyyy-MM-dd")" placeholder="Ngày bắt đầu ..." />
                                                     <i id="@("sparrow-" + item.PlanPhaseID)" class="material-icons md-18" style="display: none">arrow_forward</i>
-                                                    <input class="txt-edit-phase-time" id="@("txt-phase-end-" + item.PlanPhaseID)" style="display: none;" onfocus="(this.type='date')" onblur="(this.type='text')" value="@item.EndTime.ToString("yyyy-MM-dd")" />
+                                                    <input class="txt-edit-phase-time" id="@("txt-phase-end-" + item.PlanPhaseID)" style="display: none;"  value="@item.EndTime.ToString("yyyy-MM-dd")" />
                                                     <i id="@("btn-phase-time-save-" + item.PlanPhaseID)" class="material-icons md-18" style="color: #049f88; display: none; cursor: pointer" onclick="savePhaseTime('@item.PlanPhaseID')">save</i>
                                                     <i id="@("btn-phase-time-close-" + item.PlanPhaseID)" class="material-icons md-18" style="color: #049f88; display: none; cursor: pointer" onclick="cancelEditPhaseTime('@item.PlanPhaseID','@item.StartTime.ToString("yyyy-MM-dd")','@item.EndTime.ToString("yyyy-MM-dd")')">cancel</i>
                                                     <div id="@("error-phase-time-" + @item.PlanPhaseID)"></div>
@@ -80,6 +80,21 @@
                 </div>
             </div>
         </div>
-
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#txt-phase-start-" + '@item.PlanPhaseID').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    widgetPositioning: {
+                        vertical: 'bottom'
+                    }
+                });
+                $("#txt-phase-end-" + '@item.PlanPhaseID').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    widgetPositioning: {
+                        vertical: 'bottom'
+                    }
+                });
+            });
+        </script>
                                                 }
                                             }

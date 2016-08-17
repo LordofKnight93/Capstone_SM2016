@@ -21,7 +21,7 @@
             <div class="row" style="padding-left: 10px; padding-right: 10px;">
                 @foreach (var item in Model)
                 {
-                    <div id="@item.UserID">
+                    <div id="@("sponsoruser" + item.UserID)">
                         <!-- Member -->
                         <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
                             <div class="card-member">
@@ -62,7 +62,7 @@
                                     <div class="project-action-to-user">
                                         <ul class="project-action-to-user-list">
                                             <li>
-                                                @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DismissSponsoredUser", "Project", new { sponsorID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắn chắn muốn xóa sự ủng hộ từ người này ? " }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Xóa" })
+                                                @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DismissSponsoredUser", "Project", new { sponsorID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "sponsoruser" + item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắn chắn muốn xóa sự ủng hộ từ người này ? " }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Xóa" })
                                             </li>
                                         </ul>
                                     </div>

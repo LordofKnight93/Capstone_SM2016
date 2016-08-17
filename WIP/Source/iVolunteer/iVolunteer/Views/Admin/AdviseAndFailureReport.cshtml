@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Góp ý & Báo cáo sự cố";
+}
+<div class="report-container" style="height: calc(100vh - 60px)">
+    <ul class="nav nav-tabsReport">
+        <li class="active" role="presentation" data-toggle="tab">
+            @Ajax.ActionLink("Góp ý","AllAdvise","Admin", new { }, new AjaxOptions { UpdateTargetId = "adviseandfailurereport", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { })
+        </li>
+        <li role="presentation" data-toggle="tab">
+            @Ajax.ActionLink("Báo cáo sự cố", "AllFailureReport", "Admin", new { }, new AjaxOptions { UpdateTargetId = "adviseandfailurereport", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }, new { })
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" id="groupReport" class="tab-pane active fade in">
+            <div class="nano has-scrollbar" style="height: calc(100vh - 133px);">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px; outline: none;" id="adviseandfailurereport">
+                    @{ Html.RenderAction("AllAdvise", "Admin"); }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

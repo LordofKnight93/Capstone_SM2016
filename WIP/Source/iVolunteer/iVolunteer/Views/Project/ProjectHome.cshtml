@@ -764,6 +764,35 @@
             });
         };
 
+        /******************************************************** Add cmt *****************************************************************/
+        function saveCommentMainTask(planPhaseID, mainTaskID) {
+           if ($('#txt-comment').val().trim() == "" || $('#txt-comment').val() == null) return;
+           $.ajax({
+               type: "POST",
+               url: "@Url.Action("AddComment", "Plan")",
+               data: {
+                   planPhaseID: planPhaseID,
+                   mainTaskID: mainTaskID,
+                   cmtContent: "" + $('#txt-comment').val()
+               },
+               success: function (response) {
+                   $("#commentList").html(response);
+                   $("#txt-comment").val('');
+               }
+           });
+        };
+
+        function sendComment(event, planPhaseID, mainTaskID) {
+            if (event.which == 13) {
+                if (!event.shiftKey) {
+                    saveCommentMainTask(planPhaseID, mainTaskID);
+                }
+            }
+        };
+
+        function sendCommentBtn(planPhaseID, mainTaskID) {
+            saveCommentMainTask(planPhaseID, mainTaskID);
+        };
         /************************************ Script for Album ******************************************************/
         function showAlbumImage(albumID, targetID) {
             $.ajax({

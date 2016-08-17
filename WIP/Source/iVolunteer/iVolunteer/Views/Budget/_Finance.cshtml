@@ -63,7 +63,7 @@
             <div class="col-sm-12">
                 <div class="sub-container">
                     <!--<h4 id="btnAddBudgetRecord" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  ĐẦU MỤC ...</h4>-->
-                    @Ajax.ActionLink("THÊM  HOẠT ĐỘNG ...", "AddFinanceItem", "Budget", new { financeID = Model._id.ToString() }, new AjaxOptions { UpdateTargetId = "addFinanceItemForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                    @Ajax.ActionLink("THÊM  HOẠT ĐỘNG ...", "AddFinanceItem", "Budget", new { financeID = Model._id.ToString() }, new AjaxOptions { UpdateTargetId = "addFinanceItemForm", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#addFinanceItemForm')" }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
                     <div id="addFinanceItemForm">
                         @*@{ Html.RenderPartial("_ProjectBudgetAddRecord");  }*@
                     </div>

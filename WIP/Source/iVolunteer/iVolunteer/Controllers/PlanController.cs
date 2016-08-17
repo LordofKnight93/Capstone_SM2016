@@ -2125,7 +2125,6 @@ namespace iVolunteer.Controllers
                     ViewBag.Message = Error.ACCESS_DENIED;
                     return View("ErrorMessage");
                 }
-                string thisprojectID = "";
 
                 //get project id
                 Mongo_Plan_DAO mongoDAO = new Mongo_Plan_DAO();
@@ -2133,14 +2132,10 @@ namespace iVolunteer.Controllers
                 string mainTaskID = mongoDAO.Get_MainTaskIDFromSubTaskID(projectID, subTaskID);
                 string planPhaseID = mongoDAO.Get_PlanPhaseIDFromMainTaskID(projectID, mainTaskID);
 
-                thisprojectID = mongoDAO.Get_ProjectID(planPhaseID);
-
                 // Check is leader or not
                 string userID = Session["UserID"].ToString();
 
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-
-                if (relationDAO.Is_Leader(userID, thisprojectID))
+                if (mongoDAO.Get_AssignPeople(planPhaseID, mainTaskID, subTaskID).Equals(userID))
                 {
                     using (var transaction = new TransactionScope())
                     {

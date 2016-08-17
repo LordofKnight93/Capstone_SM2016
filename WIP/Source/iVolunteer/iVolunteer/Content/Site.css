@@ -863,8 +863,8 @@ button:focus {
     margin-bottom: 5px;
 }
 
-    .table-post-ava .td {
-        padding-left: 10px;
+    .table-post-ava  td {
+		padding: 0;
     }
 
 .member-manager-table {
@@ -1819,6 +1819,10 @@ body.modal-open .background-container {
         overflow: none;
     }
 
+	.login-form .btn-login:hover {
+        color: #000;
+    }
+	
 .register-form {
 }
 
@@ -2421,7 +2425,7 @@ label.noti-handler {
         border-top: 7px solid transparent;
         border-bottom: 7px solid transparent;
         border-right: 7px solid rgba(101, 148, 105, 0.89);
-        margin: 15px 0 0 -6px;
+        margin: 8px 0 0 -6px;
     }
 
 .speech-right > .speech:before {
@@ -2431,7 +2435,7 @@ label.noti-handler {
     border-bottom: 7px solid transparent;
     border-left: 7px solid #eceff1;
     border-right: 0;
-    margin: 15px -6px 0 0;
+    margin: 8px -6px 0 0;
 }
 
 .speech .media-heading {
@@ -2886,6 +2890,10 @@ label.noti-handler {
     color: #cccccc;
 }
 
+.smileys {
+    width: 20px;
+    height: 20px;
+}
 body .ui-autocomplete {
     /* font-family to all */
     z-index: 1053;
@@ -2924,65 +2932,6 @@ body .ui-autocomplete {
     max-width: none;
 }
 
-/*********************************************************************  Calendar **********************************************************************/
-.calendar-container {
-    width: 100%;
-    display: flex;
-}
-
-.calendar-date .calendar-month {
-    float: left;
-}
-
-.calendar-date {
-    width: 40%;
-    height: 165px;
-    background-color: #049f88;
-    color: #fff;
-}
-
-    .calendar-date > p {
-        font-family: Roboto Condensed !important;
-        margin: 0;
-        color: #fff;
-        text-align: center;
-    }
-
-.calendar-date-day {
-    font-size: 16px;
-    padding-top: 20px;
-}
-
-.calendar-date-month-year {
-    font-size: 14px;
-}
-
-.calendar-date-date {
-    font-size: 64px;
-}
-
-.calendar-month {
-    width: 60%;
-    border: 1px solid #ccc;
-    padding: 5px;
-    height: 165px;
-    text-align: center;
-    font-size: 16px;
-}
-
-    .calendar-month > div {
-        padding: 0;
-        margin-bottom: 10px;
-    }
-
-#calendar-month-year {
-    margin: 5px;
-}
-
-#calendar-month-dates > table > tr > td {
-    padding: 0 3.5px;
-}
-
 /***********************************************************  Panel  *******************************************************************/
 .panel-group {
     margin-bottom: 0;
@@ -2998,6 +2947,7 @@ body .ui-autocomplete {
     padding: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+	z-index: 10000;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -5395,4 +5345,100 @@ transform: scaleX(-1);
     background-color: #fff;
     margin-right: 2px;
     margin-left: 2px;
+}
+/********************************************** TABLE *******************************************/
+.component {
+	line-height: 1.5em;
+	margin: 0 auto;
+	padding: 2em 0 3em;
+	width: 96%;
+	max-width: 1000px;
+	overflow: hidden;
+}
+.component .filler {
+	font-family: "Blokk", Arial, sans-serif;
+	color: #d3d3d3;
+}
+.table-report {
+    border-collapse: collapse;
+    margin-bottom: 3em;
+    width: 100%;
+    background: #fff;
+}
+.table-report td, th {
+    padding: 0.75em 1.5em;
+    text-align: left;
+}
+	.table-report td.err {
+		background-color: #e992b9;
+		color: #fff;
+		font-size: 0.75em;
+		text-align: center;
+		line-height: 1;
+	}
+.table-report th {
+    background-color: #31bc86;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+}
+.table-report tbody th {
+	background-color: #2ea879;
+}
+.table-report tbody tr:nth-child(2n-1) {
+    transition: all .125s ease-in-out;
+}
+.table-report tbody tr:hover {
+    background-color: rgba(129,208,177,.3);
+}
+
+/* For appearance */
+.sticky-wrap {
+	overflow-x: hidden;
+	overflow-y: hidden;
+	margin: 3em 0;
+	width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: all .125s ease-in-out;
+	z-index: 50;
+	width: auto; /* Prevent table from stretching to full size */
+}
+	.sticky-wrap .sticky-thead {
+		box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
+		z-index: 100;
+		width: 100%; /* Force stretch */
+	}
+	.sticky-wrap .sticky-intersect {
+		opacity: 1;
+		z-index: 150;
+
+	}
+		.sticky-wrap .sticky-intersect th {
+			background-color: #666;
+			color: #eee;
+		}
+.sticky-wrap td,
+.sticky-wrap th {
+	box-sizing: border-box;
+}
+
+/* Not needed for sticky header/column functionality */
+td.user-name {
+	text-transform: capitalize;
+}
+.sticky-wrap.overflow-y {
+	overflow-y: auto;
+	max-height: 50vh;
+}
+
+/******************************************************* Datetime Picker **********************************************************/
+.bootstrap-datetimepicker-widget {
+   z-index:99999 !important;
 }

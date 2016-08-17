@@ -1,0 +1,117 @@
+﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_FailureReport
+
+<div class="row">
+    <div class="col-md-12" style="padding: 0 30px;">
+        <h4>Góp ý &amp; Báo cáo sự cố</h4>
+        <div class="divider-holizon"></div>
+    </div>
+</div>
+@using (Ajax.BeginForm("AddFailureReport", "Account", new AjaxOptions { UpdateTargetId= "popup-content-normal", HttpMethod = "POST", InsertionMode= InsertionMode.Replace } , new { }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1" style="margin-top: 10px;">
+                <div class="radio" style="display: inline; margin-right: 20px;">
+                    @Html.RadioButtonFor(model => model.Type, "1" , new { @id = "rdAdvise", @checked = true })
+                    <label for="rdAdvise">
+                        Góp ý
+                    </label>
+                </div>
+                <div class="radio" style="display: inline;">
+                    @Html.RadioButtonFor(model => model.Type, "2", new { @id = "rdFailureReport" })
+                    <label for="rdFailureReport">
+                        Báo cáo sự cố
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Place, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mục được góp ý ..." } })
+                @Html.ValidationMessageFor(model => model.Place, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.TextAreaFor(model => model.Content, new { @class = "form-control", @placeholder = "Nội dung góp ý ...", @style = "resize: vertical", @rows = "4" })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <input id="screenshot-name" name="ScreenshotName" type="text" style="display: none" />
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                <label style="margin-top: 5px;">Hãy đính kèm thêm ảnh chụp màn hình nếu có:</label>
+                <input type="file" id="UploadImg" />
+                @*<label class="btn btn-upload-img" for="file">
+                    <i class="fa fa-upload fa-cus-18"></i>
+                    <input type="file" id="UploadImg" style="display:none;">
+                    Chọn ảnh
+                </label>
+                <input class='label label-filename' id="upload-file-info" readonly />*@
+            </div>
+            <div class="col-md-10 col-md-offset-1" style="margin-top: 5px">
+                <div class="preview-image thumbnail" id="preview-image" style="display: none;">
+                    <img id="imgPreview" />
+                </div>
+            </div>
+        </div>
+        @*<input type="file" id="UploadImg" /> <br /><br />
+        New File Name: <input type="text" id="txtImg" size="50" /> <br /><br />
+        <img id="imgPreview" height="200" width="200" />*@
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform" onclick="onpopupclose('#popup-normal')">
+                    HỦY
+                </a>
+                <input type="submit" value="GỬI" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<script type="text/javascript">
+    $('#rdAdvise').click(function () {
+        $('#Place').attr('placeholder', 'Mục được góp ý ...');
+        $('#Content').attr('placeholder', 'Nội dung góp ý ...');
+    });
+    $('#rdFailureReport').click(function () {
+        $('#Place').attr('placeholder', 'Mục xảy ra lỗi ...');
+        $('#Content').attr('placeholder', 'Mô tả ngắn gọn lỗi xảy ra giúp chúng tôi tìm hiểu nguyên nhân và khắc phục lỗi ...');
+    });
+
+    $("#UploadImg").change(function () {
+        var data = new FormData();
+        var files = $("#UploadImg").get(0).files;
+        if (files.length > 0) {
+            data.append("MyImages", files[0]);
+        }
+
+        $.ajax({
+            url: "/Account/UploadFile",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (response) {
+                //code after success
+                $('#preview-image').show();
+                $("#screenshot-name").val(response);
+                $("#imgPreview").attr('src', '/Images/FailureReport/' + response);
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    });
+</script>

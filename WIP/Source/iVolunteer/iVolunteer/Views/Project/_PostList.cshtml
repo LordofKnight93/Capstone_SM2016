@@ -12,12 +12,12 @@
                         <tr>
                             @if (item.PostInfomation.IsPublic == true)
                             {
-                                <td rowspan="2"><img src="@("/Images/Project/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                <td rowspan="2" style="width: 50px;"><img src="@("/Images/Project/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
                                 <td class="td"><a href="@Url.Action("ProjectHome","Project", new { userID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
                             }
                             else
                             {
-                                <td rowspan="2"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                <td rowspan="2" style="width: 50px;"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
                                 <td class="td"><a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a></td>
                             }
                             

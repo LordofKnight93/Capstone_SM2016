@@ -74,13 +74,11 @@
                         }
 
                         ////////////////////// CHAT LINE STYLE///////////////////////
+                        var chatMessNew = replaceEmoji(content);
                         var chatLine = " <li class='mar-btm'>";
                         chatLine += " <div class='media-body pad-hor'>";
                         chatLine += "<div class='speech'>";
-                        chatLine += "<p>" + content + "</p>";
-                        chatLine += "<p class='speech-time'";
-                        chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + displayTime;
-                        chatLine += "</p>";
+                        chatLine += "<p data-toggle='tooltip' title='" + displayTime + "'>" + chatMessNew + "</p>";
                         chatLine += "</div>";
                         chatLine += "</div> </li>";
                         /////////////////////////////////////////////////////////////
@@ -212,13 +210,11 @@
                             if ('@Session["UserID"].ToString()' == data["Messages"][i]["Sender"]["ID"]) {
                                 dis1 = "speech-right"; dis2 = "speech-time-right";
                             }
+                            var messContent = replaceEmoji(data["Messages"][i]["Content"]);
                             var chatLine = " <li class='mar-btm'>";
                             chatLine += " <div class='media-body pad-hor " + dis1 + " '>";
                             chatLine += "<div class='speech'>";
-                            chatLine += "<p>" + data["Messages"][i]["Content"] + "</p>";
-                            chatLine += "<p class='" + dis2 + "'";
-                            chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + data["DisplayTimes"][i];
-                            chatLine += "</p>";
+                            chatLine += "<p data-toggle='tooltip' title='" + data["DisplayTimes"][i] + "'>" + messContent + "</p>";
                             chatLine += "</div>";
                             chatLine += "</div> </li>";
                             $("#chatLine" + friendID).append(chatLine);
@@ -241,13 +237,11 @@
                     url: "/User/CreateMessage",
                     data: data,
                     success: function (data, textstatus) {
+                        var sendChatNew = replaceEmoji(content);
                         var chatLine = " <li class='mar-btm'>";
                         chatLine += " <div class='media-body pad-hor speech-right'>";
                         chatLine += "<div class='speech'>";
-                        chatLine += "<p>" + content + "</p>";
-                        chatLine += "<p class='speech-time-right'";
-                        chatLine += "<i class='fa fa-clock-o fa-fw'></i>" + data;
-                        chatLine += "</p>";
+                        chatLine += "<p data-toggle='tooltip' title='" + data + "'>" + sendChatNew + "</p>";
                         chatLine += "</div>";
                         chatLine += "</div> </li>";
 
