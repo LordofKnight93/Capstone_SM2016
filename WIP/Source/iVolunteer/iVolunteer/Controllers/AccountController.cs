@@ -61,7 +61,6 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult SendActivationEmail(string displayName, string email, string userID)
         {
-
             MailMessage message = new MailMessage();
             SmtpClient client = new SmtpClient();
             client.Host = "smtp.gmail.com";
@@ -1510,7 +1509,7 @@ namespace iVolunteer.Controllers
                 relationDAO.Suggest_Users(friendID, projectID);
 
                 ViewBag.Message = "Đễ xuất thành công, cám ơn bạn.";
-                return PartialView("ErrorMessage");
+                return PartialView("_NotifyMessage");
             }
             catch
             {

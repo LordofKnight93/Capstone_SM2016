@@ -61,8 +61,8 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
-                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID
+                                                                            && pr.IsActivate == Status.IS_ACTIVATE);
                     if (result != null)
                     {
                         result.IsActivate = Status.IS_BANNED;
@@ -88,8 +88,8 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
-                                                                            && acc.IsActivate == Status.IS_BANNED);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID
+                                                                            && pr.IsActivate == Status.IS_BANNED);
                     if (result != null)
                     {
                         result.IsActivate = Status.IS_ACTIVATE;
@@ -135,8 +135,8 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
-                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID
+                                                                            && pr.IsActivate == Status.IS_ACTIVATE);
                     if (result != null)
                     {
                         result.InProgress = Status.ENDED;
@@ -163,8 +163,8 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID
-                                                                            && acc.IsActivate == Status.IS_ACTIVATE);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID
+                                                                            && pr.IsActivate == Status.IS_ACTIVATE);
                     if (result != null)
                     {
                         result.InProgress = Status.ONGOING;
@@ -190,7 +190,7 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID);
                     if (result != null)
                     {
                         result.IsRecruiting = Status.IS_RECRUITING;
@@ -217,7 +217,7 @@ namespace iVolunteer.DAL.SQL
             {
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
-                    var result = dbEntities.SQL_Project.FirstOrDefault(acc => acc.ProjectID == projectID);
+                    var result = dbEntities.SQL_Project.FirstOrDefault(pr => pr.ProjectID == projectID);
                     if (result != null)
                     {
                         result.IsRecruiting = Status.IS_NOT_RECRUITING;

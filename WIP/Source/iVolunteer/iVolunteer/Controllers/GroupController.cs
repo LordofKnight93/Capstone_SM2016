@@ -1575,10 +1575,10 @@ namespace iVolunteer.Controllers
 
             try
             {
-                // get joined group list
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                // get group curent project list
+                SQL_GrPr_Relation_DAO relationDAO = new SQL_GrPr_Relation_DAO();
                 var listID = relationDAO.Get_Current_Projects(groupID);
-                // get joined group Info
+                // get group curent project Info
                 Mongo_Project_DAO groupDAO = new Mongo_Project_DAO();
                 var result = groupDAO.Get_ProjectsInformation(listID);
 
@@ -1844,7 +1844,7 @@ namespace iVolunteer.Controllers
                     }
                     // return group member to content-panel
                     ViewBag.Message = "Gửi yêu cầu thành công.";
-                    return PartialView("ErrorMessage");
+                    return PartialView("_NotifyMessage");
                 }
                 else
                 {
@@ -1942,7 +1942,7 @@ namespace iVolunteer.Controllers
                     }
                     // return group member to content-panel
                     ViewBag.Message = "Gửi yêu cầu thành công.";
-                    return PartialView("ErrorMessage");
+                    return PartialView("_NotifyMessage");
                 }
                 else
                 {

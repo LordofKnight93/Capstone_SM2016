@@ -18,7 +18,10 @@
                         {
                             @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Mời bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
                         }
-                        @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Đề xuất bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
+                        else
+                        {
+                            @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-green fa-cus-20'></i><span> Đề xuất bạn bè</span>", "FriendNotInProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "text-decoration: none; outline: none;" })
+                        }
                     }
                 </div>
 

@@ -1762,7 +1762,7 @@ namespace iVolunteer.Controllers
                 {
                     relationDAO.Invite_Users(friendID, projectID);
                     ViewBag.Message = "Đã mời thành công, hãy chờ hồi âm.";
-                    return PartialView("ErrorMessage");
+                    return PartialView("_NotifyMessage");
                 }
                 else
                 {
@@ -3470,7 +3470,6 @@ namespace iVolunteer.Controllers
                             projectDAO.Start_Recruiting(projectID);
 
                             transaction.Complete();
-                            return ProjectInformation(projectID);
                         }
                         catch
                         {
@@ -3479,6 +3478,7 @@ namespace iVolunteer.Controllers
                             return PartialView("ErrorMessage");
                         }
                     }
+                    return ProjectInformation(projectID);
                 }
                 else
                 {
@@ -3523,7 +3523,6 @@ namespace iVolunteer.Controllers
                             projectDAO.Stop_Recruiting(projectID);
 
                             transaction.Complete();
-                            return ProjectInformation(projectID);
                         }
                         catch
                         {
@@ -3532,6 +3531,7 @@ namespace iVolunteer.Controllers
                             return PartialView("ErrorMessage");
                         }
                     }
+                    return ProjectInformation(projectID);
                 }
                 else
                 {

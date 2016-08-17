@@ -264,7 +264,7 @@ namespace iVolunteer.DAL.MongoDB
                     }
                 }
 
-                var result = collection.Find(filter).ToList()
+                var result = collection.Find(filter).ToList().OrderByDescending(pr => pr.ProjectInformation.FollowerCount)
                                                     .Select(pr => pr.ProjectInformation).Skip(skip).Take(number).ToList();
                 return result;
             }
@@ -320,7 +320,7 @@ namespace iVolunteer.DAL.MongoDB
                     }
                 }
 
-                var result = collection.Find(filter).ToList()
+                var result = collection.Find(filter).ToList().OrderByDescending(pr => pr.ProjectInformation.FollowerCount)
                                                     .Select(pr => pr.ProjectInformation).Skip(skip).Take(number).ToList();
                 return result;
             }
