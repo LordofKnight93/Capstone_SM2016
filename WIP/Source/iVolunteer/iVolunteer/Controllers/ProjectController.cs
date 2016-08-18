@@ -292,15 +292,15 @@ namespace iVolunteer.Controllers
                     MemoryStream ms = new MemoryStream();
                     WebImage img = new WebImage(_comPath);
 
-                    if (img.Width > 2048)
+                    if (img.Width > 500)
                     {
-                        int height = (int)(img.Height / (img.Width / 2048));
-                        img.Resize(2048, height);
+                        int height = (int)(img.Height / (img.Width / 500));
+                        img.Resize(500, height);
                     }
-                    else if (img.Height > 2048)
+                    else if (img.Height > 500)
                     {
-                        int width = (int)(img.Width / (img.Height / 2048));
-                        img.Resize(width, 2048);
+                        int width = (int)(img.Width / (img.Height / 500));
+                        img.Resize(width, 500);
                     }
                     img.Save(_comPath);
                     // end resize
@@ -950,8 +950,14 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
                 SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
                 if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
-                else
+                else if (relation.Is_Member(userID,projectID))
+                {
                     ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = null;
+                }
             }
             ViewBag.InSection = "GroupGallery";
             ViewBag.ProjectID = projectID;
@@ -3004,10 +3010,11 @@ namespace iVolunteer.Controllers
         /// <param name="postID"></param>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public PartialViewResult ShowCommentArea(string postID, string projectID)
+        public PartialViewResult ShowCommentArea(string postID, string projectID, string cmtCount)
         {
             ViewBag.ProjectID = projectID;
             ViewBag.PostID = postID;
+            ViewBag.CommentCount = cmtCount;
             return PartialView("_CommentArea");
         }
         /// <summary>
@@ -3993,10 +4000,11 @@ namespace iVolunteer.Controllers
             return GetAlbumList(targetID);
         }
         ////////Comment In ALbum////////////////
-        public PartialViewResult AlbumShowCommentArea(string albumID, string projectID)
+        public PartialViewResult AlbumShowCommentArea(string albumID, string projectID, string cmtCount)
         {
             ViewBag.ProjectID = projectID;
             ViewBag.AlbumID = albumID;
+            ViewBag.CommentCount = cmtCount;
             return PartialView("_AlbumCommentArea");
         }
         /// <summary>
@@ -4045,20 +4053,20 @@ namespace iVolunteer.Controllers
                 mongo_Album_DAO.Set_DateLastActivity(albumID, comment.DateCreate);
                 mongo_Album_DAO.Add_Comment(albumID, comment);
 
-                return AlbumGetCommentList(albumID);
+                return AlbumGetCommentList(albumID,projectID);
             }
             catch
             {
                 throw;
             }
         }
-        public ActionResult AlbumDeleteComment(string albumID, string commentID, string groupID)
+        public ActionResult AlbumDeleteComment(string albumID, string commentID, string projectID)
         {
             try
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
                 albumDAO.Delete_Comment(albumID, commentID);
-                return AlbumGetCommentList(albumID);
+                return AlbumGetCommentList(albumID,projectID);
             }
             catch
             {
@@ -4066,8 +4074,19 @@ namespace iVolunteer.Controllers
                 return PartialView("ErrorMessage");
             }
         }
-        public PartialViewResult AlbumGetCommentList(string albumID)
+        public PartialViewResult AlbumGetCommentList(string albumID,string projectID)
         {
+            string userID = Session["UserID"].ToString();
+            SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+            if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
+            else if (relation.Is_Member(userID, projectID))
+            {
+                ViewBag.Role = "Member";
+            }
+            else
+            {
+                ViewBag.Role = null;
+            }
             try
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();

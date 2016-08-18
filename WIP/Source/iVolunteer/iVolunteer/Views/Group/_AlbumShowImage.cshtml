@@ -74,26 +74,29 @@
     <!-- Interaction Panel -->
     <div class="row">
         <!-- Interaction Button -->
-        <div id="@("likeArea" + Model.AlbumInformation.AlbumID)" class="col-md-6 col-sm-6" style="padding: 0px 35px">
-            @{Html.RenderAction("AlbumIsLiked", "Group", new { albumID = Model.AlbumInformation.AlbumID });}
-        </div>
-        <!-- Interaction Counter -->
-        <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
-            <div class="row">
-                <ul class="list-interaction">
-                    <li>
-                        <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
-                        @if (Model.CommentList.Count != 0)
-                        {
-                            <span style="color: #cecece">@Model.CommentList.Count</span>
-                        }
-                    </li>
-                </ul>
+        <div class="col-md-10 col-sm-10" style="padding: 5px 35px 3px; display: inline-flex;">
+            <div id="@("likeArea" + Model.AlbumInformation.AlbumID)" style="margin-right: 30px;">
+                @{Html.RenderAction("AlbumIsLiked", "Group", new { albumID = Model.AlbumInformation.AlbumID });}
+            </div>
+            <div id="@("cmtCount" + Model.AlbumInformation.AlbumID)" style="margin-right: 30px;">
+                <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
+                @if (Model.CommentList.Count != 0)
+                {
+                    <span style="color: #aab8c2">@Model.CommentList.Count</span>
+                }
+            </div>
+            <div id="@("share" + Model.AlbumInformation.AlbumID)">
+                <i class="fa-cus fa-share-square-o fa-cus-18" style="color: #aab8c2" title="Chức năng đang phát triển"></i>
+                @if (Model.CommentList.Count != 0)
+                {
+                    <span style="color: #aab8c2"></span>
+                }
             </div>
         </div>
     </div>
+    <div class="divider-holizon"></div>
     <div id="@("commentArea" + Model.AlbumInformation.AlbumID)">
-        @{Html.RenderAction("AlbumShowCommentArea", "Group", new { albumID = Model.AlbumInformation.AlbumID, groupID = ViewBag.GroupID });}
+        @{Html.RenderAction("AlbumShowCommentArea", "Group", new { albumID = Model.AlbumInformation.AlbumID, groupID = ViewBag.GroupID, cmtCount = Model.CommentList.Count });}
     </div>
 </div>
 <script>

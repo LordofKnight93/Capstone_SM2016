@@ -251,15 +251,15 @@ namespace iVolunteer.Controllers
                     MemoryStream ms = new MemoryStream();
                     WebImage img = new WebImage(_comPath);
 
-                    if (img.Width > 2048)
+                    if (img.Width > 500)
                     {
-                        int height = (int)(img.Height / (img.Width / 2048));
-                        img.Resize(2048, height);
+                        int height = (int)(img.Height / (img.Width / 500));
+                        img.Resize(500, height);
                     }
-                    else if (img.Height > 2048)
+                    else if (img.Height > 500)
                     {
-                        int width = (int)(img.Width / (img.Height / 2048));
-                        img.Resize(width, 2048);
+                        int width = (int)(img.Width / (img.Height / 500));
+                        img.Resize(width, 500);
                     }
                     img.Save(_comPath);
                     // end resize
@@ -522,8 +522,14 @@ namespace iVolunteer.Controllers
                 //Leader will be able to Post in Public Section(in next View returned)
                 SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
                 if (relation.Is_Leader(userID, groupID)) { ViewBag.Role = "Leader"; }
-                else
+                else if (relation.Is_Member(userID,groupID))
+                {
                     ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = null;
+                }
             }
             ViewBag.InSection = "GroupGallery";
             ViewBag.GroupID = groupID;
@@ -1302,10 +1308,11 @@ namespace iVolunteer.Controllers
         /// <param name="postID"></param>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        public PartialViewResult ShowCommentArea(string postID, string groupID)
+        public PartialViewResult ShowCommentArea(string postID, string groupID, string cmtCount)
         {
             ViewBag.GroupID = groupID;
             ViewBag.PostID = postID;
+            ViewBag.CommentCount = cmtCount;
             return PartialView("_CommentArea");
         }
         /// <summary>
@@ -2695,10 +2702,11 @@ namespace iVolunteer.Controllers
             return GetAlbumList(targetID);
         }
         ////////Comment In ALbum////////////////
-        public PartialViewResult AlbumShowCommentArea(string albumID, string groupID)
+        public PartialViewResult AlbumShowCommentArea(string albumID, string groupID, string cmtCount)
         {
             ViewBag.GroupID = groupID;
             ViewBag.AlbumID = albumID;
+            ViewBag.CommentCount = cmtCount;
             return PartialView("_AlbumCommentArea");
         }
         /// <summary>
@@ -2747,15 +2755,28 @@ namespace iVolunteer.Controllers
                 mongo_Album_DAO.Set_DateLastActivity(albumID, comment.DateCreate);
                 mongo_Album_DAO.Add_Comment(albumID, comment);
 
-                return AlbumGetCommentList(albumID);
+                return AlbumGetCommentList(albumID,groupID);
             }
             catch
             {
                 throw;
             }
         }
-        public PartialViewResult AlbumGetCommentList(string albumID)
+        public PartialViewResult AlbumGetCommentList(string albumID, string groupID)
         {
+               
+                string userID = Session["UserID"].ToString();
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) { ViewBag.Role = "Leader"; }
+                else if (relation.Is_Member(userID, groupID))
+                {
+                    ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = null;
+                }
+           
             try
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
@@ -2796,7 +2817,7 @@ namespace iVolunteer.Controllers
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();
                 albumDAO.Delete_Comment(albumID,commentID);
-                return AlbumGetCommentList(albumID);
+                return AlbumGetCommentList(albumID,groupID);
             }
             catch
             {

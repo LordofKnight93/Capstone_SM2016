@@ -37,7 +37,7 @@
                         </div>
 
                         <!-- Date Start -->
-                        <div class="row">
+                        <div class="row" style="margin-top: 5px;">
                             <div class="col-xs-4 register-label">
                                 <label for="dateStart">Ngày bắt đầu:</label>
                             </div>
@@ -47,7 +47,7 @@
                         </div>
 
                         <!-- Date End-->
-                        <div class="row">
+                        <div class="row" style="margin-top: 5px;">
                             <div class="col-xs-4 register-label">
                                 <label for="dateEnd">Ngày kết thúc:</label>
                             </div>
@@ -57,7 +57,7 @@
                         </div>
 
                         <!-- Project Place -->
-                        <div class="row">
+                        <div class="row" style="margin-top: 5px;">
                             <div class="col-xs-4 register-label">
                                 <label for="projectPlace">Địa điểm:</label>
                             </div>
@@ -69,73 +69,103 @@
                         <!--Tag checkbox list-->
                         <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
                             <div class="row">
-                                <p class="row">Chủ đề tình nguyện</p>
-                                <div>
-                                    <input type="checkbox" class="row" value="Giáo dục" name="tagsList" />Giáo dục
+                                <label>Chủ đề tình nguyện</label>
+                                <div class="checkbox">
+                                    <input id="education" type="checkbox" class="row" value="Giáo dục" name="tagsList" />
+                                    <label for="education">
+                                        Giáo dục
+                                    </label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Văn hóa" name="tagsList" />Văn hóa
+                                <div class="checkbox">
+                                    <input id="culture" type="checkbox" class="row" value="Văn hóa" name="tagsList" />
+                                    <label for="culture">Văn hóa</label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Y tế" name="tagsList" />Y tế
+                                <div class="checkbox">
+                                    <input id="medical" type="checkbox" class="row" value="Y tế" name="tagsList" />
+                                    <label for="medical">
+                                        Y tế
+                                    </label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Xã hội" name="tagsList" />Xã hội
+                                <div class="checkbox">
+                                    <input id="society" type="checkbox" class="row" value="Xã hội" name="tagsList" />
+                                    <label for="society">Xã hội</label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Môi trường" name="tagsList" />Môi trường
+                                <div class="checkbox">
+                                    <input id="environment" type="checkbox" class="row" value="Môi trường" name="tagsList" />
+                                    <label for="environment">Môi trường</label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Du lịch" name="tagsList" />Du lịch
+                                <div class="checkbox">
+                                    <input id="travel" type="checkbox" class="row" value="Du lịch" name="tagsList" />
+                                    <label for="travel">Du lịch</label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Thể thao" name="tagsList" />Thể thao
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
-                            <div class="row">
-                                <p class="row">Đối tượng hướng đến</p>
-                                <div>
-                                    <input type="checkbox" class="row" value="Trẻ em" name="tagsList"  />Trẻ em
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Người nghèo" name="tagsList" />Người nghèo
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Người khuyết tật" name="tagsList" />Người khuyết tật
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" />Vùng thiên tai
-                                </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Động vật" name="tagsList" />Động vật
+                                <div class="checkbox">
+                                    <input id="sport" type="checkbox" class="row" value="Thể thao" name="tagsList" />
+                                    <label for="sport">Thể thao</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
                             <div class="row">
-                                <p class="row">Hình thức hoạt động</p>
-                                <div>
-                                    <input type="checkbox" class="row" value="Ủng hộ" name="tagsList" />Ủng hộ
+                                <label>Đối tượng hướng đến</label>
+                                <div class="checkbox">
+                                    <input id="children" type="checkbox" class="row" value="Trẻ em" name="tagsList" />
+                                    <label for="children">Trẻ em</label>
                                 </div>
-                                <div>
-                                    <input type="checkbox" class="row" value="Đi thực tế" name="tagsList" />Đi thực tế
+                                <div class="checkbox">
+                                    <input id="poorpeople" type="checkbox" class="row" value="Người nghèo" name="tagsList" />
+                                    <label for="poorpeople">Người nghèo</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="disabilities" type="checkbox" class="row" value="Người khuyết tật" name="tagsList" />
+                                    <label for="disabilities">Người khuyết tật</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="disasterarea" type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" />
+                                    <label for="disasterarea">Vùng thiên tai</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="animal" type="checkbox" class="row" value="Động vật" name="tagsList" />
+                                    <label for="animal">Động vật</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
                             <div class="row">
-                                <p class="row">Trạng thái</p>
+                                <label>Hình thức hoạt động</label>
+                                <div class="checkbox">
+                                    <input id="charity" type="checkbox" class="row" value="Ủng hộ" name="tagsList" />
+                                    <label for="charity">Ủng hộ</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="fieldtrip" type="checkbox" class="row" value="Đi thực tế" name="tagsList" />
+                                    <label for="fieldtrip">Đi thực tế</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <label>Trạng thái</label>
                                 <div>
-                                    <input type="radio" class="row" value="true" name="progress" checked/>Chưa kết thúc
-                                    <input type="radio" class="row" value="false" name="progress" />Đã kết thúc
+                                    @*<input type="radio" class="row" value="true" name="progress" checked/>Chưa kết thúc
+                                    <input type="radio" class="row" value="false" name="progress" />Đã kết thúc*@
+                                    <div class="radio">
+                                        <input id="finished" type="radio" class="row" value="true" name="progress" />
+                                        <label for="finished">Chưa kết thúc</label>
+                                    </div>
+                                    <div class="radio">
+                                        <input id="notfinish" type="radio" class="row" value="false" name="progress" />
+                                        <label for="notfinish">Đã kết thúc</label>
+                                    </div>
                                 </div>
                                 <div>
-                                    @Html.CheckBoxFor(model => model.Recruiting) Đang tuyển thành viên
+                                    @*@Html.CheckBoxFor(model => model.Recruiting) Đang tuyển thành viên*@
+                                    <div class="checkbox">
+                                        @Html.CheckBoxFor(model => model.Recruiting)
+                                        <label for="Recruiting">Đang tuyển thành viên</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

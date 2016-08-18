@@ -1,10 +1,11 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post>
+﻿@using iVolunteer.Common
+@model IEnumerable<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post>
 @if (Model != null)
 {
     foreach (var item in Model)
     {
     <!--  Text Post -->
-        <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+        <div class="card-panel post-card" style="margin: 0.5rem 0 1rem 0;">
             <div class="row">
                 <div class="col-sm-7 col-md-7">
                     <!-- Post Owner -->
@@ -20,10 +21,10 @@
                                 <td rowspan="2" style="width: 50px;"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
                                 <td class="td"><a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a></td>
                             }
-                            
+
                         </tr>
                         <tr>
-                            <td class="td" style="color: gray; font-size:90%">@item.PostInfomation.DateCreate.ToLocalTime()</td>
+                            <td class="td" style="color: gray; font-size:90%" title="@item.PostInfomation.DateCreate.ToLocalTime()">@HelperExtensions.DaySpan(DateTime.Now, item.PostInfomation.DateCreate.ToLocalTime())</td>
                         </tr>
                     </table>
                 </div>
@@ -51,15 +52,31 @@
             <!-- Interaction Panel -->
             <div class="row">
                 <!-- Interaction Button -->
-                <div id="@("likeArea" + item.PostInfomation.PostID)" class="col-md-6 col-sm-6" style="padding: 0px 35px">
-                    @{Html.RenderAction("IsLiked", "Project", new { postID = @item.PostInfomation.PostID });}
+                <div class="col-md-10 col-sm-10" style="padding: 5px 35px 3px; display: inline-flex;">
+                    <div id="@("likeArea" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                        @{Html.RenderAction("IsLiked", "Project", new { postID = @item.PostInfomation.PostID });}
+                    </div>
+                    <div id="@("cmtCount" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                        <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
+                        @if (item.CommentList.Count != 0)
+                        {
+                            <span style="color: #aab8c2">@item.CommentList.Count</span>
+                        }
+                    </div>
+                    <div id="@("share" + item.PostInfomation.PostID)">
+                        <i class="fa-cus fa-share-square-o fa-cus-18" style="color: #aab8c2" title="Chức năng đang phát triển"></i>
+                        @if (item.CommentList.Count != 0)
+                        {
+                            <span style="color: #aab8c2"></span>
+                        }
+                    </div>
                 </div>
                 <!-- Interaction Counter -->
-                <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
+                @*<div class="col-md-1 col-sm-1" style="text-align: right; padding-right: 6%">
                     <div class="row">
                         <ul class="list-interaction">
                             <li>
-                                <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
+                                <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
                                 @if (item.CommentList.Count != 0)
                                 {
                                     <span style="color: #cecece">@item.CommentList.Count</span>
@@ -67,10 +84,11 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
             </div>
+            <div class="divider-holizon"></div>
             <div id="@("commentArea" + item.PostInfomation.PostID)">
-                @{Html.RenderAction("ShowCommentArea", "Project", new { postID = item.PostInfomation.PostID, projectID = ViewBag.ProjectID });}
+                @{Html.RenderAction("ShowCommentArea", "Project", new { postID = item.PostInfomation.PostID, projectID = ViewBag.ProjectID, cmtCount = item.CommentList.Count });}
             </div>
         </div>
                         }

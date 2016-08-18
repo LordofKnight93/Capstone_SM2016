@@ -377,6 +377,24 @@ namespace iVolunteer.DAL.SQL
                 throw;
             }
         }
+        public bool Is_Member(string userID, string groupID)
+        {
+            try
+            {
+                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
+                {
+                    var result = dbEntities.SQL_AcGr_Relation.FirstOrDefault(rl => rl.UserID == userID
+                                                                   && rl.GroupID== groupID
+                                                                   && rl.Relation == AcGrRelation.MEMBER_RELATION
+                                                                   && rl.Status == Status.ACCEPTED);
+                    return result != null;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
         /// <summary>
         /// check if a user joined a group
         /// </summary>

@@ -564,5 +564,25 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+
+        [HttpPost]
+        public ActionResult KeepSessionAlive()
+        {
+            return new JsonResult { Data = "Success" };
+        }
+
+        [HttpGet]
+        public ActionResult FeedBackForm()
+        {
+            if(Session["UserID"] != null)
+            {
+                return View("FeedBack");
+            }
+            else
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
+        }
     }
 }

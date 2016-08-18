@@ -149,15 +149,15 @@ namespace iVolunteer.Controllers
                     MemoryStream ms = new MemoryStream();
                     WebImage img = new WebImage(_comPath);
 
-                    if (img.Width > 2048)
+                    if (img.Width > 500)
                     {
-                        int height = (int)(img.Height / (img.Width / 2048));
-                        img.Resize(2048, height);
+                        int height = (int)(img.Height / (img.Width / 500));
+                        img.Resize(500, height);
                     }
-                    else if (img.Height > 2048)
+                    else if (img.Height > 500)
                     {
-                        int width = (int)(img.Width / (img.Height / 2048));
-                        img.Resize(width, 2048);
+                        int width = (int)(img.Width / (img.Height / 500));
+                        img.Resize(width, 500);
                     }
                     img.Save(_comPath);
                     // end resize

@@ -1,16 +1,15 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
     <!-- Tổng quan -->
     <div class="row">
-        <div class="col-md-12" style="margin-top: -20px">
+        <div class="col-md-12" style="margin-top: -15px">
             <h4 style="color: #049f88">
                 Tổng quan
                 @if (ViewBag.IsLeader == true)
                 {
-                    <button class="btn btn-image" title="Chỉnh sửa">
-                        <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdateGroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                    </button>
+                    @Ajax.RawActionLink("<i class='fa fa-pencil fa-cus-18' style='margin-left: 15px;' title='Sửa thông tin'></i>", "UpdateGroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#project-tab')" }, new { })
                 }
             </h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>

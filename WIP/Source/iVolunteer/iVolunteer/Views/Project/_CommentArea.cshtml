@@ -3,8 +3,11 @@
         Html.RenderAction("ShowAddCommentArea", "Project", new { postID = ViewBag.PostID, projectID = ViewBag.ProjectID });
     }
 <div id="@("commentList" + ViewBag.PostID)"  class="commentList">
-    <div class="col-md-12 col-sm-12" style="padding-left: 7%;">
-        @Ajax.ActionLink("Xem bình luận khác", "GetCommentList", "Project", new { postID = ViewBag.PostID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @id = "showComment" + ViewBag.PostID, @style = "color:#9BCABA" })
+    <div class="col-md-12 col-sm-12" style="padding-left: 5%; margin-top: 5px;">
+        @if (ViewBag.CommentCount != "0")
+        {
+            @Ajax.ActionLink("Xem bình luận", "GetCommentList", "Project", new { postID = ViewBag.PostID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @id = "showComment" + ViewBag.PostID, @style = "color:#9BCABA" })
+        }
     </div>
 </div>
 

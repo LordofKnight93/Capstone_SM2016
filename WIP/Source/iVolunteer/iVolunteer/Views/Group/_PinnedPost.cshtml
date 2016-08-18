@@ -1,8 +1,9 @@
-﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post
 @if (Model != null)
 {
     <div class="pinArea"><label><i class="glyphicon glyphicon-pushpin"></i> Bài viết được ghim</label></div>
-    <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="card-panel post-card" style="margin: 0.5rem 0 1rem 0;">
         <div class="row">
             <div class="col-sm-7 col-md-7">
                 <!-- Post Owner -->
@@ -21,7 +22,7 @@
 
                     </tr>
                     <tr>
-                        <td class="td" style="color: gray; font-size:90%">@Model.PostInfomation.DateCreate.ToLocalTime()</td>
+                        <td class="td" style="color: gray; font-size:90%" title="@Model.PostInfomation.DateCreate.ToLocalTime()">@HelperExtensions.DaySpan(DateTime.Now, Model.PostInfomation.DateCreate.ToLocalTime())</td>
                     </tr>
                 </table>
             </div>
@@ -49,26 +50,29 @@
         <!-- Interaction Panel -->
         <div class="row">
             <!-- Interaction Button -->
-            <div id="@("likeArea" + Model.PostInfomation.PostID)" class="col-md-6 col-sm-6" style="padding: 0px 35px">
-                @{Html.RenderAction("IsLiked", "Group", new { postID = @Model.PostInfomation.PostID });}
-            </div>
-            <!-- Interaction Counter -->
-            <div class="col-md-6 col-sm-6" style="text-align: right; padding-right: 6%">
-                <div class="row">
-                    <ul class="list-interaction">
-                        <li>
-                            <i class="glyphicon glyphicon-comment" style="color: #9bcaba"></i>
-                            @if (Model.CommentList.Count != 0)
-                            {
-                                <span style="color: #cecece">@Model.CommentList.Count</span>
-                            }
-                        </li>
-                    </ul>
+            <div class="col-md-10 col-sm-10" style="padding: 5px 35px 3px; display: inline-flex;">
+                <div id="@("likeArea" + Model.PostInfomation.PostID)" style="margin-right: 30px;">
+                    @{Html.RenderAction("IsLiked", "Group", new { postID = Model.PostInfomation.PostID });}
+                </div>
+                <div id="@("cmtCount" + Model.PostInfomation.PostID)" style="margin-right: 30px;">
+                    <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
+                    @if (Model.CommentList.Count != 0)
+                    {
+                        <span style="color: #aab8c2">@Model.CommentList.Count</span>
+                    }
+                </div>
+                <div id="@("share" + Model.PostInfomation.PostID)">
+                    <i class="fa-cus fa-share-square-o fa-cus-18" style="color: #aab8c2" title="Chức năng đang phát triển"></i>
+                    @if (Model.CommentList.Count != 0)
+                    {
+                        <span style="color: #aab8c2"></span>
+                    }
                 </div>
             </div>
         </div>
+        <div class="divider-holizon"></div>
         <div id="@("commentArea" + Model.PostInfomation.PostID)">
-            @{Html.RenderAction("ShowCommentArea", "Group", new { postID = Model.PostInfomation.PostID, groupID = ViewBag.GroupID });}
+            @{Html.RenderAction("ShowCommentArea", "Group", new { postID = Model.PostInfomation.PostID, groupID = ViewBag.GroupID, cmtCount = Model.CommentList.Count });}
         </div>
     </div>
 

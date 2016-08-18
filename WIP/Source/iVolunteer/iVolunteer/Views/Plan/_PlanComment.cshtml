@@ -1,4 +1,5 @@
-﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
+﻿@using iVolunteer.Common
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
 
 @foreach (var item in Model)
 {
@@ -26,12 +27,12 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <span style="font-size: 0.8em; color: #b4b4b4"> @item.DateCreate.ToLocalTime()</span>
+                                <span style="font-size: 0.8em; color: #b4b4b4" title="@item.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")">@HelperExtensions.DaySpan(DateTime.Now, item.DateCreate.ToLocalTime())</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <p style="white-space: pre-line;">@item.Content</p>
+                                <p id="@("coment-content" + item.CommentID)" style="white-space: pre-line;">@item.Content</p>
                             </div>
                         </div>
                     </div>
@@ -40,4 +41,8 @@
             </div>
         </div>
     </li>
+    <script>
+        var mess = $("#coment-content" + '@item.CommentID').text();
+        $("#coment-content" + '@item.CommentID').html(replaceEmoji(mess));
+    </script>
 }

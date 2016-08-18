@@ -16,7 +16,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <p>@Html.EditorFor(model => model.GroupDescription, new { htmlAttributes = new { @class = "form-control" } })</p>
+                @Html.TextAreaFor(model => model.GroupDescription, new { @class = "form-control", @row = "3" } )
             </div>
         </div>
 
@@ -43,33 +43,33 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <ul class="list-post">
-                    <li>
+                <div class="row">
+                    <div class="col-sm-12">
                         <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
-                        <span>@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })</span>
+                        <span>@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @style = "display: inline; width: 50%" } })</span>
                         <span>@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })</span>
-                    </li>
-                    <li>
+                    </div>
+                    <div class="col-sm-12" style="margin-top: 10px;">
                         <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
-                        <span>@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })</span>
+                        <span>@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @style = "display: inline; width: 50%" } })</span>
                         <span>@Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })</span>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+            <div class="col-xs-8 col-xs-offset-4" style="text-align: center; margin-top: 5px">
                 <label style="color:red;">@ViewBag.Message</label>
             </div>
         </div>
                                     <!-- Button -->
-                            <div class="row" style="margin-top: 60px">
-                                <div class="col-xs-2 col-xs-offset-7 text-input">
-                                    @Ajax.ActionLink("Hủy", "GroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
-                                </div>
-                                <div class="col-xs-2 text-input">
-                                    <button type="submit" class="btn btn-register">CẬP NHẬT</button>
-                                </div>
-                            </div>
+        <div class="row" style="margin-top: 10px">
+            <div class="col-xs-2 col-xs-offset-7 text-input" style="text-align: right; padding-right: 10px;">
+                @Ajax.ActionLink("Hủy", "GroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+            </div>
+            <div class="col-xs-2 text-input">
+                <button type="submit" class="btn btn-register">CẬP NHẬT</button>
+            </div>
+        </div>
     }
 </div>

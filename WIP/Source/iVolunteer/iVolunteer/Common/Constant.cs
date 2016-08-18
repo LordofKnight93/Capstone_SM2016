@@ -36,8 +36,10 @@ namespace iVolunteer.Common
     public static class Default
     {
         //default avt, cover
-        public const string DEFAULT_AVATAR = "/Images/DefaultAvatar.jpg";
-        public const string DEFAULT_COVER = "/Images/DefaultCover.jpg";
+        public const string DEFAULT_AVATAR = "/Images/Default/DefaultAvatar.jpg";
+        public const string DEFAULT_COVER = "/Images/Default/DefaultCover.jpg";
+        public const string DEFAULT_PAGE_ICON = "/Images/Default/logo_lite.png";
+        public const string DEFAULT_IVOLUNTEER_LOGO = "/Images/Default/logo.png";
     }
 
     public static class Role

@@ -17,8 +17,10 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         [DisplayName("Nội dung:")]
         public string Content { get; set; }
         [DisplayName("Đơn giá:")]
+        [Required(ErrorMessage = "Vui lòng nhập vào đơn giá.")]
         public double UnitPrice { get; set; }
         [DisplayName("Số lượng:")]
+        [Required(ErrorMessage = "Vui lòng nhập vào số lượng.")]
         public int Quatity { get; set; }
         [DisplayName("Đơn vị:")]
         public string Unit { get; set; }

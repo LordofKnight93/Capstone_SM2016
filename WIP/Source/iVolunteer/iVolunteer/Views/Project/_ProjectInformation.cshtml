@@ -1,17 +1,19 @@
-﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
 
     <!-- Tổng quan -->
     <div class="row">
-        <div class="col-md-12" style="margin-top: -20px">
+        <div class="col-md-12" style="margin-top: -15px">
             <h4 style="color: #049f88">
                 Tổng Quan
                 @if (ViewBag.IsLeader == true && Model.InProgress)
                 {
-                    <button class="btn btn-image" title="Chỉnh sửa">
+                    @*<button class="btn btn-image" title="Chỉnh sửa">
                         <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdateProjectInformation", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
-                    </button>
+                    </button>*@
+                    @Ajax.RawActionLink("<i class='fa fa-pencil fa-cus-18' style='margin-left: 15px;' title='Sửa thông tin'></i>", "UpdateProjectInformation", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#project-tab')" }, new { })
                 }
             </h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
@@ -24,7 +26,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             <h4 style="color: #049f88">Lĩnh vực</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
@@ -37,7 +39,7 @@
 
     <!-- Địa điểm -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             <h4 style="color: #049f88">Địa Điểm</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
@@ -50,7 +52,7 @@
 
     <!-- Thời Gian -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             <h4 style="color: #049f88">Thời Gian</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>
@@ -99,7 +101,7 @@
 
     <!-- Thông tin liên quan -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             <h4 style="color: #049f88">Thông tin chi tiết</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
             @Html.DisplayFor(model => model.ProjectFullDescription)
@@ -113,7 +115,7 @@
 
     <!-- Liên hệ-->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="margin-top: 15px;">
             <h4 style="color: #049f88">Liên hệ</h4>
             <div class="divider-holizon" style="margin-top: -8px"></div>
         </div>

@@ -20,8 +20,10 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass
         [DisplayName("Người thanh toán")]
         public SDLink Payer { get; set; }
         [DisplayName("Số tiền")]
+        [Required(ErrorMessage = "Vui lòng nhập vào số tiền.")]
         public double Amount { get; set; }
         [DisplayName("Thời gian")]
+        [Required(ErrorMessage = "Vui lòng nhập vào thời gian.")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Unspecified)]
         public DateTime Date { get; set; }

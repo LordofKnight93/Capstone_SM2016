@@ -28,7 +28,7 @@
                     {
                         <li>
                             @*//Hủy yêu cầu tham gia*@
-                            @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i>&nbsp;<span class='action-to-target-text action-text-active'>&nbsp;Hủy yêu cầu tham gia</span>", "CancelJoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                            @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i>&nbsp;<span class='action-to-target-text action-text-active'>&nbsp;Hủy yêu cầu tham gia</span>", "CancelJoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                         </li>
                     }
                     else
@@ -37,7 +37,7 @@
                         {
                             <li>
                                 @*// Tham gia*@
-                                @Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                                @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                             </li>
                         }
                     }
@@ -46,14 +46,14 @@
                     {
                         <li>
                             @*//Hủy theo dõi*@
-                            @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy theo dõi</span>", "UnfollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                            @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy theo dõi</span>", "UnfollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                         </li>
                     }
                     else
                     {
                         <li>
                             @*//Theo dõi*@
-                            @Ajax.RawActionLink("<i class='fa fa-rss fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                            @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                         </li>
                     }
                 }
@@ -61,7 +61,7 @@
                 {
                     <li>
                         @*//Roi su kien*@
-                        @Ajax.RawActionLink("<i class='fa fa-sign-out fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Rời dự án</span>", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia dự án này nữa ? " }, new { @class = "btn btn-default action-to-target-link", @type = "button", @id = "project-resign" })
+                        @Ajax.RawActionLink("<i class='fa-cus fa-sign-out fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Rời dự án</span>", "ProjectResign", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chăc chắn không muốn tham gia dự án này nữa ? " }, new { @class = "btn btn-default action-to-target-link", @type = "button", @id = "project-resign" })
                     </li>
                 }
 

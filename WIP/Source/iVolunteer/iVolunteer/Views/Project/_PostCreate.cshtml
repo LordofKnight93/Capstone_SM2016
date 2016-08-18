@@ -4,28 +4,36 @@
 @using (Ajax.BeginForm("AddPost", "Project", new { projectID = ViewBag.ProjectID, inSection = ViewBag.InSection }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     @Html.AntiForgeryToken()
-    <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <div class="card-panel" style="margin: 0.5rem 0 1rem 0; padding: 0;">
         <form class="form-post" style="margin-bottom: 0;">
-            <div id="postImageHandler" style="visibility: hidden;"></div>
-            @Html.HiddenFor(model => model.ImgLink, new { @style = "visibility: hidden;", @id = "imageToPostArea" })
             <div class="row nav-project">
                 <!-- Post Content-->
-                @Html.TextAreaFor(model => model.Content, new { @id = "postContent", @class = "write-post-txt", @rows = "4", @placeholder = "Bài đăng của bạn...", @style = "resize: vertical; margin-bottom: 4px" })
+                @Html.TextAreaFor(model => model.Content, new { @id = "postContent", @class = "write-post-txt", @rows = "4", @placeholder = "Bài đăng của bạn...", @onclick="showWriteNewPost()" })
                 @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
             </div>
-            <div class="row" style="margin-top: 10px">
-                <!-- Post button -->
-                <div class="col-md-10" style="text-align: left">
-                    @Ajax.RawActionLink("<span class='fa fa-picture-o fa-cus-green fa-cus-18'></span>", "AddImageToPost", "Project", new { }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "btn-card", @rel = "tooltip", @title = "Chèn ảnh" })
-                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons">insert_link</i></button>
-                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons md-18">local_offer</i></button>
-                    <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons md-20">place</i></button>
+            <div class="row">
+                <div class="interaction-write-post" id="interaction-write-post" style="display: none;">
+                    <div class="col-sm-12">
+                        <div class="divider-holizon"></div>
+                    </div>
+                    <!-- Post button -->
+                    <div class="col-sm-12" style="padding:3px 30px; margin: 3px; margin-top: 0">
+                        <div class="row">
+                            <div class="col-md-10" style="text-align: left">
+                                @Ajax.RawActionLink("<span class='fa fa-picture-o fa-cus-18 fa-cus-green'></span>", "AddImageToPost", "Group", new { }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace }, new { @data_toggle = "modal", @data_target = "#popup", @class = "btn-card", @rel = "tooltip", @title = "Chèn ảnh", @style = "margin-left: 0; outline: none" })
+                                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons">insert_link</i></button>
+                                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons md-18">local_offer</i></button>
+                                <button class="btn btn-image" type="submit" data-toggle="tooltip" title="Chức năng đang được phát triển" disabled><i class="material-icons md-20">place</i></button>
+                                <div id="postImageHandler" style="visibility: hidden; display: initial;"></div>
+                                @Html.HiddenFor(model => model.ImgLink, new { @style = "visibility: hidden;", @id = "imageToPostArea" })
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-post" type="submit" onclick="isPostBlank(event);">ĐĂNG BÀI</button>
+                            </div>
 
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-post" type="submit" onclick="isPostBlank(event)">ĐĂNG BÀI</button>
-                </div>
-
             </div>
         </form>
     </div>

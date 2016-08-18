@@ -3,15 +3,13 @@
 @using (Ajax.BeginForm("AddComment", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { InsertionMode = InsertionMode.Replace, UpdateTargetId = "commentList" + ViewBag.PostID, }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
 {
     <div class="row">
-        <div class="col-md-1 col-sm-1">
-            <object type="image/jpg" data="@("/Images/User/Avatar/" + Session["UserID"].ToString() + ".jpg")" width="40" height="40" style="border-radius:5px"></object>
-        </div>
-        <div class="col-md-10 col-sm-10">
-            @Html.TextBoxFor(model => model.Content, new { @id = "comment" + ViewBag.PostID, @class = "write-comment-txt", @rows = "4", @placeholder = "Bình luận...", @style = "resize: vertical; margin-bottom: 4px" })
-            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-        </div>
-        <div class="col-md-1 col-sm-1">
-            <button class="btn btn-comment" onclick="isCommentBlank(event, '@ViewBag.PostID')" type="submit"><i style='font-size:1.1em; margin-left: -5px; padding-top:5px; opacity: .25;' class='glyphicon glyphicon-send'></i></button>
+        <div class="col-md-12 col-sm-12" style="margin-left: 15px;">
+            <div class="comment-area">
+                <img src="@("/Images/User/Avatar/" + Session["UserID"].ToString() + ".jpg")" width="40" height="40" />
+                @Html.TextBoxFor(model => model.Content, new { @id = "comment" + ViewBag.PostID, @class = "write-comment-txt", @rows = "4", @placeholder = "Bình luận...", @style = "resize: vertical; margin-bottom: 4px", @autocomplete = "off" })
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                <button class="btn btn-comment" onclick="isCommentBlank(event, '@ViewBag.PostID')" type="submit"><i style='font-size:1.1em; margin-left: -5px; padding-top:5px;' class='fa-cus fa-paper-plane fa-cus-18 fa-cus-green'></i></button>
+            </div>
         </div>
     </div>
 }

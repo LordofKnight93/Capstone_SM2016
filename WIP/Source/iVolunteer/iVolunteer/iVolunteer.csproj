@@ -254,19 +254,9 @@
     <Content Include="fonts\material-icons.css" />
     <Content Include="fonts\MaterialIcons-Regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Images\1.jpg" />
-    <Content Include="Images\2.jpg" />
-    <Content Include="Images\3.jpg" />
-    <Content Include="Images\4.jpg" />
-    <Content Include="Images\5.jpg" />
-    <Content Include="Images\avatar.svg" />
-    <Content Include="Images\duc-avata.jpg" />
     <Content Include="Images\icons\identifyID.svg" />
     <Content Include="Images\logo.png" />
-    <Content Include="Images\my-avata.jpg" />
-    <Content Include="Images\my-cover.jpg" />
-    <Content Include="Images\quyvochai.jpg" />
-    <Content Include="Images\thugom_cover.jpg" />
+    <Content Include="Images\logo_lite.png" />
     <Content Include="Models\SQL\iVolunteerSQL.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
@@ -335,7 +325,6 @@
     <Content Include="scripts\moment.js" />
     <Content Include="scripts\moment.min.js" />
     <Content Include="scripts\vi.js" />
-    <Content Include="Views\Shared\KeepAlive.ashx" />
     <EntityDeploy Include="Models\SQL\iVolunteerSQL.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>iVolunteerSQL.Designer.cs</LastGenOutput>
@@ -376,7 +365,6 @@
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="scripts\phucvt_custom.js" />
-    <Content Include="Images\logo_lite.png" />
     <Content Include="scripts\respond.js" />
     <Content Include="scripts\respond.min.js" />
     <Content Include="Web.config" />
@@ -501,9 +489,6 @@
     </Compile>
     <Compile Include="Models\SQL\SQL_Project.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Shared\KeepAlive.ashx.cs">
-      <DependentUpon>KeepAlive.ashx</DependentUpon>
     </Compile>
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
@@ -742,6 +727,7 @@
     <Content Include="Views\Plan\_TaskCount.cshtml" />
     <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
     <Content Include="Views\Shared\_NotifyMessage.cshtml" />
+    <Content Include="Views\Home\FeedBack.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

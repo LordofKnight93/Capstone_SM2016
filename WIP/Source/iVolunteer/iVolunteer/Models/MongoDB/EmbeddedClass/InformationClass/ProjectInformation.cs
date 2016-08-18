@@ -33,14 +33,14 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         [Required(ErrorMessage ="Vui lòng nhập ngày bắt đầu!")]
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateStart { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập ngày kết thúc!")]
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
         [GreaterThanOrEqualTo("DateStart",ErrorMessage ="Ngày kết thúc không thể sớm hơn ngày bắt đầu!")]
         [DateEnd(ErrorMessage = "Ngày kết thúc không thể sớm hơn hôm nay!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateEnd { get; set; }
         [MaxLength(100, ErrorMessage = "Độ dài không quá 100 ký tự!")]
         [Required(ErrorMessage = "Vui lòng nhập mô tả!")]
