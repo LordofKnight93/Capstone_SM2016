@@ -11,12 +11,12 @@
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
             <ul class="nav nav-tabs">
-                <li class="active" data-type="member" data-toggle="tab">
+                <li class="active" data-toggle="tab">
                     @Ajax.RawActionLink("<i class='fa fa-user fa-cus-18' style='margin-right: 10px;'></i><span>BẠN BÈ</span>", "FriendList", "User", new { userID = ViewBag.UserID }, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#content-panel')" }, null)
                 </li>
                 @if (ViewBag.IsMyHome == true)
                 {
-                    <li data-type="request" data-toggle="tab">
+                    <li data-toggle="tab">
                         @Ajax.RawActionLink("<i class='fa fa-user-plus fa-cus-18' style='margin-right: 10px;'></i><span>LỜI MỜI KẾT BẠN</span>", "FriendRequestList", "Account", null, new AjaxOptions { UpdateTargetId = "content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#content-panel')" }, null)
                     </li>
                 }

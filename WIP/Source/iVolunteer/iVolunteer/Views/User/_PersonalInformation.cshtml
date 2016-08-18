@@ -167,9 +167,9 @@
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
     <div class="row" style="margin-bottom: 10px">
         <div class="col-sm-12">
-            <ul class="nav sub-nav-tabs">
+            <ul class="nav nav-tabs">
                 <li class="active"  data-toggle="tab">
-                    @Ajax.ActionLink("SỰ KIỆN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#sub-content-panel')" })
+                    @Ajax.ActionLink("DỰ ÁN ĐANG THAM GIA", "CurrentProjects", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "sub-content-panel", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#sub-content-panel')" })
                 </li>
                 @if (ViewBag.IsMyHome == true)
                 {

@@ -40,6 +40,8 @@ namespace iVolunteer.Common
         public const string DEFAULT_COVER = "/Images/Default/DefaultCover.jpg";
         public const string DEFAULT_PAGE_ICON = "/Images/Default/logo_lite.png";
         public const string DEFAULT_IVOLUNTEER_LOGO = "/Images/Default/logo.png";
+        public const string DEFAULT_ALBUM = "/Images/Default/DefaultAlbum.jpg";
+
     }
 
     public static class Role

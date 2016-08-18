@@ -105,9 +105,7 @@
                                 <li>@Ajax.ActionLink("Đổi mật khẩu", "ChangePassword", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { })</li>
                                 <li><a href="@Url.Action("LogOut","Home")">Đăng xuất</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="guide.html">Trợ giúp</a></li>
-                                @*<li><a href="report.html">Góp ý & Báo cáo sự cố</a></li>*@
-
+                                @*<li><a href="guide.html">Trợ giúp</a></li>*@
                                 <li>@Ajax.ActionLink("Góp ý & Báo cáo sự cố", "AddFailureReport", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content-normal", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content-normal','#popup-normal')" }, new { })</li>
                             </ul>
                         }
@@ -131,7 +129,7 @@
         @*<button class="fixedChatButton" onclick="location.href='@Url.Action("ChatRoom", "Home")'"><p>Chatroom</p></button>*@
         @*<button class="fix-button-home-red"><i class="fa-cus fa-flag fa-cus-20" ></i><span>Góp ý &amp; Báo cáo sự cố</span></button>*@
         @Ajax.RawActionLink("<i class='fa-cus fa-flag fa-cus-20'></i><span>Góp ý &amp; Báo cáo sự cố</span>", "AddFailureReport", "Account", null, new AjaxOptions { UpdateTargetId = "popup-content-normal", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content-normal','#popup-normal')" }, new { @class = "fix-button-home-red" })
-        <button class="fix-button-home-green" onclick="location.href='@Url.Action("FeedBackForm", "Home")'"><i class="material-icons md-24">feedback</i><span>Đánh giá</span></button>
+        <button class="fix-button-home-green" onclick="location.href='@Url.Action("FeedBack", "Home")'"><i class="material-icons md-24">feedback</i><span>Đánh giá</span></button>
     </div>
 
     <div class="modal fade" role="dialog" id="popup">
