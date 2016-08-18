@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
                         <!--form role="form" class="login-form"> -->
-                        @using (Ajax.BeginForm("UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                        @using (Ajax.BeginForm("UpdatePersonalInformation", "Account", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
                         {
                             @Html.HiddenFor(model => model.UserID)
                                     <!-- Project Name -->

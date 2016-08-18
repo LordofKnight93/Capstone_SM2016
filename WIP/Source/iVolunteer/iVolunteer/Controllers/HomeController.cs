@@ -237,9 +237,6 @@ namespace iVolunteer.Controllers
         {
             if(!ModelState.IsValid) return View("Register", registerModel);
 
-            // if user already login then redirect ro new feed
-            if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
-
             string err = "";
             bool isValid = true;
 
@@ -408,9 +405,17 @@ namespace iVolunteer.Controllers
                 return PartialView("_Login", loginModel);
             }
             // code save cookie wil be added here later
-            if (loginModel.IsRemember)
+
+            if (account.IsAdmin == Role.IS_ADMIN)
             {
-                if (account.IsAdmin == Role.IS_USER)
+                HttpCookie myCookie = new HttpCookie("Cookie");
+                myCookie.Expires = DateTime.Now.AddDays(-1d);
+                Response.Cookies.Add(myCookie);
+
+            }
+            else
+            {
+                if (loginModel.IsRemember)
                 {
                     HttpCookie cookie = new HttpCookie("Cookie");
                     //need encrypt
@@ -419,12 +424,6 @@ namespace iVolunteer.Controllers
                     cookie.Values.Add("Password", account.Password);
                     cookie.Expires = DateTime.Now.AddDays(15);
                     Response.Cookies.Add(cookie);
-                }
-                else
-                {
-                    HttpCookie myCookie = new HttpCookie("Cookie");
-                    myCookie.Expires = DateTime.Now.AddDays(-1d);
-                    Response.Cookies.Add(myCookie);
                 }
             }
 

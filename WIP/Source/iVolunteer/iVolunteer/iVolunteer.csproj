@@ -656,7 +656,7 @@
     <Content Include="Views\Shared\_PostImage_Temp.cshtml" />
     <Content Include="Views\Home\_SlideQuotes.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
-    <Content Include="Views\User\_UpdatePersonalInformation.cshtml" />
+    <Content Include="Views\Account\_UpdatePersonalInformation.cshtml" />
     <Content Include="Views\Group\_CommentArea.cshtml" />
     <Content Include="Views\Home\NotificationsPage.cshtml" />
     <Content Include="Views\Project\_CommentArea.cshtml" />

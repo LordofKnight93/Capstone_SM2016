@@ -22,7 +22,7 @@
                                         @*<button class="btn btn-image" title="Chỉnh sửa">
                                             <i class="material-icons md-20 md-mygreen">@Ajax.ActionLink("edit", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</i>
                                         </button>*@
-                                        @Ajax.RawActionLink("<i class='material-icons md-20 md-mygreen'>edit</i>", "UpdatePersonalInformation", "User", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#user-tab')" }, new { @title = "Chỉnh sửa", @style = "display: inline;" })
+                                        @Ajax.RawActionLink("<i class='material-icons md-20 md-mygreen'>edit</i>", "UpdatePersonalInformation", "Account", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#user-tab')" }, new { @title = "Chỉnh sửa", @style = "display: inline;" })
                                     }
                                 </div>
                                 <div class="col-xs-12">

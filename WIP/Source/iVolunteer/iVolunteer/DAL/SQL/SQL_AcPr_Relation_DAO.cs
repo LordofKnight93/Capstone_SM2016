@@ -1019,7 +1019,8 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
                                                                    && ( rl.Relation == AcPrRelation.LEADER_RELATION || rl.Relation == AcPrRelation.MEMBER_RELATION )
                                                                    && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE)
+                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Project.InProgress == Status.ENDED)
                                                              .Select(rl => rl.ProjectID).Distinct().ToList();
                     return result;
                 }
@@ -1043,7 +1044,8 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
                                                                    && rl.Relation == AcPrRelation.SPONSOR_RELATION
                                                                    && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE)
+                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Project.InProgress == Status.ENDED)
                                                              .Select(rl => rl.ProjectID).Distinct().ToList();
                     return result;
                 }
@@ -1067,7 +1069,8 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.UserID == userID
                                                                    && rl.Relation == AcPrRelation.ORGANIZE_RELATION
                                                                    && rl.Status == Status.ACCEPTED
-                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE)
+                                                                   && rl.SQL_Project.IsActivate == Status.IS_ACTIVATE
+                                                                   && rl.SQL_Project.InProgress == Status.ENDED)
                                                              .Select(rl => rl.ProjectID).Distinct().ToList();
                     return result;
                 }
@@ -1618,39 +1621,6 @@ namespace iVolunteer.DAL.SQL
             }
         }
         /// <summary>
-        /// decline all members of group that request to join project
-        /// </summary>
-        /// <param name="groupID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_Join_Requested_Group_Members(string groupID, string projectID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                       && rl.Relation == AcPrRelation.MEMBER_RELATION
-                                                                       && rl.Status == Status.PENDING
-                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
-                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
-                                                                                                                     && rl2.Status == Status.ACCEPTED) != null);
-                    if (result != null)
-                    {
-                        dbEntities.SQL_AcPr_Relation.RemoveRange(result);
-                        dbEntities.SaveChanges();
-                        return true;
-                    }
-                    else return false;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
         /// accept all members of group that request to sponsor project
         /// </summary>
         /// <param name="groupID"></param>
@@ -1675,38 +1645,6 @@ namespace iVolunteer.DAL.SQL
                     var finalResult = result.Select(rl => rl.UserID).ToList();
                     dbEntities.SaveChanges();
                     return finalResult;
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-        /// <summary>
-        /// decline all members of group that request to sponsor project
-        /// </summary>
-        /// <param name="groupID"></param>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool Delete_Sponsor_Requested_Group_Members(string groupID, string projectID)
-        {
-            try
-            {
-                using (iVolunteerEntities dbEntities = new iVolunteerEntities())
-                {
-                    var result = dbEntities.SQL_AcPr_Relation.Where(rl => rl.ProjectID == projectID
-                                                                       && rl.Relation == AcPrRelation.SPONSOR_RELATION
-                                                                       && rl.Status == Status.PENDING
-                                                                       && rl.SQL_Account.SQL_AcGr_Relation.FirstOrDefault(rl2 => rl2.GroupID == groupID
-                                                                                                                     && (rl2.Relation == AcGrRelation.LEADER_RELATION || rl2.Relation == AcGrRelation.MEMBER_RELATION)
-                                                                                                                     && rl2.Status == Status.ACCEPTED) != null);
-                    if (result != null)
-                    {
-                        dbEntities.SQL_AcPr_Relation.RemoveRange(result);
-                        dbEntities.SaveChanges();
-                        return true;
-                    }
-                    else return false;
                 }
             }
             catch
