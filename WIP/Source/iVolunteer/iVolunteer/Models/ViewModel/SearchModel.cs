@@ -5,6 +5,8 @@ using System.Web;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ListClass;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
+using iVolunteer.Common;
+using Foolproof;
 
 namespace iVolunteer.Models.ViewModel
 {
@@ -16,11 +18,12 @@ namespace iVolunteer.Models.ViewModel
         public string Location { get; set; }
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateStart { get; set; }
+        [GreaterThan("DateStart", ErrorMessage = "Khoảng thời gian không hợp lệ!")]
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime DateEnd { get; set; }
         public string[] TagsList { get; set; }
         public bool Progress { get; set; }

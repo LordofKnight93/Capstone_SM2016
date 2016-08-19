@@ -4,9 +4,19 @@ using System.Linq;
 using System.Web;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace iVolunteer.Common
 {
+    public class DateEndAttribute : ValidationAttribute
+    {
+        public override bool IsValid(object value)
+        {
+            DateTime d = Convert.ToDateTime(value);
+            return d > DateTime.Now;
+        }
+    }
     public static class ValidationHelper
     {
         /// <summary>

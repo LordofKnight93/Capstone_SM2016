@@ -11,14 +11,6 @@ using Foolproof;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
-    public class DateEndAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            DateTime d = Convert.ToDateTime(value);
-            return d > DateTime.Now;
-        }
-    }
     /// <summary>
     /// This class store project's infomation
     /// </summary>
