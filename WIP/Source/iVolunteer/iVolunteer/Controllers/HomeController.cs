@@ -316,8 +316,8 @@ namespace iVolunteer.Controllers
                     }
                 }
 
-
-                return View("/Views/Account/Confirm.cshtml", account);
+                ViewBag.Message = "Email kích hoạt đã được gửi đến hòm thư, mời bạn xác nhận!";
+                return View("_NotifyMessage");
             }
             catch
             {

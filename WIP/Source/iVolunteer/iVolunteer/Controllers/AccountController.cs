@@ -48,7 +48,6 @@ namespace iVolunteer.Controllers
             }
             //return RedirectToAction("Login", "Home");
             ViewBag.Message = "Tải khoản của bạn đã được kích hoạt thành công. Hãy nhấn vào 'Đăng nhập hoặc đăng kí' để đăng nhập!";
-            ViewBag.IsActivated = true;
             return View("_NotifyMessage");
             //return RedirectToAction("Newfeed", "Home");
         }

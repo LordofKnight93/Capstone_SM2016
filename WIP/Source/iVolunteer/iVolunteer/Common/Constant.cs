@@ -110,14 +110,14 @@ namespace iVolunteer.Common
         public const string ACCOUNT_EXIST = "Địa chỉ email này đã được đăng ký.";
         public const string ACCOUNT_BANNED = "Tài khoản này đã bị khóa.";
         public const string EMAIL_NOT_CONFIRM = "Tài khoản chưa được xác nhận";
-        public const string IDENTIFYID_EXIST = "Số chứng minh thư đã được sử dụng";
-        public const string UNEXPECT_ERROR = "Có lỗi xảy ra, vui lòng thử lại sau ít phút";
+        public const string IDENTIFYID_EXIST = "Số chứng minh thư đã được sử dụng.";
+        public const string UNEXPECT_ERROR = "Có lỗi xảy ra, vui lòng thử lại sau ít phút.";
         public const string INVALID_INFORMATION = "Thông tin không hợp lệ, vui lòng nhập lại.";
         public const string ACCESS_DENIED = "Trang này không tồn tại hoặc bạn không có quyền truy cập.";
         public const string DISPLAYNAME_FAIL = "Không thể đổi tên quá nhiều lần trong vòng 90 ngày.";
         public const string EMAIL_INVALID = " Email không hợp lệ ";
         public const string PASSWORD_INVALID = "Mật khẩu phải có ít nhất 1 ký tự hoa, 1 ký tự thường, 1 ký tự số, không có ký tự đặc biệt và độ dài từ 8 đến 15 ký tự.";
-        public const string IDENTIFYID_INVALID = "Số chứng minh thư không hợp lệ";
+        public const string IDENTIFYID_INVALID = "Số chứng minh thư không hợp lệ.";
         public const string PHONE_INVALID = "Số điện thoại không hợp lệ";
 
         //Error for Plan

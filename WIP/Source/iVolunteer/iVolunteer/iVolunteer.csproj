@@ -555,7 +555,6 @@
     <Content Include="Views\Group\_CreateGroup.cshtml" />
     <Content Include="Views\Project\_CreateProject.cshtml" />
     <Content Include="Views\Home\Newfeed.cshtml" />
-    <Content Include="Views\Account\Confirm.cshtml" />
     <Content Include="Views\Group\GroupHome.cshtml" />
     <Content Include="Views\Account\_CurrentProjects.cshtml" />
     <Content Include="Views\Account\_JoinedGroups.cshtml" />
