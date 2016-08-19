@@ -50,7 +50,8 @@
                                             }
 @if (Model.Count() == 10)
 {
+    int nextPage = int.Parse(ViewBag.NextPage);
     <div id=@ViewBag.NextPage>
-        @Ajax.ActionLink("Nhiều hơn", "NextResultPage", "User", new { name = ViewBag.Name, page = ViewBag.NextPage }, new AjaxOptions { UpdateTargetId = ViewBag.NextPage, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+        @Ajax.ActionLink("Nhiều hơn", "NextResultPage", "User", new { name = ViewBag.Name, page = nextPage }, new AjaxOptions { UpdateTargetId = ViewBag.NextPage, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
     </div>
 }

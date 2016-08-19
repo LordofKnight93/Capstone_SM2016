@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Transactions;
 using System.Web.Mvc;
@@ -16,6 +15,12 @@ using iVolunteer.DAL.SQL;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.Common;
 using System.IO;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using System.Net;
+using System.Web.Helpers;
 
 namespace iVolunteer.Controllers
 {
@@ -288,9 +293,12 @@ namespace iVolunteer.Controllers
                 {
                     try
                     {
+                        EmailHelper.SendActivationEmail(account.DisplayName, account.Email, account.UserID, Url.Action("Confirm", "Account", new { userID = account.UserID }, Request.Url.Scheme));
+
                         //write to DB
                         sql_Account_DAO.Add_Account(account);
                         mongo_User_DAO.Add_User(user);
+
 
                         // copy default avatar and cover
                         FileInfo avatar = new FileInfo(Server.MapPath(Default.DEFAULT_AVATAR));
@@ -307,6 +315,7 @@ namespace iVolunteer.Controllers
                         return View("Register", registerModel);
                     }
                 }
+
 
                 return View("/Views/Account/Confirm.cshtml", account);
             }
@@ -513,17 +522,22 @@ namespace iVolunteer.Controllers
                 }
 
                 SQL_Account_DAO accountDAO = new SQL_Account_DAO();
-                if(!accountDAO.Is_Email_Exist(email))
+                SQL_Account account = accountDAO.Get_Account_By_Email(email);
+
+                if(account == null)
                 {
                     ViewBag.Message = "Email này chưa đăng ký!";
                     return PartialView("_ForgotPassword");
                 }
                 //reset password
-
+                string newPassword = HashHelper.GenerateString();
                 //sent mail here
+                EmailHelper.SendForgotPasswordEmail(account.UserID, account.DisplayName, account.Email, newPassword);
+                //hash and store new password
+                accountDAO.Set_Password(account.UserID, HashHelper.Hash(newPassword));
 
                 ViewBag.Message = "Mật khẩu mới đã được gửi vào hòm thư!";
-                return PartialView("_ForgotPassword");
+                return PartialView("_NotifyMessage");
             }
             catch
             {
