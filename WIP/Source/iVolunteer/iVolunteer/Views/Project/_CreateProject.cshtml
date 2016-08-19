@@ -217,13 +217,19 @@
         @*</div>
     </div>
 </div>*@
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('#dateStart').datetimepicker({
-            format: 'YYYY-MM-DD'
-        });
-        $('#dateEnd').datetimepicker({
-            format: 'YYYY-MM-DD'
-        });
-    });
-</script>
+@section scripts {
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateStart').datetimepicker({
+				format: 'YYYY/MM/DD',
+			});
+		});
+    </script>
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateEnd').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+    </script>
+}

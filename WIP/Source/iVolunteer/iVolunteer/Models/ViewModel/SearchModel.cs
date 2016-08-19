@@ -16,11 +16,11 @@ namespace iVolunteer.Models.ViewModel
         public string Location { get; set; }
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DateStart { get; set; }
         [BsonDateTimeOptions(DateOnly = true, Kind = DateTimeKind.Local)]
         [DataType(DataType.Date, ErrorMessage = "Ngày bạn nhập không hợp lệ!")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DateEnd { get; set; }
         public string[] TagsList { get; set; }
         public bool Progress { get; set; }

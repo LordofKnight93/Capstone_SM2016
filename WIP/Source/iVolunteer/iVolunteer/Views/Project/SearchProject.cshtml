@@ -42,7 +42,7 @@
                                 <label for="dateStart">Ngày bắt đầu:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @id = "dateStart", @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "date" } })
+                                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "text" } })
                             </div>
                         </div>
 
@@ -52,7 +52,7 @@
                                 <label for="dateEnd">Ngày kết thúc:</label>
                             </div>
                             <div class="col-xs-5 text-input">
-                                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @id = "dateEnd", @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "date" } })
+                                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "text" } })
                             </div>
                         </div>
 
@@ -186,3 +186,19 @@
         </div>
     </div>
 </div>
+@section scripts {
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateStart').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+    </script>
+<script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateEnd').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+</script>
+}

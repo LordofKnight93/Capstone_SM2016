@@ -18,7 +18,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         [Required(ErrorMessage = "Vui lòng nhập tên nhóm!")]
         public string GroupName { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateCreate { get; set; }
         public string GroupDescription { get; set; }
         public int MemberCount { get; set; }

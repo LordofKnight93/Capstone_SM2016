@@ -832,6 +832,9 @@ namespace iVolunteer.Controllers
         public ActionResult SearchProject()
         {
             var searchModel = TempData["SearchModel"] as SearchModel;
+            if(searchModel == null)
+                searchModel = new SearchModel();
+
             return View("SearchProject", searchModel);
         }
         /// <summary>
