@@ -1,17 +1,34 @@
 ﻿@model iVolunteer.Models.ViewModel.SearchModel
 @{
     ViewBag.Title = "Kết quả tìm kiếm";
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
 }
 <div class="row">
 
-    @if (Session["UserID"] != null)
+    @if (Session["UserID"] != null && Session["Role"].ToString() == "User")
     {
         <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
             @{ Html.RenderAction("NavigationPanel", "Account");}
         </div>
                 }
+                else if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+                {
+
+                }
     
-    <div class="col-md-9" id="main_content">
+    <div class="@viewclass" id="main_content">
         <!-- Advance Search -->
         <div class="card-panel" style="margin: 0.5rem 0 1rem 0" id="advance-search-panel">
             <div class="row">

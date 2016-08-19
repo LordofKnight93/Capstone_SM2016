@@ -36,6 +36,7 @@
             </div>
         </div>
     </div>
+    <div id="sound" style="display: none"></div>
 </div>
 <!--FRIEND LIST-->
 
@@ -84,6 +85,7 @@
                         /////////////////////////////////////////////////////////////
                         $("#scroll" + friendID).animate({ scrollTop: $("#chatLine" + friendID).height() }, 600);
                         $("#chatLine" + friendID).append(chatLine);
+                        playSound();
                     }
                 }
                 catch (e) {

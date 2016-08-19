@@ -22,6 +22,11 @@
 
 });
 
+function playSound() {
+    document.getElementById("sound").innerHTML = '<audio autoplay="autoplay"><source src="/Sound/notisound.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="/Sound/notisound.ogg" /></audio>';
+    console.log("play sound");
+}
+
 /******************************************************** Script for Loading *********************************************************/
 
 //Show Symbol loading before ajax loading

@@ -332,6 +332,7 @@
     <Content Include="Models\SQL\iVolunteerSQL.edmx.diagram">
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Content>
+    <Content Include="Sound\notisound.ogg" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
     <None Include="scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="scripts\jquery-2.1.4.js" />
