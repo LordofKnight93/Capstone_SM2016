@@ -139,43 +139,39 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            SDLink result = null;
             try
             {
+                SDLink result = null;
                 SQL_Group_DAO sqlDAO = new SQL_Group_DAO();
                 if (sqlDAO.IsActivate(groupID))
                 {
                     Mongo_Group_DAO mongoDAO = new Mongo_Group_DAO();
                     result = mongoDAO.Get_SDLink(groupID);
+
+                    if (Session["UserID"] != null)
+                    {
+                        if (Session["Role"].ToString() == "Admin")
+                            ViewBag.IsAdmin = true;
+                        else
+                        {
+                            SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
+                            string userID = Session["UserID"].ToString();
+                            ViewBag.IsJoined = relationDAO.Is_Joined(userID, groupID);
+                        }
+                    }
+                    return View("GroupHome", result);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
                 }
 
-                if (Session["UserID"] != null)
-                {
-                    SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
-                    if (Session["Role"].ToString() == "Admin")
-                        ViewBag.IsAdmin = true;
-                    else
-                    {
-                        string userID = Session["UserID"].ToString();
-                        ViewBag.IsJoined = relationDAO.Is_Joined(userID, groupID);
-                    }
-                }
             }
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return View("ErrorMessage");
-            }
-
-            if (result == null)
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return View("ErrorMessage");
-            }
-            else
-            {
-                ViewBag.GroupID = groupID;
-                return View("GroupHome", result);
             }
         }
         /// <summary>

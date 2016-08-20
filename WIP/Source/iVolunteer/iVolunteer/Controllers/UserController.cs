@@ -64,24 +64,29 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            SDLink result = null;
             try
             {
-                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                result = userDAO.Get_SDLink(userID);
+                SDLink result = null;
+                SQL_Account_DAO accountDAO = new SQL_Account_DAO();
+
+                if (accountDAO.IsActivate(userID))
+                {
+                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                    result = userDAO.Get_SDLink(userID);
+
+                    return View("UserHome", result);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
+                }
             }
             catch
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
             }
-
-            if (result == null)
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return PartialView("ErrorMessage");
-            }
-            return View("UserHome", result);
         }
         /// <summary>
         /// アバターカバー写真セクションを表示
