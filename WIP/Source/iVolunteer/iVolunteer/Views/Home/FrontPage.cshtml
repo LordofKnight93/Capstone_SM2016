@@ -2,6 +2,18 @@
 @{ 
     ViewBag.Title = "Trang chủ";
 }
+@if (ViewBag.IsActivated == true)
+{
+    <div class="row">
+        <div class="col-md-12" style="margin: 20px auto">
+            <div class="success-message">
+                <h5>@ViewBag.Message</h5>
+            </div>
+        </div>
+    </div>
+}
+else
+{
 <div class="row background-container">
     @{ Html.RenderPartial("_SlideQuotes", new ViewDataDictionary());}
     <div class="row">
@@ -11,7 +23,7 @@
         @if (Session["Role"] != null && Session["Role"].ToString() == "User")
         {
             <div class="col-md-6" style="text-align: right; padding: 10px;">
-                @Ajax.ActionLink("TẠO DỰ ÁN MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer"})
+                @Ajax.ActionLink("TẠO DỰ ÁN MỚI ...", "CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @style = "font-weight: bold; color: #049f88; cursor: pointer" })
             </div>
         }
         <div class="col-md-12">
@@ -94,7 +106,7 @@
                 <div class="project-information">
                     <div class="meta-data">
                         <div class="title">
-                            <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID})" style="font-weight: bold; color: #fff;">
+                            <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID })" style="font-weight: bold; color: #fff;">
                                 @Html.DisplayFor(modelItem => item.ProjectName)
                             </a>
                         </div>
@@ -148,6 +160,7 @@
     </div>
     }
 </div>
+        }
 @section scripts {
     <script>
         function linkToProject(event,projectID) {

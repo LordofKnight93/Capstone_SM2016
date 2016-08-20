@@ -47,9 +47,11 @@ namespace iVolunteer.Controllers
                 return View("ErrorMessage");
             }
             //return RedirectToAction("Login", "Home");
-            ViewBag.Message = "Tải khoản của bạn đã được kích hoạt thành công. Hãy nhấn vào 'Đăng nhập hoặc đăng kí' để đăng nhập!";
-            return View("_NotifyMessage");
-            //return RedirectToAction("Newfeed", "Home");
+            TempData["Message"] = "Tải khoản của bạn đã được kích hoạt thành công. Hãy nhấn vào 'Đăng nhập hoặc đăng kí' để đăng nhập!";
+            TempData["IsActivated"] = true;
+            ViewBag.IsActivated = true;
+            //return View("_NotifyMessage");
+            return RedirectToAction("FrontPage", "Home");
         }
         /// <summary>
         /// child action, create left navigation panel

@@ -68,6 +68,13 @@ namespace iVolunteer.Controllers
 
             try
             {
+                //CASE: login for the first time (after activate account)
+                if(TempData["Message"] != null)
+                {
+                    ViewBag.Message = TempData["Message"].ToString();
+                    ViewBag.IsActivated = TempData["IsActivated"];
+                }
+
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                 var result = projectDAO.FrontPage_Project(0, 8);
                 return View("FrontPage", result);
