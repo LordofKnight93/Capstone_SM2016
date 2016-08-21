@@ -7,13 +7,13 @@
             if (ViewBag.IsActivate == true)
             {
                 <li>
-                   @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Khóa</span>", "DeactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                   @Ajax.ActionLink("Khóa", "DeactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                 </li>
             }
             else
             {
                 <li>
-                    @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Kích hoạt</span>", "ReactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                    @Ajax.ActionLink("Kích hoạt", "ReactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                 </li>
             }
         }

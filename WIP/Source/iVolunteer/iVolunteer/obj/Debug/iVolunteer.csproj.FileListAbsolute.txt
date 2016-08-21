@@ -1328,6 +1328,5 @@ F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\S
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\System.Web.Webpages.Razor.xml
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\System.Web.Helpers.xml
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\bin\System.Web.Mvc.xml
-F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.csprojResolveAssemblyReference.cache
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\iVolunteer\obj\Debug\iVolunteer.pdb

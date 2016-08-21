@@ -427,7 +427,6 @@ namespace iVolunteer.Controllers
                 HttpCookie myCookie = new HttpCookie("Cookie");
                 myCookie.Expires = DateTime.Now.AddDays(-1d);
                 Response.Cookies.Add(myCookie);
-
             }
             else
             {

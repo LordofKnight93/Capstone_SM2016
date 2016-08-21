@@ -177,27 +177,34 @@ namespace iVolunteer.Controllers
                 }
             }
 
-            SDLink result = null;
             try
             {
+                SDLink result = null;
+
                 SQL_Project_DAO sqlDAO = new SQL_Project_DAO();
-                if (sqlDAO.IsActivate(projectID))
+                if (sqlDAO.IsActivate(projectID) || (Session["Role"] != null && Session["Role"].ToString() == "Admin"))
                 {
                     Mongo_Project_DAO mongoDAO = new Mongo_Project_DAO();
                     result = mongoDAO.Get_SDLink(projectID);
-                }
 
-                if (Session["UserID"] != null)
-                {
-                    SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-                    if (Session["Role"].ToString() == "Admin")
-                        ViewBag.IsAdmin = true;
-                    else
+                    if (Session["UserID"] != null)
                     {
-                        string userID = Session["UserID"].ToString();
-                        ViewBag.IsJoined = relationDAO.Is_Joined(userID, projectID);
-                        ViewBag.IsSponsored = relationDAO.Is_Sponsor(userID, projectID);
+                        SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                        if (Session["Role"].ToString() == "Admin")
+                            ViewBag.IsAdmin = true;
+                        else
+                        {
+                            string userID = Session["UserID"].ToString();
+                            ViewBag.IsJoined = relationDAO.Is_Joined(userID, projectID);
+                            ViewBag.IsSponsored = relationDAO.Is_Sponsor(userID, projectID);
+                        }
                     }
+                    return View("ProjectHome", result);
+                }
+                else
+                {
+                    ViewBag.Message = Error.ACCESS_DENIED;
+                    return View("ErrorMessage");
                 }
             }
             catch
@@ -205,13 +212,6 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return View("ErrorMessage");
             }
-
-            if (result == null)
-            {
-                ViewBag.Message = Error.ACCESS_DENIED;
-                return View("ErrorMessage");
-            }
-            else return View("ProjectHome", result);
         }
         /// <summary>
         /// アバターカバー変更画面を表示

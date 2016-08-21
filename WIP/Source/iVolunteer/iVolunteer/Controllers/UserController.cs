@@ -69,7 +69,7 @@ namespace iVolunteer.Controllers
                 SDLink result = null;
                 SQL_Account_DAO accountDAO = new SQL_Account_DAO();
 
-                if (accountDAO.IsActivate(userID))
+                if (accountDAO.IsActivate(userID) || (Session["Role"] != null && Session["Role"].ToString() == "Admin"))
                 {
                     Mongo_User_DAO userDAO = new Mongo_User_DAO();
                     result = userDAO.Get_SDLink(userID);

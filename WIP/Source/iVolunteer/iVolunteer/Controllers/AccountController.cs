@@ -293,8 +293,6 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="groupID"></param>
         /// <returns></returns>
-        //child acton return action with group
-        [ChildActionOnly]
         public ActionResult ActionToGroup(string groupID)
         {
             try
@@ -465,7 +463,6 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="otherID"></param>
         /// <returns></returns>
-        [ChildActionOnly]
         public ActionResult ActionToOtherUser(string otherID)
         {
             try
@@ -685,8 +682,6 @@ namespace iVolunteer.Controllers
         /// </summary>
         /// <param name="projectID"></param>
         /// <returns></returns>
-        //child acton return action with project
-        [ChildActionOnly]
         public ActionResult ActionToProject(string projectID)
         {
             try

@@ -170,10 +170,10 @@ namespace iVolunteer.Controllers
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
-            return Json(true);
+            return RedirectToAction("ActionToGroup", "Account", new { groupID = groupID });
         }
         /// <summary>
         /// Ignore Group's Report
@@ -254,14 +254,14 @@ namespace iVolunteer.Controllers
                     mgReportDAO.Delete_Reports(projectID);
 
                     transaction.Complete();
-                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
+            return RedirectToAction("ActionToProject", "Account", new { projectID = projectID });
         }
         /// <summary>
         /// Ignore Reports to Project
@@ -342,14 +342,14 @@ namespace iVolunteer.Controllers
                     mgReportDAO.Delete_Reports(userID);
 
                     transaction.Complete();
-                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
+            return RedirectToAction("ActionToOtherUser", "Account", new { otherID = userID });
         }
         /// <summary>
         /// Ignore Reports to User
@@ -456,14 +456,14 @@ namespace iVolunteer.Controllers
                     mgGroupDAO.Set_Activation_Status(groupID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
-                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
+            return RedirectToAction("ActionToGroup", "Account", new { groupID = groupID });
         }
         /// <summary>
         /// Reactivate banned Project
@@ -495,14 +495,14 @@ namespace iVolunteer.Controllers
                     mgProjectDAO.Set_Activation_Status(projectID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
-                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
+            return RedirectToAction("ActionToProject", "Account", new { projectID = projectID });
         }
         /// <summary>
         /// Reactivate banned User
@@ -534,14 +534,14 @@ namespace iVolunteer.Controllers
                     mgUserDAO.Set_Activation_Status(userID, Status.IS_ACTIVATE);
 
                     transaction.Complete();
-                    return Json(true);
                 }
                 catch
                 {
                     transaction.Dispose();
-                    return Json(false);
+                    return JavaScript("alert('" + Error.UNEXPECT_ERROR + "')");
                 }
             }
+            return RedirectToAction("ActionToOtherUser", "Account", new { otherID = userID });
         }
 
         public ActionResult DisplayAsviseAndFailureReport()

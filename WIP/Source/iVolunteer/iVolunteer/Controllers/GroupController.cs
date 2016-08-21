@@ -143,7 +143,7 @@ namespace iVolunteer.Controllers
             {
                 SDLink result = null;
                 SQL_Group_DAO sqlDAO = new SQL_Group_DAO();
-                if (sqlDAO.IsActivate(groupID))
+                if (sqlDAO.IsActivate(groupID) || (Session["Role"] != null && Session["Role"].ToString() == "Admin"))
                 {
                     Mongo_Group_DAO mongoDAO = new Mongo_Group_DAO();
                     result = mongoDAO.Get_SDLink(groupID);
