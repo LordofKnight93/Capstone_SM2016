@@ -12,7 +12,7 @@
     //Set the carousel options
     $('#quote-carousel').carousel({
         pause: true,
-        interval: 4000,
+        interval: 20000,
     });
 
     // show name of button view access

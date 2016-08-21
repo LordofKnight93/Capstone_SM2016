@@ -292,7 +292,7 @@ namespace iVolunteer.DAL.MongoDB
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.GROUP)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PUBLIC);
-                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
                 var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
                 return result;
             }
@@ -316,7 +316,7 @@ namespace iVolunteer.DAL.MongoDB
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.Destination.Handler, Handler.PROJECT)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPinned, Status.IS_NOT_PINNED)
                            & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, Status.IS_PUBLIC);
-                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
                 var result = collection.Find(filter).Sort(sort).Skip(skip).Limit(number).ToList();
                 return result;
             }
@@ -507,7 +507,7 @@ namespace iVolunteer.DAL.MongoDB
                             & Builders<Mongo_Post>.Filter.Eq(p => p.PostInfomation.IsPublic, true)
                             | Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs);
 
-                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateCreate);
+                var sort = Builders<Mongo_Post>.Sort.Descending(p => p.PostInfomation.DateLastActivity);
                 //Normal 
                 //var filter2 = Builders<Mongo_Post>.Filter.In(p => p.PostInfomation.Destination.ID, destinationIDs);
                 //posts.AddRange(collection.Find(filter2).ToList());

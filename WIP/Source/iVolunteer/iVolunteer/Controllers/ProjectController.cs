@@ -2136,13 +2136,12 @@ namespace iVolunteer.Controllers
                         try
                         {
                             SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
-                            if (grPrDAO.Accept_Sponsor_Request(requestID, projectID))
-                            {
-                                var acceptList = acPrDAO.Accept_Sponsor_Requested_Group_Members(requestID, projectID);
+                            grPrDAO.Accept_Sponsor_Request(requestID, projectID);
 
-                                Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                                userDAO.Batch_Sponsor_Project(acceptList);
-                            }
+                            var acceptList = acPrDAO.Accept_Sponsor_Requested_Group_Members(requestID, projectID);
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            userDAO.Batch_Sponsor_Project(acceptList);
+                            
                             transaction.Complete();
                         }
                         catch
@@ -2706,6 +2705,7 @@ namespace iVolunteer.Controllers
                         {
                             SQL_Project_DAO sqlDAO = new SQL_Project_DAO();
                             sqlDAO.Close(projectID);
+                            sqlDAO.Stop_Recruting(projectID);
                             Mongo_Project_DAO mongoDAO = new Mongo_Project_DAO();
                             mongoDAO.Close(projectID);
                             mongoDAO.Stop_Recruiting(projectID);

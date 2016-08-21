@@ -25,10 +25,6 @@
             @{ Html.RenderAction("NavigationPanel", "Account");}
         </div>
                 }
-                else if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
-                {
-
-                }
     <div class="@viewclass" id="main_content">
         @*-------------------Cover Photo----------------*@
         @{ Html.RenderAction("AvatarCover", "Project", new { projectID = Model.ID });}

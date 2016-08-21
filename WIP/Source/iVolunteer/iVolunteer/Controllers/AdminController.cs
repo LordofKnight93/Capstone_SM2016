@@ -26,7 +26,7 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult Manage()
         {
-            if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -40,7 +40,7 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayPendingReport()
         {
-            if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
@@ -54,6 +54,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayPendingReportedGroup()
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             try
             {
                 Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
@@ -74,6 +80,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayPendingReportedProject()
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             try
             {
                 Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
@@ -94,6 +106,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayPendingReportedUser()
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             try
             {
                 Mongo_Report_DAO reportDAO = new Mongo_Report_DAO();
@@ -116,6 +134,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateGroup(string groupID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -159,6 +183,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreGroupReport(string groupID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -192,6 +222,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateProject(string projectID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -235,6 +271,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreProjectReport(string projectID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -268,6 +310,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DeactivateUser(string userID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -311,6 +359,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult IgnoreUserReport(string userID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -342,6 +396,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult DisplayBannedObjects()
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (Session["Role"].ToString() != "Admin" || Session["UserID"] == null)
             {
                 ViewBag.Message = Error.ACCESS_DENIED;
@@ -374,6 +434,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateGroup(string groupID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (groupID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -407,6 +473,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateProject(string projectID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (projectID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {
@@ -440,6 +512,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReactivateUser(string userID)
         {
+            if (Session["UserID"] == null || Session["Role"].ToString() != "Admin")
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             if (userID == null) return Json(false);
             using (var transaction = new TransactionScope())
             {

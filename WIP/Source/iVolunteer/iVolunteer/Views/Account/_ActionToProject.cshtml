@@ -14,7 +14,7 @@
             else
             {
                 <li>
-                    @Ajax.ActionLink("Kích hoạt", "ActivateProject", "Admin", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                    @Ajax.ActionLink("Kích hoạt", "ReactivateProject", "Admin", new { projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
                 </li>
             }
         }
