@@ -58,7 +58,7 @@ namespace iVolunteer.Models.ViewModel
         public DateTime Birthday { get; set; }
 
         //Số CMT
-        [Required(ErrorMessage = "Vui lòng nhập số chứng minh thư!")]
+        //[Required(ErrorMessage = "Vui lòng nhập số chứng minh thư!")]
         [DisplayName("Số chứng minh thư")]
         [RegularExpression(@"^(([0-9]{12})|([0-9]{9}))$", ErrorMessage ="Chỉ chấp nhận số và độ dài 9 hoặc 12 ký tự!")]
         [DisplayFormat(DataFormatString = "{0:F2}", ApplyFormatInEditMode = true)]

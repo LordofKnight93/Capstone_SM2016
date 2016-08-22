@@ -265,12 +265,12 @@ namespace iVolunteer.Controllers
                     isValid = false;
                 }
 
-                // check if identifyID exist
-                if (sql_Account_DAO.Is_IdentifyID_Exist(registerModel.IdentifyID))
-                {
-                    err = err + Error.IDENTIFYID_EXIST + Environment.NewLine;
-                    isValid = false;
-                }
+                //// check if identifyID exist
+                //if (sql_Account_DAO.Is_IdentifyID_Exist(registerModel.IdentifyID))
+                //{
+                //    err = err + Error.IDENTIFYID_EXIST + Environment.NewLine;
+                //    isValid = false;
+                //}
 
                 if (!isValid)
                 {
@@ -636,6 +636,12 @@ namespace iVolunteer.Controllers
             }
             if (Session["Role"] != null && Session["Role"].ToString() == "Admin") return RedirectToAction("Manage", "Admin");
             return View("FeedBack");
+        }
+
+        public ActionResult ErrorMessage()
+        {
+            ViewBag.Message = Error.ACCESS_DENIED;
+            return View("ErrorMessage");
         }
     }
 }

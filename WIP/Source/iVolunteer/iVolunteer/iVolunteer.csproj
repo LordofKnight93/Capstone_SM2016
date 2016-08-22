@@ -729,7 +729,6 @@
     <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
     <Content Include="Views\Shared\_NotifyMessage.cshtml" />
     <Content Include="Views\Home\FeedBack.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
