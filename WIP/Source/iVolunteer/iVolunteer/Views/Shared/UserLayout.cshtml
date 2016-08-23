@@ -69,8 +69,8 @@
                 {
 					<ul class="nav navbar-nav">
 						<li><a title="Trang chủ" href="@Url.Action("FrontPage","Home")" style="color: #fff;">TRANG CHỦ</a></li>
-						<li><a title="Bảng tin" id="logo" href="@Url.Action("Newfeed","Home")" style="color: #fff;">BẢNG TIN</a></li>'
-						<li><a title="Phòng chat" href="#" onclick="location.href='@Url.Action("ChatRoom", "Home")'" style="color: #fff;">TRÒ CHUYỆN</a></li>
+						<li><a title="Bảng tin" id="logo" href="@Url.Action("Newfeed","Home")" style="color: #fff;">BẢNG TIN</a></li>
+						<li><a title="Trò chuyện" href="#" onclick="location.href='@Url.Action("ChatRoom", "Home")'" style="color: #fff;" id="chatRoomButton">TRÒ CHUYỆN</a><span id="chatnewnoti" class="chatnewnoti" style="opacity: 0;">MỚI</span></li>
 					</ul>
 				}
 
@@ -260,6 +260,10 @@
             $('#postContent').css('height', '80px');
         };
         $(document).ready(function () {
+
+            $('#chatRoomButton').click(function () {
+                $('#chatnewnoti').hide();
+            });
 
             //Add Blur Class
             $('.div-change-cover').hover(function () {

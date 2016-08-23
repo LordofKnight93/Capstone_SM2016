@@ -18,7 +18,7 @@ else
     @{ Html.RenderPartial("_SlideQuotes", new ViewDataDictionary());}
     <div class="row">
         <div class="col-md-6">
-            <h4>Dự án nổi bật</h4>
+            <h4>Dự án tình nguyện nổi bật</h4>
         </div>
         @if (Session["Role"] != null && Session["Role"].ToString() == "User")
         {
@@ -27,7 +27,7 @@ else
             </div>
         }
         <div class="col-md-12">
-            <div class="divider-holizon"></div>
+            <div class="divider-holizon" style="margin-top: -5px;"></div>
         </div>
     </div>
     @foreach (var item in Model)

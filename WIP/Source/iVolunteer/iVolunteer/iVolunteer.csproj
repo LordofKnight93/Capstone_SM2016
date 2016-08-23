@@ -332,6 +332,7 @@
     <Content Include="Models\SQL\iVolunteerSQL.edmx.diagram">
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Content>
+    <Content Include="Sound\notisound.mp3" />
     <Content Include="Sound\notisound.ogg" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
     <None Include="scripts\jquery-2.1.4.intellisense.js" />
@@ -365,7 +366,6 @@
     <Content Include="scripts\jquery.validate.unobtrusive.js" />
     <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
-    <Content Include="scripts\phucvt_custom.js" />
     <Content Include="scripts\respond.js" />
     <Content Include="scripts\respond.min.js" />
     <Content Include="Web.config" />
@@ -655,7 +655,7 @@
     <Content Include="Views\Group\_PinnedPost.cshtml" />
     <Content Include="Views\Shared\_ImageUploadInPost.cshtml" />
     <Content Include="Views\Shared\_PostImage_Temp.cshtml" />
-    <Content Include="Views\Home\_SlideQuotes.cshtml" />
+    <Content Include="Views\Home\_SlideQuotes-Ori.cshtml" />
     <Content Include="Views\Project\_ProjectPlan.cshtml" />
     <Content Include="Views\Account\_UpdatePersonalInformation.cshtml" />
     <Content Include="Views\Group\_CommentArea.cshtml" />
@@ -729,6 +729,7 @@
     <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
     <Content Include="Views\Shared\_NotifyMessage.cshtml" />
     <Content Include="Views\Home\FeedBack.cshtml" />
+    <Content Include="Views\Home\_SlideQuotes.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

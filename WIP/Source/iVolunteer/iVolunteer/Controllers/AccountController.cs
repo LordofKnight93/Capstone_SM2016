@@ -1450,7 +1450,7 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 relationDAO.Suggest_Users(friendID, projectID);
 
-                ViewBag.Message = "Đễ xuất thành công, cám ơn bạn.";
+                ViewBag.Message = "Đề xuất thành công, cám ơn bạn.";
                 return PartialView("_NotifyMessage");
             }
             catch

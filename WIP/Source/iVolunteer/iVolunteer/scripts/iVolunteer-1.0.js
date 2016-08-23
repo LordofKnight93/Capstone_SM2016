@@ -14,7 +14,11 @@
         pause: true,
         interval: 20000,
     });
-
+    
+    $('#carousel-intro').carousel({
+        pause: true,
+        interval: 20000,
+    });
     // show name of button view access
     $('.btn-view-action').hover(function () {
         $('.btn-view-action').find('span').show(1000);
@@ -23,8 +27,8 @@
 });
 
 function playSound() {
-    document.getElementById("sound").innerHTML = '<audio autoplay="autoplay"><source src="/Sound/notisound.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="/Sound/notisound.ogg" /></audio>';
-    console.log("play sound");
+    //document.getElementById("sound").innerHTML = '<audio autoplay="autoplay"><source src="/Sound/notisound.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="/Sound/notisound.ogg" /></audio>';
+    document.getElementById("sound").innerHTML = '<audio autoplay="autoplay"><source src="/Sound/notisound.mp3" type="audio/mpeg" /><source src="/Sound/notisound.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="/Sound/notisound.mp3" /></audio>';
 }
 
 /******************************************************** Script for Loading *********************************************************/
