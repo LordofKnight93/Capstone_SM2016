@@ -524,7 +524,7 @@ namespace iVolunteer.Controllers
                 }
                 else
                 {
-                    ViewBag.Role = null;
+                    ViewBag.Role = "Guess";
                 }
             }
             ViewBag.InSection = "GroupGallery";

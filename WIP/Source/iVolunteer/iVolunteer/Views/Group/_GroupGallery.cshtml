@@ -1,9 +1,13 @@
-﻿@if (ViewBag.Role != null)
+﻿@if (ViewBag.Role == "Leader" || ViewBag.Role == "Member")
 {
     <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
         @Ajax.ActionLink("TẠO BỘ ẢNH MỚI...", "CreateAlbum", "Group", new { targetID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "GET", UpdateTargetId = "popup-content-normal", OnBegin = "OnBeginPopup('#popup-content-normal','#popup-normal')" }, new { @style = "font-size: 15px;font-weight: bold; margin-top:10px" })
     </div>
 }
-<div id="albumList">
-    @{Html.RenderAction("GetAlbumList", "Group", new { groupID = ViewBag.GroupID });}
-</div>
+
+@if (ViewBag.Role != null)
+{
+    <div id="albumList">
+        @{Html.RenderAction("GetAlbumList", "Group", new { groupID = ViewBag.GroupID });}
+    </div>
+}
