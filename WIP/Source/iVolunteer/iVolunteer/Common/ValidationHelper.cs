@@ -37,7 +37,8 @@ namespace iVolunteer.Common
             }
         }
         /// <summary>
-        /// check valid deline, the dateline must be in furture
+        /// check valid deadline, the deadline must be in furture
+        /// 締め切りを検証、締め切りは必ず将来にある価値
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
@@ -49,6 +50,7 @@ namespace iVolunteer.Common
 
         /// <summary>
         /// check validate between two date
+        /// 期間内を検証
         /// </summary>
         /// <param name="date1"></param>
         /// <param name="date2"></param>

@@ -131,7 +131,13 @@ namespace iVolunteer.Controllers
         //    }
         //}
 
-
+        /// <summary>
+        /// 画像を削除
+        /// </summary>
+        /// <param name="albumID"></param>
+        /// <param name="imageID"></param>
+        /// <param name="targetID"></param>
+        /// <returns></returns>
         public ActionResult DeleteImage(string albumID, string imageID, string targetID)
         {
 
@@ -162,6 +168,10 @@ namespace iVolunteer.Controllers
             }
             return JavaScript("window.location = '" + Url.Action("EditAlbum", "Album", new { albumID = albumID ,targetID = targetID}) + "'");
         }
+        /// <summary>
+        /// アップロード
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public JsonResult Upload()
         {
@@ -189,6 +199,12 @@ namespace iVolunteer.Controllers
             var list = filesHelper.GetFileList(albumID);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// ファイルを削除
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="albumID"></param>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult DeleteFile(string file,string albumID)
         {

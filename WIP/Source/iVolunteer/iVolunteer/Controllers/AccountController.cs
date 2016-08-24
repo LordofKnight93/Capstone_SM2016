@@ -429,10 +429,12 @@ namespace iVolunteer.Controllers
                     try
                     {
                         //delete sql relation
+                        //SQLにある関係を削除
                         SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                         relationDAO.Delelte_Request(userID, groupID);
 
                         //Delete Group's leaders join group request notification
+                        //リーダーの通知にあるアイテムを削除
                         List<string> leaders = relationDAO.Get_Leaders(groupID);
                         Mongo_User_DAO userDAO = new Mongo_User_DAO();
                         var notifyID = userDAO.Get_JoinGroup_NotifyID(leaders[0], userID, groupID);
@@ -1440,6 +1442,7 @@ namespace iVolunteer.Controllers
                 }
 
                 //check permission
+                //許可をチェック
                 if (Session["UserID"] == null)
                 {
                     ViewBag.Message = Error.ACCESS_DENIED;

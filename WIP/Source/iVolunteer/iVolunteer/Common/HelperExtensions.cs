@@ -6,6 +6,18 @@ namespace iVolunteer.Common
 {
     public static class HelperExtensions
     {
+        /// <summary>
+        /// Customize AjaxActionLink
+        /// AjaxActionLInkをカスタマイズ
+        /// </summary>
+        /// <param name="ajaxHelper"></param>
+        /// <param name="linkText"></param>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="routeValues"></param>
+        /// <param name="ajaxOptions"></param>
+        /// <param name="htmlAttributes"></param>
+        /// <returns></returns>
         public static MvcHtmlString RawActionLink(this AjaxHelper ajaxHelper, string linkText, string actionName, string controllerName, object routeValues, AjaxOptions ajaxOptions, object htmlAttributes)
         {
             var repID = Guid.NewGuid().ToString();

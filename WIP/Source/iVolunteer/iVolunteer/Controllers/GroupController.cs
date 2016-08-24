@@ -45,34 +45,40 @@ namespace iVolunteer.Controllers
             if (!ModelState.IsValid) return PartialView("_CreateGroup", groupInfo);
 
             //set missing information
+            //足りなかったデータを補充
             groupInfo.DateCreate = DateTime.Now;
             groupInfo.MemberCount = 1;
             groupInfo.IsActivate = Status.IS_ACTIVATE;
 
             //create creator
+            //リーダーを指定
             string userID = Session["UserID"].ToString();
 
             //create mongo Group
+            //Mongoのグループを作成
             Mongo_Group mongo_Group = new Mongo_Group(groupInfo);
 
             //create sql Group
+            //SQLのグルぷを作成
             SQL_Group sql_Group = new SQL_Group();
             sql_Group.GroupID = mongo_Group.GroupInformation.GroupID;
             sql_Group.IsActivate = true;
 
             //start transaction
-
+            //トランザクションを開始
             using (var transaction = new TransactionScope())
             {
                 try
                 {
                     // create DAO instance
+                    //DAOのインスタンスを作成
                     Mongo_Group_DAO mongo_Group_DAO = new Mongo_Group_DAO();
                     Mongo_User_DAO mongo_User_DAO = new Mongo_User_DAO();
                     SQL_Group_DAO sql_Group_DAO = new SQL_Group_DAO();
                     SQL_AcGr_Relation_DAO sql_User_Group_DAO = new SQL_AcGr_Relation_DAO();
 
                     //write to DB
+                    //データベースに保存
                     sql_Group_DAO.Add_Group(sql_Group);
                     sql_User_Group_DAO.Add_Leader(userID, sql_Group.GroupID);
 
@@ -80,6 +86,7 @@ namespace iVolunteer.Controllers
                     mongo_User_DAO.Join_Group(userID);
 
                     // copy default avatar and cover
+                    //既定アバターとカーバをコピー
                     FileInfo avatar = new FileInfo(Server.MapPath(Default.DEFAULT_AVATAR));
                     avatar.CopyTo(Server.MapPath("/Images/Group/Avatar/" + sql_Group.GroupID + ".jpg"));
                     FileInfo cover = new FileInfo(Server.MapPath(Default.DEFAULT_COVER));
@@ -111,6 +118,7 @@ namespace iVolunteer.Controllers
                 HttpCookie cookie = Request.Cookies["Cookie"];
                 string email = Request.Cookies["Cookie"].Values["Email"];
                 //decrypt here
+                //解読
                 string passwod = Request.Cookies["Cookie"].Values["Password"];
                 //decrypt here
                 SQL_Account account = null;
@@ -186,10 +194,12 @@ namespace iVolunteer.Controllers
             try
             {
                 //get data
+                //データを取得
                 Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
                 var result = groupDAO.Get_SDLink(groupID);
                 //get ralation 
+                //関係を取得
                 if (Session["UserID"] == null)
                 {
                     ViewBag.CanChange = "false";
@@ -218,7 +228,7 @@ namespace iVolunteer.Controllers
         public ActionResult ChangeAvatar(string id)
         {
             //check permission here
-
+            //許可をチェック
             ViewBag.Action = "UploadAvatar";
             ViewBag.Controller = "Group";
             ViewBag.ID = id;
