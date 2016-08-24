@@ -75,7 +75,6 @@ F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\De
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\Microsoft.Owin.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\System.Web.Optimization.dll
-F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\System.Web.Mvc.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\Owin.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\MongoDB.Bson.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\FoolproofValidation.dll
@@ -114,3 +113,8 @@ F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\De
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\obj\Debug\UnitTests.csprojResolveAssemblyReference.cache
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\obj\Debug\UnitTests.dll
 F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\obj\Debug\UnitTests.pdb
+F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\UnitTests.dll.config
+F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\MvcContrib.TestHelper.dll
+F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\Rhino.Mocks.dll
+F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\EntityFramework.SqlServer.dll
+F:\CapstoneProject\GitHub\Capstone_SM2016\WIP\Source\iVolunteer\UnitTests\bin\Debug\EntityFramework.SqlServer.xml

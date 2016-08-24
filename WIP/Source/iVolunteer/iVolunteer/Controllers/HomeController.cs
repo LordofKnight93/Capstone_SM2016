@@ -521,6 +521,12 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Email = email;
 
+                if (String.IsNullOrWhiteSpace(email))
+                {
+                    ViewBag.Message = "Vui lòng nhập email!";
+                    return PartialView("_ForgotPassword");
+                }
+
                 if (!ValidationHelper.IsValidEmail(email))
                 {
                     ViewBag.Message = Error.EMAIL_INVALID;

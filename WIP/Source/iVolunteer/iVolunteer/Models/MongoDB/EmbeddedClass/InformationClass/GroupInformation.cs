@@ -5,6 +5,8 @@ using MongoDB.Bson.IO;
 using iVolunteer.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
 {
@@ -15,7 +17,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     public class GroupInformation 
     {
         public string GroupID { get; set; }
-        [Required(ErrorMessage = "Vui lòng nhập tên nhóm!")]
+        [Required(ErrorMessage = "Vui lòng nhập tên nhóm!", AllowEmptyStrings = false)]
         public string GroupName { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
@@ -35,6 +37,8 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
             this.DateCreate = new DateTime();
             this.GroupDescription = "";
             this.MemberCount = 0;
+            this.Email = "";
+            this.Phone = "";
             this.IsActivate = Status.IS_ACTIVATE;
         }
         public string Get_AvatarLink()

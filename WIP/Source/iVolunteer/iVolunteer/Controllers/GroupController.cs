@@ -32,6 +32,11 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult CreateGroup()
         {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
             return PartialView("_CreateGroup");
         }
         /// <summary>
@@ -145,6 +150,12 @@ namespace iVolunteer.Controllers
                 {
 
                 }
+            }
+
+            if (String.IsNullOrWhiteSpace(groupID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
             }
 
             try
@@ -1996,6 +2007,7 @@ namespace iVolunteer.Controllers
 
                 SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
                 grPrDAO.Delete_Joined_Group(groupID, projectID);
+                grPrDAO.Delete_Organized_Group(groupID, projectID);
 
                 return ActionToProject(groupID, projectID);
             }

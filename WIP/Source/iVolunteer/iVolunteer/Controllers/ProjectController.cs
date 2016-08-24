@@ -33,6 +33,11 @@ namespace iVolunteer.Controllers
         [HttpGet]
         public ActionResult CreateProject()
         {
+            if (Session["UserID"] == null)
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return View("ErrorMessage");
+            }
             return PartialView("_CreateProject");
         }
         /// <summary>
@@ -175,6 +180,12 @@ namespace iVolunteer.Controllers
                 {
 
                 }
+            }
+
+            if (String.IsNullOrWhiteSpace(projectID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
             }
 
             try
