@@ -64,6 +64,12 @@ namespace iVolunteer.Controllers
                 }
             }
 
+            if (String.IsNullOrWhiteSpace(userID))
+            {
+                ViewBag.Message = Error.ACCESS_DENIED;
+                return PartialView("ErrorMessage");
+            }
+
             try
             {
                 SDLink result = null;

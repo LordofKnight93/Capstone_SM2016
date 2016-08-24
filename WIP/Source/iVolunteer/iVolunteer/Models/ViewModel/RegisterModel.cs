@@ -20,27 +20,27 @@ namespace iVolunteer.Models.ViewModel
     public class RegisterModel
     {
         //Email
-        [Required(ErrorMessage = "Vui lòng nhập email!")]
+        [Required(ErrorMessage = "Vui lòng nhập email!", AllowEmptyStrings = false)]
         [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng!")]
         [DisplayName("Email")]
         public string Email { get; set; }
 
         //Mật khẩu
-        [Required(ErrorMessage = "Vui lòng nhập mật khẩu!")]
+        [Required(ErrorMessage = "Vui lòng nhập mật khẩu!", AllowEmptyStrings = false)]
         [PasswordPropertyText(true)]
         [DisplayName("Mật khẩu")]
         [RegularExpression(@"(^[A-Z](?=.*[0-9])(?=.*[a-z])|^[a-z](?=.*[A-Z])(?=.*[0-9])|^[0-9](?=.*[a-z])(?=.*[A-Z]))[a-zA-Z0-9]{7,14}$", ErrorMessage = Error.PASSWORD_INVALID)]
         public string Password { get; set; }
 
         //Xác nhận mật khẩu
-        [Required(ErrorMessage = "Vui lòng nhập xác nhận mật khẩu!")]
+        [Required(ErrorMessage = "Vui lòng nhập xác nhận mật khẩu!", AllowEmptyStrings = false)]
         [PasswordPropertyText(true)]
         [DisplayName("Xác nhận mật khẩu")]
         [Compare("Password", ErrorMessage = "Mật khẩu xác nhận và mật khẩu không giống nhau!")]
         public string ConfirmPassword { get; set; }
 
         //Họ và Tên
-        [Required(ErrorMessage = "Vui lòng nhập họ và tên!")]
+        [Required(ErrorMessage = "Vui lòng nhập họ và tên!", AllowEmptyStrings = false)]
         [DisplayName("Họ và Tên")]
         public string RealName { get; set; }
 
@@ -50,7 +50,7 @@ namespace iVolunteer.Models.ViewModel
         public bool Gender { get; set; }
 
         //Ngày sinh
-        [Required(ErrorMessage = "Vui lòng nhập ngày sinh!")]
+        [Required(ErrorMessage = "Vui lòng nhập ngày sinh!", AllowEmptyStrings = false)]
         [DisplayName("Ngày sinh")]
         [DataType(DataType.Date, ErrorMessage = "Ngày sinh bạn nhập không hợp lệ!")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

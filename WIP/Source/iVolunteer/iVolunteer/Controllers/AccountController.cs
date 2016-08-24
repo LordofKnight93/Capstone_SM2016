@@ -1196,11 +1196,13 @@ namespace iVolunteer.Controllers
                         {
                             if (relationDAO.Is_More_Than_One_Leader(projectID))
                             {
-                                relationDAO.Delete_Leader(userID, projectID);
-                                relationDAO.Delete_Organizer(userID, projectID);
                                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                                userDAO.Out_Project(userID);
                                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+
+                                relationDAO.Delete_Leader(userID, projectID);
+                                if(relationDAO.Delete_Organizer(userID, projectID))
+                                    userDAO.Not_Organize_Project(userID);
+                                userDAO.Out_Project(userID);
                                 projectDAO.Members_Out(projectID, 1);
                             }
                             else

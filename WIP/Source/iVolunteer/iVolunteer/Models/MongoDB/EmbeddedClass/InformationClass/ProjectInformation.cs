@@ -19,7 +19,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
     public class ProjectInformation
     {
         public string ProjectID { get; set; }
-        [Required(ErrorMessage ="Vui lòng nhập tên dự án!")]
+        [Required(ErrorMessage ="Vui lòng nhập tên dự án!", AllowEmptyStrings = false)]
         public string ProjectName { get; set; }
         public DateTime DateCreate { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập ngày bắt đầu!")]
@@ -35,7 +35,7 @@ namespace iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime DateEnd { get; set; }
         [MaxLength(100, ErrorMessage = "Độ dài không quá 100 ký tự!")]
-        [Required(ErrorMessage = "Vui lòng nhập mô tả!")]
+        [Required(ErrorMessage = "Vui lòng nhập mô tả!", AllowEmptyStrings = false)]
         public string ProjectShortDescription { get; set; }
         public string ProjectFullDescription { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập địa điểm!")]
