@@ -31,7 +31,7 @@
     <Property Name="UserID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="IndentifyID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IndentifyID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="DisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="DateOfChange" Type="DateTime" Precision="3" />
     <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
@@ -109,6 +109,14 @@
     <NavigationProperty Name="SQL_Group" Relationship="Self.FK_AlbumSD_GroupSD" FromRole="SQL_Album" ToRole="SQL_Group" />
     <NavigationProperty Name="SQL_Project" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="SQL_Album" ToRole="SQL_Project" />
     <NavigationProperty Name="SQL_Image" Relationship="Self.FK_SQL_Image_SQL_Album" FromRole="SQL_Album" ToRole="SQL_Image" />
+  </EntityType>
+  <EntityType Name="SQL_Budget">
+    <Key>
+      <PropertyRef Name="BudgetID" />
+    </Key>
+    <Property Name="BudgetID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProjectID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="SQL_Project" Relationship="Self.FK_SQL_Budget_SQL_Project" FromRole="SQL_Budget" ToRole="SQL_Project" />
   </EntityType>
   <EntityType Name="SQL_Group">
     <Key>
@@ -193,10 +201,10 @@
     <Property Name="IsActivate" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="SQL_AcPr_Relation" Relationship="Self.FK_User_Project_ProjectSD" FromRole="SQL_Project" ToRole="SQL_AcPr_Relation" />
     <NavigationProperty Name="SQL_Album" Relationship="Self.FK_AlbumSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Album" />
+    <NavigationProperty Name="SQL_Budget" Relationship="Self.FK_SQL_Budget_SQL_Project" FromRole="SQL_Project" ToRole="SQL_Budget" />
     <NavigationProperty Name="SQL_GrPr_Relation" Relationship="Self.FK_SQL_GrPr_Relation_SQL_Project" FromRole="SQL_Project" ToRole="SQL_GrPr_Relation" />
     <NavigationProperty Name="SQL_Plan" Relationship="Self.FK_Plan_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Plan" />
     <NavigationProperty Name="SQL_Post" Relationship="Self.FK_PostSD_ProjectSD" FromRole="SQL_Project" ToRole="SQL_Post" />
-    <NavigationProperty Name="SQL_Budget" Relationship="iVolunteerModel.FK_SQL_Budget_SQL_Project" FromRole="SQL_Project" ToRole="SQL_Budget" />
   </EntityType>
   <Association Name="FK_User_Friend_Account">
     <End Role="SQL_Account" Type="Self.SQL_Account" Multiplicity="1" />
@@ -402,6 +410,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_SQL_Budget_SQL_Project">
+    <End Role="SQL_Project" Type="Self.SQL_Project" Multiplicity="1" />
+    <End Role="SQL_Budget" Type="Self.SQL_Budget" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SQL_Project">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="SQL_Budget">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_PostSD_GroupSD">
     <End Role="SQL_Group" Type="Self.SQL_Group" Multiplicity="0..1" />
     <End Role="SQL_Post" Type="Self.SQL_Post" Multiplicity="*" />
@@ -471,6 +491,7 @@
     <EntitySet Name="SQL_AcPo_Relation" EntityType="Self.SQL_AcPo_Relation" />
     <EntitySet Name="SQL_AcPr_Relation" EntityType="Self.SQL_AcPr_Relation" />
     <EntitySet Name="SQL_Album" EntityType="Self.SQL_Album" />
+    <EntitySet Name="SQL_Budget" EntityType="Self.SQL_Budget" />
     <EntitySet Name="SQL_Group" EntityType="Self.SQL_Group" />
     <EntitySet Name="SQL_GrPr_Relation" EntityType="Self.SQL_GrPr_Relation" />
     <EntitySet Name="SQL_HubConnection" EntityType="Self.SQL_HubConnection" />
@@ -547,6 +568,10 @@
       <End Role="SQL_Album" EntitySet="SQL_Album" />
       <End Role="SQL_Image" EntitySet="SQL_Image" />
     </AssociationSet>
+    <AssociationSet Name="FK_SQL_Budget_SQL_Project" Association="Self.FK_SQL_Budget_SQL_Project">
+      <End Role="SQL_Project" EntitySet="SQL_Project" />
+      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
+    </AssociationSet>
     <AssociationSet Name="FK_PostSD_GroupSD" Association="Self.FK_PostSD_GroupSD">
       <End Role="SQL_Group" EntitySet="SQL_Group" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
@@ -567,30 +592,5 @@
       <End Role="SQL_Project" EntitySet="SQL_Project" />
       <End Role="SQL_Post" EntitySet="SQL_Post" />
     </AssociationSet>
-    <EntitySet Name="SQL_Budget" EntityType="iVolunteerModel.SQL_Budget" />
-    <AssociationSet Name="FK_SQL_Budget_SQL_Project" Association="iVolunteerModel.FK_SQL_Budget_SQL_Project">
-      <End Role="SQL_Project" EntitySet="SQL_Project" />
-      <End Role="SQL_Budget" EntitySet="SQL_Budget" />
-    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="SQL_Budget">
-    <Key>
-      <PropertyRef Name="BudgetID" />
-    </Key>
-    <Property Name="BudgetID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="24" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="SQL_Project" Relationship="iVolunteerModel.FK_SQL_Budget_SQL_Project" FromRole="SQL_Budget" ToRole="SQL_Project" />
-  </EntityType>
-  <Association Name="FK_SQL_Budget_SQL_Project">
-    <End Type="iVolunteerModel.SQL_Project" Role="SQL_Project" Multiplicity="1" />
-    <End Type="iVolunteerModel.SQL_Budget" Role="SQL_Budget" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="SQL_Project">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="SQL_Budget">
-        <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema>

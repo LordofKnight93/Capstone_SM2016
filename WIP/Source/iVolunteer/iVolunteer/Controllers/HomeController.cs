@@ -407,11 +407,11 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCOUNT_BANNED;
                 return PartialView("_Login", loginModel);
             }
-            if (!account.IsConfirm)
-            {
-                ViewBag.Message = Error.EMAIL_NOT_CONFIRM;
-                return PartialView("_Login", loginModel);
-            }
+            //if (!account.IsConfirm)
+            //{
+            //    ViewBag.Message = Error.EMAIL_NOT_CONFIRM;
+            //    return PartialView("_Login", loginModel);
+            //}
             //hash password
             loginModel.Password = HashHelper.Hash(loginModel.Password);
 

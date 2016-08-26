@@ -27,7 +27,7 @@
     <Property Name="UserID" Type="varchar" MaxLength="24" Nullable="false" />
     <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="IndentifyID" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="IndentifyID" Type="varchar" MaxLength="20" />
     <Property Name="DisplayName" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="DateOfChange" Type="datetime" />
     <Property Name="IsAdmin" Type="bit" Nullable="false" />

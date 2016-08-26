@@ -33,6 +33,7 @@ namespace iVolunteer.Models.SQL
         public virtual DbSet<SQL_AcPo_Relation> SQL_AcPo_Relation { get; set; }
         public virtual DbSet<SQL_AcPr_Relation> SQL_AcPr_Relation { get; set; }
         public virtual DbSet<SQL_Album> SQL_Album { get; set; }
+        public virtual DbSet<SQL_Budget> SQL_Budget { get; set; }
         public virtual DbSet<SQL_Group> SQL_Group { get; set; }
         public virtual DbSet<SQL_GrPr_Relation> SQL_GrPr_Relation { get; set; }
         public virtual DbSet<SQL_HubConnection> SQL_HubConnection { get; set; }
@@ -41,6 +42,5 @@ namespace iVolunteer.Models.SQL
         public virtual DbSet<SQL_Plan> SQL_Plan { get; set; }
         public virtual DbSet<SQL_Post> SQL_Post { get; set; }
         public virtual DbSet<SQL_Project> SQL_Project { get; set; }
-        public virtual DbSet<SQL_Budget> SQL_Budget { get; set; }
     }
 }

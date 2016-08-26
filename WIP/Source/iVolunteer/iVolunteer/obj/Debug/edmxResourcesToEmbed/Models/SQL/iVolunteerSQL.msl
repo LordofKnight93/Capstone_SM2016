@@ -83,6 +83,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Budget">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Budget">
+        <MappingFragment StoreEntitySet="SQL_Budget">
+          <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="SQL_Group">
       <EntityTypeMapping TypeName="iVolunteerModel.SQL_Group">
         <MappingFragment StoreEntitySet="SQL_Group">
@@ -153,14 +161,6 @@
           <ScalarProperty Name="IsRecruiting" ColumnName="IsRecruiting" />
           <ScalarProperty Name="InProgress" ColumnName="InProgress" />
           <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="SQL_Budget">
-      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Budget">
-        <MappingFragment StoreEntitySet="SQL_Budget">
-          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-          <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

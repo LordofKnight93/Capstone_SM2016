@@ -19,10 +19,10 @@ namespace iVolunteer.Models.SQL
         {
             this.SQL_AcPr_Relation = new HashSet<SQL_AcPr_Relation>();
             this.SQL_Album = new HashSet<SQL_Album>();
+            this.SQL_Budget = new HashSet<SQL_Budget>();
             this.SQL_GrPr_Relation = new HashSet<SQL_GrPr_Relation>();
             this.SQL_Plan = new HashSet<SQL_Plan>();
             this.SQL_Post = new HashSet<SQL_Post>();
-            this.SQL_Budget = new HashSet<SQL_Budget>();
         }
     
         public string ProjectID { get; set; }
@@ -35,12 +35,12 @@ namespace iVolunteer.Models.SQL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Album> SQL_Album { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SQL_Budget> SQL_Budget { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_GrPr_Relation> SQL_GrPr_Relation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Plan> SQL_Plan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SQL_Post> SQL_Post { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SQL_Budget> SQL_Budget { get; set; }
     }
 }

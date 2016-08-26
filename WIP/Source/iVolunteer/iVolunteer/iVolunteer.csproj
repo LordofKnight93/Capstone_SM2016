@@ -325,6 +325,8 @@
     <Content Include="scripts\moment.js" />
     <Content Include="scripts\moment.min.js" />
     <Content Include="scripts\vi.js" />
+    <Content Include="Sound\notisound.mp3" />
+    <Content Include="Sound\notisound.ogg" />
     <EntityDeploy Include="Models\SQL\iVolunteerSQL.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>iVolunteerSQL.Designer.cs</LastGenOutput>
@@ -332,8 +334,6 @@
     <Content Include="Models\SQL\iVolunteerSQL.edmx.diagram">
       <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
     </Content>
-    <Content Include="Sound\notisound.mp3" />
-    <Content Include="Sound\notisound.ogg" />
     <None Include="scripts\jquery.validate-vsdoc.js" />
     <None Include="scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="scripts\jquery-2.1.4.js" />
@@ -426,6 +426,42 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\NotificationHub.cs" />
     <Compile Include="Models\MongoDB\CollectionClass\Mongo_FailureReport.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Finance.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Fund.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Plan.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\BudgetRecordInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PlanPhaseInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\ChatFriend.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\FinanceItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\InsideDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\MainTask.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\OutsideDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\SubTask.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TaskCount.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TeamFoundDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
     <Compile Include="Models\SQL\iVolunteerSQL.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -492,42 +528,6 @@
     <Compile Include="Models\SQL\SQL_Project.cs">
       <DependentUpon>iVolunteerSQL.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Finance.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Fund.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Plan.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
-    <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\BudgetRecordInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PlanPhaseInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\ChatFriend.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\FinanceItem.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\InsideDonator.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\MainTask.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\OutsideDonator.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\SubTask.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TaskCount.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TeamFoundDonator.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
-    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
     <Compile Include="Models\ViewModel\ChangePasswordModel.cs" />
     <Compile Include="Models\ViewModel\LoginModel.cs" />
     <Compile Include="Models\ViewModel\RegisterModel.cs" />
