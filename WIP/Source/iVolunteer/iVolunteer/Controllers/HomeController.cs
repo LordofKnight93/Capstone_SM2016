@@ -249,6 +249,8 @@ namespace iVolunteer.Controllers
         {
             if(!ModelState.IsValid) return View("Register", registerModel);
 
+            if (Session["UserID"] != null) return RedirectToAction("Newfeed", "Home");
+
             string err = "";
             bool isValid = true;
 
