@@ -24,7 +24,7 @@
             {
             <!-- Album 1 -->
                 <div class="col-md-4 col-sm-6">
-                    <div class="photo-album-container" onclick="showAlbumImage('@item._id.ToString()', '@ViewBag.targetID')">
+                    <div class="photo-album-container">
                         <div class="photo-album">
                             @if (item.ImageList.Count != 0)
                             {
@@ -38,7 +38,7 @@
                             }
                             <!-- Avata -->
 
-                            <div class="album-interaction" onclick="location.href'@Url.Action("DeleteAlbum", "Album", new { albumID = item._id.ToString(),targetID = ViewBag.targetID })'"></div>
+                            <div class="album-interaction" onclick="showAlbumImage('@item._id.ToString()', '@ViewBag.targetID')"></div>
                             <div class="interaction-bar">
 
                                 <!-- Album info -->
