@@ -665,7 +665,7 @@ namespace iVolunteer.Controllers
                 string notifyID = userDAO.Get_JoinGroup_NotifyID(userID, requestID, groupID);
                 //Get Leaders list
                 List<string> leadersID = relationDAO.Get_Leaders(groupID);
-                leadersID.Remove(userID);
+                //leadersID.Remove(userID);
                 if (relationDAO.Is_Leader(userID, groupID))
                 {
                     using (var transaction = new TransactionScope())
@@ -681,7 +681,7 @@ namespace iVolunteer.Controllers
                             {
                                 userDAO.Set_Notification_IsSeen(leader, notifyID);
                             }
-                            SendJoinGroupRequestAccepted(userID, requestID, groupID, notifyID);
+                            SendJoinGroupRequestAccepted(userID, requestID, groupID);
 
                             transaction.Complete();
                         }
@@ -726,10 +726,22 @@ namespace iVolunteer.Controllers
 
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
 
+                //Get Notification of this request (to set Is_Seen to other leaders)
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                string notifyID = userDAO.Get_JoinGroup_NotifyID(userID, requestID, groupID);
+
+                //Get Leaders list
+                List<string> leadersID = relationDAO.Get_Leaders(groupID);
+
                 if (relationDAO.Is_Leader(userID, groupID))
                 {
                     relationDAO.Delelte_Request(requestID, groupID);
 
+                    //Set other leader's notification isSeen
+                    foreach (var leader in leadersID)
+                    {
+                        userDAO.Set_Notification_IsSeen(leader, notifyID);
+                    }
                     return null;
                 }
                 else
@@ -1047,7 +1059,7 @@ namespace iVolunteer.Controllers
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
             List<string> leadersID = relationDAO.Get_Leaders(groupID);
-            leadersID.Remove(userID);
+            //leadersID.Remove(userID);
             using (var transaction = new TransactionScope())
             {
                 try
@@ -1069,7 +1081,7 @@ namespace iVolunteer.Controllers
                 }
             }
             //Send notification to requested User
-            SendJoinGroupRequestAccepted(userID, requestID, groupID, notifyID);
+            SendJoinGroupRequestAccepted(userID, requestID, groupID);
             return Json(true);
         }
         /// <summary>
@@ -1086,7 +1098,7 @@ namespace iVolunteer.Controllers
 
             SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
             List<string> leadersID = relationDAO.Get_Leaders(groupID);
-            leadersID.Remove(userID);
+            //leadersID.Remove(userID);
 
             using (var transaction = new TransactionScope())
             {
@@ -1094,7 +1106,7 @@ namespace iVolunteer.Controllers
                 {
                     relationDAO.Delelte_Request(requestID, groupID);
                     Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                    userDAO.Delete_Notification(userID, notifyID);
+                    //userDAO.Delete_Notification(userID, notifyID);
                     //Set this Notification's tatus of other GroupLeaders to IS_SEEN
                     foreach (var item in leadersID)
                     {
@@ -1118,7 +1130,7 @@ namespace iVolunteer.Controllers
         /// <param name="groupID"></param>
         /// <param name="notifyID"></param>
         /// <returns></returns>
-        public bool SendJoinGroupRequestAccepted(string userID, string requestID, string groupID, string notifyID)
+        public bool SendJoinGroupRequestAccepted(string userID, string requestID, string groupID)
         {
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
             Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
@@ -1126,7 +1138,7 @@ namespace iVolunteer.Controllers
             {
 
                 //Set is seen
-                userDAO.Set_Notification_IsSeen(userID, notifyID);
+                //userDAO.Set_Notification_IsSeen(userID, notifyID);
 
                 //Send join_group_accepted notify to requested User
                 //Create Notify for request user
@@ -1800,7 +1812,6 @@ namespace iVolunteer.Controllers
                 ViewBag.Message = Error.ACCESS_DENIED;
                 return PartialView("ErrorMessage");
             }
-
             try
             {
                 SQL_AcGr_Relation_DAO relationDAO = new SQL_AcGr_Relation_DAO();
@@ -1955,6 +1966,9 @@ namespace iVolunteer.Controllers
                             SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
                             grPrDAO.Add_Sponsor_Request(groupID, projectID);
 
+                            //Send notification to Project Leader
+                            SendGroupSponsorRequestNotify(groupID, projectID);
+
                             transaction.Complete();
                         }
                         catch
@@ -1978,6 +1992,47 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// グループへの寄付要求を通知
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool SendGroupSponsorRequestNotify(string groupID, string projectID)
+        {
+            try
+            {
+                //Get project leader(s)ID 
+                //グループリーダー全員のIDを取得
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                List<string> leadersID = relationDAO.Get_Leaders(projectID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+
+                Mongo_Group_DAO groupDAO = new Mongo_Group_DAO();
+                SDLink actor = groupDAO.Get_SDLink(groupID);
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+
+                //Add Notifcation Item
+                //通知を作成
+                Notification notif = new Notification(actor, Notify.GROUP_SPONSOR_RQ, actor, destination);
+
+                foreach (var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                //Connect to NotificationHub
+                //通知ハーブに接続
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+                return true;
+            }
+            catch
+            {
+                throw;
             }
         }
         /// <summary>
@@ -2490,12 +2545,21 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO acGrDAO = new SQL_AcGr_Relation_DAO();
+                List<string> leaders = acGrDAO.Get_Leaders(groupID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                string notifyID = userDAO.Get_Sponsor_NotifyID(leaders[0], groupID, projectID, Notify.GROUP_SPONSOR_RQ);
 
                 if (acGrDAO.Is_Leader(userID, groupID))
                 {
                     SQL_GrPr_Relation_DAO grPrDAO = new SQL_GrPr_Relation_DAO();
                     grPrDAO.Delete_Sponsor_Request(groupID, projectID);
 
+                    //Delete notification
+                    foreach(var leader in leaders)
+                    {
+                        userDAO.Delete_Notification(leader, notifyID);
+                    }
                     return ActionToProject(groupID, projectID);
                 }
                 else

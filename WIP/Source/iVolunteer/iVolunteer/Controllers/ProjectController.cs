@@ -1235,10 +1235,6 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 //Get Notification of this request (to set Is_Seen to other leaders)
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                string notifyID = userDAO.Get_JoinProject_NotifyID(userID, requestID, projectID);
-                //Get Leaders list
-                List<string> leadersID = relationDAO.Get_Leaders(projectID);
-                leadersID.Remove(userID);
 
                 if (relationDAO.Is_Leader(userID, projectID))
                 {
@@ -1251,12 +1247,7 @@ namespace iVolunteer.Controllers
                             Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                             projectDAO.Members_Join(projectID, 1);
 
-                            //Set IsSeen to other leaders's this requestNotify.
-                            foreach (var leader in leadersID)
-                            {
-                                userDAO.Set_Notification_IsSeen(leader, notifyID);
-                            }
-                            SendJoinProjectRequestAccepted(userID, requestID, projectID, notifyID);
+                            SendJoinProjectRequestAccepted(userID, requestID, projectID);
 
                             transaction.Complete();
                         }
@@ -1514,6 +1505,9 @@ namespace iVolunteer.Controllers
                 Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
                 projectDAO.Add_GuestSponsor(projectID, guest);
 
+                //Send Notification to Project Leader
+                SendGuestSponsorRequestNotify(guest, projectID);
+
                 ViewBag.Message = "Gửi yêu cầu thành công";
                 return PartialView("ErrorMessage");
             }
@@ -1521,6 +1515,49 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return View("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// グループへの寄付要求を通知
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool SendGuestSponsorRequestNotify(Sponsor guest, string projectID)
+        {
+            try
+            {
+                //Get project leader(s)ID 
+                //グループリーダー全員のIDを取得
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                List<string> leadersID = relationDAO.Get_Leaders(projectID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = new SDLink();
+                actor.DisplayName = guest.SponsorName;
+                actor.ID = guest.SponsorID;
+                actor.Handler = "Guest";
+
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+
+                //Add Notifcation Item
+                //通知を作成
+                Notification notif = new Notification(actor, Notify.GUEST_SPONSOR_RQ, actor, destination);
+
+                foreach (var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                //Connect to NotificationHub
+                //通知ハーブに接続
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+                return true;
+            }
+            catch
+            {
+                throw;
             }
         }
         /// <summary>
@@ -2745,41 +2782,6 @@ namespace iVolunteer.Controllers
             }
         }
         /// <summary>
-        /// 通知パーネルで参加要求を承認
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="requestID"></param>
-        /// <param name="projectID"></param>
-        /// <param name="notifyID"></param>
-        /// <returns></returns>
-        public JsonResult AcceptRequestOnNotify(string userID, string requestID, string projectID, string notifyID)
-        {
-            SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-            using (var transaction = new TransactionScope())
-            {
-                try
-                {
-                    relationDAO.Accept_Join_Request(requestID, projectID);
-                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                    userDAO.Join_Project(requestID);
-                    Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
-                    projectDAO.Members_Join(projectID, 1);
-
-                    //Send Join Project request Accepted to requested User
-                    SendJoinProjectRequestAccepted(userID, requestID, projectID, notifyID);
-
-                    transaction.Complete();
-                    return Json(true);
-                }
-                catch
-                {
-                    transaction.Dispose();
-                    return Json(false);
-                }
-            }
-
-        }
-        /// <summary>
         /// 参加要求承認の通知を放送
         /// </summary>
         /// <param name="userID"></param>
@@ -2787,15 +2789,12 @@ namespace iVolunteer.Controllers
         /// <param name="projectID"></param>
         /// <param name="notifyID"></param>
         /// <returns></returns>
-        public bool SendJoinProjectRequestAccepted(string userID, string requestID, string projectID, string notifyID)
+        public bool SendJoinProjectRequestAccepted(string userID, string requestID, string projectID)
         {
             Mongo_User_DAO userDAO = new Mongo_User_DAO();
             Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
             try
             {
-                //Set is seen
-                userDAO.Set_Notification_IsSeen(userID, notifyID);
-
                 //Send join_project_accepted notify to requested User
                 //Create Notify for request user
                 SDLink actor = userDAO.Get_SDLink(userID);
@@ -2812,39 +2811,6 @@ namespace iVolunteer.Controllers
             catch
             {
                 throw;
-            }
-
-        }
-        /// <summary>
-        /// 通知パーネルで参加要求を拒否
-        /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="requestID"></param>
-        /// <param name="projectID"></param>
-        /// <param name="notifyID"></param>
-        /// <returns></returns>
-        public JsonResult DenyRequestOnNotify(string userID, string requestID, string projectID, string notifyID)
-        {
-            try
-            {
-                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
-
-                if (relationDAO.Is_Leader(userID, projectID))
-                {
-                    relationDAO.Delete_Join_Request(requestID, projectID);
-                    Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                    userDAO.Delete_Notification(userID, notifyID);
-                    return Json(true);
-                }
-                else
-                {
-                    return Json(false);
-                }
-            }
-            catch
-            {
-                ViewBag.Message = Error.UNEXPECT_ERROR;
-                return Json(false);
             }
         }
         /// <summary>

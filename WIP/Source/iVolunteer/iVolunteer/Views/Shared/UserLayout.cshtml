@@ -362,6 +362,49 @@
                         for (var index = 0; index < data.length; index++) {
                             var request = data[index];
 
+                            // User | Group sponsor request
+                            if (request["Type"] == 15 || request["Type"] == 16) {
+                                var tem = "<div id='seenSponsorRqItem" + request["NotifyID"] + "' class='row'>";
+                                tem += "<div class='friendRequestItem'>";
+                                tem += "    <div class='row'>";
+                                tem += "        <div class='col-xs-2'>";
+                                if (request["Type"] == 15) {
+                                    tem += "            <object type='image/jpg' data='/Images/User/Avatar/" + request["Target"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-8'><div class'row'><a href='/User/UserHome?userID=" + request["Target"]["ID"] + "'>" + request["Target"]["DisplayName"] + "</a></div>";
+                                }
+                                else if(request["Type"] == 16) {
+                                    tem += "            <object type='image/jpg' data='/Images/Group/Avatar/" + request["Target"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-8'><div class'row'><a href='/Group/GroupHome?groupID=" + request["Target"]["ID"] + "'>" + request["Target"]["DisplayName"] + "</a></div>";
+                                }
+                                else {
+                                    tem += "            <object type='image/jpg' data='/Images/Default/DefaultAvatar.jpg' width='40' height='40' border=''></object>";
+                                    tem += "        </div>";
+                                    tem += "        <div class='col-xs-8'><div class'row'><a>" + request["Target"]["DisplayName"] + "</a></div>";
+                                }
+                                tem += "            <div class='row'>";
+                                tem += "                <label class='noti-friend-intro' style='color: gray'>Đã đăng kí ủng hộ dự án</label>";
+                                tem += "            </div>";
+                                tem += "            <div class='row'>";
+                                tem += "                <a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
+                                tem += "            </div>";
+                                tem += "        </div>";
+                                tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenSponsorRq" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                                tem += "    </div>";
+                                tem += "</div>";
+                                tem += "</div>";
+
+                                // APPEND recieved item to LIST
+                                $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
+
+                                //Event when click on SEEN group request accepted button
+                                $("#seenSponsorRq" + request["NotifyID"]).click(function (evt) {
+                                    seenSponsorRq(this);
+                                    evt.preventDefault();
+                                });
+                            }
+
                             // 1. Leader Promotion in Group|Project item
                             if (request["Type"] == 14 || request["Type"] == 13) {
                                 var tem = "<div id='promotion" + request["NotifyID"] + "' class='row'>";
@@ -569,7 +612,7 @@
                                 tem += "        <div class='col-xs-2'>";
                                 tem += "            <object type='image/jpg' data='/Images/Project/Avatar/" + request["Destination"]["ID"] + ".jpg' width='40' height='40' border=''></object>";
                                 tem += "        </div>";
-                                tem += "        <div class='col-xs-7'>";
+                                tem += "        <div class='col-xs-8'>";
                                 tem += "            <div class='row'>";
                                 tem += "                <label class='noti-friend-intro' style='color: gray'>Bạn được giao nhiệm vụ mới!</label>";
                                 tem += "            </div>";
@@ -577,7 +620,7 @@
                                 tem += "                <label class='noti-handler'>dự án </label><a href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "' class='noti-friend-name'>" + request["Destination"]["DisplayName"] + "</a>";
                                 tem += "            </div>";
                                 tem += "        </div>";
-                                tem += "        <div role='" + request["Destination"]["ID"] + "' class='col-xs-3' style='padding-top: 30px;'><a href='' role='" + request["NotifyID"] + "' id='taskAssignmentLink" + request["NotifyID"] + "' style='margin-left:-20px; font-size: 0.8em'>Xem chi tiết ...</a></div>";
+                                tem += "        <div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenTaskAssignment" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
                                 tem += "    </div>";
                                 tem += "</div>";
                                 tem += "</div>";
@@ -586,7 +629,7 @@
                                 $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
 
                                 //Event when click on SEEN group request accepted button
-                                $("#taskAssignmentLink" + request["NotifyID"]).click(function (evt) {
+                                $("#seenTaskAssignment" + request["NotifyID"]).click(function (evt) {
                                     seenTaskAssignment(this);
                                     evt.preventDefault();
                                 });
@@ -656,7 +699,7 @@
 
                             // 4.3 Join Project Request item
                             if (request["Type"] == 2) {
-                                var tem = "<div class='row'>";
+                                var tem = "<div  id='seenJoinProjectRequestItem" + request["NotifyID"] + "' class='row'>";
                                 tem += "<div class='friendRequestItem'>";
                                 tem += "    <div class='row'>";
                                 tem += "        <div class='col-xs-2'>";
@@ -669,13 +712,16 @@
                                 tem += "            <div class='row'>";
                                 tem += "                <label id='joinProjectRequestStatus" + request["NotifyID"] + "' class='noti-friend-intro' style='color: gray'>Xin tham gia vào dự án</label>";
                                 tem += "            </div><div class='row'><a class='noti-friend-destination' href='/Project/ProjectHome?projectID=" + request["Destination"]["ID"] + "'>" + request["Destination"]["DisplayName"] + "</a></div>";
-                                tem += "        </div><div id='requestHandleArea" + request["NotifyID"] + "'>";
-                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
-                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
                                 tem += "        </div>";
-                                tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
-                                tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
-                                tem += "        </div><div class='col-xs-1'></div></div>";
+                                ///<div id='requestHandleArea" + request["NotifyID"] + "'>";
+                                //tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                //tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='acceptJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-mygreen'>done</i></button>";
+                                //tem += "        </div>";
+                                //tem += "        <div id='" + request["NotifyID"] + "' role='" + request["Destination"]["ID"] + "' class='col-xs-1' style='padding: 0'>";
+                                //tem += "            <button role='" + request["Actors"][0]["ID"] + "' id='denyJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px'><i class='material-icons md-18 md-myred'>clear</i></button>";
+                                //tem += "        </div>
+                                tem += "<div class='col-xs-2'><button role='" + request["NotifyID"] + "' id='seenJoinProjectRequest" + request["NotifyID"] + "' class='btn btn-image' type='submit' style='line-height: 35px; margin-left: -17px;'><i class='material-icons md-18 md-mygreen'>done</i></button></div>";
+                                //</div>";
                                 tem += "    </div>";
                                 tem += "</div>";
                                 tem += "</div>";
@@ -683,18 +729,21 @@
                                 // APPEND recieved item to LIST
                                 $("#notificationList" + '@Session["UserID"].ToString()').append(tem);
 
-
+                                $("#seenJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
+                                    seenJoinProjectRequest(this);
+                                    evt.preventDefault();
+                                });
                                 //Event when click on ACCEPT friend button
-                                $("#acceptJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
-                                    acceptJoinProjectRequest(this);
-                                    evt.preventDefault();
-                                });
+                                //$("#acceptJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
+                                //    acceptJoinProjectRequest(this);
+                                //    evt.preventDefault();
+                                //});
 
-                                //Event when click on DENY friend button
-                                $("#denyJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
-                                    denyJoinProjectRequest(this);
-                                    evt.preventDefault();
-                                });
+                                ////Event when click on DENY friend button
+                                //$("#denyJoinProjectRequest" + request["NotifyID"]).click(function (evt) {
+                                //    denyJoinProjectRequest(this);
+                                //    evt.preventDefault();
+                                //});
                             }
 
                             // 4.4 Join Group Request item
@@ -953,6 +1002,29 @@
                 }
             });
         }
+        function seenJoinProjectRequest(selector) {
+            var notifyID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#seenJoinProjectRequestItem' + notifyID).remove();
+                    }
+                    else {
+                        alert("Error in Seen Join Project Request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen Join Project Request");
+                }
+            });
+        }
         // 2-b Deny JOIN PROJECT request
         function denyJoinProjectRequest(selector) {
             var notifyID = $(selector).parent().attr('id')
@@ -1094,7 +1166,7 @@
                 data: data,
                 success: function (data, textstatus) {
                     if (data == true) {
-                        $('#taskAssignmentItem' + $(selector).parent().attr('role')).remove();
+                        $('#taskAssignmentItem' + $(selector).attr('role')).remove();
                     }
                     else {
                         alert("Error in Seen Task Assingment");
@@ -1104,8 +1176,6 @@
                     alert("Not success in Seen Task Assingment");
                 }
             });
-            var destinationID = $(selector).parent().attr('role')
-            var url = "/Project/..../Plan?PhaseId=" + NestId
         }
         // 4-b Seen Task Modified
         function seenTaskModified(selector) {
@@ -1401,7 +1471,30 @@
                 }
             });
         }
-
+        // 8 Seen User/Group sponsor request to Project
+        function seenSponsorRq(selector) {
+            var notifyID = $(selector).attr('role');
+            var data = {
+                userID: '@Session["UserID"].ToString()',
+                notifyID: notifyID
+            }
+            $.ajax({
+                type: "POST",
+                url: "/User/SeenJoinRequestAccepted",
+                data: data,
+                success: function (data, textstatus) {
+                    if (data == true) {
+                        $('#seenSponsorRqItem' + notifyID).remove();
+                    }
+                    else {
+                        alert("Error in Seen Sponsor request");
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Not success in Seen sponsor request");
+                }
+            });
+        }
         // DELETE friend request click when click outside
         $(document).click(function (event) {
             if (!$(event.target).closest('#friend').length) {

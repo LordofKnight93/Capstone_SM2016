@@ -442,7 +442,8 @@ namespace iVolunteer.Controllers
                         {
                             foreach (var leader in leaders)
                             {
-                                userDAO.Set_Notification_IsSeen(leader, notifyID);
+                                //userDAO.Set_Notification_IsSeen(leader, notifyID);
+                                userDAO.Delete_Notification(leader, notifyID);
                             }
                         }
                         trans.Complete();
@@ -844,7 +845,8 @@ namespace iVolunteer.Controllers
                         {
                             foreach (var leader in leaders)
                             {
-                                userDAO.Set_Notification_IsSeen(leader, notifyID);
+                                //userDAO.Set_Notification_IsSeen(leader, notifyID);
+                                userDAO.Delete_Notification(leader, notifyID);
                             }
                         }
                         trans.Complete();
@@ -882,7 +884,11 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
 
                 if (!relationDAO.Is_Sponsor_Requested(userID, projectID))
+                {
                     relationDAO.Add_Sponsor_Request(userID, projectID);
+                    //Send sponsor request notify
+                    SendSponsorRequestNotify(userID, projectID);
+                }
 
                 return ActionToProject(projectID);
             }
@@ -890,6 +896,45 @@ namespace iVolunteer.Controllers
             {
                 ViewBag.Message = Error.UNEXPECT_ERROR;
                 return PartialView("ErrorMessage");
+            }
+        }
+        /// <summary>
+        /// グループへの寄付要求を通知
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="groupID"></param>
+        /// <returns></returns>
+        public bool SendSponsorRequestNotify(string userID, string projectID)
+        {
+            try
+            {
+                //Get project leader(s)ID 
+                //グループリーダー全員のIDを取得
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                List<string> leadersID = relationDAO.Get_Leaders(projectID);
+
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                SDLink actor = userDAO.Get_SDLink(userID);
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+
+                //Add Notifcation Item
+                //通知を作成
+                Notification notif = new Notification(actor, Notify.USER_SPONSOR_RQ, actor, destination);
+
+                foreach (var leader in leadersID)
+                {
+                    userDAO.Add_Notification(leader, notif);
+                }
+                //Connect to NotificationHub
+                //通知ハーブに接続
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getJoinGroupRequests(leadersID);
+                return true;
+            }
+            catch
+            {
+                throw;
             }
         }
         /// <summary>
@@ -915,6 +960,17 @@ namespace iVolunteer.Controllers
                 SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
                 relationDAO.Delete_Sponsor_Request(userID, projectID);
 
+                //Delete project leaders' sponsore request notificaiton
+                List<string> leaders = relationDAO.Get_Leaders(projectID);
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                var notifyID = userDAO.Get_Sponsor_NotifyID(leaders[0], userID, projectID, Notify.USER_SPONSOR_RQ);
+                if (notifyID != null)
+                {
+                    foreach (var leader in leaders)
+                    {
+                        userDAO.Delete_Notification(leader, notifyID);
+                    }
+                }
                 return ActionToProject(projectID);
             }
             catch

@@ -1,11 +1,13 @@
 ﻿using iVolunteer.Common;
 using iVolunteer.DAL.MongoDB;
 using iVolunteer.DAL.SQL;
+using iVolunteer.Hubs;
 using iVolunteer.Models.MongoDB.CollectionClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass;
 using iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass;
 using iVolunteer.Models.SQL;
+using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1680,6 +1682,9 @@ namespace iVolunteer.Controllers
 
                             //write data to db
                             mongoDAO.Add_SubTask(planPhaseID, mainTaskID, task);
+
+                            //send Assigment
+                            SendTaskAssignement(userID, task.AssignPeople, task.SubTaskID.ToString(), projectID);
                             transaction.Complete();
                         }
                         catch
@@ -1704,6 +1709,37 @@ namespace iVolunteer.Controllers
                 throw;
             }
 
+        }
+        public bool SendTaskAssignement(string leaderID, SDLink user, string taskID, string projectID)
+        {
+            try
+            {
+                //Get project leader(s)ID 
+                //グループリーダー全員のIDを取得
+                SQL_AcPr_Relation_DAO relationDAO = new SQL_AcPr_Relation_DAO();
+                Mongo_User_DAO userDAO = new Mongo_User_DAO();
+
+                SDLink leader = userDAO.Get_SDLink(leaderID);
+
+                Mongo_Project_DAO projectDAO = new Mongo_Project_DAO();
+                SDLink destination = projectDAO.Get_SDLink(projectID);
+                SDLink SD_Task = new SDLink();
+                SD_Task.ID = taskID;
+                SD_Task.Handler = "Task";
+                //Add Notifcation Item
+                //通知を作成
+                Notification notif = new Notification(leader, Notify.TASK_ASSIGN, SD_Task, destination);
+                userDAO.Add_Notification(user.ID, notif);
+                //Connect to NotificationHub
+                //通知ハーブに接続
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                hubContext.Clients.All.getTaskRelatedInfo(user.ID);
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
         /// <summary>
         /// サーブタスクを削除
@@ -1743,6 +1779,12 @@ namespace iVolunteer.Controllers
                     {
                         try
                         {
+                            // Set IsSeen for assignee's notification
+ 
+                            string assignee = mongoDAO.Get_AssignPeople(planPhaseID, mainTaskID, subTaskID);
+                            Mongo_User_DAO userDAO = new Mongo_User_DAO();
+                            string notifyID = userDAO.Get_TaskAssign_NotifyID(assignee, subTaskID);
+                            userDAO.Set_Notification_IsSeen(assignee, notifyID);
                             mongoDAO.Delete_SubTask(planPhaseID, mainTaskID, subTaskID);
 
                             transaction.Complete();

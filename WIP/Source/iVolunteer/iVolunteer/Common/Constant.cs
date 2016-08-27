@@ -184,6 +184,9 @@ namespace iVolunteer.Common
         public const int LEADER_PROMOTE_IN_PROJECT = 13;
         public const int LEADER_PROMOTE_IN_GROUP = 14;
 
+        public const int USER_SPONSOR_RQ = 15;
+        public const int GROUP_SPONSOR_RQ = 16;
+        public const int GUEST_SPONSOR_RQ = 17;
     }
 
     public static class SubTaskPriolity

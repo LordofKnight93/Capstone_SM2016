@@ -944,5 +944,32 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+        public string Get_TaskAssign_NotifyID(string userID, string taskID)
+        {
+            try
+            {
+                //var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == taskID && item.Destination.ID == projectID && item.Type == Notify.TASK_ASSIGN && item.IsSeen == false).ToList();
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == taskID && item.Type == Notify.TASK_ASSIGN && item.IsSeen == false).ToList();
+                if (result.Count == 0) return null;
+                return result.ElementAt(0).NotifyID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public string Get_Sponsor_NotifyID(string userID, string requestor, string projectID, int type)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(u => u.AccountInformation.UserID == userID).SelectMany(nt => nt.NotificationList).Where(item => item.Target.ID == requestor && item.Destination.ID == projectID && item.Type == type && item.IsSeen == false).ToList();
+                if (result.Count == 0) return null;
+                return result.ElementAt(0).NotifyID;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
