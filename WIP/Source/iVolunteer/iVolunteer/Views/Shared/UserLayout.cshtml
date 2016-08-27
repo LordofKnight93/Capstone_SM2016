@@ -169,7 +169,22 @@
     <div class="snackbar" id="snackbar">dfsdfdsgdf</div>
 
     <!-- Div for Dialog -->
-    <div id="dialog-div"></div>
+    <div id="dialog-div" style="display: none;">
+        <div class="card-panel" style="margin: 0.5rem 0 1rem 0; text-align: center; height: 120px; margin-top: 30px;">
+            <div class="preloader-wrapper active">
+                <div class="spinner-layer spinner-mygreen-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p class="loading">Loading<span>.</span><span>.</span><span>.</span></p>
+        </div>
+    </div>
 
     <!--SCRIPT ALBUM-->
     <script src="~/Scripts/jquery-2.1.4.min.js"></script>
@@ -314,7 +329,6 @@
             notifHub.client.getTaskRelatedInfo = function (userID) {
                 $("#notification" + userID).html(function (i, val) { return +val + 1 });
             }
-
             //////////////////////////////////////////////////////////
             ///////// GET NOTIFICATION NUMBERS (loading page) ///////
             ////////////////////////////////////////////////////////
@@ -342,6 +356,7 @@
                     console.log("Error in get Friend Request Count");
                 }
             });
+
             ////////////////////////////////
             //////// CLICK  BUTTON ////////
             //////////////////////////////
@@ -1513,7 +1528,7 @@
 
     </script>
     @*  ------------------------- REPORT --------------------------- *@
-    <script type="text/javascript">
+    @*<script type="text/javascript">
         var dialog = $('<div style="display:none" class="loading"></div>').appendTo('body');
         var successDialog = $('<div style="display:none" class="reportloading"></div>').appendTo('body');
         function reportObject(selector) {
@@ -1592,7 +1607,7 @@
                     }
                 });
         }
-    </script>
+    </script>*@
     @*  ------------------------- POST in GROUP ----------------(groupHome)----------- *@
     <script type="text/javascript">
         var times = 1;

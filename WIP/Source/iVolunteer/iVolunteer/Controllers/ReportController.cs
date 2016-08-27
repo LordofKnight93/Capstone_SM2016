@@ -35,7 +35,12 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ReportTarget(ReportModel report, string targetID, int targetType)
         {
-            if (!ModelState.IsValid) return Json(new { status = false, message = "Mời bạn nêu lý do trước khi gửi báo cáo!" });
+            if (!ModelState.IsValid) /*return Json(new { status = false, message = "Mời bạn nêu lý do trước khi gửi báo cáo!" })*/
+            {
+                ViewBag.TargetID = targetID;
+                ViewBag.Message = "Mời bạn nêu lý do trước khi gửi báo cáo!";
+                return PartialView("_ProjectReport");
+            };
             try
             {
                 if (Session["UserID"] == null)
@@ -114,7 +119,19 @@ namespace iVolunteer.Controllers
                 }
                 ViewBag.Message = "Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh";
                 //return PartialView("ErrorMessage");
-                return Json(new { status = true, message = "Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh" });
+                //return Json(new { status = true, message = "Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh" });
+                if (targetType == 1)
+                {
+                    return RedirectToAction("ActionToGroup", "Account", new { groupID = targetID });
+                }
+                else if (targetType == 2)
+                {
+                    return RedirectToAction("ActionToProject", "Account", new { projectID = targetID });
+                }
+                else
+                {
+                    return RedirectToAction("ActionToOtherUser", "Account", new { otherID = targetID });
+                }
             }
             catch
             {
@@ -173,7 +190,19 @@ namespace iVolunteer.Controllers
                     return Json(Error.UNEXPECT_ERROR);
                 }
             }
-            return Json(true);
+            //return Json(true);
+            if (targetType == 1)
+            {
+                return RedirectToAction("ActionToGroup", "Account", new { groupID = targetID });
+            }
+            else if (targetType == 2)
+            {
+                return RedirectToAction("ActionToProject", "Account", new { projectID = targetID });
+            }
+            else
+            {
+                return RedirectToAction("ActionToOtherUser", "Account", new { otherID = targetID });
+            }
         }
         /// <summary>
         /// 報告リストを表示

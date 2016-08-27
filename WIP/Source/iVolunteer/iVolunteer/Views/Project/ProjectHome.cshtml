@@ -120,22 +120,6 @@
             $("#completed-phase" + planPhaseID).empty();
         }
 
-        function openDialog(title) {
-            $("#dialog-div").dialog(
-                {
-                    title: title,
-                    bgiframe: true,
-                    autoOpen: true,
-                    create: function (event, ui) {
-                        $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
-                    },
-                    height: 380,
-                    width: 740,
-                    modal: true
-                }
-            );
-        };
-
         /**************************/
         /***** PLAN PHASE *********/
         /**************************/

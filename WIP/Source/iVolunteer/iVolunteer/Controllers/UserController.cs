@@ -17,6 +17,8 @@ using iVolunteer.Common;
 using Newtonsoft.Json;
 using System.IO;
 using System.Web.Helpers;
+using Microsoft.AspNet.SignalR;
+using iVolunteer.Hubs;
 
 namespace iVolunteer.Controllers
 {
@@ -682,6 +684,7 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+
         /// <summary>
         /// メッセージを作成
         /// </summary>
@@ -921,6 +924,7 @@ namespace iVolunteer.Controllers
                 throw;
             }
         }
+        
         public ActionResult GetFriendList()
         {
             if (Session["UserID"] == null)

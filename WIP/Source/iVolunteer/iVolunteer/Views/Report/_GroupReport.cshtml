@@ -2,7 +2,9 @@
 @model iVolunteer.Models.ViewModel.ReportModel
 
 
-<form action="@Url.Action("ReportTarget", "Report", new { targetID = ViewBag.targetID, targetType = 1 })" id="submitReport" enctype="multipart/form-data" class="please" method="post">
+@*<form action="@Url.Action("ReportTarget", "Report", new { targetID = ViewBag.targetID, targetType = 1 })" id="submitReport" enctype="multipart/form-data" class="please" method="post">*@
+@using (Ajax.BeginForm("ReportTarget", "Report", new { targetID = ViewBag.targetID, targetType = 1}, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
     @Html.AntiForgeryToken()
     <div class="row">
         <div class="col-md-12">
@@ -36,6 +38,8 @@
             </div>
             <div class="row">
                 @Html.ValidationMessageFor(model => model.Reason, "", new { @class = "text-danger" })
+            </div>
+            <div class="row">
                 <label for="detailReason">Thông tin bổ sung</label>
                 @Html.TextAreaFor(model => model.Detail, new { @id = "detailReason", @class = "form-control", @rows = "3", @placeholder = "Lý do chi tiết...", @style = "resize: vertical; margin-bottom: 4px" })
             </div>
@@ -45,4 +49,20 @@
     <div class="pull-right">
         <input class="btn btn-success" type="submit" value="Báo cáo">
     </div>
-</form>
+
+}
+<script type="text/javascript">
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+
+        if (isError) {
+            // there was an error => we update the container of the form
+            $("#dialog-div").html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#dialog-div").html("<div style='text-align: center; padding: 10px; margin-top: 100px;'><p>Cảm ơn bạn đã góp sức xây dựng cộng đồng iVolunteer lành mạnh</p></div>");
+            $("#" + '@ViewBag.targetID').html(result.responseText);
+        }
+    };
+</script>
+@*</form>*@

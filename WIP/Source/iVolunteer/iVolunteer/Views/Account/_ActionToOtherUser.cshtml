@@ -48,16 +48,17 @@
             {
                 //Hủy báo cáo
                 <li>
-                    <button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons md-mygreen md-18">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>
-                    @*@Ajax.RawActionLink("<i class='material-icons md-mygreen'>flag</i><span class='action-to-target-text'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })*@
+                    @*<button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons md-mygreen md-18">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>*@
+                    @Ajax.RawActionLink("<i class='material-icons md-mygreen md-18'>flag</i><span class='action-to-target-text' style='color: #049f88;'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                 </li>
             }
             else
             {
                 //Báo cáo
                 <li>
-                    <button class="btn btn-default action-to-target-link" onclick="reportObject(this)" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>
+                    @*<button class="btn btn-default action-to-target-link" onclick="reportObject(this)" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.OtherID, targetType = 3})"><i class="material-icons">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>*@
                     @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = ViewBag.OtherID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
+                    @Ajax.RawActionLink("<i class='material-icons md-18'>flag</i><span class='action-to-target-text'>  Báo cáo vi phạm</span>", "DisplayReport", "Report", new { targetID = ViewBag.OtherID, targetType = 3 }, new AjaxOptions { UpdateTargetId = "dialog-div", InsertionMode = InsertionMode.Replace, OnBegin = "openDialog('Báo cáo vi phạm', 350, 400)" }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                 </li> 
             }
         }

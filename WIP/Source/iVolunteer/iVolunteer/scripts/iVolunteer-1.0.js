@@ -210,6 +210,40 @@ function onpopupclose(id) {
     $(id).modal('toggle');
 }
 
+function openDialog(title, height, width) {
+    $("#dialog-div").show();
+    $("#dialog-div").dialog(
+        {
+            title: title,
+            bgiframe: true,
+            autoOpen: true,
+            create: function (event, ui) {
+                $(".ui-dialog-titlebar-close").html('<i class="fa fa-times"></i>');
+            },
+            height: height,
+            width: width,
+            modal: true,
+            close: function () {
+                var loadingPopup = "";
+                loadingPopup += '<div class="card-panel" style="margin: 0.5rem 0 1rem 0; text-align: center; height: 120px; margin-top: 30px;">';
+                loadingPopup += '<div class="preloader-wrapper active">';
+                loadingPopup += '<div class="spinner-layer spinner-mygreen-only">';
+                loadingPopup += '<div class="circle-clipper left">';
+                loadingPopup += '<div class="circle"></div>';
+                loadingPopup += '</div><div class="gap-patch">';
+                loadingPopup += '<div class="circle"></div>';
+                loadingPopup += '</div><div class="circle-clipper right">';
+                loadingPopup += '<div class="circle"></div>';
+                loadingPopup += '</div>';
+                loadingPopup += '</div>';
+                loadingPopup += '</div>';
+                loadingPopup += '<p class="loading">Loading<span>.</span><span>.</span><span>.</span></p>'
+                loadingPopup += '</div>';
+                $("#dialog-div").html(loadingPopup);
+            }
+        }
+    );
+};
 function closeDialog(id) {
     $(id).dialog('close');
 }
