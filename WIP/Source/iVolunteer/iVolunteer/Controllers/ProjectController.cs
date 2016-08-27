@@ -3941,7 +3941,7 @@ namespace iVolunteer.Controllers
                 }
                 ViewBag.AlbumID = sql_Album.AlbumID;
                 Session["Album"] = sql_Album.AlbumID;
-                return GetAlbumList(targetID);
+                return AlbumAddImage(sql_Album.AlbumID, targetID);
             }
             catch (Exception e)
             {
