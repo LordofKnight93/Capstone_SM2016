@@ -1648,7 +1648,7 @@
             if ($("#postContent").val() == null || $("#postContent").val().trim() == "") {
                 event.preventDefault();
             }
-            $("#postImageHandler").css("visibility", "hidden");
+            //$("#postImageHandler").css("visibility", "hidden");
         }
         //Check if Comment is blank before sending
         function isCommentBlank(event, postID) {
@@ -1745,10 +1745,24 @@
         }
         function delPostImage(event) {
             event.preventDefault();
-            alert("Delete Image");
-            $("#postImageHandler").val("");
+            $.ajax({
+                url: '@Url.Action("DeleteTempPic", "Project")',
+                type: "POST",
+                success: function (data) {
+                    if (data == true) {
+                        $("#postImageHandler").css("visibility", "hidden");
+                        $("#imageToPostArea").val("");
+                    }
+                    else {
+                        alert("error in delete post Image");
+                    }
+                },
+                error: function () {
+                    alert("not success in load Post in public");
+                }
+            });
         }
-        
+
     </script>
 </body>
 </html>

@@ -1194,7 +1194,7 @@ namespace iVolunteer.Controllers
             mongo_Post.PostInfomation.Destination = group;
 
             //IMAGE Process
-            if (postInfor.ImgLink != null)
+            if (postInfor.ImgLink != null && postInfor.ImgLink != "")
             {
                 string oldPath = Server.MapPath("/Images/Post/" + userID + ".jpg");
                 //Change old path of temp file to the new one (map with postID)
@@ -2424,6 +2424,22 @@ namespace iVolunteer.Controllers
                     // write your code to save image
                     string uploadPath = Server.MapPath("/Images/Post/" + id + ".jpg");
                     file.SaveAs(uploadPath);
+
+                    MemoryStream ms = new MemoryStream();
+                    WebImage img = new WebImage(uploadPath);
+
+                    if (img.Width > 2048)
+                    {
+                        int height = (int)(img.Height / (img.Width / 2048));
+                        img.Resize(2048, height);
+                    }
+                    else if (img.Height > 2048)
+                    {
+                        int width = (int)(img.Width / (img.Height / 2048));
+                        img.Resize(width, 2048);
+                    }
+                    img.Save(uploadPath);
+
                     ViewBag.ImageLink = uploadPath;
                     return Json(uploadPath);
                 }
