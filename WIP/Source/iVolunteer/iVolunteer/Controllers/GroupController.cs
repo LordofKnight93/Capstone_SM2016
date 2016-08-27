@@ -2561,10 +2561,12 @@ namespace iVolunteer.Controllers
                 string userID = Session["UserID"].ToString();
 
                 SQL_AcGr_Relation_DAO acGrDAO = new SQL_AcGr_Relation_DAO();
-                List<string> leaders = acGrDAO.Get_Leaders(groupID);
+
+                SQL_AcPr_Relation_DAO acPrDAO = new SQL_AcPr_Relation_DAO();
+                List<string> leaders = acPrDAO.Get_Leaders(projectID);
 
                 Mongo_User_DAO userDAO = new Mongo_User_DAO();
-                string notifyID = userDAO.Get_Sponsor_NotifyID(leaders[0], groupID, projectID, Notify.GROUP_SPONSOR_RQ);
+                var notifyID = userDAO.Get_Sponsor_NotifyID(leaders[0], groupID, projectID, Notify.GROUP_SPONSOR_RQ);
 
                 if (acGrDAO.Is_Leader(userID, groupID))
                 {
