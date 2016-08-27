@@ -2129,6 +2129,7 @@ div.tooltip-inner {
     color: #fff;
     width: 100%;
     opacity: 0;
+    z-index: 1;
 }
 
 .photo-album:hover {
