@@ -4710,6 +4710,10 @@ div.search-dropdown:hover .txt-search {
     color: #049f88;
 }
 
+.txt-search:focus {
+    width: 100%;
+}
+
 .txt-search {
     float: right !important;
     padding: 5px;

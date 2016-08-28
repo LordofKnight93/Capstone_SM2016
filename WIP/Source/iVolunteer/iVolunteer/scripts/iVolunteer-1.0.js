@@ -91,7 +91,10 @@ $("#searchArea").keyup(function () {
 });
 
 $('div.search-dropdown').mouseleave(function () {
-    $(".dropdown-content").hide();
+    if ($("#searchArea").val().length > 0) { }
+    else {
+        $(".dropdown-content").hide();
+    }
 });
 
 if ($("#searchArea").val().length < 1) {
