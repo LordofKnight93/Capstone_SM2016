@@ -23,7 +23,7 @@
                         <div class="image-upload">
                             <label class="btn btn-upload-img" for="file">
                                 <i class="fa fa-upload fa-cus-18"></i>
-                                <input id="file" name="Image" type="file" style="display:none;" onchange="$('#upload-file-info').val($(this)[0].files[0]['name']);">
+                                <input id="file" name="Image" type="file" accept="image/*" style="display:none;" onchange="$('#upload-file-info').val($(this)[0].files[0]['name']);">
                                 Chọn ảnh
                             </label>
                             <input class='label label-filename' id="upload-file-info" readonly />

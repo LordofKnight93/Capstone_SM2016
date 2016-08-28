@@ -28,7 +28,7 @@
                     {
                         <li>
                             @*//Hủy yêu cầu tham gia*@
-                            @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i>&nbsp;<span class='action-to-target-text action-text-active'>&nbsp;Hủy yêu cầu tham gia</span>", "CancelJoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                            @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-16 fa-cus-green' aria-hidden='true'></i>&nbsp;<span class='action-to-target-text action-text-active'>&nbsp;Hủy yêu cầu tham gia</span>", "CancelJoinProjectRequest", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                         </li>
                     }
                     else
@@ -46,7 +46,7 @@
                     {
                         <li>
                             @*//Hủy theo dõi*@
-                            @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy theo dõi</span>", "UnfollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                            @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-16 fa-cus-green' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy theo dõi</span>", "UnfollowProject", "Account", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
                         </li>
                     }
                     else

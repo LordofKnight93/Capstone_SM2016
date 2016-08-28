@@ -28,6 +28,7 @@
                                 </div>
                                 <div class="col-xs-6 text-input">
                                     @Html.DisplayFor(model => model.ProjectName, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                                    @Html.HiddenFor(model => model.ProjectName)
                                 </div>
                             </div>
 

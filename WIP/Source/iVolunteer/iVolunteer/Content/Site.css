@@ -4369,6 +4369,9 @@ tab-contentReport {
             color: #fff;
         }
 
+        .card .card-image .action-to-target a .fa-cus.fa-cus-green {
+            color: #049f88;
+        }
             .card .card-image .action-to-target a .fa.fa-cus-btn-action-active {
                 color: #049f88;
             }

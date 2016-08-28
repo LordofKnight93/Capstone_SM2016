@@ -16,9 +16,9 @@ else
 {
 <div class="row background-container">
     @{ Html.RenderPartial("_SlideQuotes", new ViewDataDictionary());}
-    <div class="row">
+    <div class="row" style="margin-top: 10px;">
         <div class="col-md-6">
-            <h4>Dự án tình nguyện nổi bật</h4>
+            <h4 style="font-weight: bold">Dự án tình nguyện nổi bật</h4>
         </div>
         @if (Session["Role"] != null && Session["Role"].ToString() == "User")
         {

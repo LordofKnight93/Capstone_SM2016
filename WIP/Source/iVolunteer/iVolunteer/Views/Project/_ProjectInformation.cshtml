@@ -3,9 +3,55 @@
 
 <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
 
-    <!-- Tổng quan -->
     <div class="row">
         <div class="col-md-12" style="margin-top: -15px">
+            <h4 style="color: #049f88">
+                Trạng thái
+            </h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (Model.InProgress)
+            {
+                if (ViewBag.IsLeader == true)
+                {
+                    @Ajax.ActionLink("Kết thúc hoạt động", "EndProject", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc hoạt động, bạn sẽ không thể mở lại hoạt động nay sau khi đã kết thúc ?" }, new { @type = "button", @class = "btn btn-default" })
+                }
+                if (Model.IsRecruit)
+                {
+                    if (ViewBag.IsLeader == true)
+                    {
+                        @Ajax.ActionLink("Kết thúc tuyển thành viên", "StopRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc tuyển thành viên ?" }, new { @type = "button", @class = "btn btn-default" })
+                    }
+                    else
+                    {
+                        <span class="badge is-complete" style="padding: 2px; font-size: 14px;">Đang tuyển thành viên</span>
+                    }
+                }
+                else
+                {
+                    if (ViewBag.IsLeader == true)
+                    {
+                        @Ajax.ActionLink("Bắt đầu tuyển thành viên", "StartRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                    }
+                    else
+                    {
+                        <span class="badge is-due-past" style="padding: 2px; font-size: 14px;">Đã kết thúc tuyển thành viên</span>
+                    }
+                }
+            }
+            else
+            {
+                <span class="badge is-due-past" style="padding: 2px; font-size: 14px;">Đã kết thúc</span>
+            }
+        </div>
+    </div>
+
+    <!-- Tổng quan -->
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 15px">
             <h4 style="color: #049f88">
                 Tổng Quan
                 @if (ViewBag.IsLeader == true && Model.InProgress)
@@ -61,41 +107,6 @@
         <div class="col-md-12">
             <p><strong>Thời gian bắt đầu: </strong>@Html.DisplayFor(model => model.DateStart)</p>
             <p><strong>Thời gian kết thúc: </strong>@Html.DisplayFor(model => model.DateEnd)</p>
-
-    @if (Model.InProgress)
-    {
-        if (ViewBag.IsLeader == true)
-        {
-                @Ajax.ActionLink("Kết thúc hoạt động", "EndProject", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc hoạt động, bạn sẽ không thể mở lại hoạt động nay sau khi đã kết thúc ?" }, new { @type = "button", @class = "btn btn-default" })
-        }
-        if (Model.IsRecruit)
-        {
-            if (ViewBag.IsLeader == true)
-            {
-                @Ajax.ActionLink("Kết thúc tuyển thành viên", "StopRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn kết thúc tuyển thành viên ?" }, new { @type = "button", @class = "btn btn-default" })
-            }
-            else
-            {
-                <button type="button">Đang tuyển thành viên</button>
-            }
-        }
-        else
-        {
-            if (ViewBag.IsLeader == true)
-            {
-                @Ajax.ActionLink("Bắt đầu tuyển thành viên", "StartRecruiting", "Project", new { projectID = Model.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
-            }
-            else
-            {
-                <button type="button">Đã kết thúc tuyển thành viên</button>
-            }
-        }
-    }
-    else
-    {
-        <button type="button">Đã kết thúc</button>
-    }
-
         </div>
     </div>
 

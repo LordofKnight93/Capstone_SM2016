@@ -182,7 +182,10 @@ function changeSuccess() {
     $("#snackbar").html("Thay đổi thành công.");
     showSnackBar();
 }
-
+function donateSuccess() {
+    $("#snackbar").html("Đăng kí quyên góp/ Tài trợ thành công.");
+    showSnackBar();
+}
 /* ****************************** FANCY BOX ************************************ */
 $(document).ready(function () {
     /*

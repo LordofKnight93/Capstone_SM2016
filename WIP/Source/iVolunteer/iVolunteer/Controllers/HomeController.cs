@@ -479,16 +479,26 @@ namespace iVolunteer.Controllers
             switch (option)
             {
                 case "User":
-                    if (String.IsNullOrWhiteSpace(name) || name.Trim().Length > 100)
+                    if (String.IsNullOrWhiteSpace(name))
                     {
-                        ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
+                        ViewBag.Message = "Vui lòng nhập vào từ khóa tìm kiếm.";
+                        return View("ErrorMessage");
+                    }
+                    else if(name.Trim().Length > 100)
+                    {
+                        ViewBag.Message = "Vui lòng nhập từ khóa tìm kiếm không quá 100 kí tự.";
                         return View("ErrorMessage");
                     }
                     return RedirectToAction("SearchUser", "User", new { name = name, page = 1 });
                 case "Group":
-                    if (String.IsNullOrWhiteSpace(name) || name.Trim().Length > 100)
+                    if (String.IsNullOrWhiteSpace(name))
                     {
-                        ViewBag.Message = "Rất tiếc, chúng tôi không hiểu tìm kiếm này. Vui lòng thử truy vấn theo cách khác.";
+                        ViewBag.Message = "Vui lòng nhập vào từ khóa tìm kiếm.";
+                        return View("ErrorMessage");
+                    }
+                    else if (name.Trim().Length > 100)
+                    {
+                        ViewBag.Message = "Vui lòng nhập từ khóa tìm kiếm không quá 100 kí tự.";
                         return View("ErrorMessage");
                     }
                     return RedirectToAction("SearchGroup", "Group", new { name = name, page = 1 });
@@ -498,7 +508,7 @@ namespace iVolunteer.Controllers
                     TempData["SearchModel"] = searchModel;
                     return RedirectToAction("SearchProject", "Project");
                 default:
-                    ViewBag.Message = Error.INVALID_INFORMATION;
+                    ViewBag.Message = "Vui lòng chọn trường tìm kiếm sau khi nhập từ khóa";
                     return View("ErrorMessage");
             }
         }
