@@ -2,11 +2,28 @@
 {
     @Html.Partial("_PostCreate")
 }
-<div id="pinnedPost">
-    @{Html.RenderAction("GetPinnedPost_InPublic", "Project", new { groupID = ViewBag.GroupID });}
-</div>
-<div id="postList">
-    @{Html.RenderAction("GetPostList_InPublic", "Project", new { projectID = ViewBag.ProjectID });}
-</div>
+@if (ViewBag.Message != null)
+{
+    <div style="text-align: center; margin: 50px 0;">
+        <p>@ViewBag.Message</p>
+    </div>
+}
+else
+{
+    if (@ViewBag.PinnedTitle != null)
+    {
+        <div class="pinArea"><label style="margin-top: 5px;"><i class="glyphicon glyphicon-pushpin"></i> @ViewBag.PinnedTitle</label></div>
+    }
+    <div id="pinnedPost">
+        @{Html.RenderAction("GetPinnedPost_InPublic", "Project", new { groupID = ViewBag.GroupID });}
+    </div>
+    if (@ViewBag.PostTitle != null)
+    {
+        <div class="pinArea"><label style="margin-top: 5px;">@ViewBag.PostTitle</label></div>
+    }
+    <div id="postList">
+        @{Html.RenderAction("GetPostList_InPublic", "Project", new { projectID = ViewBag.ProjectID });}
+    </div>
 
     <a id="loadMorePost" href="" onclick="@("loadMorePostInPublicProject(event,'" + ViewBag.ProjectID +"', this.getAttribute('role'))")"></a>
+}

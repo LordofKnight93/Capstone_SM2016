@@ -498,23 +498,57 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult GroupPublic(string groupID)
         {
-            if (Session["UserID"] == null)
+            try
             {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.GroupID = groupID;
+                    ViewBag.InSection = "Public";
+                    return PartialView("_GroupPublic");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //Leader will be able to Post in Public Section(in next View returned)
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
+                else ViewBag.Role = "Member";
+
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<PostInformation> allPost = postDAO.Get_AllPost(groupID, "Group", true);
+                if (allPost.Count() == 0)
+                {
+                    ViewBag.Message = "Hiện tại chưa có bài đăng nào.";
+                }
+                else
+                {
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == false)
+                        {
+                            ViewBag.PostTitle = "Bài đăng gần đây";
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == true)
+                        {
+                            ViewBag.PinnedTitle = "Bài đăng được ghim";
+                            break;
+                        }
+                    }
+                }
+
                 ViewBag.GroupID = groupID;
                 ViewBag.InSection = "Public";
                 return PartialView("_GroupPublic");
             }
-
-            string userID = Session["UserID"].ToString();
-
-            //Leader will be able to Post in Public Section(in next View returned)
-            SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
-            if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
-            else ViewBag.Role = "Member";
-
-            ViewBag.GroupID = groupID;
-            ViewBag.InSection = "Public";
-            return PartialView("_GroupPublic");
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
         }
         /// <summary>
         /// 相談セクション画面を表示
@@ -523,9 +557,43 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult GroupDiscussion(string groupID)
         {
-            ViewBag.InSection = "Discussion";
-            ViewBag.GroupID = groupID;
-            return PartialView("_GroupDiscussion");
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<PostInformation> allPost = postDAO.Get_AllPost(groupID, "Group", false);
+                if (allPost.Count() == 0)
+                {
+                    ViewBag.Message = "Hiện tại chưa có bài đăng nào.";
+                }
+                else
+                {
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == false)
+                        {
+                            ViewBag.PostTitle = "Bài đăng gần đây";
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == true)
+                        {
+                            ViewBag.PinnedTitle = "Bài đăng được ghim";
+                            break;
+                        }
+                    }
+                }
+
+                ViewBag.InSection = "Discussion";
+                ViewBag.GroupID = groupID;
+                return PartialView("_GroupDiscussion");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
         }
         /// <summary>
         /// 写真アルバムセクション画面を表示

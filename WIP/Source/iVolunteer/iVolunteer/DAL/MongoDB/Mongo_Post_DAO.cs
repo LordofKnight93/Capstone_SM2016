@@ -70,6 +70,22 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        public List<PostInformation> Get_AllPost(string destinationID, string handler, bool permission)
+        {
+            try
+            {
+                var result = collection.AsQueryable().Where(p => p.PostInfomation.Destination.ID == destinationID
+                                                              && p.PostInfomation.Destination.Handler == handler
+                                                              && p.PostInfomation.IsPublic == permission).Select(p => p.PostInfomation).ToList();
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         /// <summary>
         /// get a numbers of post
         /// </summary>

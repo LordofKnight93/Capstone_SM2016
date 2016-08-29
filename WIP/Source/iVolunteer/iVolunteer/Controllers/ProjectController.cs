@@ -928,22 +928,56 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ProjectPublic(string projectID)
         {
-            if (Session["UserID"] == null)
+            try
             {
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.ProjectID = projectID;
+                    ViewBag.InSection = "Public";
+                    return PartialView("_ProjectPublic");
+                }
+                string userID = Session["UserID"].ToString();
+
+                //Leader will be able to Post in Public Section(in next View returned)
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(userID, projectID)) ViewBag.Role = "Leader";
+                else ViewBag.Role = "Member";
+
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<PostInformation> allPost = postDAO.Get_AllPost(projectID, "Project", true);
+                if (allPost.Count() == 0)
+                {
+                    ViewBag.Message = "Hiện tại chưa có bài đăng nào.";
+                }
+                else
+                {
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == false)
+                        {
+                            ViewBag.PostTitle = "Bài đăng gần đây";
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == true)
+                        {
+                            ViewBag.PinnedTitle = "Bài đăng được ghim";
+                            break;
+                        }
+                    }
+                }
+
                 ViewBag.ProjectID = projectID;
                 ViewBag.InSection = "Public";
                 return PartialView("_ProjectPublic");
             }
-            string userID = Session["UserID"].ToString();
-
-            //Leader will be able to Post in Public Section(in next View returned)
-            SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
-            if (relation.Is_Leader(userID, projectID)) ViewBag.Role = "Leader";
-            else ViewBag.Role = "Member";
-
-            ViewBag.ProjectID = projectID;
-            ViewBag.InSection = "Public";
-            return PartialView("_ProjectPublic");
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
         }
         /// <summary>
         /// 相談セクションを表示
@@ -952,9 +986,42 @@ namespace iVolunteer.Controllers
         /// <returns></returns>
         public ActionResult ProjectDiscussion(string projectID)
         {
-            ViewBag.InSection = "Discussion";
-            ViewBag.ProjectID = projectID;
-            return PartialView("_ProjectDiscussion");
+            try
+            {
+                Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
+                List<PostInformation> allPost = postDAO.Get_AllPost(projectID, "Project", false);
+                if(allPost.Count() == 0)
+                {
+                    ViewBag.Message = "Hiện tại chưa có bài đăng nào.";
+                }
+                else
+                {
+                    for (int i = 0; i < allPost.Count(); i++)
+                    {
+                        if (allPost[i].IsPinned == false)
+                        {
+                            ViewBag.PostTitle = "Bài đăng gần đây";
+                            break;
+                        }
+                    }
+                    for (int i=0; i< allPost.Count(); i++)
+                    {
+                        if(allPost[i].IsPinned == true)
+                        {
+                            ViewBag.PinnedTitle = "Bài đăng được ghim";
+                            break;
+                        }
+                    }
+                }
+                ViewBag.InSection = "Discussion";
+                ViewBag.ProjectID = projectID;
+                return PartialView("_ProjectDiscussion");
+            }
+            catch
+            {
+                ViewBag.Message = Error.UNEXPECT_ERROR;
+                return PartialView("ErrorMessage");
+            }
         }
 
         public ActionResult ProjectGallery(string projectID)
