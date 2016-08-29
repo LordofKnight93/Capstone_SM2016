@@ -186,13 +186,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.FriendID == receiverID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
                                                                    && rl.Status == Status.PENDING);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcAc_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -216,13 +212,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.FriendID == otherID
                                                                    && rl.Relation == AcAcRelation.FRIEND_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcAc_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch

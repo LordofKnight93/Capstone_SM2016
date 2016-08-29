@@ -38,13 +38,9 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcAl_Relation.FirstOrDefault(rl =>
                                                                     rl.AlbumID == albumID
                                                                    && rl.Relation == AcAlRelation.CREATOR_RELATION);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcAl_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch

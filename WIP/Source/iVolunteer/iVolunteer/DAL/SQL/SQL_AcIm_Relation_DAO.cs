@@ -37,16 +37,12 @@ namespace iVolunteer.DAL.SQL
                 {
                     var result = dbEntities.SQL_AcAl_Relation.FirstOrDefault(rl => rl.AlbumID == albumID);
                     List<string> img = dbEntities.SQL_Image.Where(al => al.AlbumID == albumID).Select(im =>im.ImageID).ToList();
-                    if (result != null)
-                    {
                         foreach (var item in img)
                         {
                             dbEntities.SQL_AcIm_Relation.RemoveRange(dbEntities.SQL_AcIm_Relation.Where(rl => rl.ImageID == item));
                         }
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -63,13 +59,9 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcIm_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ImageID == imageID
                                                                    && rl.Relation == AcImRelation.CREATOR_RELATION);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcIm_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch

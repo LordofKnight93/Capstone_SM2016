@@ -59,13 +59,9 @@ namespace iVolunteer.DAL.SQL
                 using (iVolunteerEntities dbEntities = new iVolunteerEntities())
                 {
                     var result = dbEntities.SQL_AcPo_Relation.FirstOrDefault(rl => rl.PostID == postID);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPo_Relation.RemoveRange(dbEntities.SQL_AcPo_Relation.Where(rl => rl.PostID == postID));
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -151,13 +147,9 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPo_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.PostID == postID
                                                                    && rl.Relation == AcPoRelation.LIKE_RELATION);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPo_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch

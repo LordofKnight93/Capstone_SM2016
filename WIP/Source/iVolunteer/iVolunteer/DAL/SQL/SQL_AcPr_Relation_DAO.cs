@@ -278,13 +278,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.MEMBER_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -309,13 +305,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.FOLLOW_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -339,13 +331,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.ORGANIZE_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -370,13 +358,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.LEADER_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -401,13 +385,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.SPONSOR_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -432,13 +412,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.REPORT_RELATION
                                                                    && rl.Status == Status.ACCEPTED);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -789,13 +765,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.MEMBER_RELATION
                                                                    && rl.Status == Status.PENDING);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -820,13 +792,9 @@ namespace iVolunteer.DAL.SQL
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.SPONSOR_RELATION
                                                                    && rl.Status == Status.PENDING);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -1408,13 +1376,9 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.INVITED_RELATION);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
@@ -1438,13 +1402,9 @@ namespace iVolunteer.DAL.SQL
                     var result = dbEntities.SQL_AcPr_Relation.FirstOrDefault(rl => rl.UserID == userID
                                                                    && rl.ProjectID == projectID
                                                                    && rl.Relation == AcPrRelation.SUGGESTED_RELATION);
-                    if (result != null)
-                    {
                         dbEntities.SQL_AcPr_Relation.Remove(result);
                         dbEntities.SaveChanges();
                         return true;
-                    }
-                    return false;
                 }
             }
             catch
