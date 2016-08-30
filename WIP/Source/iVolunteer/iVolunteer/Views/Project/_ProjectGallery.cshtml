@@ -7,7 +7,7 @@
 }
 @if (ViewBag.Role != null)
 {
-<div id="albumList">
-    @{Html.RenderAction("GetAlbumList", "Project", new { projectID = ViewBag.ProjectID });}
-</div>
+    <div id="albumList">
+        @{Html.RenderAction("GetAlbumList", "Project", new { projectID = ViewBag.ProjectID });}
+    </div>
 }

@@ -1040,6 +1040,10 @@ namespace iVolunteer.Controllers
                     ViewBag.Role = "Guess";
                 }
             }
+            else
+            {
+                ViewBag.Role = "Guess";
+            }
             ViewBag.InSection = "GroupGallery";
             ViewBag.ProjectID = projectID;
             return PartialView("_ProjectGallery");
@@ -3931,6 +3935,10 @@ namespace iVolunteer.Controllers
                 else ViewBag.Role = "Member";
                 ViewBag.UserID = userID;
                 ViewBag.targetID = projectID;
+            }
+            else
+            {
+                ViewBag.Role = "Guest";
             }
             
             try

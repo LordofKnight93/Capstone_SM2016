@@ -616,6 +616,10 @@ namespace iVolunteer.Controllers
                     ViewBag.Role = "Guess";
                 }
             }
+            else
+            {
+                ViewBag.Role = "Guess";
+            }
             ViewBag.InSection = "GroupGallery";
             ViewBag.GroupID = groupID;
             return PartialView("_GroupGallery");
@@ -2738,6 +2742,10 @@ namespace iVolunteer.Controllers
                 if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
                 else ViewBag.Role = "Member";
                 ViewBag.UserID = userID;
+            }
+            else
+            {
+                ViewBag.Role = "Guest";
             }
             ViewBag.targetID = groupID;
             try
