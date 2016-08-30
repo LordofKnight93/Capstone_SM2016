@@ -500,20 +500,6 @@ namespace iVolunteer.Controllers
         {
             try
             {
-                if (Session["UserID"] == null)
-                {
-                    ViewBag.GroupID = groupID;
-                    ViewBag.InSection = "Public";
-                    return PartialView("_GroupPublic");
-                }
-
-                string userID = Session["UserID"].ToString();
-
-                //Leader will be able to Post in Public Section(in next View returned)
-                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
-                if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
-                else ViewBag.Role = "Member";
-
                 Mongo_Post_DAO postDAO = new Mongo_Post_DAO();
                 List<PostInformation> allPost = postDAO.Get_AllPost(groupID, "Group", true);
                 if (allPost.Count() == 0)
@@ -539,6 +525,20 @@ namespace iVolunteer.Controllers
                         }
                     }
                 }
+
+                if (Session["UserID"] == null)
+                {
+                    ViewBag.GroupID = groupID;
+                    ViewBag.InSection = "Public";
+                    return PartialView("_GroupPublic");
+                }
+
+                string userID = Session["UserID"].ToString();
+
+                //Leader will be able to Post in Public Section(in next View returned)
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Leader(userID, groupID)) ViewBag.Role = "Leader";
+                else ViewBag.Role = "Member";
 
                 ViewBag.GroupID = groupID;
                 ViewBag.InSection = "Public";
