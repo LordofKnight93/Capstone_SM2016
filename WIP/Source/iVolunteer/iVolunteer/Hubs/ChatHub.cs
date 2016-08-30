@@ -65,7 +65,16 @@ namespace iVolunteer.Hubs
         public void SendMessage(string userID, string friendID, string content, string displayTime, string messageID)
         {
             Clients.Others.getMessage(userID, friendID, content, displayTime, messageID);
+            SendNewMessageNoti(userID, friendID);
         }
+
+        public bool SendNewMessageNoti(string userID, string otherID)
+        {
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+            hubContext.Clients.All.getNewMessNoti(otherID);
+            return true;
+        }
+
         public void GetFriendList(string userID)
         {
             List<bool> isOnline = new List<bool>();

@@ -115,6 +115,21 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        public bool Set_UnreadUser(string messageID, string userID)
+        {
+            try
+            {
+                var filter = Builders<Mongo_Message>.Filter.Eq(ms => ms.MessageID, messageID);
+                var update = Builders<Mongo_Message>.Update.Set(ms => ms.UnreadItem.UnreadUser, userID);
+                var result = collection.UpdateOne(filter, update);
+                return result.IsAcknowledged;
+            }
+            catch
+            {
+                throw;
+            }
+        }
         public UnreadItem Get_UnreadMss(string userID, string friendID)
         {
             try
@@ -130,6 +145,52 @@ namespace iVolunteer.DAL.MongoDB
                 throw;
             }
         }
+
+        public string Get_UnreadUser(string userID, string friendID)
+        {
+            try
+            {
+                SQL_Message_DAO DAO = new SQL_Message_DAO();
+                string messageID = DAO.Get_MessageID(userID, friendID);
+                if (messageID == null) return null;
+                var result = collection.AsQueryable().FirstOrDefault(ms => ms.MessageID == messageID);
+                return result.UnreadItem.UnreadUser;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool Get_UnreadMssNoti(string userID)
+        {
+            try
+            {
+                SQL_Message_DAO DAO = new SQL_Message_DAO();
+                List<string> messageIDs = DAO.Get_MessageIDs(userID);
+                if (messageIDs.Count() == 0) return false;
+                bool haveUnread = false;
+                for (int i=0; i< messageIDs.Count(); i++)
+                {
+                    var result = collection.AsQueryable().FirstOrDefault(ms => ms.MessageID == messageIDs[i]).UnreadItem;
+                    if(result.UnreadMessage > 0 && result.UnreadUser.Equals(userID))
+                    {
+                        haveUnread = true;
+                        break;
+                    }
+                    else
+                    {
+                        haveUnread = false;
+                    }
+                }
+                return haveUnread;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public List<SDLink> Get_Recent_Chat_Users(List<string> messageIDs, string userID)
         {
             try

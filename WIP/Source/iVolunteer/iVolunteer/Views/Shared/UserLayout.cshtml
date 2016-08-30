@@ -70,7 +70,7 @@
 					<ul class="nav navbar-nav">
 						<li><a title="Trang chủ" href="@Url.Action("FrontPage","Home")" style="color: #fff;">TRANG CHỦ</a></li>
 						<li><a title="Bảng tin" id="logo" href="@Url.Action("Newfeed","Home")" style="color: #fff;">BẢNG TIN</a></li>
-						<li><a title="Trò chuyện" href="#" onclick="location.href='@Url.Action("ChatRoom", "Home")'" style="color: #fff;" id="chatRoomButton">TRÒ CHUYỆN</a><span id="chatnewnoti" class="chatnewnoti" style="opacity: 0;">MỚI</span></li>
+						<li><a title="Trò chuyện" href="#" onclick="location.href='@Url.Action("ChatRoom", "Home")'" style="color: #fff;" id="chatRoomButton">TRÒ CHUYỆN</a><span id="@("chatnewnoti" + userID)" class="chatnewnoti" style="opacity: 0;">MỚI</span></li>
 					</ul>
 				}
 
@@ -329,6 +329,16 @@
             notifHub.client.getTaskRelatedInfo = function (userID) {
                 $("#notification" + userID).html(function (i, val) { return +val + 1 });
             }
+            notifHub.client.getNewMessNoti = function (userID) {
+                if ($(".wrapper").length)
+                {
+
+                }
+                else
+                {
+                    $("#chatnewnoti" + userID).css('opacity', '1');
+                }
+            }
             //////////////////////////////////////////////////////////
             ///////// GET NOTIFICATION NUMBERS (loading page) ///////
             ////////////////////////////////////////////////////////
@@ -348,12 +358,30 @@
             // 2. Load Friend Request Count
             $.ajax({
                 type: "POST",
-                url: "/Account/GetNumberOfFriendRequest",
+                url: "/Account/GetNumberOfFriendRequest?",
                 success: function (data, textstatus) {
                     if (data != 0) $("#friendRequest" + '@Session["UserID"]').text(data);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log("Error in get Friend Request Count");
+                }
+            });
+
+            //Get Un read message notification
+            $.ajax({
+                type: "POST",
+                url: "/User/Get_UnreadNoti",
+                data: { userID: '@Session["UserID"].ToString()'},
+                success: function (data) {
+                    if ($(".wrapper").length) {
+
+                    }
+                    else {
+                        if (data == true) $("#chatnewnoti" + '@Session["UserID"].ToString()').css('opacity', '1');
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log("Error in get Un read noti");
                 }
             });
 

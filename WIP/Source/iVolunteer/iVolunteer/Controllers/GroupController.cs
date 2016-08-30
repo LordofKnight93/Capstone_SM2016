@@ -2883,6 +2883,23 @@ namespace iVolunteer.Controllers
             ViewBag.GroupID = groupID;
             ViewBag.AlbumID = albumID;
             ViewBag.CommentCount = cmtCount;
+            if (Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
+                if (relation.Is_Member(userID, groupID))
+                {
+                    ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = "GuestUser";
+                }
+            }
+            else
+            {
+                ViewBag.Role = "Guess";
+            }
             return PartialView("_AlbumCommentArea");
         }
         /// <summary>
@@ -2940,19 +2957,24 @@ namespace iVolunteer.Controllers
         }
         public PartialViewResult AlbumGetCommentList(string albumID, string groupID)
         {
-               
+            if (Session["UserID"] != null)
+            {
                 string userID = Session["UserID"].ToString();
                 SQL_AcGr_Relation_DAO relation = new SQL_AcGr_Relation_DAO();
-                if (relation.Is_Leader(userID, groupID)) { ViewBag.Role = "Leader"; }
-                else if (relation.Is_Member(userID, groupID))
+                if (relation.Is_Member(userID, groupID))
                 {
                     ViewBag.Role = "Member";
                 }
                 else
                 {
-                    ViewBag.Role = null;
+                    ViewBag.Role = "GuessUser";
                 }
-           
+            }
+            else
+            {
+                ViewBag.Role = "Guess";
+            }
+
             try
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();

@@ -1,4 +1,4 @@
-﻿@if (Session["UserID"] != null)
+﻿@if (ViewBag.Role == "Leader" || ViewBag.Role == "Member" || ViewBag.Role == "GuestUser")
 {
     Html.RenderAction("AlbumShowAddCommentArea", "Project", new { albumID = ViewBag.AlbumID, projectID = ViewBag.ProjectID });
 }

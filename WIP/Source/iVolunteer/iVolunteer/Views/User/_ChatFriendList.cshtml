@@ -8,7 +8,7 @@
                 <ul class="people" id="friendList" style="padding-left: 0px;">
                     @foreach (var friend in Model)
                     {
-                        <li role="@friend.ID" id="@("friendChatLink" + friend.ID)" class="person" onclick="conversation.createConversation(this)">
+                        <li role="@friend.ID" id="@("friendChatLink" + friend.ID)" class="person" onclick="conversation.createConversation(this, '@friend.ID')">
                             @if (friend.isOnline == true)
                             {
                                 <p id="@("status" + friend.ID)" class="onlineStatus"></p>

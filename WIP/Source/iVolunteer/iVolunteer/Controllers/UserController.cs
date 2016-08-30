@@ -676,7 +676,55 @@ namespace iVolunteer.Controllers
                 //get messageID
                 //string messageID = messageDAO.Get_MessageID(userID, friendID);
                 mgMessageDAO.Set_UnreadMess(messageID, no);
+                //mgMessageDAO.Set_UnreadUser(messageID, friendID);
                 return Json(true);
+            }
+            catch
+            {
+                return Json(false);
+                throw;
+            }
+        }
+
+        public JsonResult Get_UnreadNoti(string userID) 
+        {
+            try
+            {
+                //SQL_Message_DAO messageDAO = new SQL_Message_DAO();
+                Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
+                //get messageID
+                //string messageID = messageDAO.Get_MessageID(userID, friendID);
+                bool haveUnread = mgMessageDAO.Get_UnreadMssNoti(userID);
+                return Json(haveUnread);
+            }
+            catch
+            {
+                return Json(false);
+            }
+        }
+
+        public ActionResult ResetUnreadMessage(string friendID)
+        {
+            try
+            {
+                if(Session["UserID"] != null)
+                {
+                    string userID = Session["UserID"].ToString();
+                    SQL_Message_DAO messageDAO = new SQL_Message_DAO();
+                    Mongo_Message_DAO mgMessageDAO = new Mongo_Message_DAO();
+                    //get messageID
+                    string messageID = messageDAO.Get_MessageID(userID, friendID);
+                    string unreadUser = mgMessageDAO.Get_UnreadUser(userID, friendID);
+                    if (userID.Equals(unreadUser))
+                    {
+                        mgMessageDAO.Set_UnreadMess(messageID, 0);
+                    }
+                    return Json(true);
+                }
+                else
+                {
+                    return Json(false);
+                }
             }
             catch
             {

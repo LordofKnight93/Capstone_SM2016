@@ -4076,6 +4076,24 @@ namespace iVolunteer.Controllers
             ViewBag.ProjectID = projectID;
             ViewBag.AlbumID = albumID;
             ViewBag.CommentCount = cmtCount;
+            if (Session["UserID"] != null)
+            {
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
+                else if (relation.Is_Member(userID, projectID))
+                {
+                    ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = "GuestUser";
+                }
+            }
+            else
+            {
+                ViewBag.Role = "Guess";
+            }
             return PartialView("_AlbumCommentArea");
         }
         /// <summary>
@@ -4147,17 +4165,25 @@ namespace iVolunteer.Controllers
         }
         public PartialViewResult AlbumGetCommentList(string albumID,string projectID)
         {
-            string userID = Session["UserID"].ToString();
-            SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
-            if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
-            else if (relation.Is_Member(userID, projectID))
+            if(Session["UserID"] != null)
             {
-                ViewBag.Role = "Member";
+                string userID = Session["UserID"].ToString();
+                SQL_AcPr_Relation_DAO relation = new SQL_AcPr_Relation_DAO();
+                if (relation.Is_Leader(userID, projectID)) { ViewBag.Role = "Leader"; }
+                else if (relation.Is_Member(userID, projectID))
+                {
+                    ViewBag.Role = "Member";
+                }
+                else
+                {
+                    ViewBag.Role = null;
+                }
             }
             else
             {
-                ViewBag.Role = null;
+                ViewBag.Role = "Guess";
             }
+            
             try
             {
                 Mongo_Album_DAO albumDAO = new Mongo_Album_DAO();

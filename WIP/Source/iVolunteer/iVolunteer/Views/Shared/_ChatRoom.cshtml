@@ -149,7 +149,7 @@
 
         // Create conversation when click at Friend name
         var conversation = (function () {
-            var createConversation = function (selector) {
+            var createConversation = function (selector, friendID) {
                 //Delete current chatbox
                 $("#chatArea").empty();
                 var userID = $(selector).attr("role");
@@ -158,6 +158,21 @@
 
                 //Delele messages count
                 $('#mssCount' + userID).empty();
+
+                //reset unread message
+                $.ajax({
+                    type: "POST",
+                    url: "/User/ResetUnreadMessage",
+                    data: {
+                        friendID: friendID
+                    },
+                    success: function (data, textstatus) {
+                        
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+
                 //////////////////STYLE FOR CHATBOX//////////////////
                 var boxHtml = "<div id='" + chatBoxContent + "' role=''>";
                 boxHtml += "<div class='top'>";
