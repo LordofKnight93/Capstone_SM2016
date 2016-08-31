@@ -14,7 +14,7 @@
                             @if (item.PostInfomation.IsPublic == true)
                             {
                                 <td rowspan="2" style="width: 50px;"><img src="@("/Images/Project/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
-                                <td class="td"><a href="@Url.Action("ProjectHome","Project", new { userID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
+                                <td class="td"><a href="@Url.Action("ProjectHome","Project", new { projectID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
                             }
                             else
                             {
