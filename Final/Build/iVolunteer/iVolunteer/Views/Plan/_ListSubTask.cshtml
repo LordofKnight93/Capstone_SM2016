@@ -1,0 +1,295 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.SubTask>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        DateTime date = DateTime.Today;
+        TimeSpan span = item.Deadline - date;
+        int dateGap = span.Days;
+
+        <li>
+            <div>
+                @if (ViewBag.IsLeader == true)
+                {
+                    <div class="delete-sub-task">
+                        @Ajax.ActionLink("delete", "DeleteSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID, subTaskID = item.SubTaskID },
+                                                                        new AjaxOptions { UpdateTargetId = "subtaskList", InsertionMode = InsertionMode.Replace, OnSuccess = "deleteSuccess" },
+                                                                        new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer; " })
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (ViewBag.IsLeader == true && item.IsDone != 3)
+                        {
+                            if (item.Priolity == 1)
+                            {
+                                <div class="priolity low" id="@("priolity" + item.SubTaskID)" onclick="openEditSubTaskPriolity('@item.SubTaskID')"></div>
+                            }
+                            else if (item.Priolity == 2)
+                            {
+                                <div class="priolity medium" id="@("priolity" + item.SubTaskID)" onclick="openEditSubTaskPriolity('@item.SubTaskID')"></div>
+                            }
+                            else
+                            {
+                                <div class="priolity high" id="@("priolity" + item.SubTaskID)" onclick="openEditSubTaskPriolity('@item.SubTaskID')"></div>
+                            }
+                            <select class="slc-task-status" style="display: none;" id="@("slcpriolity" + item.SubTaskID)" onchange="editSubTaskPriolity('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                <option value="0">--- Ưu tiên ---</option>
+                                <option value="1">THẤP</option>
+                                <option value="2">VỪA</option>
+                                <option value="3">CAO</option>
+                            </select>
+                            <i id="@("priolityButton" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskPriolity('@item.SubTaskID')">cancel</i>
+                        }
+                        else
+                        {
+                            if (item.Priolity == 1)
+                            {
+                                <div class="priolity low" id="@("priolity" + item.SubTaskID)"></div>
+                            }
+                            else if (item.Priolity == 2)
+                            {
+                                <div class="priolity medium" id="@("priolity" + item.SubTaskID)"></div>
+                            }
+                            else
+                            {
+                                <div class="priolity high" id="@("priolity" + item.SubTaskID)"></div>
+                            }
+                        }
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                @if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="checkbox" style="margin-bottom: 0">
+                                        @if (item.IsDone == 3)
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" checked disabled>
+                                        }
+                                        else
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" onclick="cbxChangeSubTaskStatus('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                        }
+                                        <label for="@("cbxstatus-" + item.SubTaskID)"></label>
+                                    </div>
+                                }
+                                else if (Session["UserID"].ToString().Equals(item.AssignPeople.ID))
+                                {
+                                    <div class="checkbox" style="margin-bottom: 0">
+                                        @if (item.IsDone == 3)
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" checked disabled>
+                                        }
+                                        else
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" onclick="cbxChangeSubTaskStatus('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                        }
+                                        <label for="@("cbxstatus-" + item.SubTaskID)"></label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="checkbox" style="margin-bottom: 0">
+                                        @if (item.IsDone == 3)
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" checked disabled>
+                                        }
+                                        else
+                                        {
+                                            <input id="@("cbxstatus-" + item.SubTaskID)" type="checkbox" disabled>
+                                        }
+                                        <label for="@("cbxstatus-" + item.SubTaskID)"></label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-sm-11" style="padding-left: 0; padding-top: 10px;">
+                                @if (item.IsDone == 3)
+                                {
+                                    <label id="@("lbContent-" + item.SubTaskID)" style="font-weight: normal; text-decoration: line-through; font-style: italic;">@item.Content</label>
+                                }
+                                else if (item.IsDone != 3)
+                                {
+                                    if (ViewBag.IsLeader == true)
+                                    {
+                                        <label id="@("lbContent-" + item.SubTaskID)" style="font-weight: normal;" onclick="openEditSubTaskContent('@item.SubTaskID')">@item.Content</label>
+                                        <input class="txt-edit-subtask-content" id="@("txtContent-" + item.SubTaskID)" value="@item.Content" style="display: none;" onkeypress="enterSaveSubTaskContent(event,'@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID','@item.SubTaskID')" />
+                                        <i id="@("btn-save-sub-task-content" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="btnSaveSubTaskContent('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">save</i>
+                                        <i id="@("btnContentClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTakContent('@item.SubTaskID')">cancel</i>
+                                    }
+                                    else
+                                    {
+                                        <label id="@("lbContent-" + item.SubTaskID)" style="font-weight: normal;">@item.Content</label>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <ul class="list-task-infor">
+                            @if ((ViewBag.IsLeader == true && item.IsDone != 3) || (Session["UserID"].ToString().Equals(item.AssignPeople.ID) && item.IsDone != 3))
+                            {
+                                <li id="@("status" + item.SubTaskID)" onclick="openEditSubTaskStatus('@item.SubTaskID')">
+                                    @if (item.IsDone == 1)
+                                    {
+                                        <span class="badge is-unread-notification">ĐANG CHỜ</span>
+                                    }
+                                    else if (item.IsDone == 2)
+                                    {
+                                        <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
+                                    }
+                                    else if (item.IsDone == 3)
+                                    {
+                                        <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge is-due-past">THỰC HIỆN LẠI</span>
+                                    }
+                                </li>
+                                <li id="@("selectstatus" + item.SubTaskID)" style="display: none">
+                                    @if (ViewBag.IsLeader == true)
+                                    {
+                                        <select class="slc-task-status" id="@("selectbox" + item.SubTaskID)" onchange="SaveSubTaskStatus('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                            <option value="0">-- Trạng thái --</option>
+                                            <option value="2">ĐANG THỰC HIỆN</option>
+                                            <option value="3">ĐÃ HOÀN THÀNH</option>
+                                            <option value="4">THỰC HIỆN LẠI</option>
+                                        </select>
+                                        <i id="@("btn-cancel-edit-subtask-status" + item.SubTaskID)" class="material-icons" onclick="cancelEditSubTaskStatus('@item.SubTaskID')">cancel</i>
+                                    }
+                                    else if (Session["UserID"].ToString().Equals(item.AssignPeople.ID))
+                                    {
+                                        <select class="slc-task-status" id="@("selectbox" + item.SubTaskID)" onchange="SaveSubTaskStatus('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                            <option value="0">-- Trạng thái --</option>
+                                            <option value="2">ĐANG THỰC HIỆN</option>
+                                            <option value="3">ĐÃ HOÀN THÀNH</option>
+                                        </select>
+                                        <i id="@("btn-cancel-edit-subtask-status" + item.SubTaskID)" class="material-icons" onclick="cancelEditSubTaskStatus('@item.SubTaskID')">cancel</i>
+                                    }
+                                </li>
+                            }
+                            else if (ViewBag.IsLeader == true && item.IsDone == 3)
+                            {
+                                <li id="@("status" + item.SubTaskID)" onclick="openEditSubTaskStatus('@item.SubTaskID')">
+                                    <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                </li>
+                                <li id="@("selectstatus" + item.SubTaskID)" style="display: none">
+                                    <select class="slc-task-status" id="@("selectbox" + item.SubTaskID)" onchange="SaveSubTaskStatus('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">
+                                        <option value="0">-- Trạng thái --</option>
+                                        <option value="4">THỰC HIỆN LẠI</option>
+                                    </select>
+                                    <i id="@("btn-cancel-edit-subtask-status" + item.SubTaskID)" class="material-icons" onclick="cancelEditSubTaskStatus('@item.SubTaskID')">cancel</i>
+                                </li>
+                            }
+                            else
+                            {
+                                <li id="@("status" + item.SubTaskID)">
+                                    @if (item.IsDone == 1)
+                                    {
+                                        <span class="badge is-unread-notification">ĐANG CHỜ</span>
+                                    }
+                                    else if (item.IsDone == 2)
+                                    {
+                                        <span class="badge is-due-past">ĐANG THỰC HIỆN</span>
+                                    }
+                                    else if (item.IsDone == 3)
+                                    {
+                                        <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge is-due-past">THỰC HIỆN LẠI</span>
+                                    }
+                                </li>
+                            }
+                            <li>
+                                @if (ViewBag.IsLeader == true && item.IsDone != 3)
+                                {
+                                    if (dateGap > 0)
+                                    {
+                                        <i class="material-icons md-18 md-mygreen2">access_time</i>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@Html.DisplayFor(modelItem => item.Deadline)</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past" onclick="openEditSubTaskDeadline('@item.SubTaskID')">@Html.DisplayFor(modelItem => item.Deadline)</span>
+                                    }
+                                    <input class="txt-edit-subtask-deadline" id="@("txtDeadline-" + item.SubTaskID)" value="@item.Deadline" style="display: none;" />
+                                    <i id="@("btn-save-subtask-deadline" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="saveSubTaskDeadline('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">save</i>
+                                    <i id="@("btnDeadlineClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskDeadline('@item.SubTaskID','@item.Deadline')">cancel</i>
+                                }
+                                else
+                                {
+                                    if (dateGap > 0)
+                                    {
+                                        <i class="material-icons md-18 md-mygreen2">access_time</i>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-complete">@Html.DisplayFor(modelItem => item.Deadline)</span>
+                                    }
+                                    else
+                                    {
+                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                        <span id="@("stDeadline-" + item.SubTaskID)" class="badge is-due-past">@Html.DisplayFor(modelItem => item.Deadline)</span>
+                                    }
+                                }
+                            </li>
+                            <li>
+                                <i class="material-icons md-18 md-mygray">perm_identity</i>
+                                @if (ViewBag.IsLeader == true && item.IsDone != 3)
+                                {
+                                    if (item.AssignPeople.DisplayName.Equals(""))
+                                    {
+                                        <span id="@("stAssign-" + item.SubTaskID)" class="assign-people" onclick="openEditSubTaskAssign('@item.SubTaskID')">Chưa được giao</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="@("stAssign-" + item.SubTaskID)" class="assign-people" onclick="openEditSubTaskAssign('@item.SubTaskID')">@item.AssignPeople.DisplayName</span>
+                                    }
+                                    <input class="txt-edit-subtask-assign" id="@("txtAssign-" + item.SubTaskID)" value="@item.AssignPeople.DisplayName" style="display: none;" onkeypress="pickMemberToAssign('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')" />
+                                    <input id="@("txtAssignID-" + item.SubTaskID)" value="@item.AssignPeople.ID" type="hidden" />
+                                    <i id="@("btn-save-subtask-assign" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="saveSubTaskAssign('@ViewBag.PlanPhaseID', '@ViewBag.MainTaskID', '@item.SubTaskID')">save</i>
+                                    <i id="@("btnAssignClose-" + item.SubTaskID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditSubTaskAssign('@item.SubTaskID', '@item.AssignPeople.ID')">cancel</i>
+                                }
+                                else 
+                                {
+                                    <span id="@("stAssign-" + item.SubTaskID)" class="assign-people">@item.AssignPeople.DisplayName</span>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </li>
+        <script type="text/javascript">
+            $("#txtDeadline-" + '@item.SubTaskID').datetimepicker({
+                sideBySide: true,
+                widgetPositioning: {
+                    vertical: 'bottom'
+                }
+            });
+        </script>
+    }
+}
+else
+{
+
+}
+@if (ViewBag.IsLeader == true)
+            {
+                string idupdate = "addSubTaskForm" + ViewBag.MainTaskID;
+    <li>
+        <div class="row">
+            <div class="col-sm-12">
+                <!--<label style="font-weight: bold; color: #049f88;">THÊM CÔNG VIỆC ...</label>-->
+                @Ajax.ActionLink("THÊM MỤC ...", "AddSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID }, new AjaxOptions { UpdateTargetId = "addSubTaskForm", InsertionMode = InsertionMode.Replace }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+            </div>
+            <div class="col-sm-12" id="addSubTaskForm">
+
+            </div>
+        </div>
+    </li>
+}

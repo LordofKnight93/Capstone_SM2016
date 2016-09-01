@@ -1,0 +1,81 @@
+﻿@using iVolunteer.Common;
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+
+<div id="joinedGroup" class="tab-pane fade in ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="sub-container" style="padding: 5px 15px 15px;">
+
+                <!-- Header -->
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h4 style="color: #049f88">NHÓM ỦNG HỘ</h4>
+                        <p style="margin: -9px 0 0 0; font-size: 16px;">@Model.Count() nhóm đã ủng hộ</p>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="divider-holizon"></div>
+                    </div>
+                </div>
+
+                <!-- List Groups -->
+                @foreach (var item in Model)
+            {
+                    <div id="@item.GroupID">
+                        <div class="row" style="padding: 10px;">
+                            <div class="col-sm-12">
+                                <div class="card-group">
+                                    <div class="group-ava">
+                                        <img src="@item.Get_AvatarLink()" />
+                                    </div>
+                                    <div class="group-infor">
+                                        <div class="group-name">
+                                            <a href="@Url.Action("GroupHome", "Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
+                                        </div>
+                                        <div class="group-detail-infor">
+                                            <div class="group-des">
+                                                <label class="overflow-paragraph" style="font-weight: normal" title="@Html.DisplayFor(modelItem => item.GroupDescription)">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
+                                            </div>
+                                            <ul class="group-contact">
+                                                <li>
+                                                    <i class="material-icons md-18">email</i>
+                                                    <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                                </li>
+                                                <li>
+                                                    <i class="material-icons md-18">phone</i>
+                                                    <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="group-count">
+                                        <h2 class="number-of-group-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.MemberCount)</h2>
+                                        <label class="group-member">Thành viên</label>
+                                    </div>
+                                    <div class="action-to-group">
+
+                                        <ul class="project-action-to-group-list">
+                                            <li>
+                                                @Ajax.RawActionLink("<i class='fa fa-group fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "SponsoredGroupMembers", "Project", new { groupID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#popup-content','#popup')" }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Thành viên đã ủng hộ" })
+                                            </li>
+                                            @if (ViewBag.IsLeader == true)
+                                            {
+                                                <li>
+                                                    @Ajax.RawActionLink("<i class='fa fa-trash-o fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "DismissSponsoredGroup", "Project", new { groupID = item.GroupID, projectID = ViewBag.ProjectID }, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = item.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn có chắc chắn muốn xóa sự ủng hộ nhóm này khỏi dự án ? (Hành động này không bao gồm việc xóa sự ủng hộ của các thành viên của nhóm đã ủng hộ khỏi dự án)" }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Xóa" })
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    @*<div class="action-to-group-of-user">
+                                            @{ Html.RenderAction("ActionToGroup", "Account", new { groupID = item.GroupID });}
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

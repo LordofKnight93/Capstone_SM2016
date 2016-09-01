@@ -1,0 +1,86 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.BudgetRecordInformation>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        string idupdate = "add-item-test-" + Html.DisplayFor(modelItem => item.BudgetRecordID);
+        string budgetItemUpdate = "budgetItemDetails" + Html.DisplayFor(modelItem => item.BudgetRecordID);
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel-group" style="margin-bottom: 20px">
+                    <!-- Đầu mục -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title" style="padding: 0;">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            @if (ViewBag.IsLeader == true)
+                                            {
+                                                <h4 id="@("lbBudgetRecord-" + item.BudgetRecordID)" style="font-weight: bold; line-height: 30px" onclick="openEditBudgetRecordName('@item.BudgetRecordID')">@Html.DisplayFor(modelItem => item.Name)</h4>
+                                                <input class="txt-edit-budget-record-name" id="@("txtBudgetRecordName-" + item.BudgetRecordID)" value="@item.Name" onkeypress="enterSaveBudgetRecordName(event,'@item.BudgetRecordID')" style="display: none;" />
+                                                <i id="@("btnSaveBudgetRecordName-" + item.BudgetRecordID)" class="material-icons" style="display: none; cursor: pointer" onclick="btnSaveEditBudgetRecordName('@item.BudgetRecordID')">save</i>
+                                                <i id="@("btnCancelBudgetRecordName-" + item.BudgetRecordID)" class="material-icons" style="display: none; cursor: pointer" onclick="cancelEditBudgetRecordName('@item.BudgetRecordID')">cancel</i>
+                                                <div id="@("error-budget-record-name-" + @item.BudgetRecordID)"></div>
+                                            }
+                                            else
+                                            {
+                                                <h4 style="font-weight: bold; line-height: 30px">@Html.DisplayFor(modelItem => item.Name)</h4>
+                                            }
+                                        </div>
+
+                                        <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                            @if (ViewBag.IsLeader == true)
+                                            {
+                                                @Ajax.ActionLink("delete", "DeleteBudgetRecord", "Budget", new { budgetRecordID = Html.DisplayFor(modelItem => item.BudgetRecordID) }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer; padding-left: 8px" })
+                                            }
+                                            @{
+                                                string idcollapse = "collapse" + item.BudgetRecordID;
+                                                string hrefcollapse = "#collapse" + item.BudgetRecordID;
+                                            }
+                                            <a data-toggle="collapse" href="@hrefcollapse"><i class="material-icons">keyboard_arrow_up</i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="@idcollapse" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="@budgetItemUpdate">
+                                    @{ Html.RenderAction("DetailBudgetItem", "Budget", new { budgetRecordID = Html.DisplayFor(modelItem => item.BudgetRecordID) });}
+                                </div>
+                                @if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <!--<a id="add-budget-item-button" style="color: #049f88; font-weight: bold; cursor: pointer"> THÊM  NỘI DUNG ...</a>-->
+                                            @Ajax.ActionLink("THÊM  NỘI DUNG ...", "AddBudgetItem", "Budget", new { budgetRecordID = Html.DisplayFor(modelItem => item.BudgetRecordID) }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#"+ idupdate + "')" }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                                            <div class="row">
+                                                <div class="col-sm-12" id="@idupdate">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+                                }
+                            }
+                            else
+                            {
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom: 20px">
+                                        <h4>Mục này chưa có nội dung nào!</h4>
+                                    </div>
+                                </div>
+                            }
+

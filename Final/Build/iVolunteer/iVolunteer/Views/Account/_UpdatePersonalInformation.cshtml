@@ -1,0 +1,164 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PersonalInformation
+
+@Html.AntiForgeryToken()
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    @*<div id="createProjectForm" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg modal-md">
+            <div class="modal-content">*@
+    <div class="modal-body">
+        <div class="row">
+
+            <!-- Login -->
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="row" style="margin: -10px 0 -5px 0;">
+                        <div class="col-sm-12">
+                            <h4>Thay đổi thông tin cá nhân</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider-holizon"></div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <!--form role="form" class="login-form"> -->
+                        @using (Ajax.BeginForm("UpdatePersonalInformation", "Account", null, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                        {
+                            @Html.HiddenFor(model => model.UserID)
+                                    <!-- Project Name -->
+                            <div class="row">
+                                <div class="col-xs-4 register-label">
+                                    @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                    <label for="realName">Họ và Tên</label>
+                                </div>
+                                <div class="col-xs-5 text-input">
+                                    @Html.DisplayFor(model => model.RealName, new { htmlAttributes = new { @id = "realName", @class = "form-control" } })
+                                    @Html.HiddenFor(model => model.RealName)
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-4 register-label">
+                                    <label for="gender">Giới tính</label>
+                                </div>
+                                                @(Model.Gender ? "Nam" : "Nữ" )
+                                @Html.HiddenFor(model => model.Gender)
+                            </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="birthDay">Ngày sinh</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.DisplayFor(model => model.Birthday, new { htmlAttributes = new { @id = "birthDay", @class = "form-control", @type = "date" } })
+                                            @Html.HiddenFor(model => model.Birthday)
+                                        </div>
+                                    </div>
+
+                                    @*<div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            <label for="identifyID">Chứng minh nhân dân</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.DisplayFor(model => model.IdentifyID, new { htmlAttributes = new { @id = "identifyID", @class = "form-control" } })
+                                            @Html.HiddenFor(model => model.IdentifyID)
+                                        </div>
+                                    </div>*@
+
+                                    <!-- Address -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="Address">Địa chỉ</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @id = "address", @class = "form-control", @placeholder = "Địa điểm" } })
+                                            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="email">Email liên lạc</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Email" } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="phone">Điện thoại</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Phone" } })
+                                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="interest">Lĩnh vực quan tâm</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.Interest, new { @id = "interest", @class = "form-control", @rows = "4", @placeholder = "Lĩnh vực, chủ đề bạn quan tâm ...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.Interest, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="skill">Kỹ năng</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.Skills, new { @id = "skill", @class = "form-control", @rows = "4", @placeholder = "Bạn có những kỹ năng gì ...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.Skills, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="experience">Kinh nghiệm</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.Experience, new { @id = "experience", @class = "form-control", @rows = "8", @placeholder = "Bạn có những nghiệm gì", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.Experience, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+
+                            // Error Message
+                            <div class="row">
+                                <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                    <label style="color:red;">@ViewBag.Message</label>
+                                </div>
+                            </div>
+                                    <!-- Button -->
+                            <div class="row" style="margin-top: 60px">
+                                <div class="col-xs-2 col-xs-offset-7 text-input">
+                                    @Ajax.ActionLink("Hủy", "PersonalInformation", "User", new { userID = Model.UserID }, new AjaxOptions { UpdateTargetId = "user-tab", InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                                </div>
+                                <div class="col-xs-2 text-input">
+                                    <button type="submit" class="btn btn-register">CẬP NHẬT</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</div>
+            </div>
+        </div>*@
+</div>

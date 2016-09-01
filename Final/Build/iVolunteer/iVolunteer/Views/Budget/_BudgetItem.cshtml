@@ -1,0 +1,139 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.BudgetItem>
+
+@{
+    int count = 0;
+    double total = 0;
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@if (Model.Count != 0)
+{
+    string editBudgetItemId = "edidBudgetItem" + ViewBag.BudgetRecordID;
+    <!-- Chi tiêt -->
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="member-manager-table" id="headman" style="margin-bottom: 20px">
+                <colgroup>
+                    @if (ViewBag.IsLeader == true)
+                    {
+                        <col width="10%%" />
+                        <col width="27%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="12%" />
+                        <col width="15%" />
+                    }
+                    else
+                    {
+                        <col width="10%%" />
+                        <col width="30%" />
+                        <col width="15%" />
+                        <col width="15%" />
+                        <col width="15%" />
+                        <col width="15%" />
+                    }
+                </colgroup>
+                <tbody>
+                    <tr style="text-align: center">
+                        <th style="text-align: center">STT</th>
+                        <th>NỘI DUNG</th>
+                        <th style="text-align: center">ĐƠN GIÁ</th>
+                        <th style="text-align: center">SỐ LƯỢNG</th>
+                        <th style="text-align: center">ĐƠN VỊ</th>
+                        <th style="text-align: center">THÀNH TIỀN</th>
+                        @if (ViewBag.IsLeader == true)
+                        {
+                            <th style="text-align: center">HÀNH ĐỘNG</th>
+                        }
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        count++;
+                        total += item.Cost;
+                        string budgetItemContentId = "budgetItemContent" + ViewBag.BudgetRecordID + count;
+                        string budgetItemUnitPriceId = "budgetItemUnitPrice" + ViewBag.BudgetRecordID + count;
+                        string budgetItemId = "itemId" + ViewBag.BudgetRecordID + count;
+                        <tr id="@budgetItemId">
+                            <td style="text-align: center">@count</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Content)
+                                @*@if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="showbutton" style="text-align: center">
+                                        @*<button class="btn btn-image" id="txt-edit-budget-item-content"><i class="fa fa-edit"></i></button>
+                                        @Ajax.ActionLink("edit", "EditEachFieldBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString(), field = "content" }, new AjaxOptions { UpdateTargetId = "edit-budget-item-info", InsertionMode = InsertionMode.Replace, OnSuccess = "openPopover" }, new { @id = "txt-edit-budget-item-content", @class = "material-icons md-20 trigger", data_toggle = "popover", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer", })
+                                    </div>
+                                }*@
+                            </td>
+                            <td id="@budgetItemUnitPriceId" style="text-align: center">
+                                @String.Format(info, "{0:C0}", item.UnitPrice)
+                                @*@if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="showbutton" style="text-align: center">
+                                        @Ajax.ActionLink("edit", "EditEachFieldBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString(), field = "unitprice" }, new AjaxOptions { UpdateTargetId = "editEachFieldBudgetItem", InsertionMode = InsertionMode.Replace, OnSuccess = "openPopover" }, new { @class = "material-icons md-20 trigger", data_toggle = "popover", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    </div>
+                                }*@
+                            </td>
+                            <td style="text-align: center">
+                                @Html.DisplayFor(modelItem => item.Quatity)
+                                @*@if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="showbutton" style="text-align: center">
+                                        @Ajax.ActionLink("edit", "EditEachFieldBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString(), field = "quatity" }, new AjaxOptions { UpdateTargetId = "editEachFieldBudgetItem", InsertionMode = InsertionMode.Replace, OnSuccess = "openPopover" }, new { @class = "material-icons md-20 trigger", data_toggle = "popover", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    </div>
+                                }*@
+                            </td>
+                            <td style="text-align: center">
+                                @Html.DisplayFor(modelItem => item.Unit)
+                                @*@if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="showbutton" style="text-align: center">
+                                        @Ajax.ActionLink("edit", "EditEachFieldBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString(), field = "unit", isLeader = ViewBag.IsLeader }, new AjaxOptions { UpdateTargetId = "editEachFieldBudgetItem", InsertionMode = InsertionMode.Replace, OnSuccess = "openPopover" }, new { @class = "material-icons md-20 trigger", data_toggle = "popover", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    </div>
+                                }*@
+                            </td>
+                            <td style="text-align: center">@String.Format(info, "{0:C0}", item.Cost)</td>
+                            @if (ViewBag.IsLeader == true)
+                            {
+                                <td style="text-align: center">
+                                    <!--<a><i class="material-icons md-20">edit</i></a>-->
+                                    @Ajax.ActionLink("edit", "EditBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "dialog-div", InsertionMode = InsertionMode.Replace, OnBegin = "openDialog('Sửa thông tin', 380, 740)" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                    @*<a class="btn btn-image" data-toggle="tooltip" title="Xóa" onclick="location.href ='@Url.Action("DeleteBudgetItem","Budget", new { BudgetRecordID = ViewBag.BudgetRecordID, itemContent = item.Content.ToString()})'"><i class="material-icons md-20">delete</i></a>*@
+                                    @Ajax.ActionLink("delete", "DeleteBudgetItem", "Budget", new { budgetRecordID = ViewBag.BudgetRecordID, budgetItemID = item.BudgetItemID.ToString() }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace, Confirm = "Bạn muốn xóa " + item.Content + " ?" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                </td>
+                            }
+                        </tr>
+                    }
+                    <tr>
+                        @if (ViewBag.IsLeader == true)
+                        {
+                            <td colspan="5" style="padding-left:10px"><h4 style="font-weight: bold">Tổng tiền dự kiến chi cho đầu mục:</h4></td>
+                            <td colspan="2" style="text-align: right; padding-right: 5px;"><h4 style="color: #049f88; font-weight: bold">@String.Format(info, "{0:C0}", total) <span> VND </span></h4></td>
+                        }
+                        else
+                        {
+                            <td colspan="4" style="padding-left:10px"><h4 style="font-weight: bold">Tổng tiền dự kiến chi cho đầu mục:</h4></td>
+                            <td colspan="2" style="text-align: right; padding-right: 5px;"><h4 style="color: #049f88; font-weight: bold">@String.Format(info, "{0:C0}", total) <span> VND </span></h4></td>
+
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12" id="@editBudgetItemId">
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 20px">
+            <h4>Đầu mục này chưa có nội dung nào!</h4>
+        </div>
+    </div>
+}

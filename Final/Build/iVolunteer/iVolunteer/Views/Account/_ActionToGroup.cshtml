@@ -1,0 +1,80 @@
+﻿@using iVolunteer.Common
+<ul class="list-action-to-target">
+    @if (ViewBag.IsUser == true)
+    {
+        if (ViewBag.IsAdmin == true)
+        {
+            if (ViewBag.IsActivate == true)
+            {
+                <li>
+                   @Ajax.ActionLink("Khóa", "DeactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                </li>
+            }
+            else
+            {
+                <li>
+                    @Ajax.ActionLink("Kích hoạt", "ReactivateGroup", "Admin", new { groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                </li>
+            }
+        }
+        else
+        {
+            if (ViewBag.IsJoined != true)
+            {
+                if (ViewBag.IsRequested == true)
+                {
+                    //Hủy yêu cầu
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy yêu cầu tham gia</span>", "CancelJoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST" , UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+                else
+                {
+                    //Tham gia
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa-cus fa-sign-in fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "JoinGroupRequest", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+
+                if (ViewBag.IsFollowing == true)
+                {
+                    //Hủy theo dõi
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-btn-action-active fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text action-text-active'>  Hủy theo dõi</span>", "UnfollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+                else
+                {
+                    //Theo dõi
+                    <li>
+                        @Ajax.RawActionLink("<i class='fa-cus fa-rss fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Theo dõi</span>", "FollowGroup", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                    </li>
+                }
+            }
+            else
+            {
+                //Rời nhóm
+                <li>
+                    @Ajax.RawActionLink("<i class='fa-cus fa-sign-out fa-cus-gray fa-cus-16' aria-hidden='true'></i><span class='action-to-target-text'>  Rời nhóm</span>", "GroupResign", "Account", new { groupID = ViewBag.GroupID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chăc chắn muốn rời nhóm này ? " }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
+
+            if (ViewBag.IsReported == true)
+            {
+                //Hủy báo cáo
+                <li>
+                    @*<button class="btn btn-default action-to-target-link" id="cancelReportBtn" onclick="cancelReport(this)" href="@Url.Action("CancelReport","Report", new { targetID = ViewBag.GroupID, targetType = 1})"><i class="material-icons md-mygreen md-18">flag</i><span class="action-to-target-text">Hủy báo cáo</span></button>*@                    
+                    @Ajax.RawActionLink("<i class='material-icons md-mygreen md-18'>flag</i><span class='action-to-target-text' style='color: #049f88;'>  Hủy báo cáo</span>", "CancelReport", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
+            else
+            {
+                <li>
+                    @*<button class="btn btn-default action-to-target-link" onclick="reportObject(this)" id="displayReport" href="@Url.Action("DisplayReport","Report", new { targetID = ViewBag.GroupID, targetType = 1})"><i class="material-icons md-18 md-mygray">flag</i><span class="action-to-target-text">  Báo cáo vi phạm</span></button>*@
+                    @*@Ajax.ActionLink("Báo cáo vi phạm", "ReportTarget", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, new AjaxOptions { UpdateTargetId = ViewBag.GroupID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })*@
+                    @Ajax.RawActionLink("<i class='material-icons md-18 md-mygray'>flag</i><span class='action-to-target-text'>  Báo cáo vi phạm</span>", "DisplayReport", "Report", new { targetID = ViewBag.GroupID, targetType = 1 }, new AjaxOptions { UpdateTargetId = "dialog-div", InsertionMode = InsertionMode.Replace, OnBegin = "openDialog('Báo cáo vi phạm', 350, 400)" }, new { @type = "button", @class = "btn btn-default action-to-target-link" })
+                </li>
+            }
+        }
+    }
+</ul>

@@ -1,0 +1,140 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.MainTask
+@{
+    string idMainTaskName = "idMainTaskName" + Model.MainTaskID;
+    DateTime date = DateTime.Today;
+    TimeSpan span = Model.Duedate - date;
+    int dateGap = span.Days;
+
+    string userID = Session["UserID"].ToString();
+    string displayName = Session["DisplayName"].ToString();
+    string role = Session["Role"].ToString();
+    string avtlink = "/Images/User/Avatar/" + userID + ".jpg";
+}
+<!-- Header -->
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-11">
+            @if (ViewBag.IsLeader == true)
+            {
+                <h4 id="main-task-title" style="font-weight: bold" onclick="openEditMainTaskTitle()">@Model.Name</h4>
+                <input class="txt-edit-maintask-name" type="text" value="@Model.Name" id="txtMainTaskTitle" style="display: none; width: 85%" onkeypress="enterSaveMainTaskTitle(event,'@ViewBag.PlanPhaseID', '@Model.MainTaskID')" />
+                <i id="save-edit-name" class="material-icons" style="display: none; cursor: pointer" onclick="btnSaveMainTaskTitle('@ViewBag.PlanPhaseID', '@Model.MainTaskID')">save</i>
+                <i id="cancle-edit-name" class="material-icons" style="display: none; cursor: pointer" onclick="btnCancelEditMainTaskTitle()">cancel</i>
+                <div id="error-maintask-name"></div>
+            }
+            else
+            {
+                <h4 id="main-task-title" style="font-weight: bold">@Model.Name</h4>
+            }
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+    </div>
+    <div class="divider-holizon"></div>
+</div>
+
+<div class="col-md-12" style="padding: 20px">
+    <div class="row">
+        <div class="col-sm-12">
+            <label>Ngày hết hạn</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            @if (ViewBag.IsLeader == true)
+            {
+                if (dateGap >= 0)
+                {
+                    <span id="main-task-duedate" class="badge is-complete" onclick="openEditMainTaskDuedate()">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+                else
+                {
+                    <span id="main-task-duedate" class="badge is-due-past" onclick="openEditMainTaskDuedate()">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+                <input class="txt-edit-maintask-duedate" id="txt-main-task-duedate" value="@Model.Duedate" style="display: none; width: 50%" />
+                <i id="save-edit-duedate" class="material-icons" style="display: none; cursor: pointer" onclick="saveMainTaskDuedate('@ViewBag.PlanPhaseID','@Model.MainTaskID')">save</i>
+                <i id="cancle-edit-duedate" class="material-icons" style="display: none; cursor: pointer" onclick="closeEditMainTaskDuedate('@Model.Duedate')">cancel</i>
+                <div id="error-maintask-duedate"></div>
+            }
+            else
+            {
+                if (dateGap >= 0)
+                {
+                    <span id="main-task-duedate" class="badge is-complete">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+                else
+                {
+                    <span id="main-task-duedate" class="badge is-due-past">@Html.DisplayFor(Model => Model.Duedate)</span>
+                }
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" style="margin-top: 10px;">
+            <label>Mô tả</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (ViewBag.IsLeader == true)
+            {
+                <p id="main-task-description" style="font-weight: normal; white-space: pre-line;" onclick="openEditMainTaskDes()">@Model.Description</p>
+                <textarea class="txt-edit-maintask-des" id="textarea-maintask-description" style="display: none; width: 100%">@Model.Description</textarea>
+                <a id="btn-save-maintask-description" style="display: none; cursor: pointer" onclick="saveMainTaskDescription('@ViewBag.PlanPhaseID', '@Model.MainTaskID')">Lưu lại</a>
+                <a id="cancle-edit-description" style="display: none; cursor: pointer" onclick="CancelEditMainTaskDescription()">Hủy bỏ</a>
+            }
+            else
+            {
+                <p id="main-task-description" style="font-weight: normal; white-space: pre-line;">@Model.Description</p>
+            }
+        </div>
+    </div>
+</div>
+
+
+<!-- Detail -->
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="fa fa-check-square-o fa-cus-20"></span> Danh sách công việc</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <ol class="list-task" id="subtaskList">
+        @{ Html.RenderAction("ListSubTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+    </ol>
+</div>
+
+<div class="col-sm-12">
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="font-weight: bold"><span class="fa fa-comment-o fa-cus-20"></span> Bình luận</h4>
+            <div class="divider-holizon"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="margin-top: 10px;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="maintask-comment">
+                        <img src="@avtlink" width="40" height="40" />
+                        <textarea class="write-cmt-box" id="txt-comment" type="text" placeholder="Viết bình luận ..." onkeypress="sendComment(event,'@ViewBag.PlanPhaseID', '@Model.MainTaskID')"></textarea>
+                        <button id="btn-sumit-comment" class="btn btn-image" onclick="sendCommentBtn('@ViewBag.PlanPhaseID', '@Model.MainTaskID')"><i class="fa fa-paper-plane fa-cus-18 fa-cus-green"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <ol class="comment-list" id="commentList">
+                @{ Html.RenderAction("ListComment", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = ViewBag.MainTaskID });}
+            </ol>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#txt-main-task-duedate").datetimepicker();
+    });
+</script>

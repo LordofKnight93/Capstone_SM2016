@@ -1,0 +1,802 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    @if (Session["Role"] != null && Session["Role"].ToString() == "User")
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    <div class="@viewclass" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Project", new { projectID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+
+        @if (ViewBag.IsJoined == false && ViewBag.IsSponsored == true)
+        {
+            <h5>Bạn đã quyên góp, tài trợ cho sự kiện này.</h5>
+        }
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                {
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
+                        @Ajax.ActionLink("Hoạt động", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
+                        @Ajax.ActionLink("Thảo luận", "ProjectDiscussion", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="plantab" href="#plan" data-toggle="tab">KẾ HOẠCH</a>-->
+                        @Ajax.ActionLink("Kế hoạch", "ProjectPlan", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                    </li>
+                }
+                @if (Session["UserID"] == null || (ViewBag.IsJoined == false && ViewBag.IsSponsored == false))
+                {
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a>-->
+                        @Ajax.ActionLink("Hoạt động", "ProjectPublic", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                }
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="budgettab" href="#member" data-toggle="tab">THÀNH VIÊN</a>-->
+                    @Ajax.ActionLink("Tổ chức", "ProjectStructure", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
+                    @Ajax.ActionLink("Thư viện", "ProjectGallery", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Thông tin", "ProjectInformation", "Project", new { projectID = Model.ID }, new AjaxOptions { UpdateTargetId = "project-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#project-tab')" })
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane active" id="project-tab">
+                    @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsSponsored == false)
+                    {
+                        Html.RenderAction("ProjectPublic", "Project");
+                    }
+                    @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true || ViewBag.IsSponsored == true)
+                    {
+                        Html.RenderAction("ProjectDiscussion", "Project");
+                    }
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function AddAttr() {
+            $('#openMainTaskModal').attr('data-toggle', 'modal');
+        }
+        function ShowModal() {
+
+            $('#taskdetail').modal('show');
+        }
+        $('#taskdetail').on('hidden.bs.modal', function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("DetailPlanRecord", "Plan")",
+                data: {
+                    projectID: "@Model.ID"
+                },
+                success: function (response) {
+                    $("#tabplanbudget").html(response);
+                }
+            });
+        });
+        function mainTaskDetail(MainTaskID) {
+            $("#maintaskdetail" + MainTaskID).trigger('click');
+            console.log("pass");
+        };
+
+        function removeReWorkPhase(planPhaseID) {
+            console.log(planPhaseID);
+            $("#completed-phase" + planPhaseID).empty();
+        }
+
+        /**************************/
+        /***** PLAN PHASE *********/
+        /**************************/
+
+        /**************************************************** Update Phase Name *************************************************************/
+        //Show textfield edit phase name
+        function planPhaseNameLabel(planPhaseID) {
+            $("#phase-name-" + planPhaseID).hide();
+            $("#txt-phase-name-" + planPhaseID).show();
+            $("#btn-save-phase-name-" + planPhaseID).show();
+            $("#btn-phase-name-" + planPhaseID).show();
+        };
+
+        //Hide textfield edit phase name
+        function closeEditPlanPhaseName(planPhaseID) {
+            $("#phase-name-" + planPhaseID).show();
+            $("#txt-phase-name-" + planPhaseID).hide();
+            $("#btn-save-phase-name-" + planPhaseID).hide();
+            $("#btn-phase-name-" + planPhaseID).hide();
+            $("#txt-phase-name-" + planPhaseID).val($("#phase-name-" + planPhaseID).text());
+            $("#error-phase-name-" + planPhaseID).hide();
+        };
+
+        //Save Plan Phase Name
+        function savePlanPhaseName(planPhaseID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditPlanPhaseName", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    txtPhaseName: "" + $("#txt-phase-name-" + planPhaseID).val()
+                },
+                complete: function (response) {
+                    var isError = $(response.responseText).find('#error-text').text().length > 0;
+                    if (isError) {
+                        // there was an error => we update the container of the form
+                        $('#error-phase-name-' + planPhaseID).html(response.responseText);
+                        $("#txt-phase-name-" + planPhaseID).val($("#phase-name-" + planPhaseID).text());
+                    } else {
+                        // no error => we hide validation errors and update the result container
+                        $("#updatePlanPhaseBox").html(response.responseText);
+                        editSuccess();
+                    }
+                }
+            });
+        }
+
+        // Call save plan phase name
+        function enterSavePlanPhaseName(event, planPhaseID) {
+            if (event.which == 13) {
+                savePlanPhaseName(planPhaseID);
+            };
+        };
+        function btnSavePlanPhaseName(planPhaseID) {
+            savePlanPhaseName(planPhaseID);
+        }
+
+        /**************************************************** Update Phase Time *************************************************************/
+        //Show textfield edit phase time
+        function phaseTimeLabel(planPhaseID) {
+            $("#phase-time-" + planPhaseID).hide();
+            $("#txt-phase-start-" + planPhaseID).css('display', 'inline');
+            $("#sparrow-" + planPhaseID).css('display', 'inline');
+            $("#txt-phase-end-" + planPhaseID).css('display', 'inline');
+            $("#btn-phase-time-close-" + planPhaseID).show();
+            $("#btn-phase-time-save-" + planPhaseID).show();
+        };
+
+        //Hide textfield edit phase name
+        function cancelEditPhaseTime(planPhaseID, startTime, endTime) {
+            $("#phase-time-" + planPhaseID).show();
+            $("#txt-phase-start-" + planPhaseID).hide();
+            $("#sparrow-" + planPhaseID).hide();
+            $("#txt-phase-end-" + planPhaseID).hide();
+            $("#txt-phase-start-" + planPhaseID).val(startTime);
+            $("#txt-phase-end-" + planPhaseID).val(endTime);
+            $("#btn-phase-time-close-" + planPhaseID).hide();
+            $("#btn-phase-time-save-" + planPhaseID).hide();
+            $('#error-phase-time-' + planPhaseID).hide();
+        };
+
+        //update phase name
+        function savePhaseTime(planPhaseID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditPlanPhaseTime", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    txtStartTime: "" + $("#txt-phase-start-" + planPhaseID).val(),
+                    txtEndTime: "" + $("#txt-phase-end-" + planPhaseID).val()
+                },
+                complete: function (response) {
+                    var isError = $(response.responseText).find('#error-text').text().length > 0;
+                    if (isError) {
+                        // there was an error => we update the container of the form
+                        $('#error-phase-time-' + planPhaseID).html(response.responseText);
+                        $("#txt-phase-start-" + planPhaseID).val($("#txt-phase-start-" + planPhaseID).val());
+                        $("#txt-phase-end-" + planPhaseID).val($("#txt-phase-end-" + planPhaseID).val());
+                    } else {
+                        // no error => we hide validation errors and update the result container
+                        $("#updatePlanPhaseBox").html(response.responseText);
+                        editSuccess();
+                    }
+                }
+            });
+        };
+
+        /**************************/
+        /******** MAIN TASK *******/
+        /**************************/
+
+        /**************************************************** Update Maintask Name *************************************************************/
+        //Show text field update main task name
+        function openEditMainTaskTitle() {
+            $('#main-task-title').hide();
+            $('#txtMainTaskTitle').show();
+            $('#save-edit-name').show();
+            $('#cancle-edit-name').show();
+        };
+
+        //Cancel change maintask name
+        function btnCancelEditMainTaskTitle() {
+            $('#main-task-title').show();
+            $('#txtMainTaskTitle').hide();
+            $('#save-edit-name').hide();
+            $('#cancle-edit-name').hide();
+            $('#txtMainTaskTitle').val($('#main-task-title').text());
+            $('#error-maintask-name').hide();
+        };
+
+        function saveMainTaskTitle(planPhaseID, mainTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateMainTaskName", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    txtMainTaskContent: "" + $('#txtMainTaskTitle').val()
+                },
+                complete: function (response) {
+                    var isError = $(response.responseText).find('#error-text').text().length > 0;
+                    if (isError) {
+                        // there was an error => we update the container of the form
+                        $('#error-maintask-name').html(response.responseText);
+                        $('#txtMainTaskTitle').val($('#main-task-title').text());
+                    } else {
+                        // no error => we hide validation errors and update the result container
+                        $("#mainTaskDetail").html(response.responseText);
+                        editSuccess();
+                    }
+                }
+            });
+        };
+
+        //Update main task name
+        function enterSaveMainTaskTitle(event, planPhaseID, mainTaskID) {
+            if (event.which == 13) {
+                saveMainTaskTitle(planPhaseID, mainTaskID);
+            }
+        };
+        function btnSaveMainTaskTitle(planPhaseID, mainTaskID) {
+            saveMainTaskTitle(planPhaseID, mainTaskID);
+        }
+
+        /************************************************* Update Maintask Description *****************************************************/
+
+        //show text area update decription
+        function openEditMainTaskDes() {
+            $('#main-task-description').hide();
+            $('#btn-save-maintask-description').show();
+            $('#cancle-edit-description').show();
+            $('#textarea-maintask-description').show();
+        };
+
+        function CancelEditMainTaskDescription() {
+            $('#cancle-edit-description').hide();
+            $('#main-task-description').show();
+            $('#btn-save-maintask-description').hide();
+            $('#textarea-maintask-description').hide();
+            $('#textarea-maintask-description').val($("#textarea-maintask-description").text());
+        };
+
+        //update main task description
+        function saveMainTaskDescription(planPhaseID, mainTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateMainTaskDescription", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    txtMainTaskDescription: "" + $('#textarea-maintask-description').val()
+                },
+                success: function (response) {
+                    $("#mainTaskDetail").html(response);
+                    editSuccess();
+                }
+            });
+        }
+
+        /**************************************************** Update Maintask Duedate *************************************************************/
+
+        //show textfield update maintask duedate
+        function openEditMainTaskDuedate() {
+            $('#main-task-duedate').hide();
+            $('#txt-main-task-duedate').show();
+            $('#save-edit-duedate').show();
+            $('#cancle-edit-duedate').show();
+        };
+
+        function closeEditMainTaskDuedate(duedate) {
+            $('#cancle-edit-duedate').hide();
+            $('#save-edit-duedate').hide();
+            $('#main-task-duedate').show();
+            $('#txt-main-task-duedate').hide();
+            $('#txt-main-task-duedate').val(duedate);
+            $('#error-maintask-duedate').hide();
+        };
+
+        //Update Maintask Duedate
+        function saveMainTaskDuedate(planPhaseID, mainTaskID){
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateMainTaskDueDate", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    txtMainTaskDuedate: "" + $('#txt-main-task-duedate').val()
+                },
+                complete: function (response) {
+                    var isError = $(response.responseText).find('#error-text').text().length > 0;
+                    console.log(isError);
+                    if (isError) {
+                        // there was an error => we update the container of the form
+                        $('#error-maintask-duedate').html(response.responseText);
+                    } else {
+                        // no error => we hide validation errors and update the result container
+                        $("#mainTaskDetail").html(response.responseText);
+                        editSuccess();
+                    }
+                }
+            });
+        }
+
+        /*************************************/
+        /**********  SUB TASK ****************/
+        /*************************************/
+
+        /*************************************************** Update Sub Task Priolity **********************************/
+        function openEditSubTaskPriolity(subTaskID) {
+            $("#priolity" + subTaskID).hide();
+            $("#slcpriolity" + subTaskID).show();
+            $("#priolityButton" + subTaskID).show();
+        };
+
+        //Hide textfield subtask content
+        function cancelEditSubTaskPriolity(subTaskID) {
+            $("#priolity" + subTaskID).show();
+            $("#slcpriolity" + subTaskID).hide();
+            $("#priolityButton" + subTaskID).hide();
+        };
+
+        //Update to DB
+        function editSubTaskPriolity(planPhaseID, mainTaskID, subTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateSubTaskPriolity", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    subTaskID: subTaskID,
+                    slcPriolity: "" + $("#slcpriolity" + subTaskID).val()
+                },
+                success: function (response) {
+                    $("#subtaskList").html(response);
+                    editSuccess();
+                }
+            });
+        };
+
+        /************************************ Update Sub Task Content ***********************************/
+        function openEditSubTaskContent(subTaskID) {
+            $("#lbContent-" + subTaskID).hide();
+            $("#txtContent-" + subTaskID).show();
+            $("#btn-save-sub-task-content" + subTaskID).show();
+            $("#btnContentClose-" + subTaskID).show();
+        };
+
+        //Hide textfield subtask content
+        function cancelEditSubTakContent(subTaskID) {
+            $("#lbContent-" + subTaskID).show();
+            $("#txtContent-" + subTaskID).hide();
+            $("#txtContent-" + subTaskID).val($("#lbContent-" + subTaskID).text());
+            $("#btn-save-sub-task-content" + subTaskID).hide();
+            $("#btnContentClose-" + subTaskID).hide();
+        };
+
+        function saveSubTaskContent(planPhaseID, mainTaskID, subTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateSubTaskContent", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    subTaskID: subTaskID,
+                    txtSubTaskContent: "" + $("#txtContent-" + subTaskID).val()
+                },
+                success: function (response) {
+                    $("#subtaskList").html(response);
+                    editSuccess();
+                }
+            });
+        };
+        //Update to DB
+        function enterSaveSubTaskContent(event, planPhaseID, mainTaskID, subTaskID) {
+            if (event.which == 13) {
+                saveSubTaskContent(planPhaseID, mainTaskID, subTaskID);
+            };
+        };
+        function btnSaveSubTaskContent(planPhaseID, mainTaskID, subTaskID) {
+            saveSubTaskContent(planPhaseID, mainTaskID, subTaskID);
+        };
+
+        /************************************ Change Sub Task Status ****************************************/
+
+        //when hover task status
+        function openEditSubTaskStatus(subTaskID) {
+            $('#status' + subTaskID).hide();
+            $('#selectstatus' + subTaskID).css('display', 'inline');
+        };
+
+        function cancelEditSubTaskStatus(subTaskID) {
+            $('#status' + subTaskID).css('display', 'inline');
+            $('#selectstatus' + subTaskID).hide();
+        };
+
+        function SaveSubTaskStatus(planPhaseID, mainTaskID, subTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTaskStatus", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    subTaskID: subTaskID,
+                    slcStatus: "" + $('#selectbox' + subTaskID).val()
+                },
+                success: function (response) {
+                    $("#subtaskList").html(response);
+                    editSuccess();
+                }
+            });
+        };
+
+        function cbxChangeSubTaskStatus(planPhaseID, mainTaskID, subTaskID) {
+            var newStatus = "";
+            if ($("#cbxstatus-" + subTaskID).is(':checked')){
+                newStatus = "3";
+            }
+            else {
+                newStatus = "2";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTaskStatus", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: mainTaskID,
+                    subTaskID: subTaskID,
+                    slcStatus: "" + newStatus
+                },
+                success: function (response) {
+                    $("#subtaskList").html(response);
+                    editSuccess();
+                }
+            });
+        };
+
+        /*********************** In my task *********************/
+        /************************************ Change Sub Task Status ****************************************/
+
+        //when hover task status
+        function openEditSubTaskStatusUser(subTaskID) {
+            $("#liCurrentStatus-" + subTaskID).hide();
+            $("#liChooseNewStatus-" + subTaskID).css('display', 'inline');
+        };
+
+        function cancelEditSubTaskStatusUser(subTaskID) {
+            $("#liCurrentStatus-" + subTaskID).css('display', 'inline');
+            $("#liChooseNewStatus-" + subTaskID).hide();
+        };
+
+        function saveSubTaskStatusUser(projectID, subTaskID) {
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTaskStatusInMyTask", "Plan")",
+                data: {
+                    projectID: projectID,
+                    subTaskID: subTaskID,
+                    slcStatus: "" + $("#slcNewStatus-" + subTaskID).val()
+                },
+                success: function (response) {
+                    $("#myTask").html(response);
+                    $("#my-task").addClass('in');
+                    editSuccess();
+                }
+            });
+        };
+
+        //By Checkbox
+
+        function cbsEditSubTaskStatusUser(projectID, subTaskID) {
+            var newStatus = "";
+            if ($("#cbxMyTaskStatus-" + subTaskID).is(':checked')) {
+                newStatus = "3";
+            }
+            else {
+                newStatus = "2";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ChangeTaskStatusInMyTask", "Plan")",
+                data: {
+                    projectID: projectID,
+                    subTaskID: subTaskID,
+                    slcStatus: "" + newStatus
+                },
+                success: function (response) {
+                    $("#myTask").html(response);
+                    $("#my-task").addClass('in');
+                    editSuccess();
+                }
+            });
+        };
+
+        /*************************************************** Update Sub Task Deadline **********************************/
+
+        //Show textfield subtask deadline
+        function openEditSubTaskDeadline(subTaskID) {
+            $("#stDeadline-" + subTaskID).hide();
+            $("#txtDeadline-" + subTaskID).show();
+            $("#btn-save-subtask-deadline" + subTaskID).show();
+            $("#btnDeadlineClose-" + subTaskID).show();
+        };
+
+        //Hide textfield subtask content
+        function cancelEditSubTaskDeadline(subTaskID, deadline) {
+            $("#stDeadline-" + subTaskID).show();
+            $("#txtDeadline-" + subTaskID).hide();
+            $("#txtDeadline-" + subTaskID).val(deadline);
+            $("#btn-save-subtask-deadline" + subTaskID).hide();
+            $("#btnDeadlineClose-" + subTaskID).hide();
+        };
+
+        //Update to DB
+        function saveSubTaskDeadline(planPhaseID, MainTaskID, subTaskID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateSubTaskDateline", "Plan")",
+                data: {
+                    planPhaseID: planPhaseID,
+                    mainTaskID: MainTaskID,
+                    subTaskID: subTaskID,
+                    txtSubTaskDateline: "" + $("#txtDeadline-" + subTaskID).val()
+                },
+                success: function (response) {
+                    $("#subtaskList").html(response);
+                    editSuccess();
+                }
+            });
+        };
+
+        /************************************** Update Assign ***********************************************/
+        //Show textfield subtask deadline
+        function openEditSubTaskAssign(subTaskID) {
+            $("#stAssign-" + subTaskID).hide();
+            $("#txtAssign-" + subTaskID).show();
+            $("#btnAssignClose-" + subTaskID).show();
+        };
+
+        //Hide textfield subtask content
+        function cancelEditSubTaskAssign(subTaskID, assignPeopleID) {
+            $("#stAssign-" + subTaskID).show();
+            $("#txtAssign-" + subTaskID).hide();
+            $("#txtAssign-" + subTaskID).val($("#stAssign-" + subTaskID).text());
+            $("#txtAssignID-" + subTaskID).val(assignPeopleID);
+            $("#btnAssignClose-" + subTaskID).hide();
+        };
+
+        function pickMemberToAssign(planPhaseID, mainTaskID, subTaskID) {
+            // Search Member
+            $("#txtAssign-" + subTaskID).autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "@Url.Action("ProjectMembersToAssign","Project")",
+                        dataType: "json",
+                        type: "POST",
+                        data: {
+                            sourceID: planPhaseID,
+                            target: 'plan',
+                            name: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.DisplayName,
+                                    value: item.UserID
+                                }
+                            }))
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    $("#txtAssignID-" + subTaskID).val(ui.item.value);
+                    $("#txtAssign-" + subTaskID).val(ui.item.label);
+
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("UpdateSubTaskAssign", "Plan")",
+                        data: {
+                            planPhaseID: planPhaseID,
+                            mainTaskID: mainTaskID,
+                            subTaskID: subTaskID,
+                            txtSubTaskAssignID: "" + $("#txtAssignID-" + subTaskID).val()
+                        },
+                        success: function (response) {
+                            $("#subtaskList").html(response);
+                            editSuccess();
+                        }
+                    });
+                    return false;
+                }
+            });
+        };
+
+        /********************************************/
+        /********* BUDGET ***************************/
+        /********************************************/
+
+        /***************************** Edit Budget Record Name ***************************************************/
+        function openEditBudgetRecordName(budgetRecordID) {
+            $("#lbBudgetRecord-" + budgetRecordID).hide();
+            $("#txtBudgetRecordName-" + budgetRecordID).show();
+            $("#btnSaveBudgetRecordName-" + budgetRecordID).show();
+            $("#btnCancelBudgetRecordName-" + budgetRecordID).show();
+        };
+
+        //Hide textfield subtask content
+        function cancelEditBudgetRecordName(budgetRecordID) {
+            $("#lbBudgetRecord-" + budgetRecordID).show();
+            $("#txtBudgetRecordName-" + budgetRecordID).hide();
+            $("#txtBudgetRecordName-" + budgetRecordID).val($("#lbBudgetRecord-" + budgetRecordID).text());
+            $("#btnSaveBudgetRecordName-" + budgetRecordID).hide();
+            $("#btnCancelBudgetRecordName-" + budgetRecordID).hide();
+        };
+
+        function saveBudgetRecordID(budgetRecordID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("EditBudgetRecordName", "Budget")",
+                data: {
+                    budgetRecordID: budgetRecordID,
+                    txtRecordName: "" + $("#txtBudgetRecordName-" + budgetRecordID).val()
+                },
+                complete: function (response) {
+                    var isError = $(response.responseText).find('#error-text').text().length > 0;
+                    console.log($(response.responseText).find('#error-text').text());
+                    console.log(isError);
+                    if (isError) {
+                        // there was an error => we update the container of the form
+                        //$('#error-budget-record-name-' + budgetRecordID).html(response.responseText);
+                        notifyMess($(response.responseText).find('#error-text').text());
+                        $("#txtBudgetRecordName-" + budgetRecordID).val($("#lbBudgetRecord-" + budgetRecordID).text());
+                    } else {
+                        // no error => we hide validation errors and update the result container
+                        $("#tabplanbudget").html(response.responseText);
+                        editSuccess();
+                    }
+                    //$("#tabplanbudget").html(response);
+                    //editSuccess();
+                }
+            });
+        };
+        //Update to DB
+        function enterSaveBudgetRecordName(event, budgetRecordID) {
+            if (event.which == 13) {
+                saveBudgetRecordID(budgetRecordID);
+            };
+        };
+        function btnSaveEditBudgetRecordName(budgetRecordID) {
+            saveBudgetRecordID(budgetRecordID);
+        };
+
+        //Replace Button
+        function replaceButtonHidePhaseCompleted() {
+            $('#showphasecompleted').hide();
+            $('#hidephasecompleted').show();
+        }
+        function replaceButtonShowPhaseCompleted() {
+            $('#showphasecompleted').show();
+            $('#hidephasecompleted').hide();
+            $('#planPhaseIsCompleted').empty();
+        }
+
+        /************************ Change IsRecieved Money in Fund ***************/
+        function changeStatusIsRecieved(fundID, teamFoundDonatorID) {
+            var isRecieved = true;
+            if ($("#checkbox" + teamFoundDonatorID).is(':checked')) {
+                isRecieved = true;
+            }
+            else {
+                isRecieved = false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("IsReceiceMoneyChange", "Budget")",
+                data: {
+                    fundID: fundID,
+                    teamFoundDonatorID: teamFoundDonatorID,
+                    cbxIsReceive: "" + isRecieved
+                },
+                success: function (response) {
+                    $("#tabplanbudget").html(response);
+                }
+            });
+        };
+
+        /******************************************************** Add cmt *****************************************************************/
+        function saveCommentMainTask(planPhaseID, mainTaskID) {
+           if ($('#txt-comment').val().trim() == "" || $('#txt-comment').val() == null) return;
+           $.ajax({
+               type: "POST",
+               url: "@Url.Action("AddComment", "Plan")",
+               data: {
+                   planPhaseID: planPhaseID,
+                   mainTaskID: mainTaskID,
+                   cmtContent: "" + $('#txt-comment').val()
+               },
+               success: function (response) {
+                   $("#commentList").html(response);
+                   $("#txt-comment").val('');
+               }
+           });
+        };
+
+        function sendComment(event, planPhaseID, mainTaskID) {
+            if (event.which == 13) {
+                if (!event.shiftKey) {
+                    saveCommentMainTask(planPhaseID, mainTaskID);
+                }
+            }
+        };
+
+        function sendCommentBtn(planPhaseID, mainTaskID) {
+            saveCommentMainTask(planPhaseID, mainTaskID);
+        };
+        /************************************ Script for Album ******************************************************/
+        function showAlbumImage(albumID, targetID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AlbumShowImage", "Project")",
+                data: {
+                    albumID: albumID,
+                    targetID: targetID
+                },
+                beforeSend: function () {
+                    OnBegin('#albumList');
+                },
+                success: function (response) {
+                    $("#albumList").html(response);
+                }
+            });
+        };
+    </script>
+}

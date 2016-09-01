@@ -1,0 +1,789 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{65563AA0-9314-4699-A61B-37EBA0829D84}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iVolunteer</RootNamespace>
+    <AssemblyName>iVolunteer</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FoolproofValidation, Version=0.9.5851.39121, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FoolproofValidation.0.9.4518\lib\net45\FoolproofValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.1.2.3\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.1.2.3\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.1.2.3\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.1.2.3\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.1.2.3\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=1.2.3.490, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\..\..\..\..\CSharpDriver-2.2.4\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\..\..\..\..\CSharpDriver-2.2.4\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core">
+      <HintPath>..\..\..\..\..\..\..\CSharpDriver-2.2.4\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.GridFS">
+      <HintPath>..\..\..\..\..\..\..\CSharpDriver-2.2.4\MongoDB.Driver.GridFS.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Legacy">
+      <HintPath>..\..\..\..\..\..\..\CSharpDriver-2.2.4\MongoDB.Driver.Legacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.5.2.14234, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.js" />
+    <Content Include="Client Scripts\mvcfoolproof.unobtrusive.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofJQueryValidation.min.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.js" />
+    <Content Include="Client Scripts\MvcFoolproofValidation.min.js" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-indicator.min.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-video.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery-video.min.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery.css" />
+    <Content Include="Content\blueimp-gallery2\css\blueimp-gallery.min.css" />
+    <Content Include="Content\blueimp-gallery2\img\error.png" />
+    <Content Include="Content\blueimp-gallery2\img\loading.gif" />
+    <Content Include="Content\blueimp-gallery2\img\play-pause.png" />
+    <Content Include="Content\blueimp-gallery2\img\video-play.png" />
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-family.css" />
+    <Content Include="Content\jquery-ui.min.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui-noscript.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-ui.css" />
+    <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
+    <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
+    <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
+    <Content Include="Content\justifiedGallery.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\material-icons.css" />
+    <Content Include="fonts\MaterialIcons-Regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\icons\identifyID.svg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logo_lite.png" />
+    <Content Include="Models\SQL\iVolunteerSQL.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
+      <LastGenOutput>iVolunteerSQL.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\SQL\iVolunteerSQL.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
+      <LastGenOutput>iVolunteerSQL.cs</LastGenOutput>
+    </Content>
+    <Content Include="scripts\ai.0.15.0-build58334.js" />
+    <Content Include="scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="fonts\MaterialIcons-Regular.eot" />
+    <Content Include="fonts\MaterialIcons-Regular.ijmap" />
+    <Content Include="fonts\MaterialIcons-Regular.ttf" />
+    <Content Include="fonts\MaterialIcons-Regular.woff" />
+    <Content Include="fonts\MaterialIcons-Regular.woff2" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="Content\blueimp-gallery2\img\error.svg" />
+    <Content Include="Content\blueimp-gallery2\img\play-pause.svg" />
+    <Content Include="Content\blueimp-gallery2\img\video-play.svg" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.min.js.map" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-fullscreen.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-indicator.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-video.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-vimeo.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery-youtube.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-gallery.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.js" />
+    <Content Include="scripts\blueimp-gallery2\js\blueimp-helper.min.js" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.js" />
+    <Content Include="scripts\blueimp-gallery2\js\jquery.blueimp-gallery.min.js" />
+    <Content Include="scripts\bootstrap-datetimepicker.js" />
+    <Content Include="scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\iVolunteer-1.0.js" />
+    <Content Include="scripts\jquery-2.1.4.min.map" />
+    <Content Include="scripts\moment-with-locales.js" />
+    <Content Include="scripts\moment-with-locales.min.js" />
+    <Content Include="scripts\moment.js" />
+    <Content Include="scripts\moment.min.js" />
+    <Content Include="scripts\vi.js" />
+    <Content Include="Sound\notisound.mp3" />
+    <Content Include="Sound\notisound.ogg" />
+    <EntityDeploy Include="Models\SQL\iVolunteerSQL.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>iVolunteerSQL.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SQL\iVolunteerSQL.edmx.diagram">
+      <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
+    </Content>
+    <None Include="scripts\jquery.validate-vsdoc.js" />
+    <None Include="scripts\jquery-2.1.4.intellisense.js" />
+    <Content Include="scripts\jquery-2.1.4.js" />
+    <Content Include="scripts\jquery-2.1.4.min.js" />
+    <Content Include="scripts\jquery-ui-1.11.4.js" />
+    <Content Include="scripts\jquery-ui-1.11.4.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\canvas-to-blob.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\cors\jquery.postmessage-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\cors\jquery.xdr-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-angular.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-audio.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-image.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-jquery-ui.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-process.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-ui.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-validate.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload-video.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.fileupload.js" />
+    <Content Include="scripts\jQuery.FileUpload\jquery.iframe-transport.js" />
+    <Content Include="scripts\jQuery.FileUpload\load-image.all.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\tmpl.min.js" />
+    <Content Include="scripts\jQuery.FileUpload\vendor\jquery.ui.widget.js" />
+    <Content Include="scripts\jquery.justifiedGallery.js" />
+    <Content Include="scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="scripts\jquery.signalR-2.2.0.min.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="scripts\jquery.validate.js" />
+    <Content Include="scripts\jquery.validate.min.js" />
+    <Content Include="scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="scripts\respond.js" />
+    <Content Include="scripts\respond.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Common\Constant.cs" />
+    <Compile Include="Common\EmailHelper.cs" />
+    <Compile Include="Common\HashHelper.cs" />
+    <Compile Include="Common\HelperExtensions.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\BudgetController.cs" />
+    <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PlanController.cs" />
+    <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Album_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Budget_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_DAO.cs" />
+    <Compile Include="Common\ValidationHelper.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_FailureReport_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Finance_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Fund_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Plan_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Report_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcAl_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcIm_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcPo_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcAc_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Budget_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_GrPr_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_HubConnection_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Plan_DAO.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\MongoDB\Mongo_Group_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Message_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Post_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_Project_DAO.cs" />
+    <Compile Include="DAL\MongoDB\Mongo_User_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Account_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Album_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Group_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Message_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Post_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_Project_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcGr_Relation_DAO.cs" />
+    <Compile Include="DAL\SQL\SQL_AcPr_Relation_DAO.cs" />
+    <Compile Include="Helper\FilesHelper.cs" />
+    <Compile Include="Helper\ImageHandler.cs" />
+    <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\NotificationHub.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_FailureReport.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Album.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Budget.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Finance.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Fund.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Group.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Image.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Message.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Plan.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Post.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Project.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_Report.cs" />
+    <Compile Include="Models\MongoDB\CollectionClass\Mongo_User.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AlbumInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\BudgetRecordInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\GroupInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ImageInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PlanPhaseInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PostInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\ProjectInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\PersonalInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\InformationClass\AccountInformation.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\BudgetItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\ChatFriend.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Comment.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\FinanceItem.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\InsideDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\MainTask.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Notification.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\OutsideDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\Sponsor.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\SubTask.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TaskCount.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ItemClass\TeamFoundDonator.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\LinkClass\SDLink.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Agenda.cs" />
+    <Compile Include="Models\MongoDB\EmbeddedClass\ListClass\Request.cs" />
+    <Compile Include="Models\SQL\iVolunteerSQL.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>iVolunteerSQL.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\iVolunteerSQL.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\iVolunteerSQL.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>iVolunteerSQL.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcAc_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcAl_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Account.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcGr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcIm_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcPo_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_AcPr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Album.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Budget.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Group.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_GrPr_Relation.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_HubConnection.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Image.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Message.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Plan.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Post.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQL\SQL_Project.cs">
+      <DependentUpon>iVolunteerSQL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModel\ChangePasswordModel.cs" />
+    <Compile Include="Models\ViewModel\LoginModel.cs" />
+    <Compile Include="Models\ViewModel\RegisterModel.cs" />
+    <Compile Include="Models\ViewModel\ReportModel.cs" />
+    <Compile Include="Models\ViewModel\SearchModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\GuestLayout.cshtml" />
+    <Content Include="Views\Shared\_AvatarCover.cshtml" />
+    <Content Include="Views\Shared\_ImageUpload.cshtml" />
+    <Content Include="Views\Account\_NavigationPanel.cshtml" />
+    <Content Include="Views\Shared\UserLayout.cshtml" />
+    <Content Include="Views\Shared\ErrorMessage.cshtml" />
+    <Content Include="Views\Home\Register.cshtml" />
+    <Content Include="Views\Home\_Login.cshtml" />
+    <Content Include="Views\Home\FrontPage.cshtml" />
+    <Content Include="Views\Group\_CreateGroup.cshtml" />
+    <Content Include="Views\Project\_CreateProject.cshtml" />
+    <Content Include="Views\Home\Newfeed.cshtml" />
+    <Content Include="Views\Group\GroupHome.cshtml" />
+    <Content Include="Views\Account\_CurrentProjects.cshtml" />
+    <Content Include="Views\Account\_JoinedGroups.cshtml" />
+    <Content Include="Views\Account\_JoinedProjects.cshtml" />
+    <Content Include="Views\User\UserHome.cshtml" />
+    <Content Include="Views\User\_PersonalInformation.cshtml" />
+    <Content Include="Views\User\_JoinedGroups.cshtml" />
+    <Content Include="Views\User\_CurrentProjects.cshtml" />
+    <Content Include="Views\User\_ActivityHistory.cshtml" />
+    <Content Include="Views\Group\_GroupInformation.cshtml" />
+    <Content Include="Views\Group\_CurrentProjects.cshtml" />
+    <Content Include="Views\Project\_ProjectInformation.cshtml" />
+    <Content Include="Views\Group\_ActivityHistory.cshtml" />
+    <Content Include="Views\Account\_ActionToGroup.cshtml" />
+    <Content Include="Views\Account\_ActionToOtherUser.cshtml" />
+    <Content Include="Views\Group\_GroupStructure.cshtml" />
+    <Content Include="Views\User\_FriendList.cshtml" />
+    <Content Include="Views\Shared\_NotificationPanel.cshtml" />
+    <Content Include="Views\Group\_GroupPublic.cshtml" />
+    <Content Include="Views\Group\_GroupDiscussion.cshtml" />
+    <Content Include="Views\Group\_GroupGallery.cshtml" />
+    <Content Include="Views\Project\_ProjectPublic.cshtml" />
+    <Content Include="Views\Project\_ProjectDiscussion.cshtml" />
+    <Content Include="Views\Project\_ProjectStructure.cshtml" />
+    <Content Include="Views\Project\_ProjectGallery.cshtml" />
+    <Content Include="Views\Project\SearchProject.cshtml" />
+    <Content Include="Views\Group\SearchGroup.cshtml" />
+    <Content Include="Views\User\SearchUser.cshtml" />
+    <Content Include="Views\Home\NotificationAll.cshtml" />
+    <Content Include="Views\Home\MessageAll.cshtml" />
+    <Content Include="Views\Home\FriendRequestAll.cshtml" />
+    <Content Include="Views\Group\_GroupLeaders.cshtml" />
+    <Content Include="Views\Group\_GroupMembers.cshtml" />
+    <Content Include="Views\Group\_GroupRequests.cshtml" />
+    <Content Include="Views\Account\_MutalFriends.cshtml" />
+    <Content Include="Views\User\_ParticipatedProjects.cshtml" />
+    <Content Include="Views\User\_SponsoredProjects.cshtml" />
+    <Content Include="Views\User\_OrganizedProjects.cshtml" />
+    <Content Include="Views\Group\_OrganizedProjects.cshtml" />
+    <Content Include="Views\Group\_ParticipatedProjects.cshtml" />
+    <Content Include="Views\Group\_SponsoredProjects.cshtml" />
+    <Content Include="Views\Account\_ActionToProject.cshtml" />
+    <Content Include="Views\Account\_FriendRequestList.cshtml" />
+    <Content Include="Views\User\_Friends.cshtml" />
+    <Content Include="Views\Admin\BannedObjects.cshtml" />
+    <Content Include="Views\Admin\PendingReportList.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedGroups.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedProjects.cshtml" />
+    <Content Include="Views\Admin\_PendingReportedUsers.cshtml" />
+    <Content Include="Views\Admin\AdminHome.cshtml" />
+    <Content Include="Views\Project\_ProjectLeaders.cshtml" />
+    <Content Include="Views\Project\_ProjectMembers.cshtml" />
+    <Content Include="Views\Project\_UserJoinRequests.cshtml" />
+    <Content Include="Views\Project\_CreateSponsor.cshtml" />
+    <Content Include="Views\Project\_UserSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_GroupJoinRequests.cshtml" />
+    <Content Include="Views\Project\_GroupSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_SponsoredUsers.cshtml" />
+    <Content Include="Views\Project\_JoinedGroups.cshtml" />
+    <Content Include="Views\Project\_SponsoredGroups.cshtml" />
+    <Content Include="Views\Project\_OrganizedGroups.cshtml" />
+    <Content Include="Views\Shared\_ChatRoom.cshtml" />
+    <Content Include="Views\Account\_FriendNotInGroup.cshtml" />
+    <Content Include="Views\Group\_UpdateGroupInformation.cshtml" />
+    <Content Include="Views\Account\_FriendNotInProject.cshtml" />
+    <Content Include="Views\Project\_OrganizedUsers.cshtml" />
+    <Content Include="Views\Project\_SponsoredGuests.cshtml" />
+    <Content Include="Views\Project\_GuestSponsorRequests.cshtml" />
+    <Content Include="Views\Project\_SuggestedUsers.cshtml" />
+    <Content Include="Views\Account\_InvitedProjects.cshtml" />
+    <Content Include="Views\Account\_LeadGroups.cshtml" />
+    <Content Include="Views\Group\_ActionToProject.cshtml" />
+    <Content Include="Views\Group\_MemberSelector.cshtml" />
+    <Content Include="Views\Project\_GroupMembersList.cshtml" />
+    <Content Include="Views\Project\_MembersNotOrganizer.cshtml" />
+    <Content Include="Views\Project\_JoinedGroupsNotOrganizer.cshtml" />
+    <Content Include="Views\Project\_UpdateProjectInformation.cshtml" />
+    <Content Include="Views\Account\_ChangePassword.cshtml" />
+    <Content Include="Views\Project\_ProjectResult.cshtml" />
+    <Content Include="Views\Group\_GroupResult.cshtml" />
+    <Content Include="Views\User\_UserResult.cshtml" />
+    <Content Include="Views\Home\_ForgotPassword.cshtml" />
+    <Content Include="Views\Group\_PostList.cshtml" />
+    <Content Include="Views\Group\_PostWriteComment.cshtml" />
+    <Content Include="Views\Group\_PostCreate.cshtml" />
+    <Content Include="Views\Project\_PostList.cshtml" />
+    <Content Include="Views\Project\_PostCreate.cshtml" />
+    <Content Include="Views\Project\_PostWriteComment.cshtml" />
+    <Content Include="Views\Report\_GroupReport.cshtml" />
+    <Content Include="Views\Report\_ProjectReport.cshtml" />
+    <Content Include="Views\Report\_UserReport.cshtml" />
+    <Content Include="Views\Project\ProjectHome.cshtml" />
+    <Content Include="Views\Group\_CommentList.cshtml" />
+    <Content Include="Views\Project\_CommentList.cshtml" />
+    <Content Include="Views\Group\_LikeStatus.cshtml" />
+    <Content Include="Views\Project\_LikeStatus.cshtml" />
+    <Content Include="Views\Group\_ActionToPost.cshtml" />
+    <Content Include="Views\Group\_PinnedPost.cshtml" />
+    <Content Include="Views\Shared\_ImageUploadInPost.cshtml" />
+    <Content Include="Views\Shared\_PostImage_Temp.cshtml" />
+    <Content Include="Views\Home\_SlideQuotes-Ori.cshtml" />
+    <Content Include="Views\Project\_ProjectPlan.cshtml" />
+    <Content Include="Views\Account\_UpdatePersonalInformation.cshtml" />
+    <Content Include="Views\Group\_CommentArea.cshtml" />
+    <Content Include="Views\Home\NotificationsPage.cshtml" />
+    <Content Include="Views\Project\_CommentArea.cshtml" />
+    <Content Include="Views\Project\_ActionToPost.cshtml" />
+    <Content Include="Views\Project\_PinnedPost.cshtml" />
+    <Content Include="Views\Home\_NewfeedPosts.cshtml" />
+    <Content Include="Views\Group\_AddImage.cshtml" />
+    <Content Include="Views\Group\_AlbumAddImage.cshtml" />
+    <Content Include="Views\Group\_AlbumCommentArea.cshtml" />
+    <Content Include="Views\Group\_AlbumCommentList.cshtml" />
+    <Content Include="Views\Group\_AlbumCreate.cshtml" />
+    <Content Include="Views\Group\_AlbumEditImage.cshtml" />
+    <Content Include="Views\Group\_AlbumLikeStatus.cshtml" />
+    <Content Include="Views\Group\_AlbumList.cshtml" />
+    <Content Include="Views\Group\_AlbumShowImage.cshtml" />
+    <Content Include="Views\Group\_AlbumWriteComment.cshtml" />
+    <Content Include="Views\Project\_AddImage.cshtml" />
+    <Content Include="Views\Project\_AlbumAddImage.cshtml" />
+    <Content Include="Views\Project\_AlbumCommentArea.cshtml" />
+    <Content Include="Views\Project\_AlbumCommentList.cshtml" />
+    <Content Include="Views\Project\_AlbumCreate.cshtml" />
+    <Content Include="Views\Project\_AlbumEditImage.cshtml" />
+    <Content Include="Views\Project\_AlbumLikeStatus.cshtml" />
+    <Content Include="Views\Project\_AlbumList.cshtml" />
+    <Content Include="Views\Project\_AlbumShowImage.cshtml" />
+    <Content Include="Views\Project\_AlbumWriteComment.cshtml" />
+    <Content Include="Views\User\_ChatFriendList.cshtml" />
+    <Content Include="Views\Shared\AccountActivated.cshtml" />
+    <Content Include="Views\Account\_SendFailureReport.cshtml" />
+    <Content Include="Views\Admin\AdviseAndFailureReport.cshtml" />
+    <Content Include="Views\Admin\_AllAdvide.cshtml" />
+    <Content Include="Views\Admin\_AllFailureReport.cshtml" />
+    <Content Include="Views\Budget\_Budget.cshtml" />
+    <Content Include="Views\Budget\_BudgetAddItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetAddRecord.cshtml" />
+    <Content Include="Views\Budget\_BudgetEditItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetEditRecord.cshtml" />
+    <Content Include="Views\Budget\_BudgetError.cshtml" />
+    <Content Include="Views\Budget\_BudgetItem.cshtml" />
+    <Content Include="Views\Budget\_BudgetRecord.cshtml" />
+    <Content Include="Views\Budget\_EditEachFieldBudgetItem.cshtml" />
+    <Content Include="Views\Budget\_Finance.cshtml" />
+    <Content Include="Views\Budget\_FinanceAddItem.cshtml" />
+    <Content Include="Views\Budget\_FinanceDetails.cshtml" />
+    <Content Include="Views\Budget\_Fund.cshtml" />
+    <Content Include="Views\Budget\_FundAddTeamFoundDonator.cshtml" />
+    <Content Include="Views\Budget\_FundInsideDonator.cshtml" />
+    <Content Include="Views\Budget\_FundIsReceiveTeamFoundDonator.cshtml" />
+    <Content Include="Views\Budget\_FundOutsideDonator.cshtml" />
+    <Content Include="Views\Budget\_FundTeamFoundDonator.cshtml" />
+    <Content Include="Views\Plan\_AddMainTask.cshtml" />
+    <Content Include="Views\Plan\_AddPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_AddSubTask.cshtml" />
+    <Content Include="Views\Plan\_EditPlanPhase.cshtml" />
+    <Content Include="Views\Plan\_ListSubTask.cshtml" />
+    <Content Include="Views\Plan\_MainTask.cshtml" />
+    <Content Include="Views\Plan\_MainTaskDetail.cshtml" />
+    <Content Include="Views\Plan\_MyTask.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompleted.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedComment.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedMainTaskDetail.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedMainTaskList.cshtml" />
+    <Content Include="Views\Plan\_PhaseCompletedSubTaskList.cshtml" />
+    <Content Include="Views\Plan\_Plan.cshtml" />
+    <Content Include="Views\Plan\_PlanComment.cshtml" />
+    <Content Include="Views\Plan\_PlanError.cshtml" />
+    <Content Include="Views\Plan\_PlanPhase.cshtml" />
+    <Content Include="Views\Plan\_TaskCount.cshtml" />
+    <Content Include="Views\Plan\_TaskOnThisDay.cshtml" />
+    <Content Include="Views\Shared\_NotifyMessage.cshtml" />
+    <Content Include="Views\Home\FeedBack.cshtml" />
+    <Content Include="Views\Home\_SlideQuotes.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Images\Album\somefiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5050</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:5050/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

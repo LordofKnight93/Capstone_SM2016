@@ -1,0 +1,235 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation
+
+@Html.AntiForgeryToken()
+@*<div id="createProjectForm" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-md">
+        <div class="modal-content">*@
+            <div class="modal-body">
+                <div class="row">
+                   
+                    <!-- Login -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="row" style="margin: -10px 0 -5px 0;">
+                                <div class="col-sm-12">
+                                    <h4>Tạo dự án mới</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="divider-holizon"></div>
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <!--form role="form" class="login-form"> -->
+                                @using (Ajax.BeginForm("CreateProject", "Project", null, new AjaxOptions { UpdateTargetId = "popup-content", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 30px" }))
+                                {
+                                    <!-- Project Name -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Tên dự án:</label>
+                                            <span class="required-field">*</span>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.ProjectName, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                                            @Html.ValidationMessageFor(model => model.ProjectName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Start -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateStart, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateStart">Ngày bắt đầu:</label>
+                                            <span class="required-field">*</span>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "text" } })
+                                            @Html.ValidationMessageFor(model => model.DateStart, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Date End-->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @*@Html.LabelFor(model => model.DateEnd, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="dateEnd">Ngày kết thúc:</label>
+                                            <span class="required-field">*</span>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "text" } })
+                                            @Html.ValidationMessageFor(model => model.DateEnd, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <!-- Project Description -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectDescription, htmlAttributes: new { @class = "control-label" })*@
+                                            <label for="projectDescription">Mô tả tóm tắt: </label>
+                                            <span class="required-field">*</span>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.TextAreaFor(model => model.ProjectShortDescription, new { @id = "projectDescription", @class = "form-control", @rows = "4", @placeholder = "Mô tả ngắn gọn về dự án...", @style = "resize: vertical; margin-bottom: 4px" })
+                                            @Html.ValidationMessageFor(model => model.ProjectShortDescription, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Location -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Địa điểm</label>
+                                            <span class="required-field">*</span>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @id = "location", @class = "form-control", @placeholder = "Địa điểm" } })
+                                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Email</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "email", @class = "form-control", @placeholder = "Email" } })
+                                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <!-- Phone -->
+                                    <div class="row">
+                                        <div class="col-xs-4 register-label">
+                                            @* @Html.LabelFor(model => model.ProjectName, htmlAttributes: new { @class = "control-label" }) *@
+                                            <label for="projectName">Điện thoại</label>
+                                        </div>
+                                        <div class="col-xs-5 text-input">
+                                            @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @id = "phone", @class = "form-control", @placeholder = "Phone" } })
+                                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <!--Tag checkbox list-->
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Chủ đề tình nguyện</p>
+                                            <div class="checkbox">
+                                                <input id="education" type="checkbox" class="row" value="Giáo dục" name="tagsList" />
+                                                <label for="education">
+                                                    Giáo dục
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="culture" type="checkbox" class="row" value="Văn hóa" name="tagsList" />
+                                                <label for="culture">Văn hóa</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="medical" type="checkbox" class="row" value="Y tế" name="tagsList"  />
+                                                <label for="medical">
+                                                    Y tế
+                                                </label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="society" type="checkbox" class="row" value="Xã hội" name="tagsList" />
+                                                <label for="society">Xã hội</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="environment" type="checkbox" class="row" value="Môi trường" name="tagsList" />
+                                                <label for="environment">Môi trường</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="travel" type="checkbox" class="row" value="Du lịch" name="tagsList" />
+                                                <label for="travel">Du lịch</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="sport" type="checkbox" class="row" value="Thể thao" name="tagsList" />
+                                                <label for="sport">Thể thao</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Đối tượng hướng đến</p>
+                                            <div class="checkbox">
+                                                <input id="children" type="checkbox" class="row" value="Trẻ em" name="tagsList" />
+                                                <label for="children">Trẻ em</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="poorpeople" type="checkbox" class="row" value="Người nghèo" name="tagsList" />
+                                                <label for="poorpeople">Người nghèo</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="disabilities" type="checkbox" class="row" value="Người khuyết tật" name="tagsList"  />
+                                                <label for="disabilities">Người khuyết tật</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="disasterarea" type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" />
+                                                <label for="disasterarea">Vùng thiên tai</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="animal" type="checkbox" class="row" value="Động vật" name="tagsList" />
+                                                <label for="animal">Động vật</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                                        <div class="row">
+                                            <p class="row">Hình thức hoạt động</p>
+                                            <div class="checkbox">
+                                                <input id="charity" type="checkbox" class="row" value="Ủng hộ" name="tagsList" />
+                                                <label for="charity">Ủng hộ</label>
+                                            </div>
+                                            <div class="checkbox">
+                                                <input id="fieldtrip" type="checkbox" class="row" value="Đi thực tế" name="tagsList" />
+                                                <label for="fieldtrip">Đi thực tế</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center; margin-top: 15px;">
+                                            <label style="color: red">Vui lòng nhập vào các trường có dấu (*)</label>
+                                        </div>
+                                    </div>
+
+                                    // Error Message
+                                    <div class="row">
+                                        <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                            <label style="color:red;">@ViewBag.Message</label>
+                                        </div>
+                                    </div>
+                                    <!-- Button -->
+                                    <div class="row" style="margin-top: 60px">
+                                        <div class="col-xs-2 col-xs-offset-7 text-input">
+                                            <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                                        </div>
+                                        <div class="col-xs-2 text-input">
+                                            <button type="submit" class="btn btn-register">TẠO</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @*</div>
+    </div>
+</div>*@
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateStart').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+    </script>
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateEnd').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+    </script>

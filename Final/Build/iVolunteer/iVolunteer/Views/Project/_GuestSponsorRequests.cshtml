@@ -1,0 +1,57 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Sponsor>
+@using iVolunteer.Common;
+<!-- Member -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="sub-container" style="padding: 5px 15px 15px;">
+
+            <!-- Header -->
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 style="color: #049f88">NGƯỜI NGOÀI MUỐN ỦNG HỘ</h4>
+                    <p style="margin: -9px 0 0 0; font-size: 16px;">@Model.Count() người muốn ủng hộ</p>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="divider-holizon"></div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="row" style="padding-left: 10px; padding-right: 10px;">
+                @foreach (var item in Model)
+                {
+                    <div id="@item.SponsorID">
+                        <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="card-member">
+                                <div class="outside-sponsore">
+                                    <a href="">@Html.DisplayFor(modelItem => item.SponsorName)</a>
+                                </div>
+                                <div class="outside-sponsore-infor">
+                                    <div class="detail-infor">
+                                        <p class="address-info">@Html.DisplayFor(modelItem => item.SponsorAddress)</p>
+                                        <p class="email-address">@Html.DisplayFor(modelItem => item.SponsorEmail)</p>
+                                        <p class="phone-number">@Html.DisplayFor(modelItem => item.SponsorPhone)</p>
+                                    </div>
+                                </div>
+                                @if (ViewBag.IsLeader == true)
+                                {
+                                    <div class="project-action-to-user">
+                                        <ul class="project-action-to-user-list">
+                                            <li>
+                                                @Ajax.RawActionLink("<i class='fa fa-check fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "AcceptGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
+                                            </li>
+                                            <li>
+                                                @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-14 fa-cus-green' aria-hidden='true'></i>", "DeclineGuestSponsorRequest", "Project", new { sponsorID = item.SponsorID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.SponsorID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

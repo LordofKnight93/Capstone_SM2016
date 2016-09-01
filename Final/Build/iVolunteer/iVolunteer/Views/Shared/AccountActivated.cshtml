@@ -1,0 +1,17 @@
+﻿
+@if(ViewBag.IsActivated == true)
+{
+    ViewBag.Title = "Account activated";
+}
+else
+{
+    ViewBag.Title = "Account confirmation";
+}
+
+<div class="row">
+    <div class="col-md-12" style="margin: 20px auto">
+        <div class="success-message">
+            <h5>@ViewBag.Message</h5>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,89 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.MainTask>
+
+<ol class="main-list-task">
+    @if (Model.Count != 0)
+    {
+        foreach (var item in Model)
+        {
+            DateTime date = DateTime.Today;
+            TimeSpan span = item.Duedate - date;
+            int dateGap = span.Days;
+
+            string mainTaskLiID = "maintask" + item.MainTaskID;
+            <!-- Main Task 1 -->
+            <li id="@mainTaskLiID">
+                @if (ViewBag.IsLeader == true)
+                {
+                    <div class="delete-main-task">
+                        @Ajax.ActionLink("delete", "DeleteMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
+                                                                             new AjaxOptions { UpdateTargetId = "maintastlist" + ViewBag.PlanPhaseID, InsertionMode = InsertionMode.Replace, OnSuccess = "deleteSuccess" },
+                                                                             new { @class = "material-icons md-20", @style = "text-decoration: none; font-weight: bold; cursor: pointer;" })
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card-panel sub-card-panel">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    @Ajax.ActionLink(@item.Name, "MainTaskDetail", "Plan", new { planPhaseID = ViewBag.PlanPhaseID, mainTaskID = item.MainTaskID },
+                                                                                           new AjaxOptions { UpdateTargetId = "mainTaskDetail", InsertionMode = InsertionMode.Replace, OnBegin = "OnBeginPopup('#mainTaskDetail','#taskdetail')" },
+                                                                                           new { @id = "maintaskdetail" + item.MainTaskID, @style = "color: #000; cursor: pointer" })
+                                </div>
+                                <div class="col-sm-12">
+                                    <ul class="main-list-task-infor">
+                                        <li>
+                                            <span class="fa fa-check-square-o fa-cus-gray" aria-hidden="true"></span>
+                                            <span class="task-count">@item.TaskDoneCount/@item.SubTaskCount</span>
+                                        </li>
+                                        <li>
+                                            <i class="fa fa-comment-o fa-cus-gray" aria-hidden="true"></i>
+                                            <span class="task-count">@Html.DisplayFor(modelItem => item.CommentCount)</span>
+                                        </li>
+                                        @if (dateGap >= 0)
+                                        {
+                                            <li>
+                                                <span class="fa fa-clock-o fa-cus-gray" aria-hidden="true"></span>
+                                                <span class="task-count">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <span class="fa fa-clock-o fa-cus-red" aria-hidden="true"></span>
+                                                <span class="task-count" style="color: red">@Html.DisplayFor(modelItem => item.Duedate)</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        }
+    }
+    else
+    {
+        <li>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 10px;">
+                    <label>Giai đoạn này chưa có công việc nào!</label>
+                </div>
+            </div>
+        </li>
+    }
+    @if (ViewBag.IsLeader == true)
+    {
+        string idupdate = "addMainTaskForm" + ViewBag.PlanPhaseID;
+        <li>
+            <div class="row">
+                <div class="col-sm-12" style="margin-top: 15px; margin-left: -10px;">
+                    @Ajax.ActionLink("THÊM  CÔNG VIỆC ...", "AddMainTask", "Plan", new { planPhaseID = ViewBag.PlanPhaseID }, new AjaxOptions { UpdateTargetId = idupdate, InsertionMode = InsertionMode.Replace }, new { @style = "color: #000;font-weight: bold;cursor: pointer;font-size: small;background-color: #fff;padding: 5px;" })
+                </div>
+                <div class="col-sm-12" id="@idupdate">
+
+                </div>
+            </div>
+        </li>
+    }
+</ol>

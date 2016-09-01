@@ -1,0 +1,105 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.TeamFoundDonator
+
+@using (Ajax.BeginForm("AddTeamFoundDonator", "Budget", new { fundID = ViewBag.FundID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Cá nhân/ tổ chức ủng hộ hoặc quỹ nhóm ..." } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Information, new { htmlAttributes = new { @class = "form-control", @placeholder = "Thông tin ..." } })
+                @Html.ValidationMessageFor(model => model.Information, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số tiền ..." } })
+                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.ReceiveDate, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày nhận tiền ..." } })
+                @Html.ValidationMessageFor(model => model.ReceiveDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.DropDownListFor(model => model.Method, new SelectListItem[] {
+                                                                    new SelectListItem() {Text = "TIỀN MẶT", Value = "1" },
+                                                                    new SelectListItem() {Text = "CHUYỂN KHOẢN", Value = "2" } },
+                                                                    new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Method, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="checkbox">
+                    @Html.CheckBoxFor(model => model.IsReceived)
+                    @Html.LabelFor(model => model.IsReceived)
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform">
+                    HỦY
+                </a>
+                <input type="submit" value="THÊM" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#addTeamFoundDonatorForm").empty();
+        });
+
+        $('#Name').keypress(function () {
+            $('[data-valmsg-for="Name"]').hide();
+        });
+
+        $('#Amount').keypress(function () {
+            $('[data-valmsg-for="Amount"]').hide();
+        });
+
+        $('#ReceiveDate').keypress(function () {
+            $('[data-valmsg-for="ReceiveDate"]').hide();
+        });
+
+        $('#ReceiveDate').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+
+        if (isError) {
+            // there was an error => we update the container of the form
+            $('#addTeamFoundDonatorForm').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#addFinanceItemForm").empty();
+            $("#tabplanbudget").html(result.responseText);
+        }
+    };
+</script>
+

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Notification>
+@{
+    ViewBag.Title = "Lịch sử thông báo";
+}
+<div class="row">
+    <div class="col-md-3">
+        @{Html.RenderAction("NavigationPanel", "Account");}
+    </div>
+    <div class="col-md-9">
+        <div id="notifyPage" class="card-panel">
+            <div class="notifyPageHeader">
+                <h4>Lịch sử kết bạn</h4>
+            </div>
+            @foreach (var notify in Model)
+            {
+                    <div class="notifyItem-card">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <object type="image/jpg" data="@("/Images/User/Avatar/"+ notify.Actors[0].ID + ".jpg")" width="30" height="30"></object>
+                            </div>
+                            <div class="col-md-11" style="padding-left: 0px; margin-top: 5px">
+                                <a class="noti-friend-name" style="padding-right: 0px" href="@Url.Action("UserHome","User", new { userID = notify.Actors[0].ID})">@notify.Actors[0].DisplayName</a><label class="noti-friend-intro">đã đồng ý lời mời kết bạn</label>
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+</div>

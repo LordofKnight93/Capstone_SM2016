@@ -1,0 +1,15 @@
+﻿@if (Session["UserID"] != null)
+    {
+        Html.RenderAction("ShowAddCommentArea", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID });
+    }
+<div id="@("commentList" + ViewBag.PostID)"  class="commentList">
+    <div class="col-md-12 col-sm-12" style="padding-left: 5%;">
+        @if (ViewBag.CommentCount != "0")
+        {
+            @Ajax.ActionLink("Xem bình luận", "GetCommentList", "Group", new { postID = ViewBag.PostID, groupID = ViewBag.GroupID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.PostID, InsertionMode = InsertionMode.Replace }, new { @id = "showComment" + ViewBag.PostID, @style = "color:#9BCABA" })
+        }
+    </div>
+</div>
+
+
+

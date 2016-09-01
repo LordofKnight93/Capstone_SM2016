@@ -1,0 +1,112 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.ProjectInformation>
+@using iVolunteer.Common;
+<!-- List Project -->
+@foreach (var item in Model)
+{
+    <div id="@item.ProjectID">
+        <div class="card-project" style="margin-bottom: 10px;">
+            <div class="project-ava">
+                <img src="@item.Get_AvatarLink()" />
+            </div>
+            <div class="project-infor">
+                <div class="project-name">
+                    <a href="@Url.Action("ProjectHome", "Project", new { projectID = item.ProjectID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                </div>
+                <div class="project-detail-infor">
+                    <div class="project-des">
+                        <label class="overflow-paragraph" style="font-weight: normal" title="@Html.DisplayFor(modelItem => item.ProjectShortDescription)">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
+                    </div>
+                    <ul class="project-in">
+                        <li>
+                            <i class="material-icons md-18 md-mygreen">location_on</i>
+                            <span> @Html.DisplayFor(modelItem => item.Location)</span>
+                        </li>
+                        <li>
+                            <i class="fa fa-tags fa-cus-16 fa-cus-green"></i>
+                            <span> @Html.DisplayFor(modelItem => item.TagsString)</span>
+                        </li>
+                        <li>
+                            <i class="material-icons md-18 md-mygreen">access_time</i>
+                            <span> @Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</span>
+                        </li>
+                        <li>
+                            <i class="material-icons md-18 md-mygreen">email</i>
+                            <span> @Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="project-count">
+                <div>
+                    <h2 class="number-of-project-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.MemberCount)</h2>
+                    <label class="project-member">Thành viên</label>
+                </div>
+                <div>
+                    <h2 class="number-of-project-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.FollowerCount)</h2>
+                    <label class="project-member">Theo dõi</label>
+                </div>
+            </div>
+            <div class="action-to-project">
+                <div id="@item.ProjectID">
+                    <ul class="list-action-to-target">
+                        <li>
+                            @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý", @style = "border: 1px solid #049f88; border-radius: 2px;" })
+                        </li>
+                        <li>
+                            @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối", @style = "border: 1px solid #049f88; border-radius: 2px;" })
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+        @*<div class="divider-holizon"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img src="@item.Get_AvatarLink()" style="width: 100%; height: calc(width)">
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <a href="@Url.Action("ProjectHome","Project",new { projectID = item.ProjectID})" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.ProjectName)</a>
+                            </div>
+                            <div class="row">
+                                <label style="font-weight: normal">@Html.DisplayFor(modelItem => item.ProjectShortDescription)</label>
+                            </div>
+                            <div class="row">
+                                <table style="font-size: 14px;" width="60%">
+                                    <tr>
+                                        <td style="color: #049f88;">ĐỊA ĐIỂM</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #049f88;">LĨNH VỰC</td>
+                                        <td>Môi trường, Con người</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #049f88;">THỜI GIAN</td>
+                                        <td>@Html.DisplayFor(modelItem => item.DateStart) - @Html.DisplayFor(modelItem => item.DateEnd)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: #049f88;">LIÊN HỆ</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Email) - @Html.DisplayFor(modelItem => item.Phone)</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            @Ajax.ActionLink("Đồng ý", "AcceptInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                            @Ajax.ActionLink("Từ chối", "DeclineInvitation", "Account", new { projectID = item.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = item.ProjectID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider-holizon"></div>*@
+    </div>
+}
+

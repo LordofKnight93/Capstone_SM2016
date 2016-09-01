@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "Trò chuyện";
+}
+<div class="row">
+    <div class="col-md-3">
+        @{Html.RenderAction("NavigationPanel", "Account");}
+    </div>
+    <div class="col-md-9" style="padding: 0 5px;">
+        <div class="wrapper">
+            <div class="chatContainter">
+                <div class="left">
+                    @*<div class="top">Bạn bè</div>*@
+                    <ul class="nav nav-tabsChat">
+                        <li data-toggle="tab">
+                            @Ajax.ActionLink("Bạn bè", "GetFriendList", "User", new { }, new AjaxOptions { UpdateTargetId = "chatTab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#chatTab')" }, new { })
+                        </li>
+                        <li data-toggle="tab" class="active">
+                            @Ajax.ActionLink("Hội thoại gần đây", "GetCurrentChatFriends", "User", new { }, new AjaxOptions { UpdateTargetId = "chatTab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#chatTab')" }, new { })
+                        </li>
+                    </ul>
+                    @* Friend Search *@
+                    <div class="top">
+                        <span class="fa fa-search" style="opacity: 0.6;"></span>
+                        @*<span class="material-icons" style="font-size: 1.2em; opacity: 0.6;">search</span>*@
+
+                        <input id="@("friendSearch" + Session["UserID"].ToString())" class="chatFriendSearch" type="text" placeholder="Tìm kiếm" />
+                    </div>
+
+                    @* Friend LIst *@
+                    <div class="tab-pane fade in active" id="chatTab">
+                        @{Html.RenderAction("GetCurrentChatFriends", "User");}
+                    </div>
+                </div>
+                <!--CHAT BOX-->
+                <div id="chatArea" class="right"></div>
+            </div>
+        </div>
+    </div>
+    <div id="sound" style="display: none"></div>
+</div>
+<!--FRIEND LIST-->
+
+
+@section scripts {
+    <script src="~/scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(document).ready(function () {
+            if (typeof (myHub) === "undefined") {
+                myHub = $.connection.chatHub;
+            }
+            // Get Message
+            myHub.client.getMessage = function (friendID, userID, content, displayTime, messageID) {
+                try {
+                    if (userID == '@Session["UserID"].ToString()') {
+                        // Process new comming message
+                        if ($('#chatArea').children().first().attr("id") != ("chatBoxContent" + friendID)) {
+                            $('#mssCount' + friendID).html(function (i, val) { return +val + 1 });
+                            //Add this message to UNREAD of target user
+                            $.ajax({
+                                url: "/User/AddUnreadMsage",
+                                type: "POST",
+                                data: {
+                                    userID: userID,
+                                    friendID: friendID,
+                                    no: $('#mssCount' + friendID).text(),
+                                    messageID: messageID
+                                },
+                                success: function (data) {
+                                },
+                                error: function () {
+                                    alert("Not success in this!");
+                                }
+                            });
+                        }
+
+                        ////////////////////// CHAT LINE STYLE///////////////////////
+                        var chatMessNew = replaceEmoji(content);
+                        var chatLine = " <li class='mar-btm'>";
+                        chatLine += " <div class='media-body pad-hor'>";
+                        chatLine += "<div class='speech'>";
+                        chatLine += "<p data-toggle='tooltip' title='" + displayTime + "'>" + chatMessNew + "</p>";
+                        chatLine += "</div>";
+                        chatLine += "</div> </li>";
+                        /////////////////////////////////////////////////////////////
+                        $("#scroll" + friendID).animate({ scrollTop: $("#chatLine" + friendID).height() }, 600);
+                        $("#chatLine" + friendID).append(chatLine);
+                        playSound();
+                    }
+                }
+                catch (e) {
+                    console.log(e.message);
+                }
+            }
+            //Get Online Status
+            myHub.client.userHasConnected = function (friendID) {
+                $("#status" + friendID).addClass('onlineStatus');
+                $("#boxStatus" + friendID).text('Online');
+                $("#boxStatus" + friendID).removeClass('boxOfflineStatus');
+                $("#boxStatus" + friendID).addClass('boxOnlineStatus');
+            }
+            // Get Ofline status
+            myHub.client.userHasDisconnected = function (friendID) {
+                $("#status" + friendID).removeClass('onlineStatus');
+                $("#boxStatus" + friendID).text('Offline');
+                $("#boxStatus" + friendID).removeClass('boxOnlineStatus');
+                $("#boxStatus" + friendID).addClass('boxOfflineStatus');
+            }
+            // Start the conneciton to hub
+            $.connection.hub.start().done(function () {
+                //Register connectionID to HubConnection Data
+                myHub.server.connectToHub('@Session["UserID"].ToString()');
+                // Register Search Bar to Session User
+
+            }).fail(function () {
+                alert("Could not Connect!");
+            });
+
+            // Search Friend section
+            $("#friendSearch" + '@Session["UserID"].ToString()').autocomplete({
+
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/User/SearchUserForChat",
+                        dataType: "json",
+                        type: "POST",
+                        data: {
+                            name: request.term
+                        },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.DisplayName,
+                                    value: item.UserID
+                                }
+                            }))
+                        },
+                        error: function () {
+                            alert("Error");
+                        }
+                    });
+                },
+                select: function (event, ui) {
+                    $("#friendChatLink" + ui.item.value).trigger("click");
+                },
+                minLength: 1
+            });
+        });
+
+        // Create conversation when click at Friend name
+        var conversation = (function () {
+            var createConversation = function (selector, friendID) {
+                //Delete current chatbox
+                $("#chatArea").empty();
+                var userID = $(selector).attr("role");
+                var userName = $(selector).find(".name").text();
+                var chatBoxContent = "chatBoxContent" + userID;
+
+                //Delele messages count
+                $('#mssCount' + userID).empty();
+
+                //reset unread message
+                $.ajax({
+                    type: "POST",
+                    url: "/User/ResetUnreadMessage",
+                    data: {
+                        friendID: friendID
+                    },
+                    success: function (data, textstatus) {
+                        
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+
+                //////////////////STYLE FOR CHATBOX//////////////////
+                var boxHtml = "<div id='" + chatBoxContent + "' role=''>";
+                boxHtml += "<div class='top'>";
+                boxHtml += "<span class='name'>" + userName + "</span>";
+                if ($(selector).find('.onlineStatus').hasClass('onlineStatus')) {
+                    boxHtml += "<span id='boxStatus" + userID + "' class='boxOnlineStatus'>Online</span>";
+                }
+                else {
+                    boxHtml += "<span id='boxStatus" + userID + "' class='boxOfflineStatus'>Offline</span>";
+                }
+                boxHtml += "</div>";
+                boxHtml += "<div class='nano has-scrollbar' style='height: calc(100vh - 210px); border-bottom: 1px solid #ddd;'>";
+                boxHtml += "<div id='scroll" + userID + "' class='nano-content pad-all' tabindex='0' style='right: -17px; outline: none;'>";
+                boxHtml += "<ul id='chatLine" + userID + "' class='list-unstyled media-block'></ul>";
+                boxHtml += "</div></div>";
+                boxHtml += "<div class='write'>";
+                boxHtml += "<input type='text' id='textArea" + userID + "' placeholder='Viết tin nhắn...'><span class='fa fa-paper-plane-o fa-cus-22'></span>";
+                boxHtml += "</div></div>";
+                /////////////////////////////////////////////////////////
+
+                $('#chatArea').append(boxHtml);
+
+                // Load Recent message
+                getRecentMessages(userID, chatBoxContent);
+
+                // Enter to send message
+                $("#textArea" + userID).keydown(function (evt) {
+                    if (evt.keyCode == 13) {
+                        var text = $(this).val();
+                        if (text.trim() == "" || text == null) return;
+                        var messageID = $("#" + chatBoxContent).attr("role");
+                        sendMessage(userID, messageID, text);
+                        $(this).text("").val("");
+                        evt.preventDefault();
+                    }
+                });
+            }
+            var getRecentMessages = function (friendID, selector) {
+                var data = {
+                    friendID: friendID
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/GetRecentMessages",
+                    data: data,
+                    success: function (data, textstatus) {
+
+                        $("#" + selector).attr("role", data["MessageID"]);
+                        var dis1, dis2;
+                        for (var i = 0; i < data["Messages"].length; i++) {
+                            dis1 = ""; dis2 = "speech-time";
+                            if ('@Session["UserID"].ToString()' == data["Messages"][i]["Sender"]["ID"]) {
+                                dis1 = "speech-right"; dis2 = "speech-time-right";
+                            }
+                            var messContent = replaceEmoji(data["Messages"][i]["Content"]);
+                            var chatLine = " <li class='mar-btm'>";
+                            chatLine += " <div class='media-body pad-hor " + dis1 + " '>";
+                            chatLine += "<div class='speech'>";
+                            chatLine += "<p data-toggle='tooltip' title='" + data["DisplayTimes"][i] + "'>" + messContent + "</p>";
+                            chatLine += "</div>";
+                            chatLine += "</div> </li>";
+                            $("#chatLine" + friendID).append(chatLine);
+                        }
+                        $("#scroll" + friendID).scrollTop($("#chatLine" + friendID).height());
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            };
+
+            var sendMessage = function (friendID, messageID, content) {
+                var data = {
+                    friendID: friendID,
+                    messageID: messageID,
+                    content: content
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/User/CreateMessage",
+                    data: data,
+                    success: function (data, textstatus) {
+                        var sendChatNew = replaceEmoji(content);
+                        var chatLine = " <li class='mar-btm'>";
+                        chatLine += " <div class='media-body pad-hor speech-right'>";
+                        chatLine += "<div class='speech'>";
+                        chatLine += "<p data-toggle='tooltip' title='" + data + "'>" + sendChatNew + "</p>";
+                        chatLine += "</div>";
+                        chatLine += "</div> </li>";
+
+                        $("#chatLine" + friendID).append(chatLine);
+                        $("#scroll" + friendID).animate({ scrollTop: $("#chatLine" + friendID).height() }, 700);
+                        $.connection.hub.start().done(function () {
+                            // Get Chat Message
+                            @*myHub.server.sendMessage('@Session["UserID"].ToString()', friendID, content, data);*@
+                            myHub.server.sendMessage('@Session["UserID"].ToString()', friendID, content, data, messageID);
+                        });
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            };
+            return {
+                createConversation: createConversation
+            };
+        })();
+    </script>
+}

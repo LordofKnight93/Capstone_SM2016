@@ -1,0 +1,78 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
+@using iVolunteer.Common;
+<!-- Member -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="sub-container" style="padding: 5px 15px 15px;">
+
+            <!-- Header -->
+            <div class="row">
+                <div class="col-sm-9">
+                    <h4 style="color: #049f88">CÁ NHÂN ĐƯỢC ĐỀ XUẤT</h4>
+                    <p style="margin: -9px 0 0 0; font-size: 16px;">@Model.Count() người được đề xuất</p>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="divider-holizon"></div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="row" style="padding-left: 10px; padding-right: 10px;">
+                @foreach (var item in Model)
+                {
+                    <div id="@("sugestedusers" + item.UserID)">
+                        <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
+                            <div class="card-member">
+                                <div class="profile-avatar">
+                                    <img src="@item.Get_AvatarLink()">
+                                </div>
+                                <div class="interaction-button">
+                                    <div id="@item.UserID">
+                                        @{ Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.UserID });}
+                                    </div>
+                                </div>
+                                <div class="user-infor">
+                                    @if (item.IsActivate)
+                                    {
+                                        <div class="user-name">
+                                            <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                        </div>
+                                        <div class="detail-infor">
+                                            <p class="address-info">@Html.DisplayFor(modelItem => item.Address)</p>
+                                            <p class="friends-count">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</p>
+                                        </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="user-name">
+                                                        <label class="member-name">
+                                                            @Html.DisplayFor(modelItem => item.DisplayName)
+                                                        </label>
+                                                    </div>
+                                                    <div class="detail-infor">
+                                                        <p class="address-info">Người dùng đang bị tạm khóa</p>
+                                                    </div>
+                                                }
+
+                                </div>
+                                <div class="project-action-to-user">
+                                    <ul class="project-action-to-user-list">
+                                        <li>
+                                            @*@Ajax.RawActionLink("<i class='fa fa-sign-in fa-cus-btn-action' aria-hidden='true'></i><span class='action-to-target-text'>  Tham gia</span>", "SetLeader", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = " Bạn chắc chắn muốn thăng chức người này làm trưởng nhóm ?" })*@
+                                            @Ajax.RawActionLink("<i class='fa fa-check fa-cus-16 fa-cus-green' aria-hidden='true'></i>", "InviteUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "sugestedusers" + item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Đồng ý" })
+                                        </li>
+                                        <li>
+                                            @*@Ajax.ActionLink("Trục xuất", "ExpelMember", "Project", new { memberID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { UpdateTargetId = item.UserID, InsertionMode = InsertionMode.Replace, Confirm = "Bạn chắc chắn muốn trục xuất thành viên này ?" })*@
+                                            @Ajax.RawActionLink("<i class='fa fa-ban fa-cus-16 fa-cus-red' aria-hidden='true'></i>", "DeclineSuggestedUser", "Project", new { suggestID = item.UserID, projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "sugestedusers" + item.UserID, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn", data_toggle = "tooltip", data_placement = "bottom", @title = "Từ chối" })
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                                }
+            </div>
+        </div>
+    </div>
+</div>

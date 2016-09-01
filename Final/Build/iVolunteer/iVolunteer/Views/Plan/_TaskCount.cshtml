@@ -1,0 +1,83 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.TaskCount
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group">
+            <!-- Đầu mục -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title" style="padding: 0;">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h4 style="font-weight: bold; line-height: 30px">THỐNG KÊ</h4>
+                                </div>
+
+                                <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                    <a data-toggle="collapse" href="#taskCountCollape"><i class="material-icons">keyboard_arrow_up</i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="taskCountCollape" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div id="taskOnThisDay">
+                            <!-- All Task -->
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label>Tổng số công việc:</label>
+                                </div>
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label style="color: #049f88">@Model.AllTask</label>
+                                </div>
+                            </div>
+
+                            <!-- Số công việc đã hoàn thành -->
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label>Công việc đã hoàn thành:</label>
+                                </div>
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label style="color: #049f88">@Model.Done</label>
+                                </div>
+                            </div>
+
+                            <!-- Số công việc đang được thực hiện -->
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label>Công việc đang được thực hiện:</label>
+                                </div>
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label style="color: #049f88">@Model.Doing</label>
+                                </div>
+                            </div>
+
+                            <!-- Số công việc đang chờ -->
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label>Công việc đang chờ:</label>
+                                </div>
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label style="color: #049f88">@Model.Pending</label>
+                                </div>
+                            </div>
+
+                            <!-- Số công việc phải thực hiện lại -->
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <label>Công việc phải thực hiện lại:</label>
+                                </div>
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label style="color: #049f88">@Model.Rework</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

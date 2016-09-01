@@ -1,0 +1,45 @@
+﻿@using iVolunteer.Common
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.Comment>
+@foreach (var item in Model)
+{
+        <!-- Comment -->
+    <div class="commentItem">
+        <div class="row">
+            <div class="col-md-1 col-sm-1">
+                <object type="image/jpg" data="@("/Images/User/Avatar/" + item.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></object>
+            </div>
+            <div class="col-md-9 col-sm-9">
+                <div class="row">
+                    <a href="@Url.Action("UserHome","User", new { userID = item.Creator.ID})" class="user-name">@item.Creator.DisplayName</a>
+                </div>
+                <div class="row">
+                    <span style="font-size: 0.8em; color: #b4b4b4" title="@item.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")">@HelperExtensions.DaySpan(DateTime.Now, item.DateCreate.ToLocalTime())</span>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-2">
+                @if (Session["UserID"] != null && (Session["UserID"].ToString().Equals(item.Creator.ID) || ViewBag.Role == "Leader"))
+                {
+                    @Ajax.RawActionLink("<i class='glyphicon glyphicon-trash'></i>", "AlbumDeleteComment", "Project", new { albumID = ViewBag.AlbumID, commentID = item.CommentID, projectID = ViewBag.ProjectID },
+                                                                                 new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.AlbumID, InsertionMode = InsertionMode.Replace },
+                                                                                 new { @style = "cursor: pointer; color: #cecece", @class = "delete-comment-in-post" })
+                }
+            </div>
+        </div>
+        <p id="@("coment-content" + item.CommentID)">@item.Content</p>
+        <div class="commentHorizontal"></div>
+    </div>
+    <script>
+        var mess = $("#coment-content" + '@item.CommentID').text();
+        $("#coment-content" + '@item.CommentID').html(replaceEmoji(mess));
+    </script>
+}
+@if (ViewBag.LoadMore == true)
+{
+    <div class="loadAllCmt">
+        @Ajax.ActionLink("Hiện tất cả bình luận", "AlbumLoadOtherComment", "Project", new { albumID = ViewBag.AlbumID }, new AjaxOptions { UpdateTargetId = "commentList" + ViewBag.AlbumID, InsertionMode = InsertionMode.InsertAfter }, new { @id = "loadMoreComment" + ViewBag.AlbumID, @onclick = "loadMoreComment('" + ViewBag.AlbumID + "')" })
+    </div>
+}
+<script>
+    $('@("#comment" + ViewBag.AlbumID)').val('');
+</script>
+

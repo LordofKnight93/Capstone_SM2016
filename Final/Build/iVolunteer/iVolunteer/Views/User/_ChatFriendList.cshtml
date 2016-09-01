@@ -1,0 +1,46 @@
+﻿@*@model Tuple<IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>, IEnumerable<bool>>*@
+@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.ChatFriend>
+@if (Model != null)
+{
+    <div role="tabpanel" id="friendListTab" class="tab-pane fade in active">
+        <div class="nano has-scrollbar" style="height: calc(100vh - 170px);">
+            <div class="nano-content pad-all" tabindex="0" style="right: -17px; outline: none">
+                <ul class="people" id="friendList" style="padding-left: 0px;">
+                    @foreach (var friend in Model)
+                    {
+                        <li role="@friend.ID" id="@("friendChatLink" + friend.ID)" class="person" onclick="conversation.createConversation(this, '@friend.ID')">
+                            @if (friend.isOnline == true)
+                            {
+                                <p id="@("status" + friend.ID)" class="onlineStatus"></p>
+                            }
+                            else
+                            {
+                                <p id="@("status" + friend.ID)"></p>
+                            }
+                            <img src="@("/Images/User/Avatar/" + friend.ID + ".jpg")" />
+                            <span class="name">@friend.DisplayName</span>
+                            @*<span class="preview"></span>*@
+
+                            @if (friend.UnreadMss == 0)
+                            {
+                                <span id="@("mssCount" + friend.ID)" class="previewInside"></span>
+                            }
+                            else
+                            {
+                                <span id="@("mssCount" + friend.ID)" class="previewInside">
+                                    @if (friend.UnreadUser.Equals(Session["UserID"].ToString()))
+                                    {
+                                        @friend.UnreadMss
+                                    }
+                                </span>
+                            }
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+else {
+    <label>N/A</label>}
+

@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="iVolunteerModelStoreContainer" CdmEntityContainer="iVolunteerEntities">
+    <EntitySetMapping Name="SQL_AcAc_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAc_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcAc_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FriendID" ColumnName="FriendID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcAl_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcAl_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcAl_Relation">
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Account">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Account">
+        <MappingFragment StoreEntitySet="SQL_Account">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="IndentifyID" ColumnName="IndentifyID" />
+          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+          <ScalarProperty Name="DateOfChange" ColumnName="DateOfChange" />
+          <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+          <ScalarProperty Name="IsConfirm" ColumnName="IsConfirm" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcGr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcGr_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcGr_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcIm_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcIm_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcIm_Relation">
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcPo_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcPo_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcPo_Relation">
+          <ScalarProperty Name="PostID" ColumnName="PostID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_AcPr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_AcPr_Relation">
+        <MappingFragment StoreEntitySet="SQL_AcPr_Relation">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Album">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Album">
+        <MappingFragment StoreEntitySet="SQL_Album">
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Budget">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Budget">
+        <MappingFragment StoreEntitySet="SQL_Budget">
+          <ScalarProperty Name="BudgetID" ColumnName="BudgetID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Group">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Group">
+        <MappingFragment StoreEntitySet="SQL_Group">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_GrPr_Relation">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_GrPr_Relation">
+        <MappingFragment StoreEntitySet="SQL_GrPr_Relation">
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="Relation" ColumnName="Relation" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_HubConnection">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_HubConnection">
+        <MappingFragment StoreEntitySet="SQL_HubConnection">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Image">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Image">
+        <MappingFragment StoreEntitySet="SQL_Image">
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+          <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Message">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Message">
+        <MappingFragment StoreEntitySet="SQL_Message">
+          <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Plan">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Plan">
+        <MappingFragment StoreEntitySet="SQL_Plan">
+          <ScalarProperty Name="PlanID" ColumnName="PlanID" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Post">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Post">
+        <MappingFragment StoreEntitySet="SQL_Post">
+          <ScalarProperty Name="PostID" ColumnName="PostID" />
+          <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+          <ScalarProperty Name="DateLastActivity" ColumnName="DateLastActivity" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="IsPinned" ColumnName="IsPinned" />
+          <ScalarProperty Name="IsPublic" ColumnName="IsPublic" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SQL_Project">
+      <EntityTypeMapping TypeName="iVolunteerModel.SQL_Project">
+        <MappingFragment StoreEntitySet="SQL_Project">
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="IsRecruiting" ColumnName="IsRecruiting" />
+          <ScalarProperty Name="InProgress" ColumnName="InProgress" />
+          <ScalarProperty Name="IsActivate" ColumnName="IsActivate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

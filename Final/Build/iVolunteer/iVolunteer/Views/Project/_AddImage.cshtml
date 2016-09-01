@@ -1,0 +1,129 @@
+﻿<div>
+    @using (Html.BeginForm("Upload", "Album", new { albumID = ViewBag.AlbumID }, FormMethod.Post, new { @id = "fileupload", @enctype = "multipart/form-data" }))
+    {
+        <div class="row fileupload-buttonbar">
+            <div class="col-md-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="fileinput-button btn-card" style="padding: 0">
+                    <i class="fa fa-plus fa-cus-18"></i>
+                    <span>Thêm ảnh...</span>
+                    <input type="file" accept="image/*" name="files[]" multiple>
+                </span>
+                <button type="submit" class="start btn-card" style="padding: 0">
+                    <i class="fa fa-upload fa-cus-18"></i>
+                    <span>Tải ảnh lên</span>
+                </button>
+                <button type="reset" class="cancel btn-card" style="padding: 0">
+                    <i class="fa fa-ban fa-cus-18"></i>
+                    <span>Hủy bỏ</span>
+                </button>
+                <button type="button" class="delete btn-card" style="padding: 0">
+                    <i class="fa fa-trash-o fa-cus-18"></i>
+                    <span>Xóa bỏ</span>
+                </button>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-md-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+    <!-- The global progress state -->
+        <div class="col-md-5 fileupload-progress fade">
+            <!-- The global progress bar -->
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+            </div>
+            <!-- The extended global progress state -->
+            <div class="progress-extended">&nbsp;</div>
+        </div>
+
+    <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    }
+</div>
+<br>
+<!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <p class="name">{%=file.ImageName%}</p>
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Đang thực hiện...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+            <button class="start btn-card" disabled>
+                <i class="fa fa-upload fa-cus-18"></i>
+                <span>Bắt đầu</span>
+            </button>
+            {% } %}
+            {% if (!i) { %}
+            <button class="cancel btn-card">
+                <i class="fa fa-ban fa-cus-18"></i>
+                <span>Hủy bỏ</span>
+            </button>
+            {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+    {% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.ImageThumbnail_url) { %}
+                <a href="{%=file.ImageUrl%}" title="{%=file.ImageName%}"><img src="{%=file.ImageThumbnail_url%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            {% if (file.error) { %}
+            <div><span class="label label-danger">Up Ảnh Bị Lỗi</span><a> Ảnh của bạn quá nặng</a></div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.ImageSize)%}</span>
+        </td>
+        <td>
+            {% if (file.ImageDelete_url) { %}
+
+            <button class="delete btn-card" data-type="{%=file.ImageDelete_type%}" data-url="{%=file.ImageDelete_url%}" {% if (file.deletewithcredentials) { %} data-xhr-fields='{"withCredentials":true }' {% } %}>
+                <i class="fa fa-trash-o fa-cus-18"></i>
+                <span>Xóa</span>
+            </button>
+
+            <input type="checkbox" name="delete" value="1" class="toggle">
+            {%   } else { %}
+            <button class="cancel btn-card">
+                <i class="fa fa-ban fa-cus-18"></i>
+                <span>Hủy bỏ</span>
+            </button>
+            {% } %}
+        </td>
+    </tr>
+    {% } %}
+</script>

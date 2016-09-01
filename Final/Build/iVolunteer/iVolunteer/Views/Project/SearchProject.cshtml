@@ -1,0 +1,217 @@
+﻿@model iVolunteer.Models.ViewModel.SearchModel
+@{
+    ViewBag.Title = "Kết quả tìm kiếm";
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+}
+<div class="row">
+
+    @if (Session["Role"] != null && Session["Role"].ToString() == "User")
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    
+    <div class="@viewclass" id="main_content">
+        <!-- Advance Search -->
+        <div class="card-panel" style="margin: 0.5rem 0 1rem 0" id="advance-search-panel">
+            <div class="row">
+                <div class="col-md-12" style="margin-top: -20px">
+                    <h4 style="color: #049f88">Tìm kiếm nâng cao</h4>
+                    <div class="divider-holizon" style="margin-top: -8px"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    <!--form role="form" class="login-form"> -->
+                    @using (Ajax.BeginForm("AdvancedSearchProject", "Project", null, new AjaxOptions { UpdateTargetId = "result-content", InsertionMode = InsertionMode.Replace }))
+                    {
+                        <!-- Project Name -->
+                        <div class="row">
+                            <div class="col-xs-4 register-label">
+                                <label for="projectName">Tên dự án:</label>
+                            </div>
+                            <div class="col-xs-5 text-input">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @id = "projectName", @class = "form-control", @placeholder = "Tên dự án..." } })
+                            </div>
+                        </div>
+
+                        <!-- Date Start -->
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-xs-4 register-label">
+                                <label for="dateStart">Khoảng thời gian từ:</label>
+                            </div>
+                            <div class="col-xs-5 text-input">
+                                @Html.EditorFor(model => model.DateStart, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày bắt đầu...", @type = "text" } })
+                            </div>
+                        </div>
+
+                        <!-- Date End-->
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-xs-4 register-label">
+                                <label for="dateEnd">Đến:</label>
+                            </div>
+                            <div class="col-xs-5 text-input">
+                                @Html.EditorFor(model => model.DateEnd, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày kết thúc...", @type = "text" } })
+                            </div>
+                        </div>
+
+                        <!-- Project Place -->
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-xs-4 register-label">
+                                <label for="projectPlace">Địa điểm:</label>
+                            </div>
+                            <div class="col-xs-5 text-input">
+                                @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @id = "location", @class = "form-control", @placeholder = "Địa điểm" } })
+                            </div>
+                        </div>
+
+                        <!--Tag checkbox list-->
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <label>Chủ đề tình nguyện</label>
+                                <div class="checkbox">
+                                    <input id="education" type="checkbox" class="row" value="Giáo dục" name="tagsList" />
+                                    <label for="education">
+                                        Giáo dục
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="culture" type="checkbox" class="row" value="Văn hóa" name="tagsList" />
+                                    <label for="culture">Văn hóa</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="medical" type="checkbox" class="row" value="Y tế" name="tagsList" />
+                                    <label for="medical">
+                                        Y tế
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="society" type="checkbox" class="row" value="Xã hội" name="tagsList" />
+                                    <label for="society">Xã hội</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="environment" type="checkbox" class="row" value="Môi trường" name="tagsList" />
+                                    <label for="environment">Môi trường</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="travel" type="checkbox" class="row" value="Du lịch" name="tagsList" />
+                                    <label for="travel">Du lịch</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="sport" type="checkbox" class="row" value="Thể thao" name="tagsList" />
+                                    <label for="sport">Thể thao</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <label>Đối tượng hướng đến</label>
+                                <div class="checkbox">
+                                    <input id="children" type="checkbox" class="row" value="Trẻ em" name="tagsList" />
+                                    <label for="children">Trẻ em</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="poorpeople" type="checkbox" class="row" value="Người nghèo" name="tagsList" />
+                                    <label for="poorpeople">Người nghèo</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="disabilities" type="checkbox" class="row" value="Người khuyết tật" name="tagsList" />
+                                    <label for="disabilities">Người khuyết tật</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="disasterarea" type="checkbox" class="row" value="Vùng thiên tai" name="tagsList" />
+                                    <label for="disasterarea">Vùng thiên tai</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="animal" type="checkbox" class="row" value="Động vật" name="tagsList" />
+                                    <label for="animal">Động vật</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <label>Hình thức hoạt động</label>
+                                <div class="checkbox">
+                                    <input id="charity" type="checkbox" class="row" value="Ủng hộ" name="tagsList" />
+                                    <label for="charity">Ủng hộ</label>
+                                </div>
+                                <div class="checkbox">
+                                    <input id="fieldtrip" type="checkbox" class="row" value="Đi thực tế" name="tagsList" />
+                                    <label for="fieldtrip">Đi thực tế</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 col-xs-7" style="margin-top: 5px; margin-bottom: 5px">
+                            <div class="row">
+                                <label>Trạng thái</label>
+                                <div>
+                                    @*<input type="radio" class="row" value="true" name="progress" checked/>Chưa kết thúc
+                                    <input type="radio" class="row" value="false" name="progress" />Đã kết thúc*@
+                                    <div class="radio">
+                                        <input id="finished" type="radio" class="row" value="true" name="progress" checked/>
+                                        <label for="finished">Chưa kết thúc</label>
+                                    </div>
+                                    <div class="radio">
+                                        <input id="notfinish" type="radio" class="row" value="false" name="progress" />
+                                        <label for="notfinish">Đã kết thúc</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    @*@Html.CheckBoxFor(model => model.Recruiting) Đang tuyển thành viên*@
+                                    <div class="checkbox">
+                                        @Html.CheckBoxFor(model => model.Recruiting)
+                                        <label for="Recruiting">Đang tuyển thành viên</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Button -->
+                        <div class="row" style="margin-top: 30px">
+                            <div class="col-xs-2 col-xs-offset-5 text-input">
+                                <input type="hidden" value="1" name="page" />
+                                <button type="submit" class="btn btn-register">TÌM KIẾM</button>
+                            </div>
+                        </div>
+                        }
+                </div>
+            </div>
+        </div>
+        <div id="result-content">
+            @{ Html.RenderAction("NextResultPage", "Project", new { page = 1 });}
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateStart').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+    </script>
+<script type="text/javascript">
+		$(document).ready(function () {
+			$('#DateEnd').datetimepicker({
+			    format: 'YYYY/MM/DD',
+			});
+		});
+</script>
+}

@@ -1,0 +1,74 @@
+﻿@model iVolunteer.Models.MongoDB.CollectionClass.Mongo_Finance
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+<div>
+    <div class="row" style="margin-bottom: 20px">
+        <div class="col-md-12">
+            <div  class="sub-container">
+
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Số tiền trong ngân quỹ:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", ViewBag.ReceivedMoney)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Tổng kinh phí thực tế:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", Model.Total)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Số tiền còn lại sau chi trả thực tế:</label>
+                            </div>
+                            <div class="col-md-6" style="text-align: right;">
+                                <label style="color: #049f88; font-weight: bold;">@String.Format(info, "{0:C0}", ViewBag.ReceivedMoney - Model.Total)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="financeDetails">
+                @{ Html.RenderAction("DetailFinanceItem", "Budget", new { financeID = Model._id.ToString() });}
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.IsLeader == true)
+    {
+                    <!-- Thêm đầu mục -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="sub-container">
+                    <!--<h4 id="btnAddBudgetRecord" style="color: #049f88; font-weight: bold; cursor: pointer">THÊM  ĐẦU MỤC ...</h4>-->
+                    @Ajax.ActionLink("THÊM  HOẠT ĐỘNG ...", "AddFinanceItem", "Budget", new { financeID = Model._id.ToString() }, new AjaxOptions { UpdateTargetId = "addFinanceItemForm", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#addFinanceItemForm')" }, new { @style = "color: #049f88; font-weight: bold; cursor: pointer" })
+                    <div id="addFinanceItemForm">
+                        @*@{ Html.RenderPartial("_ProjectBudgetAddRecord");  }*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

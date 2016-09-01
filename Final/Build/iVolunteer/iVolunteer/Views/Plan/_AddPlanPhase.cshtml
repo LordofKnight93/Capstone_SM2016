@@ -1,0 +1,95 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PlanPhaseInformation
+
+@using (Ajax.BeginForm("AddPlanPhase", "Plan", new { projectID = ViewBag.ProjectID }, new AjaxOptions { HttpMethod = "POST", OnComplete = "Complete" }, new { @id = "formValidation", @class = "register-form", @style = "margin-top: 10px" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nội dung ..." } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <span class="text-danger" id="error-name" style="font-weight: normal;">@ViewBag.MessageName</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-5 col-md-offset-1" style="padding-right: 12px">
+                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày bắt đầu ..." } })
+            </div>
+            <div>
+                <i class="material-icons md-18" style="position: absolute; margin-left: -7px; padding-top: 8px;">arrow_forward</i>
+            </div>
+            <div class="col-md-5" style="padding-left: 12px">
+                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày kết thúc ..." } })
+            </div>
+            <div class="col-sm-10 col-sm-offset-1">
+                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-10 col-sm-offset-1">
+                @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-10 col-sm-offset-1">
+                <span class="text-danger" id="error-time" style="font-weight: normal; display: block;">@ViewBag.MessageTime</span>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-7 col-md-4" style="text-align: right;">
+                <a class="btn btn-image" id="clearform">
+                    HỦY
+                </a>
+                <input type="submit" value="THÊM" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#clearform").click(function () {
+            $("#addPlanPhaseForm").empty();
+        });
+
+        $('#Name').keypress(function () {
+            $('[data-valmsg-for="Name"]').hide();
+            $('#error-name').hide();
+        });
+
+        $('#StartTime').focus(function () {
+            $('[data-valmsg-for="StartTime"]').hide();
+            $('#error-time').hide();
+        });
+
+        $('#EndTime').focus(function () {
+            $('[data-valmsg-for="EndTime"]').hide();
+            $('#error-time').hide();
+        });
+
+        $('#StartTime').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+
+        $('#EndTime').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+    //Validate form
+    function Complete(result) {
+        var isError = $('span.field-validation-error', result.responseText).length > 0;
+        var errorContent = $('#error-name', result.responseText).length > 0;
+        var errorDeadline = $('#error-time', result.responseText).length > 0;
+
+        if (isError || errorContent || errorDeadline) {
+            // there was an error => we update the container of the form
+            $('#addPlanPhaseForm' + '@ViewBag.PlanPhaseID').html(result.responseText);
+        } else {
+            // no error => we hide validation errors and update the result container
+            $("#addPlanPhaseForm").empty();
+            $("#updatePlanPhaseBox").html(result.responseText);
+            addSuccess();
+        }
+    };
+</script>

@@ -1,0 +1,110 @@
+﻿@{  string actionName = ViewBag.Action;
+    string controller = ViewBag.Controller;
+    ViewBag.Title = "Upload Image";
+}
+<div class="modal-body">
+    <div class="row">
+        <!-- Header -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-11">
+                    <h4 id="main-task-title" style="font-weight: bold">Tải ảnh lên</h4>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="divider-holizon"></div>
+        </div>
+        <!-- Login -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1">
+                    @*@using (Html.BeginForm(actionName, controller, new { id = ViewBag.ID }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {*@
+                        @*<input type="file" name="Image" id="file" style="width: 100%;" />*@
+                        <div class="image-upload">
+                            <label class="btn btn-upload-img" for="file">
+                                <i class="fa fa-upload fa-cus-18"></i>
+                                <input id="file" name="Image" type="file" accept="image/*" style="display:none;" onchange="$('#upload-file-info').val($(this)[0].files[0]['name']);">
+                                Chọn ảnh
+                            </label>
+                            <input class='label label-filename' id="upload-file-info" readonly />
+                        </div>
+
+                        @*Error Message*@
+                        <div class="row">
+                            <div class="col-xs-8 col-xs-offset-4 text-input" style="text-align: center; margin-top: 10px">
+                                <label style="color:red;">@ViewBag.Message</label>
+                            </div>
+                        </div>
+                        @if (actionName.Equals("UploadCover"))
+                        {
+                            <div class="preview-image cover" id="preview-image">
+                                <img src="" id="img-preview"/>
+                            </div>
+                        }
+                        else if (actionName.Equals("UploadAvatar"))
+                        {
+                            <div class="preview-image avatar" id="preview-image">
+                                <img src="" id="img-preview" />
+                            </div>
+                        }
+                        <!-- Button -->
+                        <div class="row" style="margin-top: 60px; text-align: center;">
+                            <div class="col-xs-2 col-xs-offset-7 text-input">
+                                <a class="close" data-dismiss="modal" style="padding: 12px 20px 0 0; font-size: 14px;color: #333;background-color: #fff; border-color: #ccc; opacity: .8">HỦY</a>
+                            </div>
+                            <div class="col-xs-2 text-input">
+                                <button type="submit" class="btn btn-register" onclick="uploadImage('@ViewBag.ID')">TẢI LÊN</button>
+                            </div>
+                        </div>
+                    @*}*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#file").change(function (e) {
+        console.log("pass");
+        for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+            var file = e.originalEvent.srcElement.files[i];
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                $('#img-preview').attr('src', reader.result);
+            }
+            reader.readAsDataURL(file);
+            $('#preview-image').html(img);
+        }
+    });
+    function uploadImage(id) {
+        var data = new FormData();
+        var files = $("#file").get(0).files;
+        if (files.length > 0) {
+            data.append("Image", files[0]);
+        }
+        console.log("Start Upload");
+
+        $.ajax({
+            url: "@Url.Action(actionName, controller, new { id = ViewBag.ID })",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function (response) {
+                console.log("upload done");
+                //$("#avatarcover" + id).html(response);
+                //$('#cover-img').attr('src','')
+                console.log(response);
+                onpopupclose("#popup");
+            },
+            error: function (er) {
+                alert(er);
+            }
+
+        });
+    };
+</script>

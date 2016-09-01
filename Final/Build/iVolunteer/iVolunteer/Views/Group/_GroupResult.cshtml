@@ -1,0 +1,55 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+
+@if (Model.Count() > 0)
+{
+        <!-- Group 1 -->
+    <div class="card-panel" style="margin: 0.5rem 0 1rem 0">
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var item in Model)
+                {
+                    <div class="card-group" style="margin-bottom: 10px;">
+                        <div class="group-ava">
+                            <img src="@item.Get_AvatarLink()" />
+                        </div>
+                        <div class="group-infor">
+                            <div class="group-name">
+                                <a href="@Url.Action("GroupHome", "Group", new { groupID = item.GroupID })" style="font-weight: bold; color: #049f88">@Html.DisplayFor(modelItem => item.GroupName)</a>
+                            </div>
+                            <div class="group-detail-infor">
+                                <div class="group-des">
+                                    <label class="overflow-paragraph" style="font-weight: normal" title="@Html.DisplayFor(modelItem => item.GroupDescription)">@Html.DisplayFor(modelItem => item.GroupDescription)</label>
+                                </div>
+                                <ul class="group-contact">
+                                    <li>
+                                        <i class="material-icons md-18">email</i>
+                                        <span>@Html.DisplayFor(modelItem => item.Email)</span>
+                                    </li>
+                                    <li>
+                                        <i class="material-icons md-18">phone</i>
+                                        <span>@Html.DisplayFor(modelItem => item.Phone)</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="group-count">
+                            <h2 class="number-of-group-member"><span style="color: #ccc">|</span> @Html.DisplayFor(modelItem => item.MemberCount)</h2>
+                            <label class="group-member">Thành viên</label>
+                        </div>
+                        <div class="action-to-group-of-user">
+                            <div id="@item.GroupID">
+                                @{ Html.RenderAction("ActionToGroup", "Account", new { groupID = item.GroupID });}
+                            </div>
+                        </div>
+                    </div>
+                                }
+            </div>
+        </div>
+    </div>
+                                }
+@if (Model.Count() == 10)
+{
+    <div id = "@ViewBag.NextPage">
+        @Ajax.ActionLink("Nhiều hơn", "NextResultPage", "Group", new { name = ViewBag.Name, page = ViewBag.NextPage }, new AjaxOptions { UpdateTargetId = "" + ViewBag.NextPage, InsertionMode = InsertionMode.Replace }, new { @type = "button", @class = "btn btn-default" })
+    </div>
+}

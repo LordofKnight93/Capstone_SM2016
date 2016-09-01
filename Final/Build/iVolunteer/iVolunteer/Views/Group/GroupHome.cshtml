@@ -1,0 +1,106 @@
+﻿@model iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink
+
+@{
+    ViewBag.Title = Model.DisplayName;
+
+    string viewclass = "";
+
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+}
+
+<div class="row">
+    @if (Session["Role"] != null && Session["Role"].ToString() == "User")
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    <div class="@viewclass" id="main_content">
+        @*-------------------Cover Photo----------------*@
+        @{ Html.RenderAction("AvatarCover", "Group", new { groupID = Model.ID });}
+        @*-------------------Navigation Bar----------------*@
+        <div id="exTab1">
+            <ul class="nav nav-tabs">
+                @if (Session["UserID"] == null || ViewBag.IsJoined == false)
+                {
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
+                        @Ajax.ActionLink("Hoạt động", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes()" })
+                    </li>
+                }   
+                @if (ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
+                {
+                    <li class="col-md-2" data-toggle="tab">
+                        <!--<a id="publictab" href="#public" data-toggle="tab">CÔNG KHAI</a> -->
+                        @Ajax.ActionLink("Hoạt động", "GroupPublic", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes();" })
+                    </li>
+                    <li class="col-md-2 active" data-toggle="tab">
+                        <!--a id="privatetab" href="#private" data-toggle="tab">THẢO LUẬN</a>-->
+                        @Ajax.ActionLink("Thảo luận", "GroupDiscussion", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" }, new { @onclick = "resetTimes();" })
+                    </li>
+                }
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Tổ chức", "GroupStructure", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    <!--<a id="gallerytab" href="#gallery" data-toggle="tab">THƯ VIỆN</a>-->
+                    @Ajax.ActionLink("Thư viện", "GroupGallery", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Thông tin", "GroupInformation", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
+                </li>
+                <li class="col-md-2" data-toggle="tab">
+                    @Ajax.ActionLink("Dự án", "ActivityHistory", "Group", new { groupID = Model.ID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, OnBegin = "OnBegin('#group-tab')" })
+                </li>
+            </ul>
+            <div id="panelContent" class="tab-content clearfix">
+                <!-- Public Tab -->
+                <div class="tab-pane fade in active" id="group-tab">
+                    @if (Session["UserID"] == null || ViewBag.IsJoined == false && ViewBag.IsAdmin == null)
+                    {
+                        Html.RenderAction("GroupPublic", "Group");
+                    }
+                    @if(ViewBag.IsJoined == true || ViewBag.IsAdmin == true)
+                    {
+                        Html.RenderAction("GroupDiscussion", "Group");
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        /************************************ Script for Album ******************************************************/
+        function showAlbumImage(albumID, targetID) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AlbumShowImage", "Group")",
+                data: {
+                    albumID: albumID,
+                    targetID: targetID
+                },
+                beforeSend: function () {
+                    OnBegin('#albumList');
+                },
+                success: function (response) {
+                    $("#albumList").html(response);
+                }
+            });
+        };
+    </script>
+}

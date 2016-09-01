@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Đình chỉ";
+}
+@model Tuple<List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>, List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>, List<iVolunteer.Models.MongoDB.EmbeddedClass.LinkClass.SDLink>>
+
+<div class="report-container">
+    <ul class="nav nav-tabsReport">
+        <li role="presentation"><a href="#bannedGroup" role="tab" data-toggle="tab" aria-controls="bannedGroup">Nhóm đã khóa</a></li>
+        <li role="presentation"><a href="#bannedProject" role="tab" data-toggle="tab" aria-controls="bannedProject">Dự án đã khóa</a></li>
+        <li role="presentation" class="active"><a href="#bannedUser" role="tab" data-toggle="tab" aria-controls="bannedUser">Thành viên đã khóa</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" id="bannedGroup" class="tab-pane fade">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    <table id="reportTable" class="table table-borderless1">
+                        <tr>
+                            <th>Tên nhóm</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        @foreach (var group in Model.Item1)
+                        {
+                            <tr id="@group.ID">
+                                <td class="col-md-6"><a href="@Url.Action("GroupHome","Group", new { groupID = group.ID })">@group.DisplayName</a></td>
+                                <td class="col-md-6">
+                                    <button role="@group.ID" id="reactivateGroup" class="btn btn-success btn-xs" href="@Url.Action("ReactivateGroup","Admin")">Kích hoạt</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" id="bannedProject" class="tab-pane fade">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    <table id="reportTable" class="table table-borderless1">
+                        <tr>
+                            <th>Tên dự án</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        @foreach (var project in Model.Item2)
+                        {
+                            <tr id="@project.ID">
+                                <td class="col-md-6"><a href="@Url.Action("ProjectHome","Project", new { projectID = project.ID })">@project.DisplayName</a></td>
+                                <td class="col-md-6">
+                                    <button role="@project.ID" id="reactivateProject" class="btn btn-success btn-xs" href="@Url.Action("ReactivateProject","Admin")">Kích hoạt</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" id="bannedUser" class="tab-pane fade in active">
+            <div class="nano has-scrollbar" style="height:620px;">
+                <div class="nano-content pad-all" tabindex="0" style="right: -17px;">
+                    <table id="reportTable" class="table table-borderless1">
+                        <tr>
+                            <th>Tên thành viên</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        @foreach (var user in Model.Item3)
+                        {
+                            <tr id="@user.ID">
+                                <td class="col-md-6"><a href="@Url.Action("UserHome","User", new { userID = user.ID })">@user.DisplayName</a></td>
+                                <td class="col-md-6">
+                                    <button role="@user.ID" id="reactivateUser" class="btn btn-success btn-xs" href="@Url.Action("ReactivateUser","Admin")">Kích hoạt</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+    $('button').click(function (event) {
+        var url = this.getAttribute('href');
+        // Deactivate Group
+        if (this.id == "reactivateGroup") {
+            var groupID = this.getAttribute('role')
+            var data = {
+                groupID: groupID
+            };
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    $('#' + groupID).remove();
+                }
+            });
+        }
+        // Ignore Group
+        if (this.id == "reactivateProject") {
+            var projectID = this.getAttribute('role')
+            var data = {
+                projectID: projectID
+            };
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    $('#' + projectID).remove();
+                }
+            });
+        }
+        if (this.id == "reactivateUser") {
+            var userID = this.getAttribute('role')
+            var data = {
+                userID: userID
+            };
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: data,
+                success: function (data) {
+                    $('#' + userID).remove();
+                }
+            });
+        }
+
+
+    });
+    </script>
+}
+

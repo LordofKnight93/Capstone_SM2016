@@ -1,0 +1,85 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.FinanceItem>
+@{
+    var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+@{ int count = 0; }
+@if (Model.Count != 0)
+{
+    foreach (var group in Model.OrderByDescending(item => item.Date).GroupBy(item => item.Date))
+    {
+        count++;
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel-group" style="margin-bottom: 20px">
+                    <!-- Đầu mục -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title" style="padding: 0;">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h4 style="font-weight: bold; line-height: 30px">@group.Key.ToString("dd/MM/yyyy")</h4>
+                                        </div>
+
+                                        <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                            <a data-toggle="collapse" href="@("#collapse" + count)"><i class="material-icons">keyboard_arrow_up</i></a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="@("collapse" + count)" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <div id="financeItemDetails">
+                                    <table class="member-manager-table" style="margin-bottom: 20px">
+                                        <colgroup>
+                                            @if (ViewBag.IsLeader == true)
+                                            {
+                                                <col width="40%" />
+                                                <col width="25%" />
+                                                <col width="20%" />
+                                                <col width="15%" />
+                                            }
+                                            else
+                                            {
+                                                <col width="50%" />
+                                                <col width="30%" />
+                                                <col width="20%" />
+                                            }
+                                        </colgroup>
+                                        <tr>
+                                            <th style="text-align: center">KHOẢN CHI</th>
+                                            <th>NGƯỜI CHI</th>
+                                            <th>SỐ TIỀN</th>
+                                            @if (ViewBag.IsLeader == true)
+                                            {
+                                                <th>HÀNH ĐỘNG</th>
+                                            }
+                                        </tr>
+                                        @foreach (var item in group)
+                                        {
+                                            <tr>
+                                                <td style="padding-left: 10px;">@item.Term</td>
+                                                <td><span class="assign"><a href="@Url.Action("UserHome", "User", new { userID = Html.Encode(item.Payer.ID)})">@item.Payer.DisplayName</a></span></td>
+                                                <td><label>@String.Format(info, "{0:C0}", item.Amount)</label></td>
+                                                @if (ViewBag.IsLeader == true)
+                                                {
+                                                    <td style="text-align: center">
+                                                        @Ajax.ActionLink("delete", "DeleteFinanceItem", "Budget", new { financeID = ViewBag.FinanceID, financeItemID = Html.Encode(item.FinanceItemID).ToString() }, new AjaxOptions { UpdateTargetId = "tabplanbudget", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+}

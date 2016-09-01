@@ -1,0 +1,170 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.ItemClass.SubTask>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel-group" style="margin-bottom: 20px">
+            <!-- Đầu mục -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title" style="padding: 0;">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h4 style="font-weight: bold; line-height: 30px">CÔNG VIỆC CỦA BẠN</h4>
+                                </div>
+
+                                <div class="col-sm-4" style="text-align: right; padding: 0 8px">
+                                    <a data-toggle="collapse" href="#my-task"><i class="material-icons">keyboard_arrow_up</i></a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="my-task" class="panel-collapse collapse">
+                    <div class="panel-body" style="padding: 5px">
+                        <div id="taskOnThisDay">
+                            <ol class="list-task">
+                                @if (Model.Count != 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        string taskid = "subtask" + @item.SubTaskID;
+                                        DateTime date = DateTime.Today;
+                                        TimeSpan span = item.Deadline - date;
+                                        int dateGap = span.Days;
+                                        int hourGap = span.Hours;
+
+                                        <li>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        @if (item.Priolity == 1)
+                                                        {
+                                                            <div class="priolity low"></div>
+                                                        }
+                                                        else if (item.Priolity == 2)
+                                                        {
+                                                            <div class="priolity medium"></div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="priolity high"></div>
+                                                        }
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="row">
+                                                            <div class="col-sm-2">
+                                                                @if (item.IsDone == 3)
+                                                                {
+                                                                    <div class="checkbox">
+                                                                        <input id="@("cbxMyTaskStatus-" + item.SubTaskID)" type="checkbox" checked disabled>
+                                                                        <label for="@("cbxMyTaskStatus-" + item.SubTaskID)">
+
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div class="checkbox">
+                                                                        <input id="@("cbxMyTaskStatus-" + item.SubTaskID)" type="checkbox" onclick="cbsEditSubTaskStatusUser('@ViewBag.ProjectID', '@item.SubTaskID')">
+                                                                        <label for="@("cbxMyTaskStatus-" + item.SubTaskID)">
+
+                                                                        </label>
+                                                                    </div>
+                                                                }
+                                                            </div>
+                                                            <div class="col-sm-10" style="padding-left: 0; padding-top: 10px;">
+                                                                @if (item.IsDone == 3)
+                                                                {
+                                                                    <label id="@("lbMyTaskContent-" + item.SubTaskID)" style="font-weight: normal; text-decoration: line-through">
+                                                                        @item.Content
+                                                                    </label>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <label id="@("lbMyTaskContent-" + item.SubTaskID)" style="font-weight: normal;">
+                                                                        @item.Content
+                                                                    </label>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <ul class="list-task-infor">
+                                                            <li id="@("liCurrentStatus-" + item.SubTaskID)">
+                                                                @if (item.IsDone == 1)
+                                                                {
+                                                                    <span class="badge is-unread-notification" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">ĐANG CHỜ</span>
+                                                                }
+                                                                else if (item.IsDone == 2)
+                                                                {
+                                                                    <span class="badge is-due-past" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">ĐANG THỰC HIỆN</span>
+                                                                }
+                                                                else if (item.IsDone == 3)
+                                                                {
+                                                                    <span class="badge is-complete">ĐÃ HOÀN THÀNH</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="badge is-due-past" onclick="openEditSubTaskStatusUser('@item.SubTaskID')">THỰC HIỆN LẠI</span>
+                                                                }
+                                                            </li>
+                                                            <li id="@("liChooseNewStatus-" + item.SubTaskID)" style="display: none">
+                                                                <select id="@("slcNewStatus-" + item.SubTaskID)" onchange="saveSubTaskStatusUser('@ViewBag.ProjectID','@item.SubTaskID')">
+                                                                    <option value="0">-- Trạng thái --</option>
+                                                                    <option value="2">ĐANG THỰC HIỆN</option>
+                                                                    <option value="3">ĐÃ HOÀN THÀNH</option>
+                                                                </select>
+                                                                <i id="@("btn-cancel-edit-subtask-status-user" + item.SubTaskID)" class="material-icons" onclick="cancelEditSubTaskStatusUser('@item.SubTaskID')">cancel</i>
+                                                            </li>
+                                                            <li>
+                                                                @if (item.IsDone != 3)
+                                                                {
+                                                                    if (dateGap >= 1)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                        <span class="pending">@dateGap ngày</span>
+                                                                    }
+                                                                    else if (dateGap < -1)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                                                        <span class="overdue">@dateGap ngày</span>
+                                                                    }
+                                                                    else if (dateGap < 1 && dateGap >= 0)
+                                                                    {
+                                                                        <i class="material-icons md-18 md-mygreen">access_time</i>
+                                                                        <span class="pending">@hourGap giờ</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="material-icons md-18 md-myred">access_time</i>
+                                                                        <span class="overdue">@hourGap giờ</span>
+                                                                    }
+                                                                }
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li>
+                                        <label>Bạn chưa có công việc nào để thực hiện.</label>
+                                    </li>
+                                }
+                            </ol>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

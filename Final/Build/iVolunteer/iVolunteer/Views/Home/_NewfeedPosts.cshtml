@@ -1,0 +1,168 @@
+﻿@using iVolunteer.Common
+@model IEnumerable<iVolunteer.Models.MongoDB.CollectionClass.Mongo_Post>
+@if (Model == null)
+{
+    <div style="text-align: center"><label>Bạn chưa tham gia bất kì nhóm hoặc dự án tình nguyện nào. <br /> Hãy tham gia ngay để cập nhật được những thông tin mới nhất</label></div>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        //If Post is in Group
+        if (item.PostInfomation.Destination.Handler == "Group")
+        {
+            <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+                <div class="row">
+                    <div class="col-sm-7 col-md-7">
+                        <!-- Post Owner -->
+                        <table class="table-post-ava">
+                            <tr>
+                                @if (item.PostInfomation.IsPublic == true)
+                                {
+                                    <td rowspan="2" style="width: 50px;"><img src="@("/Images/Group/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                            <td class="td"><a href="@Url.Action("GroupHome","Group", new { groupID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
+                                }
+                                else
+                                {
+                                    <td rowspan="2" style="width: 50px;"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                            <td class="td">
+                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="fa fa-caret-right fa-cus-14 fa-cus-gray" style="margin: 0 10px;"></i>
+                                                <a href="@Url.Action("GroupHome","Group", new { groupID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a>
+                                            </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td class="td" style="color: gray; font-size:90%" title="@item.PostInfomation.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")">@HelperExtensions.DaySpan(DateTime.Now, @item.PostInfomation.DateCreate.ToLocalTime())</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-5 col-md-5" style="text-align: right">
+                        @*@{Html.RenderAction("ActionToPost", "Group", new { postID = @item.PostInfomation.PostID, groupID = item.PostInfomation.Destination.ID });}*@
+                    </div>
+                </div>
+                <!-- Post Content -->
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="card-content">
+                            @if (@item.PostInfomation.ImgLink != "")
+                            {
+                                <div class="postImageArea">
+                                    <a class="fancybox" href="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")">
+                                        <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                    </a>
+                                </div>
+                            }
+                            <p style="white-space: pre-line;">@item.PostInfomation.Content</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="divider-holizon"></div>
+                <!-- Interaction Panel -->
+                <div class="row">
+                    <!-- Interaction Button -->
+                    <div class="col-md-10 col-sm-10" style="padding: 5px 35px 3px; display: inline-flex;">
+                        <div id="@("likeArea" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                            @{Html.RenderAction("IsLiked", "Group", new { postID = @item.PostInfomation.PostID });}
+                        </div>
+                        <div id="@("cmtCount" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                            <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
+                            @if (item.CommentList.Count != 0)
+                        {
+                                <span style="color: #aab8c2">@item.CommentList.Count</span>
+                            }
+                        </div>
+                        <div id="@("share" + item.PostInfomation.PostID)">
+                            <i class="fa-cus fa-share-square-o fa-cus-18" style="color: #aab8c2" title="Chức năng đang phát triển"></i>
+                            @if (item.CommentList.Count != 0)
+                        {
+                                <span style="color: #aab8c2"></span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="divider-holizon"></div>
+                <div id="@("commentArea" + item.PostInfomation.PostID)">
+                    @{Html.RenderAction("ShowCommentArea", "Group", new { postID = item.PostInfomation.PostID, groupID = item.PostInfomation.Destination.ID, cmtCount = item.CommentList.Count });}
+                </div>
+            </div>
+                        }
+                        //Pots is in Project
+                        else
+                        {
+                            <div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+                                <div class="row">
+                                    <div class="col-sm-7 col-md-7">
+                                        <!-- Post Owner -->
+                                        <table class="table-post-ava">
+                                            <tr>
+                                                @if (item.PostInfomation.IsPublic == true)
+                                                {
+                                                    <td rowspan="2" style="width: 50px;"><img src="@("/Images/Project/Avatar/" + item.PostInfomation.Destination.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                                            <td class="td"><a href="@Url.Action("ProjectHome","Project", new { projectID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a></td>
+                                                }
+                                                else
+                                                {
+                                                    <td rowspan="2" style="width: 50px;"><img src="@("/Images/User/Avatar/" + item.PostInfomation.Creator.ID + ".jpg")" width="40" height="40" style="border-radius:5px"></td>
+                                                            <td class="td">
+                                                                <a href="@Url.Action("UserHome","User", new { userID = item.PostInfomation.Creator.ID })" class="user-name">@item.PostInfomation.Creator.DisplayName</a><i class="fa fa-caret-right fa-cus-14 fa-cus-gray" style="margin: 0 10px;"></i>
+                                                                <a href="@Url.Action("ProjectHome","Project", new { projectID = item.PostInfomation.Destination.ID })" class="user-name">@item.PostInfomation.Destination.DisplayName</a>
+                                                            </td>
+                                                }
+                                            </tr>
+                                            <tr>
+                                                <td class="td" style="color: gray; font-size:90%" title="@item.PostInfomation.DateCreate.ToLocalTime().ToString("HH:mm dd/MM/yyyy")">@HelperExtensions.DaySpan(DateTime.Now, item.PostInfomation.DateCreate.ToLocalTime())</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Post Content -->
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="card-content">
+                                            @if (@item.PostInfomation.ImgLink != "")
+                                            {
+                                                <div class="postImageArea">
+                                                    <a class="fancybox" href="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")">
+                                                        <img class="postImage" src="@("/Images/Post/" + item.PostInfomation.PostID + ".jpg")" />
+                                                    </a>
+                                                </div>
+                                            }
+                                            <p style="white-space: pre-line;">@item.PostInfomation.Content</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divider-holizon"></div>
+                                <!-- Interaction Panel -->
+                                <div class="row">
+                                    <!-- Interaction Button -->
+                                    <div class="col-md-10 col-sm-10" style="padding: 5px 35px 3px; display: inline-flex;">
+                                        <div id="@("likeArea" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                                            @{Html.RenderAction("IsLiked", "Project", new { postID = @item.PostInfomation.PostID });}
+                                        </div>
+                                        <div id="@("cmtCount" + item.PostInfomation.PostID)" style="margin-right: 30px;">
+                                            <i class="fa fa-comment-o fa-cus-18" style="color: #aab8c2"></i>
+                                            @if (item.CommentList.Count != 0)
+                        {
+                                                <span style="color: #aab8c2">@item.CommentList.Count</span>
+                                            }
+                                        </div>
+                                        <div id="@("share" + item.PostInfomation.PostID)">
+                                            <i class="fa-cus fa-share-square-o fa-cus-18" style="color: #aab8c2" title="Chức năng đang phát triển"></i>
+                                            @if (item.CommentList.Count != 0)
+                        {
+                                                <span style="color: #aab8c2"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divider-holizon"></div>
+                                <div id="@("commentArea" + item.PostInfomation.PostID)">
+                                    @{Html.RenderAction("ShowCommentArea", "Project", new { postID = item.PostInfomation.PostID, projectID = item.PostInfomation.Destination.ID, cmtCount = item.CommentList.Count });}
+                                </div>
+                            </div>
+                                        }
+                                        <!--  Text Post -->
+
+                                        }
+                                        <a id="loadMorePostNewfeedLink" onclick="ldMrePstNf(event)"></a>
+                                        }

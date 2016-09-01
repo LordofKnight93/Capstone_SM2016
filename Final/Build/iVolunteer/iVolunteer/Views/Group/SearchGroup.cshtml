@@ -1,0 +1,29 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation>
+@{
+    ViewBag.Title = "Kết quả tìm kiếm";
+    string viewclass = "";
+    if (Session["UserID"] != null)
+    {
+        viewclass = "col-md-9";
+    }
+    else
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+    if (Session["UserID"] != null && Session["Role"].ToString() == "Admin")
+    {
+        viewclass = "col-md-9 col-md-offset-15";
+    }
+}
+<div class="row">
+
+    @if (Session["Role"] != null && Session["Role"].ToString() == "User")
+    {
+        <div class="col-md-3" style="margin: 0 0 1rem 0; margin-right: -10px">
+            @{ Html.RenderAction("NavigationPanel", "Account");}
+        </div>
+                }
+    <div class="@viewclass" id="main_content">
+        @{ Html.RenderAction("NextResultPage", "Group", new { name = ViewBag.name, page = 1 });}
+    </div>
+</div>

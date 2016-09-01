@@ -1,0 +1,96 @@
+﻿@model IEnumerable<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.AccountInformation>
+<div class="modal-body">
+    <!-- Member -->
+    <div class="row">
+        <!-- Header -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-11">
+                    <h4 id="main-task-title" style="font-weight: bold">Thành viên của dự án</h4>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+            </div>
+            <div class="divider-holizon"></div>
+        </div>
+        <div class="col-md-12">
+            @using (Ajax.BeginForm("AddOrganizedUsers", "Project", new AjaxOptions { UpdateTargetId = "tabprojectmember", InsertionMode = InsertionMode.Replace, HttpMethod = "POST" }))
+            {
+            <!-- Content -->
+                <!-- Content -->
+                <div class="row" style="padding-left: 10px; padding-right: 10px;">
+                    @if (Model.Count() != 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="col-sm-6 col-xs-12" style="margin-top: 5px; margin-bottom: 5px; padding-left: 8px; padding-right: 8px; ">
+                                <div class="card-member">
+                                    <div class="profile-avatar">
+                                        <img src="@item.Get_AvatarLink()">
+                                    </div>
+                                    <div class="interaction-button">
+                                        <div id="@item.UserID">
+                                            @{ Html.RenderAction("ActionToOtherUser", "Account", new { otherID = item.UserID });}
+                                        </div>
+                                    </div>
+                                    <div class="user-infor">
+                                        @if (item.IsActivate)
+                                        {
+                                            <div class="user-name">
+                                                <a href="@Url.Action("UserHome", "User", new { userID = item.UserID })">@Html.DisplayFor(modelItem => item.DisplayName)</a>
+                                            </div>
+                                            <div class="detail-infor">
+                                                <p class="address-info">@Html.DisplayFor(modelItem => item.Address)</p>
+                                                <p class="friends-count">@Html.DisplayFor(modelItem => item.FriendCount) bạn @{Html.RenderAction("MutalFriends", "Account", new { otherID = item.UserID }); }</p>
+                                            </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="user-name">
+                                                            <label class="member-name">
+                                                                @Html.DisplayFor(modelItem => item.DisplayName)
+                                                            </label>
+                                                        </div>
+                                                        <div class="detail-infor">
+                                                            <p class="address-info">Người dùng đang bị tạm khóa</p>
+                                                        </div>
+                                                    }
+
+                                    </div>
+
+                                    <div class="project-action-to-user">
+                                        <ul class="project-action-to-user-list">
+                                            <li>
+                                                <div class="checkbox">
+                                                    <input type="checkbox" name="memberID" value="@item.UserID" id="@("checkbox-" + item.UserID)">
+                                                    <label for="@("checkbox-" + item.UserID)" style="margin-left: -5px;">
+                                                        Chọn
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="col-md-12">
+                                                            <h5>Bạn không có bạn bè hoặc tất cả bạn bè của bạn đã tham gia hoặc đề xuất tham gia dự án.</h5>
+                                                        </div>
+                                                    }
+                </div>
+                    <!-- Footer -->
+                                                    <div class="row">
+                                                        <div class="col-sm-12" style="text-align: right">
+                                                            <div class="divider-holizon"></div>
+                                                            <input type="hidden" name="projectID" value="@ViewBag.ProjectID" />
+                                                            <button type="submit" class="btn btn-register" data-toggle="modal" data-target="#popup">HOÀN THÀNH</button>
+                                                        </div>
+                                                    </div>
+                                                    }
+        </div>
+    </div>
+</div>

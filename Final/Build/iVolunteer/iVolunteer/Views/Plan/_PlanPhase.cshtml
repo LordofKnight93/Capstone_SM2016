@@ -1,0 +1,100 @@
+﻿@model List<iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.PlanPhaseInformation>
+
+@if (Model.Count != 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-panel card-grey" style="margin-bottom: 10px;">
+                    <div class="plan-phase-panel">
+                        <!-- Interaction button -->
+                        @if (ViewBag.IsLeader == true)
+                        {
+                            <div class="btn-plan-phase-edit">
+                                @Ajax.ActionLink("done", "CompletePlanPhase", "Plan", new { planPhaseID = @item.PlanPhaseID }, new AjaxOptions { UpdateTargetId = "updatePlanPhaseBox", InsertionMode = InsertionMode.Replace }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                            </div>
+                            <div class="btn-plan-phase-delete">
+                                @Ajax.ActionLink("delete", "DeletePlanPhase", "Plan", new { planPhaseID = @item.PlanPhaseID }, new AjaxOptions { UpdateTargetId = "updatePlanPhaseBox", InsertionMode = InsertionMode.Replace, OnSuccess = "deleteSuccess" }, new { @class = "material-icons md-20", @style = "text-decoration: none; color: #049f88; font-weight: bold; cursor: pointer" })
+                            </div>
+                        }
+
+                        <!-- Header -->
+                        <div class="row">
+                            <div class="col-xs-12">
+
+                                <div class="row">
+                                    <!-- Info -->
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                @if (ViewBag.IsLeader == true)
+                                                {
+                                                    <label id="@("phase-name-" + item.PlanPhaseID)" onclick="planPhaseNameLabel('@item.PlanPhaseID')">@item.Name.ToUpper()</label>
+                                                    <input class="txt-edit-phase-name" id="@("txt-phase-name-" + item.PlanPhaseID)" value="@item.Name" style="display: none;" onkeypress="enterSavePlanPhaseName(event,'@item.PlanPhaseID')" />
+                                                    <i id="@("btn-save-phase-name-" + item.PlanPhaseID)" class="material-icons" style="display: none; cursor: pointer" onclick="btnSavePlanPhaseName('@item.PlanPhaseID')">save</i>
+                                                    <i id="@("btn-phase-name-" + item.PlanPhaseID)" class="material-icons" style="display: none; cursor: pointer" onclick="closeEditPlanPhaseName('@item.PlanPhaseID')">cancel</i>
+                                                    <div id="@("error-phase-name-" + @item.PlanPhaseID)"></div>
+                                                }
+                                                else
+                                                {
+                                                    <label id="@("phase-name-" + item.PlanPhaseID)">@item.Name.ToUpper()</label>
+                                                }
+                                            </div>
+                                            <div class="col-xs-12">
+                                                @if (ViewBag.IsLeader == true)
+                                                {
+                                                    <label id="@("phase-time-" + item.PlanPhaseID)" style="font-size: 14px; color: #049f88;" onclick="phaseTimeLabel('@item.PlanPhaseID')">@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)</label>
+                                                    <input class="txt-edit-phase-time" id="@("txt-phase-start-" + item.PlanPhaseID)" style="display: none;"  value="@item.StartTime.ToString("yyyy-MM-dd")" placeholder="Ngày bắt đầu ..." />
+                                                    <i id="@("sparrow-" + item.PlanPhaseID)" class="material-icons md-18" style="display: none">arrow_forward</i>
+                                                    <input class="txt-edit-phase-time" id="@("txt-phase-end-" + item.PlanPhaseID)" style="display: none;"  value="@item.EndTime.ToString("yyyy-MM-dd")" />
+                                                    <i id="@("btn-phase-time-save-" + item.PlanPhaseID)" class="material-icons md-18" style="color: #049f88; display: none; cursor: pointer" onclick="savePhaseTime('@item.PlanPhaseID')">save</i>
+                                                    <i id="@("btn-phase-time-close-" + item.PlanPhaseID)" class="material-icons md-18" style="color: #049f88; display: none; cursor: pointer" onclick="cancelEditPhaseTime('@item.PlanPhaseID','@item.StartTime.ToString("yyyy-MM-dd")','@item.EndTime.ToString("yyyy-MM-dd")')">cancel</i>
+                                                    <div id="@("error-phase-time-" + @item.PlanPhaseID)"></div>
+                                                }
+                                                else
+                                                {
+                                                    <label id="@("phase-time-" + item.PlanPhaseID)" style="font-size: 14px; color: #049f88;">@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)</label>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-12" style="margin-top: -5px">
+                                <div class="divider-holizon"></div>
+                            </div>
+                        </div>
+                        <!-- Detail -->
+                        <div class="row">
+                            <div class="col-sm-12" id="@("planPhaseMainTask" + item.PlanPhaseID)">
+                                <div class="row">
+                                    <div class="col-sm-12" id="@("maintastlist" + item.PlanPhaseID)" style="padding-left: 5px; padding-right: 5px">
+                                        @{ Html.RenderAction("DetailMainTask", "Plan", new { planPhaseID = @item.PlanPhaseID });}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#txt-phase-start-" + '@item.PlanPhaseID').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    widgetPositioning: {
+                        vertical: 'bottom'
+                    }
+                });
+                $("#txt-phase-end-" + '@item.PlanPhaseID').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    widgetPositioning: {
+                        vertical: 'bottom'
+                    }
+                });
+            });
+        </script>
+                                                }
+                                            }

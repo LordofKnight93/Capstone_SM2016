@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d4f02ad96cff4648a623184f0baf094e" Name="Diagram1">
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcAc_Relation" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcAl_Relation" Width="1.5" PointX="3" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Account" Width="1.5" PointX="0.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcGr_Relation" Width="1.5" PointX="6" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcIm_Relation" Width="1.5" PointX="6" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcPo_Relation" Width="1.5" PointX="6" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_AcPr_Relation" Width="1.5" PointX="3" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Album" Width="1.5" PointX="1.5" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Budget" Width="1.5" PointX="3.75" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Group" Width="1.5" PointX="1.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_GrPr_Relation" Width="1.5" PointX="6.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_HubConnection" Width="1.5" PointX="3" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Image" Width="1.5" PointX="3.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Message" Width="1.5" PointX="3" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Plan" Width="1.5" PointX="3.75" PointY="32.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Post" Width="1.5" PointX="3.75" PointY="20.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="iVolunteerModel.SQL_Project" Width="1.5" PointX="1.5" PointY="19.625" IsExpanded="true" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Friend_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Friend_Account1" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcAl_Relation_SQL_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcAl_Relation_SQL_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_Message_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcIm_Relation_SQL_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcPo_Relation_SQL_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_HubConnection_SQL_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Group_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Project_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Group_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcIm_Relation_SQL_Image" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_AcPo_Relation_SQL_Post" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_User_Project_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_AlbumSD_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_AlbumSD_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_Image_SQL_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_Budget_SQL_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_PostSD_GroupSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_GrPr_Relation_SQL_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_SQL_GrPr_Relation_SQL_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_Plan_ProjectSD" ManuallyRouted="false" />
+        <AssociationConnector Association="iVolunteerModel.FK_PostSD_ProjectSD" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

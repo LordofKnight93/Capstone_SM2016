@@ -1,0 +1,62 @@
+﻿@using iVolunteer.Common
+@model iVolunteer.Models.MongoDB.EmbeddedClass.InformationClass.GroupInformation
+
+<div class="card-panel" style="margin: 0.5rem 0 1rem 0;">
+    <!-- Tổng quan -->
+    <div class="row">
+        <div class="col-md-12" style="margin-top: -15px">
+            <h4 style="color: #049f88">
+                Tổng quan
+                @if (ViewBag.IsLeader == true)
+                {
+                    @Ajax.RawActionLink("<i class='fa fa-pencil fa-cus-18' style='margin-left: 15px;' title='Sửa thông tin'></i>", "UpdateGroupInformation", "Group", new { groupID = Model.GroupID }, new AjaxOptions { UpdateTargetId = "group-tab", InsertionMode = InsertionMode.Replace, HttpMethod = "GET", OnBegin = "OnBegin('#project-tab')" }, new { })
+                }
+            </h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>@Html.DisplayFor(model => model.GroupDescription)</p>
+        </div>
+    </div>
+
+    <!-- Thời gian -->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Ngày thành lập</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>@Html.DisplayFor(model => model.DateCreate)</p>
+        </div>
+    </div>
+
+    <!-- Liên hệ-->
+    <div class="row">
+        <div class="col-md-12">
+            <h4 style="color: #049f88">Liên hệ</h4>
+            <div class="divider-holizon" style="margin-top: -8px"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-post">
+                <li>
+                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Email" data-placement="left">mail_outline</i>
+                    <span>@Html.DisplayFor(model => model.Email)</span>
+                </li>
+                <li>
+                    <i class="material-icons md-18 md-mygreen" data-toggle="tooltip" title="Điện Thoại" data-placement="left">phone</i>
+                    <span>@Html.DisplayFor(model => model.Phone)</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@{ Html.RenderAction("CurrentProjects", "Group", new { groupID = Model.GroupID });
+}
+
